@@ -1,17 +1,17 @@
 name: Code Quality Gate - SonarQube
 
 on:
-    push:
-      branches:
-        - master # prod
-        - development # alpha
-        - feature/**
-    pull_request:
-      types: [opened, edited, reopened, synchronize]
-      branches:
-        - master
-        - development
-        - feature/**
+  push:
+    branches:
+      - master # prod
+      - development # alpha
+      - feature/**
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches:
+      - master
+      - development
+      - feature/**
 
 jobs:
   sonar-scan:
@@ -179,4 +179,4 @@ jobs:
             --set image.tag=${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}-${GITHUB_SHA::7} \
             --timeout 5m0s --create-namespace --debug
 
-            
+
