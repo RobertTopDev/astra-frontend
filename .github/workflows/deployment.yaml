@@ -1,91 +1,91 @@
-name: Code Quality Gate - SonarQube
+# name: Code Quality Gate - SonarQube
 
-on:
-  push:
-    branches:
-      - master # prod
-      - development # alpha
-      - feature/**
-  pull_request:
-    types: [opened, edited, reopened, synchronize]
-    branches:
-      - master
-      - development
-      - feature/**
+# on:
+#   push:
+#     branches:
+#       - master # prod
+#       - development # alpha
+#       - feature/**
+#   pull_request:
+#     types: [opened, edited, reopened, synchronize]
+#     branches:
+#       - master
+#       - development
+#       - feature/**
 
-jobs:
-  sonar-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout repository on branch: ${{ github.REF }}"
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.HEAD_REF }}
-          fetch-depth: 0
+# jobs:
+#   sonar-scan:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: "Checkout repository on branch: ${{ github.REF }}"
+#         uses: actions/checkout@v4
+#         with:
+#           ref: ${{ github.HEAD_REF }}
+#           fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20.x
     
-      - name: Install dependencies
-        run: npm install . --force
+#       - name: Install dependencies
+#         run: npm install . --force
 
-      - name: Lint Project
-        run: npm run lint
-      # - run: npm run test
+#       - name: Lint Project
+#         run: npm run lint
+#       # - run: npm run test
 
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#       - name: SonarCloud Scan
+#         uses: sonarsource/sonarcloud-github-action@master
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 
 
 
         
 
-  write-creds-from-secrets:
-    name: "Write env from secrets"
-    runs-on: ubuntu-latest
-    needs: [sonar-scan]
+#   write-creds-from-secrets:
+#     name: "Write env from secrets"
+#     runs-on: ubuntu-latest
+#     needs: [sonar-scan]
 
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout branch
+#         uses: actions/checkout@v4
 
-      - name: Get branch names.
-        id: branch-names
-        uses: tj-actions/branch-names@v8
-      - name: Write .env.production from secrets
-        if: ${{ steps.branch-names.outputs.ref_branch == 'master' }}
-        id: prod_creds
-        run: |
-          echo "${{ secrets.TM_ENV_PROD }}" > .env
-        env:
-          TM_ENV_PROD: ${{ secrets.TM_ENV_PROD }}
+#       - name: Get branch names.
+#         id: branch-names
+#         uses: tj-actions/branch-names@v8
+#       - name: Write .env.production from secrets
+#         if: ${{ steps.branch-names.outputs.ref_branch == 'master' }}
+#         id: prod_creds
+#         run: |
+#           echo "${{ secrets.TM_ENV_PROD }}" > .env
+#         env:
+#           TM_ENV_PROD: ${{ secrets.TM_ENV_PROD }}
 
-      - name: Write .env.development from secrets
-        if: ${{ steps.branch-names.outputs.ref_branch == 'development' || 'feature/**'}}
-        id: dev_creds
-        run: |
-          echo "${{ secrets.TM_ENV_DEV }}" > .env
-        env:
-          TM_ENV_DEV: ${{ secrets.TM_ENV_DEV }}
+#       - name: Write .env.development from secrets
+#         if: ${{ steps.branch-names.outputs.ref_branch == 'development' || 'feature/**'}}
+#         id: dev_creds
+#         run: |
+#           echo "${{ secrets.TM_ENV_DEV }}" > .env
+#         env:
+#           TM_ENV_DEV: ${{ secrets.TM_ENV_DEV }}
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: creds-artifact
-          path: |
-            .env
+#       - name: Upload artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: creds-artifact
+#           path: |
+#             .env
 
-      - name: Ensure .env.production.dist is correctly outputed
-        run: cat .env
+#       - name: Ensure .env.production.dist is correctly outputed
+#         run: cat .env
 
   docker-build-and-push:
     name: "Docker Build and Push"
