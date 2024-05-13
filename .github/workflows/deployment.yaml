@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-          
+
 
 
         
@@ -182,6 +182,9 @@ jobs:
             --values ./helm/helmvars/${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}/values.yaml \
             --set image.tag=${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}-${GITHUB_SHA::7} \
             --timeout 5m0s --create-namespace --debug
+
+
+            
 
 
 
