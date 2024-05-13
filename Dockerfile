@@ -8,8 +8,9 @@ COPY package.json ./
 RUN yarn install
 
 FROM base AS builder
-COPY .env /app/.env
+COPY .env ./.env
 COPY --from=deps /app/node_modules ./node_modules
+RUN yarn global add pnpm
 RUN yarn add react react-dom @next/env
 RUN yarn run build
 
