@@ -12,7 +12,8 @@ COPY .env ./.env
 COPY --from=deps /app/node_modules ./node_modules
 RUN yarn global add pnpm
 RUN yarn add react react-dom @next/env
-RUN yarn run build
+RUN yarn build
+
 
 FROM base AS runner
 ENV NODE_ENV production
