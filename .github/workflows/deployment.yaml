@@ -113,11 +113,13 @@ jobs:
 
       - name: Build docker image
         run: |
-          gcloud auth configure-docker us-central1-docker.pkg.dev
-          cp .env ./path/in/container/.env  # Copy .env to the desired location in the container
-          docker build -t us-central1-docker.pkg.dev/tmgalaxy/tm-de-artifact/tm-front:${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}-${GITHUB_SHA::7} .
-      
-
+        gcloud auth configure-docker us-central1-docker.pkg.dev
+        docker build -t us-central1-docker.pkg.dev/tmgalaxy/tm-de-artifact/tm-front:${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}-${GITHUB_SHA::7} .
+    
+        docker run --rm us-central1-docker.pkg.dev/tmgalaxy/tm-de-artifact/tm-front:${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}-${GITHUB_SHA::7} sh -c 'mkdir -p /path/in/container/'
+    
+        docker cp .env us-central1-docker.pkg.dev/tmgalaxy/tm-de-artifact/tm-front:${{ steps.branch-names.outputs.ref_branch == 'master' && 'prod' || 'alpha'}}-${GITHUB_SHA::7}:/path/in/container/.env
+    
           cd ./
           ls -la
           cat .env
