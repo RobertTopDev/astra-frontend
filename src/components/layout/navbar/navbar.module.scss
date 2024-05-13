@@ -1,0 +1,87 @@
+.header {
+  transition: padding 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: transparent;
+}
+
+.scrolled {
+  padding: 1rem 3rem !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(80px);
+  background: linear-gradient(
+    138.39deg,
+    rgba(255, 255, 255, 0) -7.57%,
+    rgba(255, 255, 255, 0) 107.25%
+  );
+}
+
+.navItem {
+  padding: 0 12px;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+
+  & > a {
+    display: inline-block;
+    transition: all 0.2s;
+    white-space: nowrap;
+    position: relative;
+
+    &:hover::after {
+      opacity: 1;
+      transform: translate3d(0, 0.2em, 0);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0.1em;
+      opacity: 0;
+      transition:
+        opacity 300ms,
+        transform 300ms;
+    }
+  }
+}
+
+.nav-item {
+  span {
+    @apply relative;
+  }
+
+  span:after {
+    @apply content-[""] absolute top-0 left-1/2 w-full h-[1px] transition-all duration-300 ease-in-out bg-astra-blue opacity-0 -translate-x-[50%];
+  }
+
+  &:hover {
+    button,
+    a {
+      @apply font-bold text-astra-blue;
+    }
+
+    span:after {
+      @apply translate-y-[1.25rem] -translate-x-[50%] opacity-100;
+    }
+  }
+}
+
+.nav-item-active {
+  button,
+  a {
+    @apply text-astra-blue font-bold;
+  }
+
+  span:after {
+    @apply translate-y-[1.25rem] -translate-x-[50%] opacity-100;
+  }
+}
+
+.nav-small {
+  background-color: rgba(70, 64, 84, 0.1);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(50px);
+}

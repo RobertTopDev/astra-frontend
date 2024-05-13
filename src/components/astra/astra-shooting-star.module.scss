@@ -1,0 +1,62 @@
+.astra-shooting-star {
+  position: absolute;
+  // top: 0%;
+  // left: 50%;
+  // left: initial;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  z-index: 10 !important;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.1),
+    0 0 0 8px rgba(255, 255, 255, 0.1),
+    0 0 20px rgba(255, 255, 255, 0.1);
+  // animation-duration:3s
+  // animation-timing-function: linear;
+  // animation-name: animate;
+  // animation-iteration-count: infinite;
+  // animation-timeline: infinite;
+}
+.astra-shooting-star-left {
+  animation: animate-left 3s linear infinite;
+}
+.astra-shooting-star-right {
+  animation: animate-right 3s linear infinite;
+}
+.astra-shooting-star::before {
+  content: '';
+  z-index: 10 !important;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 1px;
+  background: linear-gradient(90deg, #fff, transparent);
+}
+@keyframes animate-left {
+  0% {
+    transform: rotate(335deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(335deg) translateX(-1000px);
+    opacity: 0;
+  }
+}
+@keyframes animate-right {
+  0% {
+    transform: rotate(200deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(200deg) translateX(-1000px);
+    opacity: 0;
+  }
+}
