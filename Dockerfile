@@ -4,15 +4,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY . .
 
-FROM base AS deps
-COPY package.json ./
+# Install dependencies and build the project
 RUN yarn install
-
-FROM base AS builder
-COPY .env ./.env
-COPY --from=deps /app/node_modules ./node_modules
-RUN yarn global add pnpm
-RUN yarn add react react-dom @next/env
 RUN yarn build
 
 # Stage 2: Production
@@ -24,8 +17,9 @@ RUN addgroup --system --gid 1001 nodejs \
 
 WORKDIR /app
 
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+# Copy necessary files from the build stage
+COPY --from=base /app/public ./public
+COPY --from=base /app/.next ./.next
 
 RUN chown -R nextjs:nodejs .
 
