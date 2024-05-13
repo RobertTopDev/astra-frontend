@@ -4,8 +4,11 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY . .
 
-# Install dependencies and build the project
+# Install pnpm and dependencies
+RUN npm install -g pnpm
 RUN yarn install
+
+# Build the project
 RUN yarn build
 
 # Stage 2: Production
