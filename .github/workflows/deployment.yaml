@@ -29,7 +29,7 @@ jobs:
           node-version: 20.x
     
       - name: Install dependencies
-        run: npm install .
+        run: npm install . --force
 
       - name: Lint Project
         run: npm run lint
