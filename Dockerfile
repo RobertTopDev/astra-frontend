@@ -2,18 +2,18 @@
 FROM node:18-alpine AS base
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY..
+COPY . .
 
 # Install yarn if it's not already installed
 RUN apk add --no-cache yarn
 
 FROM base AS deps
-COPY package.json./
+COPY package. json./ 
 RUN yarn install
 
 FROM base AS builder
-COPY.env./.env
-COPY --from=deps /app/node_modules./node_modules
+COPY .env./ .env
+COPY --from=deps /app/node_modules./ node_modules
 # Add react, react-dom, and @next/env as dependencies
 RUN yarn add react react-dom @next/env
 # Build the application
