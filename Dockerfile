@@ -8,10 +8,19 @@ COPY package.json ./
 RUN yarn install
 
 FROM base AS builder
+
 COPY .env ./.env
+# Assuming you've already copied your package.json and installed dependencies
+COPY --from=deps /app/node_modules ./node_modules
+RUN yarn install
 COPY --from=deps /app/node_modules ./node_modules
 RUN yarn add react react-dom @next/env
 RUN yarn run build
+
+
+# Now run the build script
+RUN yarn run build
+
 
 FROM base AS runner
 ENV NODE_ENV production
