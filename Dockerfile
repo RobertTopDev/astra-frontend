@@ -10,11 +10,14 @@ RUN yarn install
 FROM base AS builder
 
 COPY .env ./.env
-# Assuming you've already copied your package.json and installed dependencies
-COPY --from=deps /app/node_modules ./node_modules
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Then proceed with your existing commands
 RUN yarn install
 RUN yarn add react react-dom @next/env
 RUN yarn run build
+
 
 
 FROM base AS runner
