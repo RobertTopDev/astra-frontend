@@ -20,7 +20,7 @@ export default function Offering({ launchpadData }: TComponent) {
   const { address } = useAccount()
 
   const launchpadId = pathname.split('detail/')[1]
-  const isAdmin = pathname.includes('owner') || pathname.includes('admin')
+  // const isAdmin = pathname.includes('owner') || pathname.includes('admin')
 
   const [remainingTime, setRemainingTime] = useState('00:00:00:00')
   const [saleStartsIn, setSaleStartsIn] = useState('00:00:00:00')
@@ -108,7 +108,8 @@ export default function Offering({ launchpadData }: TComponent) {
               {saleStartsIn === '00:00:00:00' ? remainingTime : saleStartsIn}
             </div>
           </div>
-          {/* {isAdmin || saleStartsIn !== '00:00:00:00' ? (
+          {launchpadData?.STATUS === 'requested' ||
+          saleStartsIn !== '00:00:00:00' ? (
             <div className="text-black text-center rounded-xl px-8 py-2 bg-astra-blue bg-opacity-15">
               Participate
             </div>
@@ -119,43 +120,24 @@ export default function Offering({ launchpadData }: TComponent) {
             >
               {remainingTime === '00:00:00:00' ? 'Finished' : 'Participate'}
             </div>
-          )} */}
-          <div
+          )}
+          {/* <div
             className="text-black text-center rounded-xl cursor-pointer px-8 py-2 bg-gradient-to-r from-[#00E7FF] to-[#28E7FD] border-astra-blue bg-opacity-15"
             onClick={() => router.push(`/launchpad/buy/${launchpadId}`)}
           >
             {remainingTime === '00:00:00:00' ? 'Finished' : 'Participate'}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        {/* <div className="flex justify-between">
-          Pucca Family Ecosystem Public rounds ends in:
-          <InfoCircledIcon />
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="text-2xl">TBA</div>
-          
-          {isAdmin || saleStartsIn !== '00:00:00:00' || true ? (
-            <div className="text-black text-center rounded-xl px-8 py-2 bg-astra-blue bg-opacity-15">
-              Participate
-            </div>
-          ) : (
-            <div className="text-black text-center rounded-xl cursor-pointer px-8 py-2 bg-gradient-to-r from-[#00E7FF] to-[#28E7FD] border-astra-blue bg-opacity-15">
-              Participate
-            </div>
-          )}
-        </div> */}
-
-        <div className="">
+        <div>
           <div className="text-sm">
             In order to Participate in this public sale you need to
           </div>
-
           <div className="grid grid-cols-2 gap-4 mt-4">
             <AstraLink link="https://twitter.com">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white'
                 } justify-between`}
               >
@@ -171,12 +153,14 @@ export default function Offering({ launchpadData }: TComponent) {
                   </div>
                   User needs to follow Astra DAO on Twitter.
                 </div>
-                <ResetIcon className="w-8 h-8" />
+                <div>
+                  <ResetIcon className="w-8 h-8" />
+                </div>
               </div>
             </AstraLink>
             <AstraLink link="https://t.me/astradao">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   telegramfollowing ? '' : 'border border-white'
                 } justify-between`}
               >
@@ -191,21 +175,23 @@ export default function Offering({ launchpadData }: TComponent) {
                   </div>
                   User needs to follow Astra DAO on Telegram.
                 </div>
-                <AstraLoading
-                  isLoading={follwingDataLoading}
-                  className="w-6 h-6"
-                >
-                  {telegramfollowing ? (
-                    <CheckIcon className="w-8 h-8 text-astra-blue" />
-                  ) : (
-                    <ResetIcon className="w-8 h-8" />
-                  )}
-                </AstraLoading>
+                <div>
+                  <AstraLoading
+                    isLoading={follwingDataLoading}
+                    className="w-6 h-6"
+                  >
+                    {telegramfollowing ? (
+                      <CheckIcon className="w-8 h-8 text-astra-blue" />
+                    ) : (
+                      <ResetIcon className="w-8 h-8" />
+                    )}
+                  </AstraLoading>
+                </div>
               </div>
             </AstraLink>
             <AstraLink link="/staking/astra">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] justify-between ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] justify-between ${
                   buyRuleStatus &&
                   buyRuleStatus !== undefined &&
                   buyRuleStatus.length > 0 &&
@@ -226,22 +212,24 @@ export default function Offering({ launchpadData }: TComponent) {
                   </div>
                   Stake AstraDAO in a lockup vault.
                 </div>
-                <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                  {buyRuleStatus &&
-                  buyRuleStatus !== undefined &&
-                  buyRuleStatus.length > 0 &&
-                  buyRuleStatus[1].result &&
-                  buyRuleStatus[1]?.result?.[0] > 0 ? (
-                    <CheckIcon className="w-8 h-8 text-astra-blue" />
-                  ) : (
-                    <ResetIcon className="w-8 h-8" />
-                  )}
-                </AstraLoading>
+                <div>
+                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                    {buyRuleStatus &&
+                    buyRuleStatus !== undefined &&
+                    buyRuleStatus.length > 0 &&
+                    buyRuleStatus[1].result &&
+                    buyRuleStatus[1]?.result?.[0] > 0 ? (
+                      <CheckIcon className="w-8 h-8 text-astra-blue" />
+                    ) : (
+                      <ResetIcon className="w-8 h-8" />
+                    )}
+                  </AstraLoading>
+                </div>
               </div>
             </AstraLink>
             <AstraLink link="/launchpad/kyc">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] justify-between ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] justify-between ${
                   buyRuleStatus && buyRuleStatus?.[0]?.result
                     ? ''
                     : 'border border-white'
@@ -258,13 +246,15 @@ export default function Offering({ launchpadData }: TComponent) {
                   </div>
                   User needs to complete KYC.
                 </div>
-                <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                  {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
-                    <CheckIcon className="w-8 h-8 min-w-8 max-w-8 text-astra-blue" />
-                  ) : (
-                    <ResetIcon className="w-8 h-8 text-white" />
-                  )}
-                </AstraLoading>
+                <div>
+                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                    {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
+                      <CheckIcon className="w-8 h-8 min-w-8 max-w-8 text-astra-blue" />
+                    ) : (
+                      <ResetIcon className="w-8 h-8 text-white" />
+                    )}
+                  </AstraLoading>
+                </div>
               </div>
             </AstraLink>
           </div>

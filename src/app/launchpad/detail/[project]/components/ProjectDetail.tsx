@@ -338,27 +338,27 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    projectValuation: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
-        message: 'Project Valuation must be a valid number',
-      })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Project Valuation is required',
-      })
-      .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
-        {
-          message: 'Project Valuation must be a positive integer',
-        }
-      )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+    // projectValuation: z
+    //   .string() // Accept input as string
+    //   .refine((value) => /^[0-9,]+$/.test(value), {
+    //     // Ensure input contains only numbers and commas
+    //     message: 'Project Valuation must be a valid number',
+    //   })
+    //   .refine((value) => value !== '', {
+    //     // Ensure input is not empty
+    //     message: 'Project Valuation is required',
+    //   })
+    //   .refine(
+    //     (value) => {
+    //       // Remove commas and check if the resulting string represents a valid number
+    //       const numValue = Number(value.replace(/,/g, ''))
+    //       return !isNaN(numValue) && numValue > 0
+    //     },
+    //     {
+    //       message: 'Project Valuation must be a positive integer',
+    //     }
+    //   )
+    //   .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
     tokenName: z.string().min(1, {
       message: 'Project Name is required',
@@ -553,7 +553,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       softCap: data ? data.SOFT_CAP.toLocaleString() : '',
       hardCap: data ? data.HARD_CAP.toLocaleString() : '',
       initialMarketCap: data ? data.INITIAL_MARKET_CAP.toLocaleString() : '',
-      projectValuation: data ? data.PROJECT_VALUATION.toLocaleString() : '',
+      projectValuation: '', // should remove project valuation
       tokenName: data ? data.LAUNCHPAD_TOKEN_NAME.toString() : '',
       website: data ? data.WEBSITE_URL.toString() : '',
       pitchdeck: data ? data.WHITEPAPER_URL.toString() : '',
@@ -620,7 +620,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       softCap: value.softCap, // update
       hardCap: value.hardCap, // update
       initialMarketCap: value.initialMarketCap, // update
-      projectValuation: value.projectValuation, // update
+      projectValuation: 0, // should remove
       projectDetail: value.projectDescription,
       projectDescriptionDetail: value.projectDescriptionDetail,
       projectImage: value.projectImage,
@@ -1014,7 +1014,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     )}
                   />
 
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="projectValuation"
                     render={({ field }) => (
@@ -1062,7 +1062,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                   <Separator className="bg-gray-400"></Separator>
                   <FormField
                     control={form.control}

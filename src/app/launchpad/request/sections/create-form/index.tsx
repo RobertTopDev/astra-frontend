@@ -164,7 +164,6 @@ const CreateForm = () => {
       }
     }
   }, [])
-  const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
   const [uploading, setUploading] = useState<boolean>(false)
 
   const [team, setTeam] = useState<TeamObject[]>([
@@ -344,27 +343,27 @@ const CreateForm = () => {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    projectValuation: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
-        message: 'Project Valuation must be a valid number',
-      })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Project Valuation is required',
-      })
-      .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
-        {
-          message: 'Project Valuation must be a positive integer',
-        }
-      )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+    // projectValuation: z
+    //   .string() // Accept input as string
+    //   .refine((value) => /^[0-9,]+$/.test(value), {
+    //     // Ensure input contains only numbers and commas
+    //     message: 'Project Valuation must be a valid number',
+    //   })
+    //   .refine((value) => value !== '', {
+    //     // Ensure input is not empty
+    //     message: 'Project Valuation is required',
+    //   })
+    //   .refine(
+    //     (value) => {
+    //       // Remove commas and check if the resulting string represents a valid number
+    //       const numValue = Number(value.replace(/,/g, ''))
+    //       return !isNaN(numValue) && numValue > 0
+    //     },
+    //     {
+    //       message: 'Project Valuation must be a positive integer',
+    //     }
+    //   )
+    //   .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
     tokenName: z.string().min(1, {
       message: 'Project Name is required',
@@ -590,17 +589,11 @@ const CreateForm = () => {
     tokenName: '',
     website: '',
     pitchdeck: '',
-    // contactName: '',
     email: '',
     projectTwitter: '',
     contactTelegram: '',
     contactDiscord: '',
-    // tokenSchedule: '',
-    // totalRaised: '',
-    // raiseAmount: '',
     totalToken: '',
-    // startDate: '',
-    // memberAmount: '',
     leadVC: '',
     marketMaker: '',
     controlledCap: '',
@@ -716,7 +709,7 @@ const CreateForm = () => {
         softCap: Number(result_values.data.softCap), // update
         hardCap: Number(result_values.data.hardCap), // update
         initialMarketCap: Number(result_values.data.initialMarketCap), // update
-        projectValuation: Number(result_values.data.projectValuation), // update
+        projectValuation: 0, // should remove
         projectDetail: result_values.data.projectDescription,
         projectDescriptionDetail: result_values.data.projectDescriptionDetail,
         projectImage: result_values.data.projectImage,
@@ -1126,7 +1119,7 @@ const CreateForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="projectValuation"
               render={({ field }) => (
@@ -1168,7 +1161,7 @@ const CreateForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <Separator className="bg-gray-400"></Separator>
             <FormField
               control={form.control}
@@ -1741,9 +1734,20 @@ const CreateForm = () => {
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="number"
+                      type="string"
                       placeholder="e.g. $50000 (Must be positive)"
                       {...field}
+                      onChange={(e) => {
+                        // Remove commas from the input value
+                        const inputValue = e.target.value.replace(/,/g, '')
+                        // Set the formatted value with commas
+                        const formattedValue =
+                          inputValue === '0-'
+                            ? '-'
+                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                        // Update the input value in the form
+                        field.onChange(formattedValue)
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -1772,7 +1776,7 @@ const CreateForm = () => {
                         values[`vest_initial_unlock`] = ''
                         form.reset(values)
                       }}
-                    ></Checkbox>
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
