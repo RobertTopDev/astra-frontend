@@ -87,6 +87,8 @@ jobs:
       - name: Ensure .env.production.dist is correctly outputed
         run: cat .env
 
+        
+
   docker-build-and-push:
     name: "Docker Build and Push"
     runs-on: ubuntu-latest
