@@ -112,7 +112,7 @@ jobs:
 
         # get alpha cluster creds
       - name: "Get GKE alpha credentials"
-        if: ${{ steps.branch-names.outputs.ref_branch != 'master' }}
+        if: ${{ steps.branch-names.outputs.ref_branch != 'mainnet' }}
         uses: "google-github-actions/get-gke-credentials@v2"
         with:
             cluster_name: "cluster-alpha-us-central1"

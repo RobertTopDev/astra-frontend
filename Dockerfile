@@ -10,6 +10,7 @@ RUN yarn install
 FROM base AS builder
 COPY .env ./.env
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 RUN yarn add react react-dom @next/env
 RUN yarn run build
 
