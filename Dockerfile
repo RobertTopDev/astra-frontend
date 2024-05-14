@@ -8,12 +8,13 @@ COPY . .
 RUN apk add --no-cache yarn
 
 FROM base AS deps
-COPY package. json./ 
+COPY package .json./
 RUN yarn install
 
 FROM base AS builder
 COPY .env./ .env
-COPY --from=deps /app/node_modules./ node_modules
+COPY --from=deps /app /node_modules./node_modules
+
 # Add react, react-dom, and @next/env as dependencies
 RUN yarn add react react-dom @next/env
 # Build the application
@@ -34,8 +35,8 @@ RUN mkdir.next
 RUN chown nextjs:nodejs.next
 
 # Copy.next/standalone and.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/.next/ standalone./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static./.next/ static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone./ standalone
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static/.next/ static
 
 # Switch to the nextjs user
 USER nextjs
