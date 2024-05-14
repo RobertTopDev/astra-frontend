@@ -1,33 +1,37 @@
-# Stage 1: Build
 FROM node:18-alpine AS base
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY . .
 
-# Install pnpm and dependencies
-RUN npm install -g pnpm
+FROM base AS deps
+COPY package.json ./
 RUN yarn install
 
-# Build the project
-RUN yarn build
+FROM base AS builder
+COPY .env ./.env
+COPY --from=deps /app/node_modules ./node_modules
+RUN yarn add react react-dom @next/env
+RUN yarn run build
 
-# Stage 2: Production
-FROM node:18-alpine AS runner
+FROM base AS runner
 ENV NODE_ENV production
 
-RUN addgroup --system --gid 1001 nodejs \
-    && adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-WORKDIR /app
+COPY --from=builder /app/public ./public
 
-# Copy necessary files from the build stage
-COPY --from=base /app/public ./public
-COPY --from=base /app/.next ./.next
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
-RUN chown -R nextjs:nodejs .
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 8080
 
-CMD ["node", "server.js"]
+ENV PORT 8080
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]
