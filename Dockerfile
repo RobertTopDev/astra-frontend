@@ -12,7 +12,8 @@ COPY package .json./
 RUN yarn install
 
 FROM base AS builder
-COPY .env./ .env
+COPY .env ./.env
+
 COPY --from=deps /app /node_modules./node_modules
 
 # Add react, react-dom, and @next/env as dependencies
