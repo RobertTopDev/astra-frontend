@@ -91,7 +91,7 @@ jobs:
       - name: Push image to dev repo if branch is development
         if: (github.ref == 'refs/heads/testnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
         run: |
-          docker build -t us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:testnet-${GITHUB_SHA::7}
+          docker push us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:testnet-${GITHUB_SHA::7}
 
   release-to-k8s:
     name: "Release to k8s"
