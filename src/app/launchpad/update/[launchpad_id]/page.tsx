@@ -444,27 +444,27 @@ export default function Page({ params }: TPage) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    projectValuation: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
-        message: 'Project Valuation must be a valid number',
-      })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Project Valuation is required',
-      })
-      .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
-        {
-          message: 'Project Valuation must be a positive integer',
-        }
-      )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+    // projectValuation: z
+    //   .string() // Accept input as string
+    //   .refine((value) => /^[0-9,]+$/.test(value), {
+    //     // Ensure input contains only numbers and commas
+    //     message: 'Project Valuation must be a valid number',
+    //   })
+    //   .refine((value) => value !== '', {
+    //     // Ensure input is not empty
+    //     message: 'Project Valuation is required',
+    //   })
+    //   .refine(
+    //     (value) => {
+    //       // Remove commas and check if the resulting string represents a valid number
+    //       const numValue = Number(value.replace(/,/g, ''))
+    //       return !isNaN(numValue) && numValue > 0
+    //     },
+    //     {
+    //       message: 'Project Valuation must be a positive integer',
+    //     }
+    //   )
+    //   .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
     tokenName: z.string().min(1, {
       message: 'Project Name is required',
@@ -817,6 +817,7 @@ export default function Page({ params }: TPage) {
     value_temp.marketMaker = value_temp.marketMaker.trim()
     value_temp.controlledCap = ''
     value_temp.daoApprovedMetrics = ''
+    value_temp.projectValuation = 0
     value_temp.vest_cliff = Number(value_temp.vest_cliff) * 86400
     value_temp.vest_duration = Number(value_temp.vest_duration) * 86400
     value_temp.vest_slice_period_seconds =
@@ -1366,7 +1367,7 @@ export default function Page({ params }: TPage) {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="projectValuation"
                   render={({ field }) => (
@@ -1410,7 +1411,7 @@ export default function Page({ params }: TPage) {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
 
                 <Separator className="bg-gray-400"></Separator>
                 <FormField

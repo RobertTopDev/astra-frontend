@@ -1,3 +1,4 @@
+
 'use client'
 
 import React from 'react'
@@ -104,7 +105,7 @@ export default function FollowSection({
           <div className="flex flex-col gap-4 mt-8">
             <AstraLink link="https://twitter.com">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white'
                 } justify-between`}
               >
@@ -120,12 +121,14 @@ export default function FollowSection({
                   </div>
                   User needs to follow Astra DAO on Twitter.
                 </div>
-                <ResetIcon className="w-8 h-8" />
+                <div>
+                  <ResetIcon className="w-8 h-8" />
+                </div>
               </div>
             </AstraLink>
             <AstraLink link="https://t.me/astradao">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   telegramfollowing ? '' : 'border border-white'
                 } justify-between`}
               >
@@ -140,13 +143,15 @@ export default function FollowSection({
                   </div>
                   User needs to follow Astra DAO on Telegram.
                 </div>
-                <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                  {telegramfollowing ? (
-                    <CheckIcon className="w-8 h-8 text-astra-blue" />
-                  ) : (
-                    <ResetIcon className="w-8 h-8" />
-                  )}
-                </AstraLoading>
+                <div>
+                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                    {telegramfollowing ? (
+                      <CheckIcon className="w-8 h-8 text-astra-blue" />
+                    ) : (
+                      <ResetIcon className="w-8 h-8" />
+                    )}
+                  </AstraLoading>
+                </div>
               </div>
             </AstraLink>
             {/* <div className="flex gap-4 rounded-xl items-center p-4 bg-[#454561] justify-between">
@@ -185,7 +190,7 @@ export default function FollowSection({
             </div> */}
             <AstraLink link="/staking/astra">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] justify-between ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] justify-between ${
                   buyRuleStatus && buyRuleStatus?.[1]?.result?.[0] > 0
                     ? ''
                     : 'border border-white'
@@ -202,18 +207,20 @@ export default function FollowSection({
                   </div>
                   Stake AstraDAO in a lockup vault.
                 </div>
-                <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                  {buyRuleStatus && buyRuleStatus?.[1]?.result?.[0] > 0 ? (
-                    <CheckIcon className="w-8 h-8 text-astra-blue" />
-                  ) : (
-                    <ResetIcon className="w-8 h-8" />
-                  )}
-                </AstraLoading>
+                <div>
+                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                    {buyRuleStatus && buyRuleStatus?.[1]?.result?.[0] > 0 ? (
+                      <CheckIcon className="w-8 h-8 text-astra-blue" />
+                    ) : (
+                      <ResetIcon className="w-8 h-8" />
+                    )}
+                  </AstraLoading>
+                </div>
               </div>
             </AstraLink>
             <AstraLink link="/launchpad/kyc">
               <div
-                className={`text-white flex gap-4 rounded-xl items-center p-4 bg-[#454561] justify-between ${
+                className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] justify-between ${
                   buyRuleStatus && buyRuleStatus?.[0]?.result
                     ? ''
                     : 'border border-white'
@@ -230,13 +237,15 @@ export default function FollowSection({
                   </div>
                   User needs to complete KYC.
                 </div>
-                <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                  {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
-                    <CheckIcon className="w-8 h-8 text-astra-blue" />
-                  ) : (
-                    <ResetIcon className="w-8 h-8 text-white" />
-                  )}
-                </AstraLoading>
+                <div>
+                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                    {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
+                      <CheckIcon className="w-8 h-8 text-astra-blue" />
+                    ) : (
+                      <ResetIcon className="w-8 h-8 text-white" />
+                    )}
+                  </AstraLoading>
+                </div>
               </div>
             </AstraLink>
           </div>
