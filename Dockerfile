@@ -8,24 +8,19 @@ COPY package.json ./
 RUN yarn install
 
 FROM base AS builder
-
 COPY .env ./.env
-# Install pnpm globally
-RUN npm install -g pnpm
-
-# Then proceed with your existing commands
-RUN yarn install
+COPY --from=deps /app/node_modules ./node_modules
 RUN yarn add react react-dom @next/env
 RUN yarn run build
-
-
 
 FROM base AS runner
 ENV NODE_ENV production
 
-
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/public ./public
+
 RUN chown nextjs:nodejs .next
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

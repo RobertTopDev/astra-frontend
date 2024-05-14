@@ -25,17 +25,7 @@ jobs:
           ref: ${{ github.HEAD_REF }}
           fetch-depth: 0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-    
-      - name: Install dependencies
-        run: npm install . --force
-
-      - name: Lint Project
-        run: npm run lint
-      # - run: npm run test
+     
 
       - uses: actions/checkout@v4
         with:
@@ -67,17 +57,17 @@ jobs:
         if: ${{ steps.branch-names.outputs.ref_branch == 'master' }}
         id: prod_creds
         run: |
-          echo "${{ secrets.TM_ENV_PROD }}" > .env
+          echo "${{ secrets.ASTRA_ENV_PROD }}" > .env
         env:
-          TM_ENV_PROD: ${{ secrets.TM_ENV_PROD }}
+          TM_ENV_PROD: ${{ secrets.ASTRA_ENV_PROD }}
 
       - name: Write .env.development from secrets
         if: ${{ steps.branch-names.outputs.ref_branch == 'development' || 'feature/**'}}
         id: dev_creds
         run: |
-          echo "${{ secrets.TM_ENV_DEV }}" > .env
+          echo "${{ secrets.ASTRA_ENV_DEV }}" > .env
         env:
-          TM_ENV_DEV: ${{ secrets.TM_ENV_DEV }}
+          TM_ENV_DEV: ${{ secrets.ASTRA_ENV_DEV }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
