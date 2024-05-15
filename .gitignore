@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage
@@ -29,7 +30,7 @@ package-lock.json
 
 # local env files
 .env*.local
-.env
+
 
 # vercel
 .vercel
@@ -41,3 +42,4 @@ next-env.d.ts
 # IDE
 /.idea
 
+.env

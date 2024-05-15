@@ -304,12 +304,10 @@ export default function LiveUpcomingCard({
         const difference = differenceInSeconds(endTime, currentTime)
 
         if (difference > 0) {
-          const hours = Math.floor((difference) / (60 * 60))
+          const hours = Math.floor(difference / (60 * 60))
           const minutes = Math.floor((difference % (60 * 60)) / 60)
           const seconds = difference % 60
-          setRemainingTime(
-            `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-          )
+          setRemainingTime(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`)
         } else {
           clearInterval(intervalEndId)
           setRemainingTime('00:00:00')
@@ -324,12 +322,10 @@ export default function LiveUpcomingCard({
         const difference = differenceInSeconds(startTime, currentTime)
 
         if (difference > 0) {
-          const hours = Math.floor((difference) / (60 * 60))
+          const hours = Math.floor(difference / (60 * 60))
           const minutes = Math.floor((difference % (60 * 60)) / 60)
           const seconds = difference % 60
-          setSaleStartsIn(
-            `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-          )
+          setSaleStartsIn(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`)
         } else {
           clearInterval(intervalStartId)
           setSaleStartsIn('00:00:00')
