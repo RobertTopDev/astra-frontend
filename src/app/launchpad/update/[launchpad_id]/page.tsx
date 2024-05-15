@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { AstraCard, AstraHeader, AstraLink } from '@/components'
 import {
   Button,
@@ -76,6 +76,8 @@ type TPage = {
 }
 
 export default function Page({ params }: TPage) {
+  const router = useRouter()
+
   const { launchpad_id } = params
   const {
     data: launchpadDetail,
@@ -566,7 +568,12 @@ export default function Page({ params }: TPage) {
       message: 'Project Description is required',
     }),
     isVesting: z.boolean(),
-    projectImage: z.any(),
+    projectImage: z
+      .string()
+      .min(1, {
+        message: 'Website url is required',
+      })
+      .url({ message: 'Invalid url' }),
   }
   if (vesting) {
     temp['vest_start'] = z.date({
@@ -755,6 +762,7 @@ export default function Page({ params }: TPage) {
     databaseData: databaseData ?? undefined,
     onSuccessTx: () => {
       refetchLaunchpadDetail()
+      router.push(`/launchpad/owner/detail/${launchpad_id}`)
     },
   })
   // APPROVE
@@ -913,7 +921,7 @@ export default function Page({ params }: TPage) {
   }
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
+    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
 
     return value.trim() === '' || urlRegex.test(value)
   }

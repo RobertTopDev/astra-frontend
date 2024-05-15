@@ -377,7 +377,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
   }
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
+    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
 
     return value.trim() === '' || urlRegex.test(value)
   }

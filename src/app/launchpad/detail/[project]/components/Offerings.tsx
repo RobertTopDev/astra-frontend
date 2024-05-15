@@ -22,8 +22,8 @@ export default function Offering({ launchpadData }: TComponent) {
   const launchpadId = pathname.split('detail/')[1]
   // const isAdmin = pathname.includes('owner') || pathname.includes('admin')
 
-  const [remainingTime, setRemainingTime] = useState('00:00:00:00')
-  const [saleStartsIn, setSaleStartsIn] = useState('00:00:00:00')
+  const [remainingTime, setRemainingTime] = useState('00:00:00')
+  const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
 
   const pad = (num: number) => {
     return num.toString().padStart(2, '0')
@@ -51,16 +51,13 @@ export default function Offering({ launchpadData }: TComponent) {
         const difference = differenceInSeconds(endTime, currentTime)
 
         if (difference > 0) {
-          const days = Math.floor(difference / (60 * 60 * 24))
-          const hours = Math.floor((difference % (60 * 60 * 24)) / (60 * 60))
+          const hours = Math.floor(difference / (60 * 60))
           const minutes = Math.floor((difference % (60 * 60)) / 60)
           const seconds = difference % 60
-          setRemainingTime(
-            `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-          )
+          setRemainingTime(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`)
         } else {
           clearInterval(intervalEndId)
-          setRemainingTime('00:00:00:00')
+          setRemainingTime('00:00:00')
           return
         }
       }
@@ -72,16 +69,13 @@ export default function Offering({ launchpadData }: TComponent) {
         const difference = differenceInSeconds(startTime, currentTime)
 
         if (difference > 0) {
-          const days = Math.floor(difference / (60 * 60 * 24))
-          const hours = Math.floor((difference % (60 * 60 * 24)) / (60 * 60))
+          const hours = Math.floor(difference / (60 * 60))
           const minutes = Math.floor((difference % (60 * 60)) / 60)
           const seconds = difference % 60
-          setSaleStartsIn(
-            `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
-          )
+          setSaleStartsIn(`${pad(hours)}:${pad(minutes)}:${pad(seconds)}`)
         } else {
           clearInterval(intervalStartId)
-          setSaleStartsIn('00:00:00:00')
+          setSaleStartsIn('00:00:00')
           return
         }
       }
@@ -99,17 +93,17 @@ export default function Offering({ launchpadData }: TComponent) {
       <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
         <div className="flex justify-between">
           Astra Public Sale
-          {saleStartsIn === '00:00:00:00' ? ' ends in' : ' coming up soon'}:
+          {saleStartsIn === '00:00:00' ? ' ends in' : ' coming up soon'}:
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <ClockIcon />
             <div className="text-2xl ml-2">
-              {saleStartsIn === '00:00:00:00' ? remainingTime : saleStartsIn}
+              {saleStartsIn === '00:00:00' ? remainingTime : saleStartsIn}
             </div>
           </div>
           {launchpadData?.STATUS === 'requested' ||
-          saleStartsIn !== '00:00:00:00' ? (
+          saleStartsIn !== '00:00:00' ? (
             <div className="text-black text-center rounded-xl px-8 py-2 bg-astra-blue bg-opacity-15">
               Participate
             </div>
@@ -118,7 +112,7 @@ export default function Offering({ launchpadData }: TComponent) {
               className="text-black text-center rounded-xl cursor-pointer px-8 py-2 bg-gradient-to-r from-[#00E7FF] to-[#28E7FD] border-astra-blue bg-opacity-15"
               onClick={() => router.push(`/launchpad/buy/${launchpadId}`)}
             >
-              {remainingTime === '00:00:00:00' ? 'Finished' : 'Participate'}
+              {remainingTime === '00:00:00' ? 'Finished' : 'Participate'}
             </div>
           )}
           {/* <div
@@ -158,7 +152,7 @@ export default function Offering({ launchpadData }: TComponent) {
                 </div>
               </div>
             </AstraLink>
-            <AstraLink link="https://t.me/astradao">
+            <AstraLink link="https://t.me/testAstraDaoGroup">
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   telegramfollowing ? '' : 'border border-white'

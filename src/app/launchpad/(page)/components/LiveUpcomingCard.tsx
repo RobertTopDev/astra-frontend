@@ -53,8 +53,8 @@ export default function LiveUpcomingCard({
   deleteInUI = () => {},
 }: Props) {
   const [loading, setLoading] = useState(false)
-  const [remainingTime, setRemainingTime] = useState('00:00:00:00')
-  const [saleStartsIn, setSaleStartsIn] = useState('00:00:00:00')
+  const [remainingTime, setRemainingTime] = useState('00:00:00')
+  const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
   const [vestAddress, setVestAddress] = useState<string>('')
   const { chainConfig } = useChainConfig()
   const { address } = useAccount()
@@ -304,16 +304,15 @@ export default function LiveUpcomingCard({
         const difference = differenceInSeconds(endTime, currentTime)
 
         if (difference > 0) {
-          const days = Math.floor(difference / (60 * 60 * 24))
-          const hours = Math.floor((difference % (60 * 60 * 24)) / (60 * 60))
+          const hours = Math.floor((difference) / (60 * 60))
           const minutes = Math.floor((difference % (60 * 60)) / 60)
           const seconds = difference % 60
           setRemainingTime(
-            `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+            `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
           )
         } else {
           clearInterval(intervalEndId)
-          setRemainingTime('00:00:00:00')
+          setRemainingTime('00:00:00')
           return
         }
       }
@@ -325,16 +324,15 @@ export default function LiveUpcomingCard({
         const difference = differenceInSeconds(startTime, currentTime)
 
         if (difference > 0) {
-          const days = Math.floor(difference / (60 * 60 * 24))
-          const hours = Math.floor((difference % (60 * 60 * 24)) / (60 * 60))
+          const hours = Math.floor((difference) / (60 * 60))
           const minutes = Math.floor((difference % (60 * 60)) / 60)
           const seconds = difference % 60
           setSaleStartsIn(
-            `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+            `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
           )
         } else {
           clearInterval(intervalStartId)
-          setSaleStartsIn('00:00:00:00')
+          setSaleStartsIn('00:00:00')
           return
         }
       }
@@ -465,8 +463,8 @@ export default function LiveUpcomingCard({
               style={{ minWidth: '140px' }}
             >
               <div className="text-white text-sm font-medium">
-                {saleStartsIn === '00:00:00:00'
-                  ? remainingTime === '00:00:00:00'
+                {saleStartsIn === '00:00:00'
+                  ? remainingTime === '00:00:00'
                     ? 'Sale Ended At'
                     : 'Sale Ends In'
                   : 'Sale Starts In'}
@@ -477,8 +475,8 @@ export default function LiveUpcomingCard({
                   <ClockIcon className="stroke-astra-blue" />
                 </div>
                 <div className="text-white text-md font-semibold tracking-widest grow whitespace-nowrap">
-                  {saleStartsIn === '00:00:00:00'
-                    ? remainingTime === '00:00:00:00'
+                  {saleStartsIn === '00:00:00'
+                    ? remainingTime === '00:00:00'
                       ? launchpadData?.SALE_END_TIME.toString()
                           .split(':')
                           .slice(0, -1)

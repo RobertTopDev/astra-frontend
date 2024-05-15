@@ -35,7 +35,7 @@ const AstraRouterBack = () => {
 
   if (
     process.env.NEXT_PUBLIC_APP_URI !== undefined &&
-    !['/', '/governance/proposals', '/staking'].includes(pathname) &&
+    !['/', '/governance/proposals', '/staking', '/launchpad/kyc'].includes(pathname) &&
     document.referrer.includes(process.env.NEXT_PUBLIC_APP_URI) &&
     document.referrer.split(process.env.NEXT_PUBLIC_APP_URI)[1] !== pathname
   ) {

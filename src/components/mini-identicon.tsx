@@ -23,9 +23,12 @@ export const MiniIdenticon = ({
       encodeURIComponent(minidenticon(seed, saturation, lightness)),
     [seed, saturation, lightness]
   )
+  const urlRegex = new RegExp('^(http|https)://[^ "]+$')
+  let outputImage = svgURI
+  if (urlRegex.test(image || '')) outputImage = image as string
   return (
     <Image
-      src={image || svgURI}
+      src={outputImage}
       alt="Identicon"
       className="object-cover bg-white rounded-full"
       fill

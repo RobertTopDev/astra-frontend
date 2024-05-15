@@ -3,16 +3,30 @@
 import { useAccount } from 'wagmi'
 import LiveUpcoming from '../(page)/components/LiveUpcoming'
 import { ClaimStatistics } from './sections/claim-statistics'
-import { useGetParticipatedLaunchpad } from '@/hooks'
+import { useGetBuyRuleLaunchpad, useGetParticipatedLaunchpad } from '@/hooks'
 import Image from 'next/image'
+import { useMemo } from 'react'
 
 export default function ClaimPage() {
   const { address } = useAccount()
   const { data: launchpads, isLoading: launchpadLoading } =
     useGetParticipatedLaunchpad(address)
 
+  const { data: buyRuleStatus } = useGetBuyRuleLaunchpad()
+
+  const isKycVerified = useMemo(() => {
+    return buyRuleStatus?.[0]?.result ?? false
+  }, [buyRuleStatus])
+
   return (
     <main className="container py-16 max-w-full xl:max-w-[1200px] 2xl:max-w-[1400px]">
+      <div className="kyc-status text-center py-2 px-8 bg-white rounded-sm w-fit my-0 mx-auto">
+        {isKycVerified ? (
+          <span className="text-black">KYC Verified</span>
+        ) : (
+          <span className="text-red-600">KYC Is Not Verified</span>
+        )}
+      </div>
       <header className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
         <div className="flex flex-col items-stretch w-[55%] max-md:w-full max-md:ml-0">
           <div className="flex flex-col items-stretch my-auto px-5 max-md:max-w-full max-md:mt-10">

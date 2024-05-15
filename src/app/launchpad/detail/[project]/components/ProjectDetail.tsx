@@ -461,7 +461,12 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       message: 'Project Description is required',
     }),
     isVesting: z.boolean(),
-    projectImage: z.any(),
+    projectImage: z
+    .string()
+    .min(1, {
+      message: 'Website url is required',
+    })
+    .url({ message: 'Invalid url' }),
   }
   if (vesting) {
     temp['vest_start'] = z.date({
@@ -584,7 +589,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   })
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
+    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
 
     return value.trim() === '' || urlRegex.test(value)
   }

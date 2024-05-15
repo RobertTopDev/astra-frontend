@@ -149,21 +149,21 @@ const CreateForm = () => {
     'code-block',
   ]
 
-  const uploadImage = useCallback(() => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
-    input.click()
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        setUploading(true)
-        const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        form.setValue(`projectImage`, url)
-        setUploading(false)
-      }
-    }
-  }, [])
+  // const uploadImage = useCallback(() => {
+  //   const input = document.createElement('input')
+  //   input.setAttribute('type', 'file')
+  //   input.setAttribute('accept', 'image/*')
+  //   input.click()
+  //   input.onchange = async () => {
+  //     if (input !== null && input.files !== null) {
+  //       setUploading(true)
+  //       const file = input.files[0]
+  //       const url = await uploadToCloudinary(file)
+  //       form.setValue(`projectImage`, url)
+  //       setUploading(false)
+  //     }
+  //   }
+  // }, [])
   const [uploading, setUploading] = useState<boolean>(false)
 
   const [team, setTeam] = useState<TeamObject[]>([
@@ -461,11 +461,14 @@ const CreateForm = () => {
     baseToken: z.string().min(1, {
       message: 'Please select maximum contribute amount.',
     }),
-    projectDescriptionDetail: z.coerce.string().min(1, {
-      message: 'Project Description is required',
-    }),
+    projectDescriptionDetail: z.coerce.string(),
     isVesting: z.boolean(),
-    projectImage: z.any(),
+    projectImage: z
+      .string()
+      .min(1, {
+        message: 'Website url is required',
+      })
+      .url({ message: 'Invalid url' }),
   }
   if (vesting) {
     temp['vest_start'] = z.date({
@@ -586,6 +589,7 @@ const CreateForm = () => {
     projectValuation: '',
     projectDescription: '',
     projectDescriptionDetail: '',
+    projectImage:'',
     tokenName: '',
     website: '',
     pitchdeck: '',
@@ -645,7 +649,7 @@ const CreateForm = () => {
   }
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
+    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
 
     return value.trim() === '' || urlRegex.test(value)
   }
@@ -751,7 +755,7 @@ const CreateForm = () => {
         throw new Error(`HTTP error! status: ${response.status}`)
       } else {
         const data = await response.json()
-        router.push(`/launchpad/update/${data.id}`)
+        router.push(`/launchpad/owner/detail/${data.id}`)
       }
     }
     setIsLoading(false)
@@ -1025,6 +1029,7 @@ const CreateForm = () => {
                       <div
                         {...getRootProps()}
                         className=" flex items-center justify-center w-full"
+                        ref={field.ref}
                       >
                         <label
                           htmlFor="dropzone-file"
