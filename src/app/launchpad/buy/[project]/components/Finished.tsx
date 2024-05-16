@@ -37,10 +37,6 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
       alt: 'Medium Logo',
       logoUrl: '/images/medium-logo.png',
       redirectUrl: 'https://astradao.medium.com/',
-      /* redirectUrl: 'https://mirror.xyz/0x0035BAb3c7Ab6EbdB9501f0C0cE4FC7C83A447A4/Ear9ZKioVE9TWpTFCOV_GopzKhQfF7ApSShk0uAWK7g', */
-      // redirectUrl:
-      //   'https://mirror.xyz/0x0035BAb3c7Ab6EbdB9501f0C0cE4FC7C83A447A4',
-      // redirectUrl: launchpadDetail?.WHITEPAPER_URL || '#',
       background: 'bg-[#f6832e]',
     },
     {
@@ -115,7 +111,7 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
 
   const platformFee = useMemo(() => {
     if (launchpadContractData?.[11]?.result === undefined) return 0
-    return Number(launchpadContractData?.[11]?.result) / 1000
+    return Number(launchpadContractData?.[11]?.result) / 10
   }, [launchpadContractData, address])
 
   const isOwner = useMemo(() => {
@@ -151,7 +147,8 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
                   <div className="flex justify-between gap-4 w-[50%]">
                     <div>Receive Amount:</div>
                     <div>
-                      {withdrawAmount - withdrawAmount * platformFee} USDC
+                      {withdrawAmount - withdrawAmount * (platformFee / 100)}{' '}
+                      USDC
                     </div>
                   </div>
                 </div>
@@ -221,13 +218,13 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
               </ul>
             </div>
             <div className="flex md:flex-row flex-col md:items-center justify-between">
-              <div className="text-md text-white font-thin">
+              <div className="text-md text-white font-thin max-w-[70%]">
                 {data?.PROJECT_DETAIL}
               </div>
               <div className="flex gap-1 md:pt-0 pt-2">
                 <img src="/images/launchpad/calendar.svg" alt="img" />
                 <span>
-                  End Time:
+                  End Time:{' '}
                   {format(
                     new Date(data?.SALE_END_TIME + 'Z'),
                     'yyyy-MM-dd HH:mm'

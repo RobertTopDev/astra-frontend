@@ -6,6 +6,7 @@ import { ClaimStatistics } from './sections/claim-statistics'
 import { useGetBuyRuleLaunchpad, useGetParticipatedLaunchpad } from '@/hooks'
 import Image from 'next/image'
 import { useMemo } from 'react'
+import { AstraLink } from '@/components'
 
 export default function ClaimPage() {
   const { address } = useAccount()
@@ -24,7 +25,11 @@ export default function ClaimPage() {
         {isKycVerified ? (
           <span className="text-black">KYC Verified</span>
         ) : (
-          <span className="text-red-600">KYC Is Not Verified</span>
+          <AstraLink link="/launchpad/kyc">
+            <span className="text-red-600 cursor-pointer">
+              KYC Is Not Verified (Click to verify KYC)
+            </span>
+          </AstraLink>
         )}
       </div>
       <header className="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
