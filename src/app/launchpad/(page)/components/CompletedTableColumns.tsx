@@ -20,6 +20,7 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
             isToken
             name={index.LAUNCHPAD_TOKEN_NAME}
             address={index.LAUNCHPAD_TOKEN_ADDRESS}
+            image={index.PROJECT_IMAGE}
           />
         </div>
       )
@@ -34,13 +35,14 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
 
       return (
         <div className="w-fit">
-          <UserAvatar
+          {index.LEAD_VC}
+          {/* <UserAvatar
             nameLink={`/launchpad/detail/${index.LAUNCHPAD_INDEX}`}
             isForTable
             isToken
             // name={index.PROJECT_NAME}
             address=""
-          />
+          /> */}
         </div>
       )
     },

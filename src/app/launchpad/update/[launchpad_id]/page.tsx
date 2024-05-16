@@ -446,28 +446,6 @@ export default function Page({ params }: TPage) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    // projectValuation: z
-    //   .string() // Accept input as string
-    //   .refine((value) => /^[0-9,]+$/.test(value), {
-    //     // Ensure input contains only numbers and commas
-    //     message: 'Project Valuation must be a valid number',
-    //   })
-    //   .refine((value) => value !== '', {
-    //     // Ensure input is not empty
-    //     message: 'Project Valuation is required',
-    //   })
-    //   .refine(
-    //     (value) => {
-    //       // Remove commas and check if the resulting string represents a valid number
-    //       const numValue = Number(value.replace(/,/g, ''))
-    //       return !isNaN(numValue) && numValue > 0
-    //     },
-    //     {
-    //       message: 'Project Valuation must be a positive integer',
-    //     }
-    //   )
-    //   .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
-
     tokenName: z.string().min(1, {
       message: 'Project Name is required',
     }),
@@ -564,14 +542,12 @@ export default function Page({ params }: TPage) {
     baseToken: z.string().min(1, {
       message: 'Please select maximum contribute amount.',
     }),
-    projectDescriptionDetail: z.coerce.string().min(1, {
-      message: 'Project Description is required',
-    }),
+    projectDescriptionDetail: z.coerce.string(),
     isVesting: z.boolean(),
     projectImage: z
       .string()
       .min(1, {
-        message: 'Website url is required',
+        message: 'Project image is required',
       })
       .url({ message: 'Invalid url' }),
   }
@@ -680,6 +656,16 @@ export default function Page({ params }: TPage) {
       }
     )
   const tempDefaultValues = defaultValues
+  teamInfoArray.map((item, key) => {
+    tempDefaultValues[`name${key}`] = item.name
+    tempDefaultValues[`position${key}`] = item.position
+    tempDefaultValues[`description${key}`] = item.description
+  })
+  metricsInfoArray.map((item, key) => {
+    tempDefaultValues[`label${key}`] = item.label
+    tempDefaultValues[`value${key}`] = item.value
+  })
+
   const form = useForm<z.infer<typeof createIndexFormSchema>>({
     mode: 'onBlur',
     resolver: zodResolver(createIndexFormSchema),
@@ -792,6 +778,9 @@ export default function Page({ params }: TPage) {
   })
 
   function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
+    console.log('submit', value)
+    return
+
     if (isUploadLoading || !address) {
       alert('loading or address is undefined')
       return
@@ -960,6 +949,7 @@ export default function Page({ params }: TPage) {
         ? 'USDC'
         : 'USDT'
     const temp: Record<string, any> = {
+      ...defaultValues,
       saleStartDate: launchpadDetail
         ? new Date(launchpadDetail.SALE_START_TIME + 'Z')
         : new Date(),
@@ -1280,6 +1270,7 @@ export default function Page({ params }: TPage) {
                           <div
                             {...getRootProps()}
                             className=" flex items-center justify-center w-full"
+                            ref={field.ref}
                           >
                             <label
                               htmlFor="dropzone-file"

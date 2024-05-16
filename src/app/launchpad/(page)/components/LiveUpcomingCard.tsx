@@ -186,7 +186,8 @@ export default function LiveUpcomingCard({
       new Date(launchpadData.SALE_END_TIME + 'Z').getTime() >=
         new Date().getTime()
     )
-      return 'inprogress'
+      if (launchpadData?.STATUS === 'requested') return 'requested'
+      else return 'inprogress'
     else return 'ended'
   }, [launchpadData])
 
@@ -352,14 +353,14 @@ export default function LiveUpcomingCard({
             <div
               className={clsx(
                 'text-center flex text-xs font-medium whitespace-nowrap justify-center items-stretch px-6 py-2 rounded-3xl capitalize',
-                launchpadStatus === 'inprogress' &&
+                (launchpadStatus === 'inprogress'|| launchpadStatus === 'requested')  &&
                   'text-astra-dark-green bg-astra-green',
                 launchpadStatus === 'ended' && 'text-[#6b7280] bg-[#f9fafb]',
                 launchpadStatus === 'upcoming' &&
                   'text-astra-dark-orange bg-astra-orange'
               )}
             >
-              {launchpadStatus === 'inprogress' && (
+              {(launchpadStatus === 'inprogress'|| launchpadStatus === 'requested') && (
                 <DotFilledIcon className="stroke-astra-dark-green" />
               )}
               {launchpadStatus === 'ended' && (

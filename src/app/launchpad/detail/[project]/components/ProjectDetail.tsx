@@ -457,16 +457,14 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     baseToken: z.string().min(1, {
       message: 'Please select maximum contribute amount.',
     }),
-    projectDescriptionDetail: z.coerce.string().min(1, {
-      message: 'Project Description is required',
-    }),
+    projectDescriptionDetail: z.coerce.string(),
     isVesting: z.boolean(),
     projectImage: z
-    .string()
-    .min(1, {
-      message: 'Website url is required',
-    })
-    .url({ message: 'Invalid url' }),
+      .string()
+      .min(1, {
+        message: 'Project image is required',
+      })
+      .url({ message: 'Invalid url' }),
   }
   if (vesting) {
     temp['vest_start'] = z.date({
@@ -534,9 +532,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     )
 
   let baseTokenTemp = ''
-  if (data.BASE_TOKEN === chainConfig.USDCContractAddress)
+  if (data?.BASE_TOKEN === chainConfig.USDCContractAddress)
     baseTokenTemp = 'USDC'
-  if (data.BASE_TOKEN === chainConfig.USDTContractAddress)
+  if (data?.BASE_TOKEN === chainConfig.USDTContractAddress)
     baseTokenTemp = 'USDT'
 
   const form = useForm<ProjectObject>({
@@ -576,13 +574,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       tokenType: data?.TOKEN_TYPE || '',
       baseToken: baseTokenTemp || '',
       isVesting: data?.IS_VESTING,
-      vest_start: data.VEST_START
+      vest_start: data?.VEST_START
         ? new Date(data.VEST_START + 'Z')
         : new Date(),
-      vest_cliff: data.VEST_CLIFF / 86400 || '',
-      vest_duration: data.VEST_DURATION / 86400 || '',
-      vest_slice_period_seconds: data.VEST_SLICE_PERIOD_SECONDS / 86400 || '',
-      vest_initial_unlock: data.VEST_INITIAL_UNLOCK || '',
+      vest_cliff: data?.VEST_CLIFF / 86400 || '',
+      vest_duration: data?.VEST_DURATION / 86400 || '',
+      vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS / 86400 || '',
+      vest_initial_unlock: data?.VEST_INITIAL_UNLOCK || '',
       projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL || '',
       saleRoundDetail: data?.SALE_ROUND_DETAIL || '',
     },
@@ -924,6 +922,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                             <div
                               {...getRootProps()}
                               className=" flex items-center justify-center w-full"
+                              ref={field.ref}
                             >
                               <label
                                 htmlFor="dropzone-file"

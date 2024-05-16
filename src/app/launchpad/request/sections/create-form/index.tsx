@@ -466,7 +466,7 @@ const CreateForm = () => {
     projectImage: z
       .string()
       .min(1, {
-        message: 'Website url is required',
+        message: 'Project image is required',
       })
       .url({ message: 'Invalid url' }),
   }
