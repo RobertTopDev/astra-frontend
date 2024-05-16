@@ -589,7 +589,7 @@ const CreateForm = () => {
     projectValuation: '',
     projectDescription: '',
     projectDescriptionDetail: '',
-    projectImage:'',
+    projectImage: '',
     tokenName: '',
     website: '',
     pitchdeck: '',
@@ -1157,7 +1157,7 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString('en-US')
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1202,7 +1202,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1389,7 +1391,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1450,7 +1454,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1481,7 +1487,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1661,7 +1669,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1705,7 +1715,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
@@ -1749,7 +1761,9 @@ const CreateForm = () => {
                         const formattedValue =
                           inputValue === '0-'
                             ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString()
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}

@@ -545,17 +545,21 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       saleStartDate: data ? new Date(data.SALE_START_TIME + 'Z') : new Date(),
       saleEndDate: data ? new Date(data.SALE_END_TIME + 'Z') : new Date(),
       tokenAddress: data ? data.LAUNCHPAD_TOKEN_ADDRESS : '',
-      tokenAmount: data ? data.TOTAL_SALE_AMOUNT.toLocaleString() : '',
+      tokenAmount: data ? data.TOTAL_SALE_AMOUNT.toLocaleString('en-US') : '',
       tokenPrice: data ? data.LAUNCHPAD_TOKEN_PRICE : '',
-      baseAmount: data ? data.MAX_PURCHASE_BASE_AMOUNT.toLocaleString() : '',
+      baseAmount: data
+        ? data.MAX_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
+        : '',
       tokenDecimals: data ? data.LAUNCHPAD_TOKEN_DECIMAL : '18',
       tokenSymbol: data ? data.LAUNCHPAD_TOKEN_SYMBOL.toString() : '',
       totalSupply: data
-        ? data.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString()
+        ? data.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString('en-US')
         : '',
-      softCap: data ? data.SOFT_CAP.toLocaleString() : '',
-      hardCap: data ? data.HARD_CAP.toLocaleString() : '',
-      initialMarketCap: data ? data.INITIAL_MARKET_CAP.toLocaleString() : '',
+      softCap: data ? data.SOFT_CAP.toLocaleString('en-US') : '',
+      hardCap: data ? data.HARD_CAP.toLocaleString('en-US') : '',
+      initialMarketCap: data
+        ? data.INITIAL_MARKET_CAP.toLocaleString('en-US')
+        : '',
       projectValuation: '', // should remove project valuation
       tokenName: data ? data.LAUNCHPAD_TOKEN_NAME.toString() : '',
       website: data ? data.WEBSITE_URL.toString() : '',
@@ -566,7 +570,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectTwitter: data ? data.TWITTER.toString() : '',
       contactTelegram: data ? data.TELEGRAM.toString() : '',
       contactDiscord: data ? data.DISCORD.toString() : '',
-      totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString() : '',
+      totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
       controlledCap: data?.CONTROLLED_CAP || '',
@@ -1057,7 +1061,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1107,7 +1111,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1300,7 +1304,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1369,7 +1373,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1405,7 +1409,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1585,7 +1589,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1634,7 +1638,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
@@ -1683,7 +1687,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   ? '-'
                                   : (
                                       parseInt(inputValue, 10) || 0
-                                    ).toLocaleString()
+                                    ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}

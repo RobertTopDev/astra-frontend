@@ -237,7 +237,7 @@ const StakingAstraStakeAstraCard = ({
             <h3>Accrued Rewards</h3>
             <p>
               <AstraLoading isLoading={isLoading}>
-                {(accruedRewards / rewardMultiplier).toLocaleString()}
+                {(accruedRewards / rewardMultiplier).toLocaleString('en-US')}
               </AstraLoading>
             </p>
             <div>

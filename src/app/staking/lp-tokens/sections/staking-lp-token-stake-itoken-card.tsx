@@ -157,11 +157,11 @@ const StakingLpTokenStakeLpTokenCard = ({
             <div className="text-left">
               {astraDecimal !== undefined
                 ? numberFormatter(
-                  formatUnits(
-                    BigInt(cell.row.original.liquidity),
-                    astraDecimal
+                    formatUnits(
+                      BigInt(cell.row.original.liquidity),
+                      astraDecimal
+                    )
                   )
-                )
                 : 0}
             </div>
           )
@@ -296,7 +296,7 @@ const StakingLpTokenStakeLpTokenCard = ({
             <h3>Accrued Rewards</h3>
             <p>
               <AstraLoading isLoading={isLoading}>
-                {(accruedRewards / rewardMultiplier).toLocaleString()}
+                {(accruedRewards / rewardMultiplier).toLocaleString('en-US')}
               </AstraLoading>
             </p>
             <div>
@@ -383,9 +383,9 @@ const StakingLpTokenStakeLpTokenCard = ({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   )
                 })}

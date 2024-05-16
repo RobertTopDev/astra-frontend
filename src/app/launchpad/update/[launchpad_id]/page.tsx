@@ -960,11 +960,11 @@ export default function Page({ params }: TPage) {
         ? launchpadDetail.LAUNCHPAD_TOKEN_ADDRESS
         : '',
       tokenAmount: launchpadDetail
-        ? launchpadDetail.TOTAL_SALE_AMOUNT.toLocaleString()
+        ? launchpadDetail.TOTAL_SALE_AMOUNT.toLocaleString('en-US')
         : '',
       tokenPrice: launchpadDetail ? launchpadDetail.LAUNCHPAD_TOKEN_PRICE : '',
       baseAmount: launchpadDetail
-        ? launchpadDetail.MAX_PURCHASE_BASE_AMOUNT.toLocaleString()
+        ? launchpadDetail.MAX_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
         : 0,
       tokenDecimals: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_DECIMAL
@@ -973,15 +973,19 @@ export default function Page({ params }: TPage) {
         ? launchpadDetail.LAUNCHPAD_TOKEN_SYMBOL.toString()
         : '',
       totalSupply: launchpadDetail
-        ? launchpadDetail.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString()
+        ? launchpadDetail.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString('en-US')
         : '',
-      softCap: launchpadDetail ? launchpadDetail.SOFT_CAP.toLocaleString() : '',
-      hardCap: launchpadDetail ? launchpadDetail.HARD_CAP.toLocaleString() : '',
+      softCap: launchpadDetail
+        ? launchpadDetail.SOFT_CAP.toLocaleString('en-US')
+        : '',
+      hardCap: launchpadDetail
+        ? launchpadDetail.HARD_CAP.toLocaleString('en-US')
+        : '',
       initialMarketCap: launchpadDetail
-        ? launchpadDetail.INITIAL_MARKET_CAP.toLocaleString()
+        ? launchpadDetail.INITIAL_MARKET_CAP.toLocaleString('en-US')
         : '',
       projectValuation: launchpadDetail
-        ? launchpadDetail.PROJECT_VALUATION.toLocaleString()
+        ? launchpadDetail.PROJECT_VALUATION.toLocaleString('en-US')
         : '',
       tokenName: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_NAME.toString()
@@ -1008,7 +1012,7 @@ export default function Page({ params }: TPage) {
         : '',
       contactDiscord: launchpadDetail ? launchpadDetail.DISCORD.toString() : '',
       totalToken: launchpadDetail
-        ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString()
+        ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US')
         : '',
       leadVC: launchpadDetail?.LEAD_VC || '',
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
@@ -1401,7 +1405,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -1449,7 +1453,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -1639,7 +1643,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -1705,7 +1709,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -1738,7 +1742,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -1922,7 +1926,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -1968,7 +1972,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
@@ -2014,7 +2018,7 @@ export default function Page({ params }: TPage) {
                                 ? '-'
                                 : (
                                     parseInt(inputValue, 10) || 0
-                                  ).toLocaleString()
+                                  ).toLocaleString('en-US')
                             // Update the input value in the form
                             field.onChange(formattedValue)
                           }}
