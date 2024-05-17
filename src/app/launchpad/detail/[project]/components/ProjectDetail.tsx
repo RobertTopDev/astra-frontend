@@ -1168,8 +1168,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormControl>
                           <Input
                             type="number"
-                            placeholder="e.g. 20"
+                            placeholder="e.g. 18"
                             {...field}
+                            onWheel={(event) => event.currentTarget.blur()}
                           />
                         </FormControl>
                         <FormMessage />
@@ -1325,6 +1326,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                             type="number"
                             placeholder="e.g. $10"
                             {...field}
+                            onWheel={(event) => event.currentTarget.blur()}
                           />
                         </FormControl>
                         <FormMessage />
@@ -1832,6 +1834,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     ? field.value.toString()
                                     : ''
                                 }
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormDescription>
@@ -1874,6 +1877,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     ? field.value.toString()
                                     : ''
                                 }
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormDescription>
@@ -1915,6 +1919,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                 value={
                                   field.value !== null ? field.value : undefined
                                 }
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormDescription>
@@ -1957,6 +1962,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                 value={
                                   field.value !== null ? field.value : undefined
                                 }
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormDescription>

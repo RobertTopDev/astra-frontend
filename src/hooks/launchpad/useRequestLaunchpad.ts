@@ -80,7 +80,7 @@ export const useRequestLaunchpad = ({
       setTransactionObj({
         status: 'loading',
         reset,
-        transactionAction: 'Completing KYC',
+        transactionAction: 'Requesting Launchpad',
       })
     },
     onError: (error) => {
@@ -191,7 +191,7 @@ export const useRequestLaunchpad = ({
             ...transactionObj,
             status: 'success',
             transactionHash: txReceipt.transactionHash,
-            transactionAction: 'Completed KYC Successfully',
+            transactionAction: 'Requested Launchpad Successfully',
           })
           onSuccessTx?.(txReceipt)
         } else {
@@ -199,7 +199,7 @@ export const useRequestLaunchpad = ({
             ...transactionObj,
             status: 'failed',
             transactionHash: txReceipt?.transactionHash,
-            transactionAction: 'Completing KYC Failed',
+            transactionAction: 'Requesting Launchpad Failed',
           })
           onRevert?.(txReceipt)
         }
@@ -208,7 +208,7 @@ export const useRequestLaunchpad = ({
           ...transactionObj,
           status: 'failed',
           transactionHash: txReceipt?.transactionHash,
-          transactionAction: 'Completing KYC Failed',
+          transactionAction: 'Requesting Launchpad Failed',
         })
         onRevert?.(txReceipt)
       }

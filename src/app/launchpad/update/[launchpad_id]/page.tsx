@@ -778,9 +778,6 @@ export default function Page({ params }: TPage) {
   })
 
   function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
-    console.log('submit', value)
-    return
-
     if (isUploadLoading || !address) {
       alert('loading or address is undefined')
       return
@@ -1510,8 +1507,9 @@ export default function Page({ params }: TPage) {
                       <FormControl>
                         <Input
                           type="number"
-                          placeholder="e.g. 20  (Must be positive)"
+                          placeholder="e.g. 18 (Must be positive)"
                           {...field}
+                          onWheel={(event) => event.currentTarget.blur()}
                         />
                       </FormControl>
                       <FormMessage />
@@ -1664,6 +1662,7 @@ export default function Page({ params }: TPage) {
                           type="number"
                           placeholder="e.g. $10 (Must be positive)"
                           {...field}
+                          onWheel={(event) => event.currentTarget.blur()}
                         />
                       </FormControl>
                       <FormMessage />
@@ -2158,6 +2157,7 @@ export default function Page({ params }: TPage) {
                               type="number"
                               placeholder="e.g. 1(day) (Must be positive)"
                               {...field}
+                              onWheel={(event) => event.currentTarget.blur()}
                             />
                           </FormControl>
                           <FormDescription>
@@ -2195,6 +2195,7 @@ export default function Page({ params }: TPage) {
                               type="number"
                               placeholder="e.g. 365(days) (Must be positive)"
                               {...field}
+                              onWheel={(event) => event.currentTarget.blur()}
                             />
                           </FormControl>
                           <FormDescription>
@@ -2233,6 +2234,7 @@ export default function Page({ params }: TPage) {
                               type="number"
                               placeholder="e.g. 1(day) (Must be positive)"
                               {...field}
+                              onWheel={(event) => event.currentTarget.blur()}
                             />
                           </FormControl>
                           <FormDescription>
@@ -2272,6 +2274,7 @@ export default function Page({ params }: TPage) {
                               type="number"
                               placeholder="e.g. 10(%) (Must be positive integer between 1 - 100)"
                               {...field}
+                              onWheel={(event) => event.currentTarget.blur()}
                             />
                           </FormControl>
                           <FormDescription>
@@ -2519,10 +2522,8 @@ export default function Page({ params }: TPage) {
                             <Input
                               type="number"
                               placeholder="e.g. 50 (%) (Must be positive number between 0 - 100)"
-                              // onChange={(e) =>
-                              //   handleInputChange(index, e.target.value, 'value')
-                              // }
                               {...field}
+                              onWheel={(event) => event.currentTarget.blur()}
                             />
                           </FormControl>
                           <FormMessage />

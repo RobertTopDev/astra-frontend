@@ -81,6 +81,7 @@ export const useApprove = ({
         ...transactionObj,
         status: 'success',
         transactionHash: txReceipt.transactionHash,
+        transactionAction: 'Approved Token Successfully',
       })
       onSuccessTx?.(txReceipt)
     } else if (txReceipt?.status === 'reverted') {
@@ -88,6 +89,7 @@ export const useApprove = ({
         ...transactionObj,
         status: 'failed',
         transactionHash: txReceipt?.transactionHash,
+        transactionAction: 'Approving Token Failed',
       })
       onRevert?.(txReceipt)
     }
