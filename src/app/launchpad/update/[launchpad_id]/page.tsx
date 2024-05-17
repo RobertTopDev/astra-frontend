@@ -1352,7 +1352,7 @@ export default function Page({ params }: TPage) {
                   name="projectDescriptionDetail"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Description *</FormLabel>
+                      <FormLabel>Project Description</FormLabel>
                       <FormControl>
                         <div style={{ color: 'black' }}>
                           <ReactQuill
