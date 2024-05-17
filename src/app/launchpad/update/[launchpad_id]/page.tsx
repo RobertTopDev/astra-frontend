@@ -78,6 +78,7 @@ type TPage = {
 export default function Page({ params }: TPage) {
   const router = useRouter()
   const [fileError, setFileError] = useState<string>('')
+  const [tempImageFile, setTempImageFile] = useState<File>()
 
   const { launchpad_id } = params
   const {
@@ -101,12 +102,15 @@ export default function Page({ params }: TPage) {
       setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
       return
     }
+    if ((image.size > 10485760)) {
+      setFileError('File size should be less than 10MB')
+      return
+    }
     setFileError('')
     if (!image) return
-    setUploading(true)
-    const url = await uploadToCloudinary(image)
-    form.setValue(`projectImage`, url)
-    setUploading(false)
+    setTempImageFile(image)
+    const fileUrl = URL.createObjectURL(image)
+    form.setValue(`projectImage`, fileUrl)
   }
 
   const reactQuillRef = useRef<ReactQuill>(null)
@@ -784,7 +788,7 @@ export default function Page({ params }: TPage) {
     },
   })
 
-  function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
+  async function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
     if (isUploadLoading || !address) {
       alert('loading or address is undefined')
       return
@@ -811,6 +815,9 @@ export default function Page({ params }: TPage) {
       baseTokenTemp = chainConfig.USDCContractAddress
     if (value.baseToken === 'USDT')
       baseTokenTemp = chainConfig.USDTContractAddress
+
+    const url = await uploadToCloudinary(tempImageFile as File)
+
     const value_temp = value
     value_temp.tokenName = value_temp.tokenName.trim()
     value_temp.tokenSymbol = value_temp.tokenSymbol.trim()
@@ -827,6 +834,7 @@ export default function Page({ params }: TPage) {
     value_temp.teamDescription = launchpadDetail?.TEAM_DESCRIPTION || ''
     value_temp.projectImage = launchpadDetail?.PROJECT_IMAGE || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
+    value_temp.projectImage = url
 
     const result_values: RequestLaunchpadResultValues = {
       data: value_temp,

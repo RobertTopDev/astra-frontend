@@ -65,6 +65,7 @@ const CreateForm = () => {
   const { address } = useAccount()
   const { chainConfig } = useChainConfig()
   const [fileError, setFileError] = useState<string>('')
+  const [tempImageFile, setTempImageFile] = useState<File>()
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -79,12 +80,15 @@ const CreateForm = () => {
       setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
       return
     }
+    if ((image.size > 10485760)) {
+      setFileError('File size should be less than 10MB')
+      return
+    }
     setFileError('')
     if (!image) return
-    setUploading(true)
-    const url = await uploadToCloudinary(image)
-    form.setValue(`projectImage`, url)
-    setUploading(false)
+    setTempImageFile(image)
+    const fileUrl = URL.createObjectURL(image)
+    form.setValue(`projectImage`, fileUrl)
   }
 
   const reactQuillRef = useRef<ReactQuill>(null)
@@ -703,6 +707,8 @@ const CreateForm = () => {
     }
     setErrors(temp_errors)
     if (_.isEmpty(temp_errors)) {
+      const url = await uploadToCloudinary(tempImageFile as File)
+
       const requestData: any = {
         owner: address as `0x${string}`,
         launchpadAddress: '',
@@ -723,7 +729,7 @@ const CreateForm = () => {
         projectValuation: 0, // should remove
         projectDetail: result_values.data.projectDescription,
         projectDescriptionDetail: result_values.data.projectDescriptionDetail,
-        projectImage: result_values.data.projectImage,
+        projectImage: url,
         teamInfo: convertTeamObjectToString(result_values.team),
         //can update
         teamDescription: '',

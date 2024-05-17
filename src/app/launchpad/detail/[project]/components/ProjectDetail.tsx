@@ -66,6 +66,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   const { chainConfig } = useChainConfig()
   const [open, setOpen] = useState(false)
 
+  const [tempImageFile, setTempImageFile] = useState<File>()
+
   const [uploading, setUploading] = useState<boolean>(false)
   const [fileError, setFileError] = useState<string>('')
 
@@ -82,12 +84,15 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
       return
     }
+    if(image.size> 10485760) {
+      setFileError('File size should be less than 10MB')
+      return
+    }
     setFileError('')
     if (!image) return
-    setUploading(true)
-    const url = await uploadToCloudinary(image)
-    form.setValue(`projectImage`, url)
-    setUploading(false)
+    setTempImageFile(image)
+    const fileUrl = URL.createObjectURL(image)
+    form.setValue(`projectImage`, fileUrl)
   }
 
   const reactQuillRef = useRef<ReactQuill>(null)
@@ -614,6 +619,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     if (value.baseToken === 'USDT')
       baseTokenTemp = chainConfig.USDTContractAddress
 
+    const url = await uploadToCloudinary(tempImageFile as File)
+
     const requestData = {
       owner: data.OWNER as `0x${string}`,
       launchpadIndex: data.LAUNCHPAD_INDEX
@@ -637,7 +644,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectValuation: 0, // should remove
       projectDetail: value.projectDescription,
       projectDescriptionDetail: value.projectDescriptionDetail,
-      projectImage: value.projectImage,
+      projectImage: url,
       teamInfo: data.TEAM_INFO,
       teamDescription: data.TEAM_DESCRIPTION || '',
       metrics: data.METRICS,
@@ -985,6 +992,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     <p className=" text-sm font-semibold">
                                       Image Uploaded
                                     </p>
+                                    {/* <button
+                                      onClick={() => {
+                                        form.setValue(`projectImage`, '')
+                                      }}
+                                    >
+                                      Delete Image
+                                    </button> */}
                                     <p className=" text-xs text-red-500">
                                       {fileError}
                                     </p>
