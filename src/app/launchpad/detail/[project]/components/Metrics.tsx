@@ -365,6 +365,7 @@ export default function Metrics({ data, refetchData }: Props) {
                                 type="number"
                                 placeholder="e.g. 50(%) (Must be positive number between 0 - 100)"
                                 {...field}
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormMessage />
@@ -416,6 +417,7 @@ export default function Metrics({ data, refetchData }: Props) {
                                 type="number"
                                 placeholder="e.g. $0.1 (Must be positive number)"
                                 {...field}
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormMessage />
@@ -433,6 +435,7 @@ export default function Metrics({ data, refetchData }: Props) {
                                 type="number"
                                 placeholder="e.g. 50(%) (Must be positive number between 0 - 100)"
                                 {...field}
+                                onWheel={(event) => event.currentTarget.blur()}
                               />
                             </FormControl>
                             <FormMessage />

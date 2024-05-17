@@ -83,7 +83,7 @@ export default function Stake() {
               <TableBody className="[&_tr]:border-0 text-left">
                 <TableRow className="h-24">
                   <TableCell>Staking Score</TableCell>
-                  <TableCell>0.00 points</TableCell>
+                  <TableCell>{stakingScore.toFixed(2)} points</TableCell>
                   <TableCell>
                     Staking $ASTRADAO tokens gives an additional bonus score
                   </TableCell>
