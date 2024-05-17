@@ -67,6 +67,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   const [open, setOpen] = useState(false)
 
   const [uploading, setUploading] = useState<boolean>(false)
+  const [fileError, setFileError] = useState<string>('')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -76,6 +77,12 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   }
 
   const handleImageUpload = async (image: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png']
+    if (!allowedTypes.includes(image.type)) {
+      setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
+      return
+    }
+    setFileError('')
     if (!image) return
     setUploading(true)
     const url = await uploadToCloudinary(image)
@@ -936,11 +943,14 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   <div className=" text-center max-w-md  ">
                                     {/* <RadialProgress progress={progress} /> */}
                                     <p className=" text-sm font-semibold">
-                                      Uploading Picture
+                                      Image Uploaded
                                     </p>
                                     <p className=" text-xs text-gray-400">
                                       Do not refresh or perform any other action
-                                      while the picture is being upload
+                                      while the image is being upload
+                                    </p>
+                                    <p className=" text-xs text-red-500">
+                                      {fileError}
                                     </p>
                                   </div>
                                 )}
@@ -973,10 +983,10 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                       alt="uploaded image"
                                     />
                                     <p className=" text-sm font-semibold">
-                                      Picture Uploaded
+                                      Image Uploaded
                                     </p>
-                                    <p className=" text-xs text-gray-400">
-                                      Click submit to upload the picture
+                                    <p className=" text-xs text-red-500">
+                                      {fileError}
                                     </p>
                                   </div>
                                 )}
@@ -985,7 +995,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               <Input
                                 {...getInputProps()}
                                 id="dropzone-file"
-                                accept="image/png, image/jpeg"
+                                accept="image/*"
                                 type="file"
                                 className="hidden"
                                 disabled={uploading || field.value !== null}

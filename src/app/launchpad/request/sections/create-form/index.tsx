@@ -64,6 +64,7 @@ const CreateForm = () => {
   const router = useRouter()
   const { address } = useAccount()
   const { chainConfig } = useChainConfig()
+  const [fileError, setFileError] = useState<string>('')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -73,6 +74,12 @@ const CreateForm = () => {
   }
 
   const handleImageUpload = async (image: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png']
+    if (!allowedTypes.includes(image.type)) {
+      setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
+      return
+    }
+    setFileError('')
     if (!image) return
     setUploading(true)
     const url = await uploadToCloudinary(image)
@@ -1039,11 +1046,14 @@ const CreateForm = () => {
                             <div className=" text-center max-w-md  ">
                               {/* <RadialProgress progress={progress} /> */}
                               <p className=" text-sm font-semibold">
-                                Uploading Picture
+                                Image Uploaded
                               </p>
                               <p className=" text-xs text-gray-400">
                                 Do not refresh or perform any other action while
-                                the picture is being upload
+                                the image is being upload
+                              </p>
+                              <p className=" text-xs text-red-500">
+                                {fileError}
                               </p>
                             </div>
                           )}
@@ -1076,10 +1086,10 @@ const CreateForm = () => {
                                 alt="uploaded image"
                               />
                               <p className=" text-sm font-semibold">
-                                Picture Uploaded
+                                Image Uploaded
                               </p>
-                              <p className=" text-xs text-gray-400">
-                                Click submit to upload the picture
+                              <p className=" text-xs text-red-500">
+                                {fileError}
                               </p>
                             </div>
                           )}
