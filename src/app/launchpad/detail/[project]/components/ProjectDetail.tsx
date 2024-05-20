@@ -488,9 +488,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .nonnegative({
         message: 'Cliff is required and must be positive',
       })
-      .refine((value) => value !== 0, {
-        message: 'Cliff cannot be zero',
-      })
+      // .refine((value) => value !== 0, {
+      //   message: 'Cliff cannot be zero',
+      // })
     temp['vest_duration'] = z.coerce
       .number()
       .nonnegative({
