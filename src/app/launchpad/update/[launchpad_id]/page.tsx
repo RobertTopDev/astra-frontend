@@ -102,7 +102,7 @@ export default function Page({ params }: TPage) {
       setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
       return
     }
-    if ((image.size > 10485760)) {
+    if (image.size > 10485760) {
       setFileError('File size should be less than 10MB')
       return
     }
@@ -147,7 +147,7 @@ export default function Page({ params }: TPage) {
       }
     }
   }, [])
-  const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
+  const urlRegex = new RegExp('^(http|https|blob:http)://[^ "]+$')
   const [uploading, setUploading] = useState<boolean>(false)
 
   const quillModules = {
@@ -922,8 +922,6 @@ export default function Page({ params }: TPage) {
   }
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
-
     return value.trim() === '' || urlRegex.test(value)
   }
 
@@ -1308,41 +1306,53 @@ export default function Page({ params }: TPage) {
                                 </div>
                               )}
 
-                              {!uploading && _.isEmpty(field.value) && (
-                                <div className=" text-center">
-                                  <div className=" border p-2 rounded-md max-w-min mx-auto">
-                                    <IoCloudUploadOutline size="1.6em" />
+                              {!uploading &&
+                                !urlRegex.test(field.value || '') && (
+                                  <div className=" text-center">
+                                    <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                      <IoCloudUploadOutline size="1.6em" />
+                                    </div>
+
+                                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                      <span className="font-semibold">
+                                        Drag an image
+                                      </span>
+                                    </p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-400">
+                                      Click to upload &#40; image should be
+                                      500x500 px & under 10 MB &#41;
+                                    </p>
                                   </div>
+                                )}
 
-                                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <span className="font-semibold">
-                                      Drag an image
-                                    </span>
-                                  </p>
-                                  <p className="text-xs text-gray-400 dark:text-gray-400">
-                                    Click to upload &#40; image should be
-                                    500x500 px & under 10 MB &#41;
-                                  </p>
-                                </div>
-                              )}
-
-                              {field.value && !uploading && (
-                                <div className="text-center">
-                                  <Image
-                                    width={1000}
-                                    height={1000}
-                                    src={field.value}
-                                    className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
-                                    alt="uploaded image"
-                                  />
-                                  <p className=" text-sm font-semibold">
-                                    Image Uploaded
-                                  </p>
-                                  <p className=" text-xs text-red-500">
-                                    {fileError}
-                                  </p>
-                                </div>
-                              )}
+                              {urlRegex.test(field.value || '') &&
+                                !uploading && (
+                                  <div className="text-center">
+                                    <Image
+                                      width={1000}
+                                      height={1000}
+                                      src={field.value}
+                                      className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                      alt="uploaded image"
+                                    />
+                                    <p className=" text-sm font-semibold">
+                                      Image Uploaded
+                                    </p>
+                                    <Button
+                                      className="px-2 mt-2"
+                                      variant="astra-red"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        form.setValue(`projectImage`, '')
+                                      }}
+                                    >
+                                      Delete Image
+                                    </Button>
+                                    <p className=" text-xs text-red-500">
+                                      {fileError}
+                                    </p>
+                                  </div>
+                                )}
                             </label>
 
                             <Input

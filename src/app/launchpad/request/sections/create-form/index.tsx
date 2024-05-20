@@ -66,6 +66,7 @@ const CreateForm = () => {
   const { chainConfig } = useChainConfig()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
+  const urlRegex = new RegExp('^(http|https|blob:http)://[^ "]+$')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -80,7 +81,7 @@ const CreateForm = () => {
       setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
       return
     }
-    if ((image.size > 10485760)) {
+    if (image.size > 10485760) {
       setFileError('File size should be less than 10MB')
       return
     }
@@ -660,8 +661,6 @@ const CreateForm = () => {
   }
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
-
     return value.trim() === '' || urlRegex.test(value)
   }
 
@@ -1064,7 +1063,7 @@ const CreateForm = () => {
                             </div>
                           )}
 
-                          {!uploading && _.isEmpty(field.value) && (
+                          {!uploading && !urlRegex.test(field.value || '') && (
                             <div className=" text-center">
                               <div className=" border p-2 rounded-md max-w-min mx-auto">
                                 <IoCloudUploadOutline size="1.6em" />
@@ -1082,7 +1081,7 @@ const CreateForm = () => {
                             </div>
                           )}
 
-                          {field.value && !uploading && (
+                          {urlRegex.test(field.value || '') && !uploading && (
                             <div className="text-center">
                               <Image
                                 width={1000}
@@ -1094,6 +1093,16 @@ const CreateForm = () => {
                               <p className=" text-sm font-semibold">
                                 Image Uploaded
                               </p>
+                              <Button
+                                className="px-2 mt-2"
+                                variant="astra-red"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  form.setValue(`projectImage`, '')
+                                }}
+                              >
+                                Delete Image
+                              </Button>
                               <p className=" text-xs text-red-500">
                                 {fileError}
                               </p>
