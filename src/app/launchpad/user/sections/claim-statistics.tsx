@@ -31,11 +31,14 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   }
 
   useEffect(() => {
-    if (launchpads?.length === 0) return
-    refetchVestingRewards()
+    // if (launchpads?.length === 0) return
+    refetchDatas()
   }, [launchpads])
 
-  return vestingRewards === undefined || vestingRewards.length === 0 ? (
+  return vestingRewards === undefined ||
+    vestingRewards.length === 0 ||
+    vestingRewardLoading ||
+    launchpadLoading ? (
     vestingRewardLoading || launchpadLoading ? (
       <Loading />
     ) : (
@@ -49,7 +52,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
             <thead className="text-xs text-gray-400 ">
               <tr className="bg-[#000000] bg-opacity-30">
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                {/* <th scope="col" className="px-6 py-3 whitespace-nowrap">
                   Launchpad Address
                 </th>
                 <th scope="col" className="px-6 py-3 whitespace-nowrap">
@@ -69,7 +72,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                 </th>
                 <th scope="col" className="px-6 py-3 whitespace-nowrap">
                   Vesting Initial Unlock
-                </th>
+                </th> */}
                 <th scope="col" className="px-6 py-3 whitespace-nowrap">
                   Token Name
                 </th>
@@ -93,7 +96,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                   className="border-b bg-[#B2C4E833] text-white border-gray-800 hover:bg-gray-800"
                   key={index}
                 >
-                  <td
+                  {/* <td
                     className="px-6 py-4 cursor-pointer"
                     onClick={() =>
                       window.open(
@@ -136,7 +139,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                   <td className="px-6 py-4">
                     {vestingReward.vestingInitialUnlock}
                     {' %'}
-                  </td>
+                  </td> */}
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     {vestingReward.launchpadTokenName}
