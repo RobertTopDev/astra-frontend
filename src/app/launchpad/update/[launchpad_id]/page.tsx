@@ -566,14 +566,12 @@ export default function Page({ params }: TPage) {
     temp['vest_start'] = z.date({
       required_error: 'Vesting start date is required.',
     })
-    temp['vest_cliff'] = z.coerce
-      .number()
-      .nonnegative({
-        message: 'Cliff is required and must be positive',
-      })
-      // .refine((value) => value !== 0, {
-      //   message: 'Cliff cannot be zero',
-      // })
+    temp['vest_cliff'] = z.coerce.number().nonnegative({
+      message: 'Cliff is required and must be positive',
+    })
+    // .refine((value) => value !== 0, {
+    //   message: 'Cliff cannot be zero',
+    // })
     temp['vest_duration'] = z.coerce
       .number()
       .nonnegative({
@@ -1704,7 +1702,7 @@ export default function Page({ params }: TPage) {
                     <FormItem>
                       <FormLabel className="flex">
                         <span className="mr-2">
-                          Maximum user contribution *
+                          Maximum User Contribution *
                         </span>
                         <TooltipProvider>
                           <Tooltip>
@@ -1713,10 +1711,9 @@ export default function Page({ params }: TPage) {
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>
-                                Maximum user contribution is the highest amount
-                                of cryptocurrency <br /> that an individual
-                                participant can contribute during a token sale
-                                event.
+                                Maximum User Contribution is the maximum amount
+                                that an individual <br /> participant can
+                                contribute during a token sale event.
                               </p>
                             </TooltipContent>
                           </Tooltip>

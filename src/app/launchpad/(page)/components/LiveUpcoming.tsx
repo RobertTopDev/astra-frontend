@@ -133,7 +133,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
               <SelectContent>
                 <SelectItem value="None">No Filter</SelectItem>
                 <SelectItem value="requested">Upcoming</SelectItem>
-                <SelectItem value="approved">In progress</SelectItem>
+                <SelectItem value="approved">In Progress</SelectItem>
                 <SelectItem value="filled">Filled</SelectItem>
                 <SelectItem value="finished">Ended</SelectItem>
                 <SelectItem value="canceled">Canceled</SelectItem>
