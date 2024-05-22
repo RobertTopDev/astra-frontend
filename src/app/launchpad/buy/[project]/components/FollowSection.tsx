@@ -42,7 +42,7 @@ export default function FollowSection({
       <CardContent className="p-0 flex flex-row items-center">
         <div className="self-stretch w-1/2 flex justify-between gap-8 pr-8 border-[#FFFFFF21] border-r-2 border-solid">
           <div className="relative h-32 w-32">
-            <MiniIdenticon seed="ddd" image={launchpadData.projectImage} />
+            <MiniIdenticon seed="ddd" image={launchpadData?.projectImage} />
           </div>
           <div className="flex grow basis-[0%] flex-col items-stretch">
             <div className="text-white text-3xl tracking-[2px]">

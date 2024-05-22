@@ -333,7 +333,7 @@ export default function BuyContent({
                   {startRemainingTime > 0
                     ? 'Upcoming'
                     : startRemainingTime <= 0 && endRemainingTime > 0
-                      ? 'Inprogress'
+                      ? 'In progress'
                       : 'Ended'}
                 </span>
               </AstraLoading>
