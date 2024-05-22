@@ -953,7 +953,7 @@ const CreateForm = () => {
               name="projectTwitter"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Twitter handle *</FormLabel>
+                  <FormLabel>Twitter Handle *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://twitter.com/"

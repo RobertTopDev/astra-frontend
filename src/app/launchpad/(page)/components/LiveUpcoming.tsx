@@ -95,10 +95,10 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
       <div className="flex justify-center">
         <AstraHeader>
           {status === 'user'
-            ? 'Particpated Projects on Astra DAO'
+            ? 'Participated Token Sales on Astra DAO'
             : status === 'owner'
-              ? 'Requested Projects'
-              : 'Live and Upcoming Projects on Astra DAO'}
+              ? 'Requested Token Sales'
+              : 'Live and Upcoming Token Sales on Astra DAO'}
         </AstraHeader>
       </div>
       {status === 'all' ? (

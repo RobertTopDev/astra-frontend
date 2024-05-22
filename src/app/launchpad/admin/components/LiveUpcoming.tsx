@@ -89,7 +89,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
   return (
     <div className="flex flex-col items-stretch py-8">
       <div className="flex justify-center">
-        <AstraHeader>Live and Upcoming Projects on Astra DAO</AstraHeader>
+        <AstraHeader>Live and Upcoming Token Sales on Astra DAO</AstraHeader>
       </div>
       {isLoading ? (
         <>
