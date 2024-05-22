@@ -1,9 +1,7 @@
 'use client'
 
 import { AstraHeader } from '@/components'
-import { Separator } from '@/components/shadcn'
 import { useLaunchpadVestingRewards } from '@/hooks'
-import { differenceInCalendarWeeks } from 'date-fns'
 import { VestingRewardActions } from './vesting-reward-actions'
 import { numberFormatter, shorten } from '@/util'
 import { TLaunchpadDetailInfo } from '@/types'
@@ -18,7 +16,6 @@ interface TPage {
 }
 
 const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
-  // const week = differenceInCalendarWeeks(new Date(), new Date('2022-08-16'))
   const { chainConfig } = useChainConfig()
   const {
     data: vestingRewards,
@@ -33,9 +30,6 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   useEffect(() => {
     refetchDatas()
   }, [launchpads])
-
-  console.log("launchpads: ", launchpads);
-  console.log("vesting rewards: ", vestingRewards);
 
   return vestingRewardLoading || launchpadLoading ? (
     <Loading />
