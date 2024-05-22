@@ -31,19 +31,14 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   }
 
   useEffect(() => {
-    // if (launchpads?.length === 0) return
     refetchDatas()
   }, [launchpads])
 
-  return vestingRewards === undefined ||
-    vestingRewards.length === 0 ||
-    vestingRewardLoading ||
-    launchpadLoading ? (
-    vestingRewardLoading || launchpadLoading ? (
-      <Loading />
-    ) : (
-      <></>
-    )
+  console.log("launchpads: ", launchpads);
+  console.log("vesting rewards: ", vestingRewards);
+
+  return vestingRewardLoading || launchpadLoading ? (
+    <Loading />
   ) : (
     <div className="flex flex-col items-center gap-4 py-8 mt-12">
       <AstraHeader>My Launchpad Vesting</AstraHeader>
