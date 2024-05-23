@@ -126,7 +126,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                           <DialogTitle>Vesting Token Detail</DialogTitle>
                         </DialogHeader>
                         <div className="content">
-                          <div className="flex justify-between gap-4">
+                          {/* <div className="flex justify-between gap-4">
                             <div>Launchpad Address:</div>
                             <div
                               className="cursor-pointer"
@@ -151,7 +151,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                             >
                               {shorten(vestingReward.vestingAddress ?? '')}
                             </div>
-                          </div>
+                          </div> */}
                           <div className="flex justify-between gap-4">
                             <div>Vesting Start:</div>
                             <div>{vestingReward.vestingStart.toString()}</div>
