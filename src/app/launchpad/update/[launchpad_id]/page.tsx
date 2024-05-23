@@ -833,6 +833,8 @@ export default function Page({ params }: TPage) {
     value_temp.projectImage = launchpadDetail?.PROJECT_IMAGE || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
     value_temp.projectImage = url
+    value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
+    value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
 
     const result_values: RequestLaunchpadResultValues = {
       data: value_temp,
@@ -1069,6 +1071,11 @@ export default function Page({ params }: TPage) {
                   'w-full flex flex-col gap-8'
                 )}
               >
+                <div className="text-center w-full mt-6">
+                  <FormLabel className="text-2xl text-center">
+                    Project Details
+                  </FormLabel>
+                </div>
                 <FormField
                   control={form.control}
                   name="tokenName"
@@ -1292,7 +1299,7 @@ export default function Page({ params }: TPage) {
                                 <div className=" text-center max-w-md  ">
                                   {/* <RadialProgress progress={progress} /> */}
                                   <p className=" text-sm font-semibold">
-                                    Image Uploaded
+                                    Image Uploading
                                   </p>
                                   <p className=" text-xs text-gray-400">
                                     Do not refresh or perform any other action
@@ -1440,6 +1447,11 @@ export default function Page({ params }: TPage) {
                 /> */}
 
                 <Separator className="bg-gray-400"></Separator>
+                <div className="text-center w-full mt-6">
+                  <FormLabel className="text-2xl text-center">
+                    Token Details
+                  </FormLabel>
+                </div>
                 <FormField
                   control={form.control}
                   name="totalSupply"
@@ -1777,7 +1789,11 @@ export default function Page({ params }: TPage) {
                   )}
                 />
                 <Separator className="bg-gray-400"></Separator>
-
+                <div className="text-center w-full mt-6">
+                  <FormLabel className="text-2xl text-center">
+                    Token Sale Details
+                  </FormLabel>
+                </div>
                 <FormField
                   control={form.control}
                   name="saleStartDate"
@@ -2314,7 +2330,11 @@ export default function Page({ params }: TPage) {
                   <></>
                 )}
                 <Separator className="bg-gray-400"></Separator>
-
+                <div className="text-center w-full mt-6">
+                  <FormLabel className="text-2xl text-center">
+                    Other Info
+                  </FormLabel>
+                </div>
                 <FormField
                   control={form.control}
                   name="leadVC"
@@ -2406,7 +2426,7 @@ export default function Page({ params }: TPage) {
                     {index == 0 ? (
                       <div className="text-center w-full mt-6">
                         <FormLabel className="text-2xl text-center">
-                          Team Information
+                          Team
                         </FormLabel>
                       </div>
                     ) : (

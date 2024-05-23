@@ -827,6 +827,11 @@ const CreateForm = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className={clsx(styles['index-form'], 'w-full flex flex-col gap-8')}
           >
+            <div className="text-center w-full mt-6">
+              <FormLabel className="text-2xl text-center">
+                Project Details
+              </FormLabel>
+            </div>
             <FormField
               control={form.control}
               name="tokenName"
@@ -1049,7 +1054,7 @@ const CreateForm = () => {
                             <div className=" text-center max-w-md  ">
                               {/* <RadialProgress progress={progress} /> */}
                               <p className=" text-sm font-semibold">
-                                Image Uploaded
+                                Image Uploading
                               </p>
                               <p className=" text-xs text-gray-400">
                                 Do not refresh or perform any other action while
@@ -1191,6 +1196,11 @@ const CreateForm = () => {
               )}
             /> */}
             <Separator className="bg-gray-400"></Separator>
+            <div className="text-center w-full mt-6">
+              <FormLabel className="text-2xl text-center">
+                Token Details
+              </FormLabel>
+            </div>
             <FormField
               control={form.control}
               name="totalSupply"
@@ -1525,6 +1535,11 @@ const CreateForm = () => {
               )}
             />
             <Separator className="bg-gray-400"></Separator>
+            <div className="text-center w-full mt-6">
+              <FormLabel className="text-2xl text-center">
+                Token Sale Details
+              </FormLabel>
+            </div>
             <FormField
               control={form.control}
               name="saleStartDate"
@@ -2055,7 +2070,11 @@ const CreateForm = () => {
             )}
 
             <Separator className="bg-gray-400"></Separator>
-
+            <div className="text-center w-full mt-6">
+              <FormLabel className="text-2xl text-center">
+                Other Info
+              </FormLabel>
+            </div>
             <FormField
               control={form.control}
               name="leadVC"
@@ -2146,7 +2165,7 @@ const CreateForm = () => {
                 {index == 0 ? (
                   <div className="text-center w-full mt-6">
                     <FormLabel className="text-2xl text-center">
-                      Team Information
+                      Team
                     </FormLabel>
                   </div>
                 ) : (

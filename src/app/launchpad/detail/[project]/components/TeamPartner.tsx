@@ -422,7 +422,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                       {index == 0 ? (
                         <div className="text-center w-full mt-6">
                           <FormLabel className="text-2xl text-center">
-                            Team Information
+                            Team
                           </FormLabel>
                         </div>
                       ) : (

@@ -60,6 +60,11 @@ interface Props {
   data: TLaunchpadDetailInfo
   refetchData?: () => Promise<void>
 }
+interface ImageFiles {
+  projectImage?: File
+  leadVCImage?: File
+  marketMakerImage?: File
+}
 
 export default function ProjectDetail({ data, refetchData }: Props) {
   const pathname = usePathname()
@@ -67,19 +72,20 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   const { chainConfig } = useChainConfig()
   const [open, setOpen] = useState(false)
 
-  const [tempImageFile, setTempImageFile] = useState<File>()
+  const [tempImageFile, setTempImageFile] = useState<ImageFiles>({})
 
   const [uploading, setUploading] = useState<boolean>(false)
   const [fileError, setFileError] = useState<string>('')
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files?.length) {
-      const selectedImage = event.target.files[0]
-      handleImageUpload(selectedImage)
+  const handleImageChange =
+    (fieldId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.files?.length) {
+        const selectedImage = event.target.files[0]
+        handleImageUpload(selectedImage, fieldId)
+      }
     }
-  }
 
-  const handleImageUpload = async (image: File) => {
+  const handleImageUpload = async (image: File, fieldId: string) => {
     const allowedTypes = ['image/jpeg', 'image/png']
     if (!allowedTypes.includes(image.type)) {
       setFileError('Invalid file type. Only JPEG and PNG files are allowed.')
@@ -91,9 +97,14 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     }
     setFileError('')
     if (!image) return
-    setTempImageFile(image)
+    type FormImageFieldNames =
+      | 'projectImage'
+      | 'leadVCImage'
+      | 'marketMakerImage'
+
+    setTempImageFile({ ...tempImageFile, [fieldId]: image })
     const fileUrl = URL.createObjectURL(image)
-    form.setValue(`projectImage`, fileUrl)
+    form.setValue(fieldId as FormImageFieldNames, fileUrl)
   }
 
   const reactQuillRef = useRef<ReactQuill>(null)
@@ -478,6 +489,18 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Project image is required',
       })
       .url({ message: 'Invalid url' }),
+    leadVCImage: z
+      .string()
+      .min(1, {
+        message: 'Lead VC image is required',
+      })
+      .url({ message: 'Invalid url' }),
+    marketMakerImage: z
+      .string()
+      .min(1, {
+        message: 'Market maker image is required',
+      })
+      .url({ message: 'Invalid url' }),
   }
   if (vesting) {
     temp['vest_start'] = z.date({
@@ -584,6 +607,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
+      leadVCImage: urlRegex.test(data?.LEAD_VC_IMAGE)
+        ? data?.LEAD_VC_IMAGE
+        : '',
+      marketMakerImage: urlRegex.test(data?.MARKET_MAKER_IMAGE)
+        ? data?.MARKET_MAKER_IMAGE
+        : '',
+
       controlledCap: data?.CONTROLLED_CAP || '',
       daoApprovedMetrics: data?.DAO_APPROVED_METRICS || '',
       tokenType: data?.TOKEN_TYPE || '',
@@ -616,7 +646,15 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     if (value.baseToken === 'USDT')
       baseTokenTemp = chainConfig.USDTContractAddress
 
-    const url = await uploadToCloudinary(tempImageFile as File)
+    const projectImageUrl = tempImageFile?.projectImage
+      ? await uploadToCloudinary(tempImageFile?.projectImage as File)
+      : value?.projectImage
+    const leadVCImageUrl = tempImageFile?.leadVCImage
+      ? await uploadToCloudinary(tempImageFile?.leadVCImage as File)
+      : value?.leadVCImage
+    const marketMakerImageUrl = tempImageFile?.leadVCImage
+      ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
+      : value?.marketMakerImage
 
     const requestData = {
       owner: data.OWNER as `0x${string}`,
@@ -641,7 +679,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectValuation: 0, // should remove
       projectDetail: value.projectDescription,
       projectDescriptionDetail: value.projectDescriptionDetail,
-      projectImage: url,
+      projectImage: projectImageUrl,
+      leadVCImage: leadVCImageUrl,
+      marketMakerImage: marketMakerImageUrl,
       teamInfo: data.TEAM_INFO,
       teamDescription: data.TEAM_DESCRIPTION || '',
       metrics: data.METRICS,
@@ -691,13 +731,24 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     tempContainer.innerHTML = data?.PROJECT_DESCRIPTION_DETAIL || ''
   }
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      const selectedImage = acceptedFiles[0]
-      handleImageUpload(selectedImage)
+  const createOnDropHandler = (fieldId: string) => {
+    return async (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const selectedImage = acceptedFiles[0]
+        handleImageUpload(selectedImage, fieldId)
+      }
     }
-  }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+  }
+
+  const projectDropzoneProps = useDropzone({
+    onDrop: createOnDropHandler('projectImage'),
+  })
+  const leadVCDropzoneProps = useDropzone({
+    onDrop: createOnDropHandler('leadVCImage'),
+  })
+  const marketMakerDropzoneProps = useDropzone({
+    onDrop: createOnDropHandler('marketMakerImage'),
+  })
 
   return (
     <div>
@@ -726,6 +777,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                   )}
                 >
                   <Separator className="bg-gray-400"></Separator>
+                  <div className="text-center w-full mt-6">
+                    <FormLabel className="text-2xl text-center">
+                      Project Details
+                    </FormLabel>
+                  </div>
                   <FormField
                     control={form.control}
                     name="tokenName"
@@ -935,19 +991,19 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <div className="text-center">
                           <FormControl>
                             <div
-                              {...getRootProps()}
+                              {...projectDropzoneProps.getRootProps()}
                               className=" flex items-center justify-center w-full"
                               ref={field.ref}
                             >
                               <label
                                 htmlFor="dropzone-file"
-                                className="relative flex items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                className="relative flex items-center justify-center w-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                               >
                                 {uploading && (
                                   <div className=" text-center max-w-md  ">
                                     {/* <RadialProgress progress={progress} /> */}
                                     <p className=" text-sm font-semibold">
-                                      Image Uploaded
+                                      Image Uploading
                                     </p>
                                     <p className=" text-xs text-gray-400">
                                       Do not refresh or perform any other action
@@ -1009,13 +1065,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               </label>
 
                               <Input
-                                {...getInputProps()}
+                                {...projectDropzoneProps.getInputProps()}
                                 id="dropzone-file"
                                 accept="image/*"
                                 type="file"
                                 className="hidden"
                                 disabled={uploading || field.value !== null}
-                                onChange={handleImageChange}
+                                onChange={handleImageChange('projectImage')}
                               />
                             </div>
                           </FormControl>
@@ -1098,6 +1154,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     )}
                   /> */}
                   <Separator className="bg-gray-400"></Separator>
+                  <div className="text-center w-full mt-6">
+                    <FormLabel className="text-2xl text-center">
+                      Token Details
+                    </FormLabel>
+                  </div>
                   <FormField
                     control={form.control}
                     name="totalSupply"
@@ -1447,6 +1508,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     )}
                   />
                   <Separator className="bg-gray-400"></Separator>
+                  <div className="text-center w-full mt-6">
+                    <FormLabel className="text-2xl text-center">
+                      Token Sale Details
+                    </FormLabel>
+                  </div>
                   <FormField
                     control={form.control}
                     name="saleStartDate"
@@ -2003,7 +2069,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                   )}
 
                   <Separator className="bg-gray-400"></Separator>
-
+                  <div className="text-center w-full mt-6">
+                    <FormLabel className="text-2xl text-center">
+                      Other Info
+                    </FormLabel>
+                  </div>
                   <FormField
                     control={form.control}
                     name="leadVC"
@@ -2046,6 +2116,215 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                       </FormItem>
                     )}
                   />
+                  <div className="flex gap-2 mb-4">
+                    <div className="flex-1 h-full">
+                      <FormField
+                        control={form.control}
+                        name="leadVCImage"
+                        render={({ field }) => (
+                          <FormItem className="py-3 h-full">
+                            <FormLabel>Lead VC Image *</FormLabel>
+                            <div className="text-center h-full">
+                              <FormControl>
+                                <div
+                                  {...leadVCDropzoneProps.getRootProps()}
+                                  className=" flex items-center justify-center w-full h-full"
+                                  ref={field.ref}
+                                >
+                                  <label
+                                    htmlFor="dropzone-file"
+                                    className="flex items-center justify-center w-full h-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                  >
+                                    {uploading && (
+                                      <div className=" text-center max-w-md  ">
+                                        {/* <RadialProgress progress={progress} /> */}
+                                        <p className=" text-sm font-semibold">
+                                          Image Uploading
+                                        </p>
+                                        <p className=" text-xs text-gray-400">
+                                          Do not refresh or perform any other
+                                          action while the image is being upload
+                                        </p>
+                                        <p className=" text-xs text-red-500">
+                                          {fileError}
+                                        </p>
+                                      </div>
+                                    )}
+
+                                    {!uploading &&
+                                      !urlRegex.test(field.value || '') && (
+                                        <div className=" text-center">
+                                          <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                            <IoCloudUploadOutline size="1.6em" />
+                                          </div>
+
+                                          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            <span className="font-semibold">
+                                              Drag an image
+                                            </span>
+                                          </p>
+                                          <p className="text-xs text-gray-400 dark:text-gray-400">
+                                            Click to upload &#40; image should
+                                            be 500x500 px & under 10 MB &#41;
+                                          </p>
+                                        </div>
+                                      )}
+
+                                    {urlRegex.test(field.value || '') &&
+                                      !uploading && (
+                                        <div className="text-center">
+                                          <Image
+                                            width={1000}
+                                            height={1000}
+                                            src={field.value as string}
+                                            className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                            alt="uploaded image"
+                                          />
+                                          <p className=" text-sm font-semibold">
+                                            Image Uploaded
+                                          </p>
+                                          <Button
+                                            className="px-1 mt-2"
+                                            variant="astra-red"
+                                            onClick={(e) => {
+                                              e.stopPropagation()
+                                              form.setValue(`leadVCImage`, '')
+                                            }}
+                                          >
+                                            Delete Image
+                                          </Button>
+                                          <p className=" text-xs text-red-500">
+                                            {fileError}
+                                          </p>
+                                        </div>
+                                      )}
+                                  </label>
+
+                                  <Input
+                                    {...leadVCDropzoneProps.getInputProps()}
+                                    id="dropzone-file"
+                                    accept="image/*"
+                                    type="file"
+                                    className="hidden"
+                                    disabled={uploading || field.value !== null}
+                                    onChange={handleImageChange('leadVCImage')}
+                                  />
+                                </div>
+                              </FormControl>
+                            </div>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="flex-1 h-full">
+                      <FormField
+                        control={form.control}
+                        name="marketMakerImage"
+                        render={({ field }) => (
+                          <FormItem className="py-3 h-full">
+                            <FormLabel>Market Maker Image *</FormLabel>
+                            <div className="text-center h-full">
+                              <FormControl>
+                                <div
+                                  {...marketMakerDropzoneProps.getRootProps()}
+                                  className=" flex items-center justify-center w-full h-full"
+                                  ref={field.ref}
+                                >
+                                  <label
+                                    htmlFor="dropzone-file"
+                                    className="flex items-center justify-center w-full h-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                  >
+                                    {uploading && (
+                                      <div className=" text-center max-w-md  ">
+                                        {/* <RadialProgress progress={progress} /> */}
+                                        <p className=" text-sm font-semibold">
+                                          Image Uploading
+                                        </p>
+                                        <p className=" text-xs text-gray-400">
+                                          Do not refresh or perform any other
+                                          action while the image is being upload
+                                        </p>
+                                        <p className=" text-xs text-red-500">
+                                          {fileError}
+                                        </p>
+                                      </div>
+                                    )}
+
+                                    {!uploading &&
+                                      !urlRegex.test(field.value || '') && (
+                                        <div className=" text-center">
+                                          <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                            <IoCloudUploadOutline size="1.6em" />
+                                          </div>
+
+                                          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            <span className="font-semibold">
+                                              Drag an image
+                                            </span>
+                                          </p>
+                                          <p className="text-xs text-gray-400 dark:text-gray-400">
+                                            Click to upload &#40; image should
+                                            be 500x500 px & under 10 MB &#41;
+                                          </p>
+                                        </div>
+                                      )}
+
+                                    {urlRegex.test(field.value || '') &&
+                                      !uploading && (
+                                        <div className="text-center">
+                                          <Image
+                                            width={1000}
+                                            height={1000}
+                                            src={field.value as string}
+                                            className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                            alt="uploaded image"
+                                          />
+                                          <p className=" text-sm font-semibold">
+                                            Image Uploaded
+                                          </p>
+                                          <Button
+                                            className="px-1 mt-2"
+                                            variant="astra-red"
+                                            onClick={(e) => {
+                                              e.stopPropagation()
+                                              form.setValue(
+                                                `marketMakerImage`,
+                                                ''
+                                              )
+                                            }}
+                                          >
+                                            Delete Image
+                                          </Button>
+                                          <p className=" text-xs text-red-500">
+                                            {fileError}
+                                          </p>
+                                        </div>
+                                      )}
+                                  </label>
+
+                                  <Input
+                                    {...marketMakerDropzoneProps.getInputProps()}
+                                    id="dropzone-file"
+                                    accept="image/*"
+                                    type="file"
+                                    className="hidden"
+                                    disabled={uploading || field.value !== null}
+                                    onChange={handleImageChange(
+                                      'marketMakerImage'
+                                    )}
+                                  />
+                                </div>
+                              </FormControl>
+                            </div>
+
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                   <Separator className="bg-gray-400"></Separator>
                   <div className="flex gap-3 justify-center">
                     <Button

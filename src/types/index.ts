@@ -567,6 +567,8 @@ export type TLaunchpadDetailInfo = {
   TEAM_DESCRIPTION: string
   SALE_ROUND_DETAIL: string
   PROJECT_IMAGE: string
+  LEAD_VC_IMAGE: string
+  MARKET_MAKER_IMAGE: string
 }
 
 export type TRequestLaunchpadContractInfo = {
@@ -645,6 +647,8 @@ export interface ProjectObject {
 
   leadVC: string
   marketMaker: string
+  leadVCImage: string
+  marketMakerImage: string
   controlledCap: string
   daoApprovedMetrics: string
 
