@@ -8,7 +8,16 @@ import { TLaunchpadDetailInfo } from '@/types'
 import Loading from '@/app/loading'
 import { formatUnits } from 'viem'
 import { useChainConfig } from '@/hooks'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/shadcn'
 
 interface TPage {
   launchpads: TLaunchpadDetailInfo[] | undefined
@@ -22,6 +31,8 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
     refetch: refetchVestingRewards,
     isLoading: vestingRewardLoading,
   } = useLaunchpadVestingRewards({ launchpads })
+
+  const [open, setOpen] = useState<boolean>(false)
 
   const refetchDatas = () => {
     console.log('Refetching vesting rewards')
@@ -70,6 +81,9 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                   Claimed Amount
                 </th>
                 <th scope="col" className="px-6 py-3 whitespace-nowrap">
+                  Detail
+                </th>
+                <th scope="col" className="px-6 py-3 whitespace-nowrap">
                   Action
                 </th>
               </tr>
@@ -99,6 +113,89 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                         )
                       )
                     )}
+                  </td>
+                  <td className="px-6 py-4">
+                    <Dialog open={open} onOpenChange={setOpen}>
+                      <DialogTrigger asChild>
+                        <Button className="px-16" variant="astra-blue">
+                          Detail
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Vesting Token Detail</DialogTitle>
+                        </DialogHeader>
+                        <div className="content">
+                          <div className="flex justify-between gap-4">
+                            <div>Launchpad Address:</div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() =>
+                                window.open(
+                                  `${chainConfig.networkURL}address/${vestingReward.launchpadAddress}`
+                                )
+                              }
+                            >
+                              {shorten(vestingReward.launchpadAddress ?? '')}
+                            </div>
+                          </div>
+                          <div className="flex justify-between gap-4">
+                            <div>Vesting Address:</div>
+                            <div
+                              className="cursor-pointer"
+                              onClick={() =>
+                                window.open(
+                                  `${chainConfig.networkURL}address/${vestingReward.vestingAddress}`
+                                )
+                              }
+                            >
+                              {shorten(vestingReward.vestingAddress ?? '')}
+                            </div>
+                          </div>
+                          <div className="flex justify-between gap-4">
+                            <div>Vesting Start:</div>
+                            <div>{vestingReward.vestingStart.toString()}</div>
+                          </div>
+                          <div className="flex justify-between gap-4">
+                            <div>Vesting Cliff:</div>
+                            <div>
+                              {' '}
+                              {vestingReward.vestingCliff / 86400}{' '}
+                              {vestingReward.vestingCliff / 86400 === 1
+                                ? 'day'
+                                : 'days'}
+                            </div>
+                          </div>
+                          <div className="flex justify-between gap-4">
+                            <div>Vesting Duration:</div>
+                            <div>
+                              {vestingReward.vestingDuration / 86400}{' '}
+                              {vestingReward.vestingDuration / 86400 === 1
+                                ? 'day'
+                                : 'days'}
+                            </div>
+                          </div>
+                          <div className="flex justify-between gap-4">
+                            <div>Vesting Slice Period:</div>
+                            <div>
+                              {vestingReward.vestingSlicePeriodSeconds / 86400}{' '}
+                              {vestingReward.vestingSlicePeriodSeconds /
+                                86400 ===
+                              1
+                                ? 'day'
+                                : 'days'}
+                            </div>
+                          </div>
+                          <div className="flex justify-between gap-4">
+                            <div>Vesting Initial Unlock:</div>
+                            <div>
+                              {vestingReward.vestingInitialUnlock}
+                              {' %'}
+                            </div>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </td>
                   <td className="px-6 py-4">
                     <VestingRewardActions
