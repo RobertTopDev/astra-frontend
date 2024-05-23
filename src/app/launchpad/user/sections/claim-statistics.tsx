@@ -1,9 +1,7 @@
 'use client'
 
 import { AstraHeader } from '@/components'
-import { Separator } from '@/components/shadcn'
 import { useLaunchpadVestingRewards } from '@/hooks'
-import { differenceInCalendarWeeks } from 'date-fns'
 import { VestingRewardActions } from './vesting-reward-actions'
 import { numberFormatter, shorten } from '@/util'
 import { TLaunchpadDetailInfo } from '@/types'
@@ -18,7 +16,6 @@ interface TPage {
 }
 
 const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
-  // const week = differenceInCalendarWeeks(new Date(), new Date('2022-08-16'))
   const { chainConfig } = useChainConfig()
   const {
     data: vestingRewards,
@@ -31,15 +28,15 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   }
 
   useEffect(() => {
+    if (launchpads?.length === 0) return
     refetchDatas()
   }, [launchpads])
 
-  console.log("launchpads: ", launchpads);
-  console.log("vesting rewards: ", vestingRewards);
+  if (vestingRewards === undefined || vestingRewards.length === 0) {
+    return vestingRewardLoading || launchpadLoading ? <Loading /> : <></>
+  }
 
-  return vestingRewardLoading || launchpadLoading ? (
-    <Loading />
-  ) : (
+  return (
     <div className="flex flex-col items-center gap-4 py-8 mt-12">
       <AstraHeader>My Launchpad Vesting</AstraHeader>
       <div className="flex flex-col gap-8 w-full">

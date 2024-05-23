@@ -43,7 +43,7 @@ export const useLaunchpadClaimVestingRewards = ({
   } = useContractWrite({
     ...config,
     onMutate: () => {
-      const transactionAction = 'Claiming Vesting Rewards'
+      const transactionAction = 'Claiming Vested Tokens'
       setTransactionObj({
         status: 'loading',
         reset,
@@ -76,7 +76,7 @@ export const useLaunchpadClaimVestingRewards = ({
 
   useEffect(() => {
     if (txReceipt?.status === 'success') {
-      const transactionAction = 'Claimed Vesting Rewards'
+      const transactionAction = 'Claimed Vested Tokens Successfully'
       setTransactionObj({
         ...transactionObj,
         status: 'success',
@@ -86,10 +86,12 @@ export const useLaunchpadClaimVestingRewards = ({
       refetchConfig()
       onSuccessTx?.(txReceipt)
     } else if (txReceipt?.status === 'reverted') {
+      const transactionAction = 'Claiming Vested Tokens Failed'
       setTransactionObj({
         ...transactionObj,
         status: 'failed',
         transactionHash: txReceipt?.transactionHash,
+        transactionAction,
       })
       onRevert?.(txReceipt)
     }
