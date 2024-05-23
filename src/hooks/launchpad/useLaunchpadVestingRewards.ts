@@ -33,7 +33,6 @@ export const useLaunchpadVestingRewards = ({
     async () => {
       try {
         const vestingRewards: TLaunchpadVestingReward[] = []
-        console.log(address, launchpads);
         if (address === undefined || launchpads === undefined) return []
         for (let j = 0; j < launchpads.length; j++) {
           const launchpad = launchpads[j]

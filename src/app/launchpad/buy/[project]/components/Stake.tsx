@@ -22,6 +22,7 @@ import {
   TableCell,
 } from '@/components/shadcn'
 import { AstraHeader, AstraLoading } from '@/components'
+import { numberFormatter } from '@/util'
 
 export default function Stake() {
   const { address } = useAccount()
@@ -66,7 +67,7 @@ export default function Stake() {
             </div>
             <span className="text-[#00E7FF] text-xl">
               <AstraLoading isLoading={stakingScoreAndMultiplierLoading}>
-                {stakingScore.toFixed(2)}
+                {numberFormatter(stakingScore)}
               </AstraLoading>
             </span>
           </div>
@@ -83,7 +84,7 @@ export default function Stake() {
               <TableBody className="[&_tr]:border-0 text-left">
                 <TableRow className="h-24">
                   <TableCell>Staking Score</TableCell>
-                  <TableCell>{stakingScore.toFixed(2)} points</TableCell>
+                  <TableCell>{numberFormatter(stakingScore)} points</TableCell>
                   <TableCell>
                     Staking $ASTRADAO tokens gives an additional bonus score
                   </TableCell>

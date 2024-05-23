@@ -28,7 +28,6 @@ import {
   useDecimals,
   useErcBalanceOf,
   useLaunchpadCountdown,
-  useLaunchpadVestingRewards,
 } from '@/hooks/'
 import { useAccount } from 'wagmi'
 import { formatUnits, parseEther, parseUnits } from 'viem'
@@ -60,6 +59,21 @@ export default function BuyContent({
 
   const [buyAmount, setBuyAmount] = useState<string>('')
   const [selectedToken, setSelectedToken] = useState<string>('')
+
+  const tokenArray = [
+    {
+      symbol: 'USDT',
+      address: chainConfig.USDTContractAddress,
+    },
+    {
+      symbol: 'USDC',
+      address: chainConfig.USDCContractAddress,
+    },
+    {
+      symbol: 'ETH',
+      address: chainConfig.WETHContractAddress,
+    },
+  ]
 
   const { remainingTime: startRemainingTime, ...startCountdown } =
     useLaunchpadCountdown({
@@ -299,15 +313,13 @@ export default function BuyContent({
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Select Token</SelectLabel>
-                    <SelectItem value={chainConfig.USDTContractAddress}>
-                      USDT
-                    </SelectItem>
-                    <SelectItem value={chainConfig.USDCContractAddress}>
-                      USDC
-                    </SelectItem>
-                    <SelectItem value={chainConfig.WETHContractAddress}>
-                      ETH
-                    </SelectItem>
+                    {tokenArray
+                      .filter((token) => token.address === detail.BASE_TOKEN)
+                      .map((token) => (
+                        <SelectItem value={token.address}>
+                          {token.symbol}
+                        </SelectItem>
+                      ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -347,7 +359,10 @@ export default function BuyContent({
                       <InfoCircledIcon />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Common Tokens often paired with other tokens.</p>
+                      <p>
+                        Indicates your participation level based on your
+                        multiplier.
+                      </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -369,8 +384,8 @@ export default function BuyContent({
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>
-                        Based on this value, your max purchase amount will be
-                        updated.
+                        Represents the boost to your purchase limit, calculated
+                        from your staking activities across chains.
                       </p>
                     </TooltipContent>
                   </Tooltip>
