@@ -1156,7 +1156,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                   <Separator className="bg-gray-400"></Separator>
                   <div className="text-center w-full mt-6">
                     <FormLabel className="text-2xl text-center">
-                      Token Details
+                      Token Sale Details
                     </FormLabel>
                   </div>
                   <FormField
@@ -1507,12 +1507,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                       </FormItem>
                     )}
                   />
-                  <Separator className="bg-gray-400"></Separator>
-                  <div className="text-center w-full mt-6">
-                    <FormLabel className="text-2xl text-center">
-                      Token Sale Details
-                    </FormLabel>
-                  </div>
                   <FormField
                     control={form.control}
                     name="saleStartDate"

@@ -1449,7 +1449,7 @@ export default function Page({ params }: TPage) {
                 <Separator className="bg-gray-400"></Separator>
                 <div className="text-center w-full mt-6">
                   <FormLabel className="text-2xl text-center">
-                    Token Details
+                    Token Sale Details
                   </FormLabel>
                 </div>
                 <FormField
@@ -1788,12 +1788,6 @@ export default function Page({ params }: TPage) {
                     </FormItem>
                   )}
                 />
-                <Separator className="bg-gray-400"></Separator>
-                <div className="text-center w-full mt-6">
-                  <FormLabel className="text-2xl text-center">
-                    Token Sale Details
-                  </FormLabel>
-                </div>
                 <FormField
                   control={form.control}
                   name="saleStartDate"

@@ -102,7 +102,7 @@ export default function FollowSection({
           </div>
 
           <div className="flex flex-col gap-4 mt-8">
-            <AstraLink link="https://twitter.com">
+            <AstraLink link="https://twitter.com/astradao_org">
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white'

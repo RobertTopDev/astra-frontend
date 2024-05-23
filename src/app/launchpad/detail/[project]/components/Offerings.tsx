@@ -129,7 +129,7 @@ export default function Offering({ launchpadData }: TComponent) {
             In order to Participate in this public sale you need to
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <AstraLink link="https://twitter.com">
+            <AstraLink link="https://twitter.com/astradao_org">
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white'
