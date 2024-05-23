@@ -24,22 +24,22 @@ export const navLinks: TLink[] = [
       {
         name: 'Dashboard',
         link: '/launchpad',
-        description: 'Live and Upcoming Projects',
+        description: 'Live And Upcoming Token Sales',
       },
       {
         name: 'Launchpad Portfolio',
         link: '/launchpad/user',
-        description: 'Check your launchpad portfolio',
+        description: 'Check Your Token Sales Portfolio',
       },
       {
         name: 'Launchpad Request',
         link: '/launchpad/request',
-        description: 'Create your project',
+        description: 'Create Your Token Sale',
       },
       {
         name: 'Launchpad Admin',
         link: '/launchpad/admin',
-        description: 'Manage the requested launchpad',
+        description: 'Manage The Requested Token Sale',
       },
     ],
   },
