@@ -439,6 +439,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL',
       }),
+    contactMedium: z
+      .string()
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL',
+      }),
     projectDescription: z
       .string()
       .min(1, {
@@ -604,6 +609,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectTwitter: data ? data.TWITTER.toString() : '',
       contactTelegram: data ? data.TELEGRAM.toString() : '',
       contactDiscord: data ? data.DISCORD.toString() : '',
+      contactMedium: data ?  data.MEDIUM : '',
       totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
@@ -690,6 +696,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       twitter: value.projectTwitter,
       telegram: value.contactTelegram,
       discord: value.contactDiscord,
+      medium: value.contactMedium,
       otherUrl: data.OTHER_URL,
       email: value.email,
       investorDetail: data.INVESTOR_DETAIL || '',
@@ -713,6 +720,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         Number(value.vest_slice_period_seconds) * 86400 || 0,
       vest_initial_unlock: value.vest_initial_unlock || 0,
     }
+    console.log('----->', requestData)
     await updateLaunchpadForDB(requestData, data?.ID + '')
     if (refetchData) {
       refetchData()
@@ -970,6 +978,27 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormControl>
                           <Input
                             placeholder="https://discord.com"
+                            {...field}
+                            onChange={(e) => {
+                              const temp = e
+                              temp.target.value = temp.target.value.trim()
+                              field.onChange(temp)
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="contactMedium"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Medium Handle *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://medium.com"
                             {...field}
                             onChange={(e) => {
                               const temp = e

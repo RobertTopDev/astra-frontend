@@ -228,6 +228,7 @@ export default function Page({ params }: TPage) {
     projectTwitter: '',
     contactTelegram: '',
     contactDiscord: '',
+    contactMedium: '',
     totalToken: '',
     leadVC: '',
     marketMaker: '',
@@ -268,7 +269,6 @@ export default function Page({ params }: TPage) {
   ])
   const [vesting, setVesting] = useState<boolean>(defaultValues.isVesting)
 
-  
   const metricsInfoArray = JSON.parse(launchpadDetail?.METRICS || '')
   const teamInfoArray = JSON.parse(launchpadDetail?.TEAM_INFO || '')
 
@@ -489,6 +489,11 @@ export default function Page({ params }: TPage) {
         }
       ),
     contactDiscord: z
+      .string()
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL',
+      }),
+    contactMedium: z
       .string()
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL',
@@ -1002,6 +1007,7 @@ export default function Page({ params }: TPage) {
         ? launchpadDetail.TELEGRAM.toString()
         : '',
       contactDiscord: launchpadDetail ? launchpadDetail.DISCORD.toString() : '',
+      contactMedium: launchpadDetail ? launchpadDetail.MEDIUM.toString() : '',
       totalToken: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US')
         : '',
@@ -1247,6 +1253,27 @@ export default function Page({ params }: TPage) {
                       <FormControl>
                         <Input
                           placeholder="https://discord.com"
+                          {...field}
+                          onChange={(e) => {
+                            const temp = e
+                            temp.target.value = temp.target.value.trim()
+                            field.onChange(temp)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contactMedium"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Medium Handle *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://Medium.com"
                           {...field}
                           onChange={(e) => {
                             const temp = e

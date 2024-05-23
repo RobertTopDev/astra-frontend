@@ -34,12 +34,6 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
 
   const socialLinks: TLogoLink[] = [
     {
-      alt: 'Medium Logo',
-      logoUrl: '/images/medium-logo.png',
-      redirectUrl: 'https://astradao.medium.com/',
-      background: 'bg-[#f6832e]',
-    },
-    {
       alt: 'Twitter Logo',
       logoUrl: '/svgs/twitter.svg',
       redirectUrl: data?.TWITTER || '#',
@@ -51,20 +45,6 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
       redirectUrl: data?.WEBSITE_URL || '#',
       background: 'bg-[#d9d9d9]',
     },
-    /* {
-      logoUrl: '/images/facebook.svg',
-      redirectUrl: 'https://www.facebook.com/astradao.org',
-    }, */
-    /* {
-      logoUrl: '/images/reddit.svg',
-      redirectUrl: 'https://www.reddit.com/r/astradao/',
-    }, */
-    // {
-    //   alt: 'Youtube Logo',
-    //   logoUrl: '/svgs/youtube.svg',
-    //   redirectUrl: 'https://www.youtube.com/channel/UCzFfo1tC6dXlPkR1Vev932g',
-    //   background: 'bg-[#d11313]',
-    // },
     {
       alt: 'Telegram Logo',
       logoUrl: '/svgs/telegram.svg',
@@ -80,6 +60,14 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
       logoUrl: '/svgs/discord.svg',
       redirectUrl: data?.DISCORD || '#',
       background: 'bg-astra-orange',
+    })
+  }
+  if (data?.MEDIUM) {
+    socialLinks.push({
+      alt: 'Medium Logo',
+      logoUrl: '/images/medium-logo.png',
+      redirectUrl: data?.MEDIUM || '#',
+      background: 'bg-[#f6832e]',
     })
   }
 

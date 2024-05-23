@@ -432,6 +432,11 @@ const CreateForm = () => {
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL',
       }),
+    contactMedium: z
+      .string()
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL',
+      }),
     projectDescription: z
       .string()
       .min(1, {
@@ -607,6 +612,7 @@ const CreateForm = () => {
     projectTwitter: '',
     contactTelegram: '',
     contactDiscord: '',
+    contactMedium:'',
     totalToken: '',
     leadVC: '',
     marketMaker: '',
@@ -718,6 +724,7 @@ const CreateForm = () => {
         twitter: result_values.data.projectTwitter,
         telegram: result_values.data.contactTelegram,
         discord: result_values.data.contactDiscord,
+        medium: result_values.data.contactMedium,
         otherUrl: '',
         email: result_values.data.email,
         investorDetail: '',
@@ -1003,6 +1010,27 @@ const CreateForm = () => {
                   <FormControl>
                     <Input
                       placeholder="https://discord.gg/HptzpRVY"
+                      {...field}
+                      onChange={(e) => {
+                        const temp = e
+                        temp.target.value = temp.target.value.trim()
+                        field.onChange(temp)
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contactMedium"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Medium Handle</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://Medium.com"
                       {...field}
                       onChange={(e) => {
                         const temp = e
@@ -2004,9 +2032,7 @@ const CreateForm = () => {
 
             <Separator className="bg-gray-400"></Separator>
             <div className="text-center w-full mt-6">
-              <FormLabel className="text-2xl text-center">
-                Other Info
-              </FormLabel>
+              <FormLabel className="text-2xl text-center">Other Info</FormLabel>
             </div>
             <FormField
               control={form.control}
@@ -2097,9 +2123,7 @@ const CreateForm = () => {
                 <Separator className="bg-gray-400"></Separator>
                 {index == 0 ? (
                   <div className="text-center w-full mt-6">
-                    <FormLabel className="text-2xl text-center">
-                      Team
-                    </FormLabel>
+                    <FormLabel className="text-2xl text-center">Team</FormLabel>
                   </div>
                 ) : (
                   ''
