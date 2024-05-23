@@ -45,13 +45,7 @@ interface Errors {
 export default function Metrics({ data, refetchData }: Props) {
   const pathname = usePathname()
 
-  const metricsInfo =
-    data?.METRICS && data?.METRICS !== 'none' ? data?.METRICS.split(',') : []
-  const metricsInfoArray = metricsInfo.map((item) => {
-    const pairs = item.split(':')
-    const obj: MetricsObject = { label: pairs[0], value: parseFloat(pairs[1]) }
-    return obj
-  })
+  const metricsInfoArray = JSON.parse(data?.METRICS || '')
   const saleRoundDetailInfo = data?.SALE_ROUND_DETAIL
     ? data?.SALE_ROUND_DETAIL.split('<>')
     : []
@@ -99,7 +93,7 @@ export default function Metrics({ data, refetchData }: Props) {
 
   const metricsDefaultValues: Record<string, any> = {}
   metricsInfoArray.map(
-    (item, key) => (
+    (item: MetricsObject, key: number) => (
       (metricsDefaultValues[`label${key}`] = item.label.trim()),
       (metricsDefaultValues[`value${key}`] = item.value)
     )
@@ -212,7 +206,7 @@ export default function Metrics({ data, refetchData }: Props) {
         projectImage: data?.PROJECT_IMAGE,
         teamInfo: data?.TEAM_INFO,
         teamDescription: data?.TEAM_DESCRIPTION || '',
-        metrics: convertMetricsObjectToString(valueArray),
+        metrics: JSON.stringify(valueArray),
         saleRoundDetail:
           saleValueArray.length > 0
             ? convertSaleRoundDetailObjectToString(saleValueArray)

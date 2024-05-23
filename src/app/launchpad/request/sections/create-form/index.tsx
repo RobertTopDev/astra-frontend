@@ -640,23 +640,6 @@ const CreateForm = () => {
     reValidateMode: 'onChange',
     defaultValues: defaultValues,
   })
-
-  const convertTeamObjectToString = (team: TeamObject[]) => {
-    return team
-      .map((member: TeamObject) => {
-        return Object.entries(member)
-          .map(([key, value]) => `${key}=${value}`)
-          .join('?')
-      })
-      .join(',')
-  }
-  const convertMetricsObjectToString = (metrics: MetricsObject[]) => {
-    return metrics
-      .map((member: MetricsObject) => {
-        return `${member.label}:${member.value}`
-      })
-      .join(',')
-  }
   function isUrl(value: string) {
     // Regular expression to check if the value is a valid URL
     return value.trim() === '' || urlRegex.test(value)
@@ -727,10 +710,9 @@ const CreateForm = () => {
         projectDetail: result_values.data.projectDescription,
         projectDescriptionDetail: result_values.data.projectDescriptionDetail,
         projectImage: url,
-        teamInfo: convertTeamObjectToString(result_values.team),
-        //can update
+        teamInfo: JSON.stringify(result_values.team),
         teamDescription: '',
-        metrics: convertMetricsObjectToString(result_values.metrics),
+        metrics: JSON.stringify(result_values.metrics),
         websiteUrl: result_values.data.website,
         whitepaperUrl: result_values.data.pitchdeck,
         twitter: result_values.data.projectTwitter,
@@ -1130,7 +1112,7 @@ const CreateForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="projectDescriptionDetail"
               render={({ field }) => (
@@ -1147,49 +1129,6 @@ const CreateForm = () => {
                         className="w-full h-[70%] mt-10 bg-white"
                       />
                     </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* <FormField
-              control={form.control}
-              name="projectValuation"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex">
-                    <span className="mr-2">Project Valuation *</span>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <InfoCircledIcon className="w-[1rem] h-[1rem]" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>
-                            Project valuation is total value of the project
-                            <br /> at the time of its launch.
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="string"
-                      placeholder="e.g. $50000 (Must be positive)"
-                      {...field}
-                      onChange={(e) => {
-                        // Remove commas from the input value
-                        const inputValue = e.target.value.replace(/,/g, '')
-                        // Set the formatted value with commas
-                        const formattedValue =
-                          inputValue === '0-'
-                            ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString('en-US')
-                        // Update the input value in the form
-                        field.onChange(formattedValue)
-                      }}
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

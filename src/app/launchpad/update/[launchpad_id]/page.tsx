@@ -268,28 +268,9 @@ export default function Page({ params }: TPage) {
   ])
   const [vesting, setVesting] = useState<boolean>(defaultValues.isVesting)
 
-  const metricsInfo =
-    launchpadDetail?.METRICS && launchpadDetail?.METRICS !== 'none'
-      ? launchpadDetail?.METRICS.split(',')
-      : []
-  const metricsInfoArray = metricsInfo.map((item) => {
-    const pairs = item.split(':')
-    const obj: MetricsObject = { label: pairs[0], value: parseFloat(pairs[1]) }
-    return obj
-  })
-  const teamInfo =
-    launchpadDetail?.TEAM_INFO && launchpadDetail?.TEAM_INFO !== 'none'
-      ? launchpadDetail?.TEAM_INFO.split(',')
-      : []
-  const teamInfoArray = teamInfo.map((item) => {
-    const pairs = item.split('?')
-    const obj = pairs.reduce((acc: any, currentPair) => {
-      const [key, value] = currentPair.split('=')
-      acc[key] = value
-      return acc
-    }, {})
-    return obj
-  })
+  
+  const metricsInfoArray = JSON.parse(launchpadDetail?.METRICS || '')
+  const teamInfoArray = JSON.parse(launchpadDetail?.TEAM_INFO || '')
 
   const temp: Record<string, any> = {
     saleStartDate: z.date({
@@ -1399,53 +1380,6 @@ export default function Page({ params }: TPage) {
                     </FormItem>
                   )}
                 />
-
-                {/* <FormField
-                  control={form.control}
-                  name="projectValuation"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex">
-                        <span className="mr-2">Project Valuation *</span>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <InfoCircledIcon className="w-[1rem] h-[1rem]" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>
-                                Project valuation is total value of the project
-                                <br /> at the time of its launch.
-                              </p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="string"
-                          placeholder="e.g. $50000 (Must be positive)"
-                          {...field}
-                          onChange={(e) => {
-                            // Remove commas from the input value
-                            const inputValue = e.target.value.replace(/,/g, '')
-                            // Set the formatted value with commas
-                            const formattedValue =
-                              inputValue === '0-'
-                                ? '-'
-                                : (
-                                    parseInt(inputValue, 10) || 0
-                                  ).toLocaleString('en-US')
-                            // Update the input value in the form
-                            field.onChange(formattedValue)
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-
                 <Separator className="bg-gray-400"></Separator>
                 <div className="text-center w-full mt-6">
                   <FormLabel className="text-2xl text-center">
