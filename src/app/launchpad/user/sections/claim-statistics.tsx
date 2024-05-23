@@ -24,18 +24,31 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   } = useLaunchpadVestingRewards({ launchpads })
 
   const refetchDatas = () => {
+    console.log('Refetching vesting rewards')
     refetchVestingRewards?.()
   }
 
   useEffect(() => {
+    console.log('Launchpads changed:', launchpads) // Debugging log
     if (launchpads?.length === 0) return
     refetchDatas()
   }, [launchpads])
 
-  if (vestingRewards === undefined || vestingRewards.length === 0) {
-    return vestingRewardLoading || launchpadLoading ? <Loading /> : <></>
+  useEffect(() => {
+    console.log('Vesting rewards changed:', vestingRewards) // Debugging log
+  }, [vestingRewards])
+
+  if (vestingRewardLoading || launchpadLoading) {
+    console.log('Loading...')
+    return <Loading />
   }
 
+  if (vestingRewards === undefined || vestingRewards.length === 0) {
+    console.log('No vesting rewards available')
+    return <></>
+  }
+
+  console.log('Rendering vesting rewards table')
   return (
     <div className="flex flex-col items-center gap-4 py-8 mt-12">
       <AstraHeader>My Launchpad Vesting</AstraHeader>
@@ -44,27 +57,6 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
             <thead className="text-xs text-gray-400 ">
               <tr className="bg-[#000000] bg-opacity-30">
-                {/* <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Launchpad Address
-                </th>
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Vesting Address
-                </th>
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Vesting Start
-                </th>
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Vesting Cliff
-                </th>
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Vesting Duration
-                </th>
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Vesting Slice Period
-                </th>
-                <th scope="col" className="px-6 py-3 whitespace-nowrap">
-                  Vesting Initial Unlock
-                </th> */}
                 <th scope="col" className="px-6 py-3 whitespace-nowrap">
                   Token Name
                 </th>
@@ -88,51 +80,6 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                   className="border-b bg-[#B2C4E833] text-white border-gray-800 hover:bg-gray-800"
                   key={index}
                 >
-                  {/* <td
-                    className="px-6 py-4 cursor-pointer"
-                    onClick={() =>
-                      window.open(
-                        `${chainConfig.networkURL}address/${vestingReward.launchpadAddress}`
-                      )
-                    }
-                  >
-                    {shorten(vestingReward.launchpadAddress ?? '')}
-                  </td>
-                  <td
-                    className="px-6 py-4 cursor-pointer"
-                    onClick={() =>
-                      window.open(
-                        `${chainConfig.networkURL}address/${vestingReward.vestingAddress}`
-                      )
-                    }
-                  >
-                    {shorten(vestingReward.vestingAddress ?? '')}
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {vestingReward.vestingStart.toString()}
-                  </td>
-                  <td className="px-6 py-4">
-                    {vestingReward.vestingCliff / 86400}{' '}
-                    {vestingReward.vestingCliff / 86400 === 1 ? 'day' : 'days'}
-                  </td>
-                  <td className="px-6 py-4">
-                    {vestingReward.vestingDuration / 86400}{' '}
-                    {vestingReward.vestingDuration / 86400 === 1
-                      ? 'day'
-                      : 'days'}
-                  </td>
-                  <td className="px-6 py-4">
-                    {vestingReward.vestingSlicePeriodSeconds / 86400}{' '}
-                    {vestingReward.vestingSlicePeriodSeconds / 86400 === 1
-                      ? 'day'
-                      : 'days'}
-                  </td>
-                  <td className="px-6 py-4">
-                    {vestingReward.vestingInitialUnlock}
-                    {' %'}
-                  </td> */}
-
                   <td className="px-6 py-4 whitespace-nowrap">
                     {vestingReward.launchpadTokenName}
                   </td>
@@ -157,7 +104,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                     <VestingRewardActions
                       vestingReward={vestingReward}
                       refetchDatas={refetchDatas}
-                    ></VestingRewardActions>
+                    />
                   </td>
                 </tr>
               ))}

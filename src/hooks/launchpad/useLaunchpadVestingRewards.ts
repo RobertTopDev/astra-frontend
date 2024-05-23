@@ -115,9 +115,10 @@ export const useLaunchpadVestingRewards = ({
             })
           }
         }
+        console.log('Fetched vesting rewards:', vestingRewards)
         return vestingRewards
       } catch (err) {
-        console.error({ err })
+        console.error('Error fetching vesting rewards:', err)
         return []
       }
     },
