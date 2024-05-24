@@ -35,7 +35,7 @@ export default function Overview({ launchpadDetail }: TComponent) {
     {
       alt: 'Git Logo',
       logoUrl: '/svgs/github.svg',
-      redirectUrl: launchpadDetail?.WEBSITE_URL || '#',
+      redirectUrl: launchpadDetail?.GITHUB || '#',
       background: 'bg-[#d9d9d9]',
     },
     {

@@ -393,10 +393,16 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url' }),
+    projectDeck: z
+      .string()
+      .min(1, {
+        message: 'Project deck url is required',
+      })
+      .url({ message: 'Invalid url' }),
     pitchdeck: z
       .string()
       .min(1, {
-        message: 'Pitchdeck url is required',
+        message: 'Whitepaper URL is required.',
       })
       .url({ message: 'Invalid url' }),
     email: z
@@ -409,6 +415,12 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .string()
       .min(1, {
         message: 'Project Twitter is required',
+      })
+      .url({ message: 'Invalid url' }),
+    github: z
+      .string()
+      .min(1, {
+        message: 'Github link is required',
       })
       .url({ message: 'Invalid url' }),
     contactTelegram: z
@@ -480,6 +492,31 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     marketMaker: z.string().min(1, {
       message: 'Market Maker information is required',
     }),
+    investorDetail: z.string().min(1, {
+      message: 'Investor List is required',
+    }),
+    raised: z
+      .string() // Accept input as string
+      .refine((value) => /^[0-9,]+$/.test(value), {
+        // Ensure input contains only numbers and commas
+        message: 'Total raised amount must be a valid number',
+      })
+      .refine((value) => value !== '', {
+        // Ensure input is not empty
+        message: 'Total raised amount is required',
+      })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Total raised amount must be a positive integer',
+        }
+      )
+      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+
     tokenType: z.string({
       required_error: 'Please select token category.',
     }),
@@ -594,6 +631,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       totalSupply: data
         ? data.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString('en-US')
         : '',
+      raised: data ? data.RAISED.toLocaleString('en-US') : '',
       softCap: data ? data.SOFT_CAP.toLocaleString('en-US') : '',
       hardCap: data ? data.HARD_CAP.toLocaleString('en-US') : '',
       initialMarketCap: data
@@ -602,17 +640,20 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectValuation: '', // should remove project valuation
       tokenName: data ? data.LAUNCHPAD_TOKEN_NAME.toString() : '',
       website: data ? data.WEBSITE_URL.toString() : '',
+      projectDeck: data ? data.PROJECT_DECK.toString() : '',
       pitchdeck: data ? data.WHITEPAPER_URL.toString() : '',
       projectDescription: data ? data?.PROJECT_DETAIL.toString() : '',
       projectImage: data ? data?.PROJECT_IMAGE : '',
       email: data ? data.EMAIL.toString() : '',
       projectTwitter: data ? data.TWITTER.toString() : '',
+      github: data ? data.GITHUB.toString() : '',
       contactTelegram: data ? data.TELEGRAM.toString() : '',
       contactDiscord: data ? data.DISCORD.toString() : '',
       contactMedium: data ? data.MEDIUM : '',
       totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
+      investorDetail: JSON.parse(data?.INVESTOR_DETAIL || '[]').join(", ") || '',
       leadVCImage: urlRegex.test(data?.LEAD_VC_IMAGE)
         ? data?.LEAD_VC_IMAGE
         : '',
@@ -662,6 +703,12 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
       : value?.marketMakerImage
 
+      const tempInvestorDetail = JSON.stringify(
+        value.investorDetail
+          .split(',')
+          .map((investor: string) => investor.trim())
+      )
+
     const requestData = {
       owner: data.OWNER as `0x${string}`,
       launchpadIndex: data.LAUNCHPAD_INDEX
@@ -672,6 +719,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       launchpadTokenName: value.tokenName.trim(),
       launchpadTokenSymbol: value.tokenSymbol.trim(),
       launchpadTotalSupply: value.totalSupply, // update
+      raised: value.raised,
       launchpadTokenDecimal: value.tokenDecimals,
       launchpadTokenPrice: value.tokenPrice,
       launchpadTokenFDV: value.totalToken, // update
@@ -692,20 +740,22 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       teamDescription: data.TEAM_DESCRIPTION || '',
       metrics: data.METRICS,
       websiteUrl: value.website,
+      projectDeck: value.projectDeck,
       whitepaperUrl: value.pitchdeck,
       twitter: value.projectTwitter,
+      github: value.github,
       telegram: value.contactTelegram,
       discord: value.contactDiscord,
       medium: value.contactMedium,
       otherUrl: data.OTHER_URL,
       email: value.email,
-      investorDetail: data.INVESTOR_DETAIL || '',
       chain: data.CHAIN,
       requestTransaction: data.REQUEST_TRANSACTION,
       approveTransaction: data.APPROVE_TRANSACTION,
       status: data.STATUS,
       leadVC: value.leadVC.trim(),
       marketMaker: value.marketMaker.trim(),
+      investorDetail: tempInvestorDetail,
       controlledCap: '',
       daoApprovedMetrics: '',
       tokenType: value.tokenType,
@@ -720,7 +770,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         Number(value.vest_slice_period_seconds) * 86400 || 0,
       vest_initial_unlock: value.vest_initial_unlock || 0,
     }
-    console.log('----->', requestData)
     await updateLaunchpadForDB(requestData, data?.ID + '')
     if (refetchData) {
       refetchData()
@@ -795,7 +844,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="tokenName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Name *</FormLabel>
+                        <FormLabel>Name *</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -818,7 +867,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex">
-                          <span className="mr-2">Project Overview *</span>
+                          <span className="mr-2">Overview *</span>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild>
@@ -855,7 +904,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="website"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project URL *</FormLabel>
+                        <FormLabel>Website *</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -877,7 +926,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="pitchdeck"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Whitepaper Link *</FormLabel>
+                        <FormLabel>Whitepaper Link *</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -888,6 +937,28 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               temp.target.value = temp.target.value.trim()
                               field.onChange(temp)
                             }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="projectDeck"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Project Deck *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://docsend.com/view/..."
+                            {...field}
+                            onChange={(e) => {
+                              const temp = e
+                              temp.target.value = temp.target.value.trim()
+                              field.onChange(temp)
+                            }}
+                            autoComplete="off"
                           />
                         </FormControl>
                         <FormMessage />
@@ -932,6 +1003,28 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               temp.target.value = temp.target.value.trim()
                               field.onChange(temp)
                             }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="github"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Github Link *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="https://github.com/JohnDoe"
+                            {...field}
+                            onChange={(e) => {
+                              const temp = e
+                              temp.target.value = temp.target.value.trim()
+                              field.onChange(temp)
+                            }}
+                            autoComplete="off"
                           />
                         </FormControl>
                         <FormMessage />
@@ -2118,7 +2211,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                   <Separator className="bg-gray-400"></Separator>
                   <div className="text-center w-full mt-6">
                     <FormLabel className="text-2xl text-center">
-                      Other Info
+                      Other Details
                     </FormLabel>
                   </div>
                   <FormField
@@ -2165,6 +2258,93 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                       </FormItem>
                     )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="investorDetail"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex">
+                          <span className="mr-2">Investor List *</span>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>
+                                  Write down the investor list, separated by
+                                  commas.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="e.g. Jhon, Jane, James"
+                            {...field}
+                            onChange={(e) => {
+                              const temp = e
+                              temp.target.value = temp.target.value.trimStart()
+                              field.onChange(temp)
+                            }}
+                            autoComplete="off"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="raised"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex">
+                          <span className="mr-2">Total Raised Amount *</span>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>
+                                  Please write down the total amount <br /> you
+                                  have raised so far.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            autoComplete="off"
+                            type="string"
+                            placeholder="e.g. 1000"
+                            {...field}
+                            onChange={(e) => {
+                              // Remove commas from the input value
+                              const inputValue = e.target.value.replace(
+                                /,/g,
+                                ''
+                              )
+                              // Set the formatted value with commas
+                              const formattedValue =
+                                inputValue === '0-'
+                                  ? '-'
+                                  : (
+                                      parseInt(inputValue, 10) || 0
+                                    ).toLocaleString('en-US')
+                              // Update the input value in the form
+                              field.onChange(formattedValue)
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <div className="flex gap-2 mb-4">
                     <div className="flex-1 h-full">
                       <FormField

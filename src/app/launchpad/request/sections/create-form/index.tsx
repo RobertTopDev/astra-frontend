@@ -386,10 +386,16 @@ const CreateForm = () => {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url' }),
+    projectDeck: z
+      .string()
+      .min(1, {
+        message: 'Project deck url is required',
+      })
+      .url({ message: 'Invalid url' }),
     pitchdeck: z
       .string()
       .min(1, {
-        message: 'Pitchdeck url is required',
+        message: 'Whitepaper URL is required.',
       })
       .url({ message: 'Invalid url' }),
     email: z
@@ -402,6 +408,12 @@ const CreateForm = () => {
       .string()
       .min(1, {
         message: 'Project Twitter is required',
+      })
+      .url({ message: 'Invalid url' }),
+    github: z
+      .string()
+      .min(1, {
+        message: 'Github link is required',
       })
       .url({ message: 'Invalid url' }),
     contactTelegram: z
@@ -472,6 +484,31 @@ const CreateForm = () => {
     marketMaker: z.string().min(1, {
       message: 'Market Maker information is required',
     }),
+    investorDetail: z.string().min(1, {
+      message: 'Investor List is required',
+    }),
+    raised: z
+      .string() // Accept input as string
+      .refine((value) => /^[0-9,]+$/.test(value), {
+        // Ensure input contains only numbers and commas
+        message: 'Total raised amount must be a valid number',
+      })
+      .refine((value) => value !== '', {
+        // Ensure input is not empty
+        message: 'Total raised amount is required',
+      })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Total raised amount must be a positive integer',
+        }
+      )
+      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+
     tokenType: z.string({
       required_error: 'Please select token category.',
     }),
@@ -598,6 +635,7 @@ const CreateForm = () => {
     tokenDecimals: 18,
     tokenSymbol: '',
     totalSupply: '',
+    raised: '',
     softCap: '',
     hardCap: '',
     initialMarketCap: '',
@@ -607,15 +645,18 @@ const CreateForm = () => {
     projectImage: '',
     tokenName: '',
     website: '',
+    projectDeck: '',
     pitchdeck: '',
     email: '',
     projectTwitter: '',
+    github: '',
     contactTelegram: '',
     contactDiscord: '',
-    contactMedium:'',
+    contactMedium: '',
     totalToken: '',
     leadVC: '',
     marketMaker: '',
+    investorDetail: '',
     controlledCap: '',
     daoApprovedMetrics: '',
     tokenType: '',
@@ -694,24 +735,28 @@ const CreateForm = () => {
     setErrors(temp_errors)
     if (_.isEmpty(temp_errors)) {
       const url = await uploadToCloudinary(tempImageFile as File)
-
+      const tempInvestorDetail = JSON.stringify(
+        result_values.data.investorDetail
+          .split(',')
+          .map((investor: string) => investor.trim())
+      )
       const requestData: any = {
         owner: address as `0x${string}`,
         launchpadAddress: '',
         launchpadTokenAddress: result_values.data.tokenAddress,
         launchpadTokenName: result_values.data.tokenName.trim(),
         launchpadTokenSymbol: result_values.data.tokenSymbol.trim(),
-        launchpadTotalSupply: result_values.data.totalSupply, // update
+        launchpadTotalSupply: result_values.data.totalSupply,
         launchpadTokenDecimal: Number(result_values.data.tokenDecimals),
         launchpadTokenPrice: Number(result_values.data.tokenPrice),
-        launchpadTokenFDV: Number(result_values.data.totalToken), // update
+        launchpadTokenFDV: Number(result_values.data.totalToken),
         totalSaleAmount: Number(result_values.data.tokenAmount),
         saleStartTime: new Date(result_values.data.saleStartDate).getTime(),
         saleEndTime: new Date(result_values.data.saleEndDate).getTime(),
         maxPurchaseBaseAmount: Number(result_values.data.baseAmount),
-        softCap: Number(result_values.data.softCap), // update
-        hardCap: Number(result_values.data.hardCap), // update
-        initialMarketCap: Number(result_values.data.initialMarketCap), // update
+        softCap: Number(result_values.data.softCap),
+        hardCap: Number(result_values.data.hardCap),
+        initialMarketCap: Number(result_values.data.initialMarketCap),
         projectValuation: 0, // should remove
         projectDetail: result_values.data.projectDescription,
         projectDescriptionDetail: result_values.data.projectDescriptionDetail,
@@ -720,6 +765,8 @@ const CreateForm = () => {
         teamDescription: '',
         metrics: JSON.stringify(result_values.metrics),
         websiteUrl: result_values.data.website,
+        github: result_values.data.github,
+        projectDeck: result_values.data.projectDeck,
         whitepaperUrl: result_values.data.pitchdeck,
         twitter: result_values.data.projectTwitter,
         telegram: result_values.data.contactTelegram,
@@ -727,12 +774,13 @@ const CreateForm = () => {
         medium: result_values.data.contactMedium,
         otherUrl: '',
         email: result_values.data.email,
-        investorDetail: '',
         chain: 'Arbitrum',
         requestTransaction: '',
         approveTransaction: '',
         leadVC: result_values.data.leadVC.trim(),
         marketMaker: result_values.data.marketMaker.trim(),
+        investorDetail: tempInvestorDetail,
+        raised: result_values.data.raised,
         controlledCap: '',
         daoApprovedMetrics: '',
         tokenType: result_values.data.tokenType,
@@ -826,7 +874,7 @@ const CreateForm = () => {
               name="tokenName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Name *</FormLabel>
+                  <FormLabel>Name *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. ASTRA"
@@ -836,7 +884,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -849,7 +897,7 @@ const CreateForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex">
-                    <span className="mr-2">Project Overview *</span>
+                    <span className="mr-2">Overview *</span>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
@@ -885,7 +933,7 @@ const CreateForm = () => {
               name="website"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project URL *</FormLabel>
+                  <FormLabel>Website *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://project.com"
@@ -895,7 +943,29 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="projectDeck"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Deck *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://docsend.com/view/..."
+                      {...field}
+                      onChange={(e) => {
+                        const temp = e
+                        temp.target.value = temp.target.value.trim()
+                        field.onChange(temp)
+                      }}
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -907,7 +977,7 @@ const CreateForm = () => {
               name="pitchdeck"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Whitepaper Link *</FormLabel>
+                  <FormLabel>Whitepaper Link *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://drive.google.com/drive/..."
@@ -917,7 +987,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -939,7 +1009,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -961,7 +1031,29 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="github"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Github Link *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://github.com/JohnDoe"
+                      {...field}
+                      onChange={(e) => {
+                        const temp = e
+                        temp.target.value = temp.target.value.trim()
+                        field.onChange(temp)
+                      }}
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1000,7 +1092,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1022,7 +1114,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1044,7 +1136,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1148,7 +1240,7 @@ const CreateForm = () => {
                 </FormItem>
               )}
             />
-            
+
             <Separator className="bg-gray-400"></Separator>
             <div className="text-center w-full mt-6">
               <FormLabel className="text-2xl text-center">
@@ -1195,7 +1287,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1217,7 +1309,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1253,7 +1345,7 @@ const CreateForm = () => {
                       placeholder="e.g. 18  (Must be positive)"
                       {...field}
                       onWheel={(event) => event.currentTarget.blur()}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1316,7 +1408,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1389,7 +1481,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1408,7 +1500,7 @@ const CreateForm = () => {
                       placeholder="e.g. $10 (Must be positive)"
                       {...field}
                       onWheel={(event) => event.currentTarget.blur()}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1455,7 +1547,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1489,7 +1581,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1671,7 +1763,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1718,7 +1810,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1765,7 +1857,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -1900,7 +1992,7 @@ const CreateForm = () => {
                           placeholder="e.g. 1(day) (Must be positive)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormDescription>
@@ -1938,7 +2030,7 @@ const CreateForm = () => {
                           placeholder="e.g. 365(days) (Must be positive)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormDescription>
@@ -1978,7 +2070,7 @@ const CreateForm = () => {
                           placeholder="e.g. 1(day) (Must be positive)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormDescription>
@@ -2017,7 +2109,7 @@ const CreateForm = () => {
                           placeholder="e.g. 10(%) (Must be positive integer between 1 - 100)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormDescription>
@@ -2034,7 +2126,9 @@ const CreateForm = () => {
 
             <Separator className="bg-gray-400"></Separator>
             <div className="text-center w-full mt-6">
-              <FormLabel className="text-2xl text-center">Other Info</FormLabel>
+              <FormLabel className="text-2xl text-center">
+                Other Details
+              </FormLabel>
             </div>
             <FormField
               control={form.control}
@@ -2051,7 +2145,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
                     />
                   </FormControl>
                   <FormMessage />
@@ -2073,7 +2167,89 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
-                      autoComplete='off'
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="investorDetail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex">
+                    <span className="mr-2">Investor List *</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            Write down the investor list, separated by commas.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g. Jhon, Jane, James"
+                      {...field}
+                      onChange={(e) => {
+                        const temp = e
+                        temp.target.value = temp.target.value.trimStart()
+                        field.onChange(temp)
+                      }}
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="raised"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex">
+                    <span className="mr-2">Total Raised Amount *</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            Please write down the total amount <br /> you have
+                            raised so far.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      autoComplete="off"
+                      type="string"
+                      placeholder="e.g. 1000"
+                      {...field}
+                      onChange={(e) => {
+                        // Remove commas from the input value
+                        const inputValue = e.target.value.replace(/,/g, '')
+                        // Set the formatted value with commas
+                        const formattedValue =
+                          inputValue === '0-'
+                            ? '-'
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
+                        // Update the input value in the form
+                        field.onChange(formattedValue)
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -2149,7 +2325,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2171,7 +2347,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2194,7 +2370,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2247,7 +2423,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2266,7 +2442,7 @@ const CreateForm = () => {
                           placeholder="e.g. 50 (%) (Must be positive number between 0 - 100)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
-                          autoComplete='off'
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />

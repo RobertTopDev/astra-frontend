@@ -184,22 +184,6 @@ export default function Page({ params }: TPage) {
     'code-block',
   ]
 
-  const uploadImage = useCallback(() => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
-    input.click()
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        setUploading(true)
-        const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        form.setValue(`projectImage`, url)
-        setUploading(false)
-      }
-    }
-  }, [])
-
   const { chainConfig } = useChainConfig()
   const { address } = useAccount()
   const [defaultValues, setDefaultValues] = useState<Record<string, any>>({
@@ -212,12 +196,14 @@ export default function Page({ params }: TPage) {
     tokenDecimals: 18,
     tokenSymbol: '',
     totalSupply: '',
+    raised: '',
     softCap: '',
     hardCap: '',
     initialMarketCap: '',
     projectValuation: '',
     tokenName: '',
     website: '',
+    projectDeck: '',
     pitchdeck: '',
     projectDescription: '',
     projectDescriptionDetail: '',
@@ -226,12 +212,14 @@ export default function Page({ params }: TPage) {
     saleRoundDetail: '',
     email: '',
     projectTwitter: '',
+    github: '',
     contactTelegram: '',
     contactDiscord: '',
     contactMedium: '',
     totalToken: '',
     leadVC: '',
     marketMaker: '',
+    investorDetail: '',
     controlledCap: '',
     daoApprovedMetrics: '',
     tokenType: '',
@@ -446,10 +434,16 @@ export default function Page({ params }: TPage) {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url' }),
+    projectDeck: z
+      .string()
+      .min(1, {
+        message: 'Project deck url is required',
+      })
+      .url({ message: 'Invalid url' }),
     pitchdeck: z
       .string()
       .min(1, {
-        message: 'Pitchdeck url is required',
+        message: 'Whitepaper URL is required.',
       })
       .url({ message: 'Invalid url' }),
     email: z
@@ -462,6 +456,12 @@ export default function Page({ params }: TPage) {
       .string()
       .min(1, {
         message: 'Project Twitter is required',
+      })
+      .url({ message: 'Invalid url' }),
+    github: z
+      .string()
+      .min(1, {
+        message: 'Github link is required',
       })
       .url({ message: 'Invalid url' }),
     contactTelegram: z
@@ -532,6 +532,31 @@ export default function Page({ params }: TPage) {
     marketMaker: z.string().min(1, {
       message: 'Market Maker information is required',
     }),
+    investorDetail: z.string().min(1, {
+      message: 'Investor List is required',
+    }),
+    raised: z
+      .string() // Accept input as string
+      .refine((value) => /^[0-9,]+$/.test(value), {
+        // Ensure input contains only numbers and commas
+        message: 'Total raised amount must be a valid number',
+      })
+      .refine((value) => value !== '', {
+        // Ensure input is not empty
+        message: 'Total raised amount is required',
+      })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Total raised amount must be a positive integer',
+        }
+      )
+      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+
     tokenType: z.string({
       required_error: 'Please select token category.',
     }),
@@ -776,6 +801,7 @@ export default function Page({ params }: TPage) {
       alert('loading or address is undefined')
       return
     }
+
     const teamValues = []
     for (let i = 0; i < team.length; i++) {
       teamValues.push({
@@ -785,6 +811,7 @@ export default function Page({ params }: TPage) {
       })
     }
     setTeam(teamValues)
+
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
@@ -793,19 +820,23 @@ export default function Page({ params }: TPage) {
       })
     }
     setMetrics(metricsValues)
+    
     let baseTokenTemp = ''
     if (value.baseToken === 'USDC')
       baseTokenTemp = chainConfig.USDCContractAddress
     if (value.baseToken === 'USDT')
       baseTokenTemp = chainConfig.USDTContractAddress
 
-    const url = await uploadToCloudinary(tempImageFile as File)
+    const projectImageUrl = tempImageFile
+      ? await uploadToCloudinary(tempImageFile as File)
+      : value?.projectImage
 
     const value_temp = value
     value_temp.tokenName = value_temp.tokenName.trim()
     value_temp.tokenSymbol = value_temp.tokenSymbol.trim()
     value_temp.leadVC = value_temp.leadVC.trim()
     value_temp.marketMaker = value_temp.marketMaker.trim()
+    value_temp.investorDetail = value_temp.investorDetail.trim()
     value_temp.controlledCap = ''
     value_temp.daoApprovedMetrics = ''
     value_temp.projectValuation = 0
@@ -815,11 +846,15 @@ export default function Page({ params }: TPage) {
       Number(value_temp.vest_slice_period_seconds) * 86400
     value_temp.baseToken = baseTokenTemp
     value_temp.teamDescription = launchpadDetail?.TEAM_DESCRIPTION || ''
-    value_temp.projectImage = launchpadDetail?.PROJECT_IMAGE || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
-    value_temp.projectImage = url
+    value_temp.projectImage = projectImageUrl
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
+    value_temp.investorDetail = JSON.stringify(
+      value_temp.investorDetail
+        .split(',')
+        .map((investor: string) => investor.trim())
+    )
 
     const result_values: RequestLaunchpadResultValues = {
       data: value_temp,
@@ -827,7 +862,6 @@ export default function Page({ params }: TPage) {
       metrics: metricsValues,
     }
     setIsUploadLoading(true)
-
     //validation
     let isValid = true
     const temp_errors: Errors = {}
@@ -843,6 +877,7 @@ export default function Page({ params }: TPage) {
       setIsUploadLoading(false)
       return
     }
+
     // sale start and end time
     const startTime =
       new Date(result_values.data.saleStartDate).getTime() / 1000
@@ -970,6 +1005,9 @@ export default function Page({ params }: TPage) {
       totalSupply: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString('en-US')
         : '',
+      raised: launchpadDetail
+        ? launchpadDetail.RAISED.toLocaleString('en-US')
+        : '',
       softCap: launchpadDetail
         ? launchpadDetail.SOFT_CAP.toLocaleString('en-US')
         : '',
@@ -986,6 +1024,9 @@ export default function Page({ params }: TPage) {
         ? launchpadDetail.LAUNCHPAD_TOKEN_NAME.toString()
         : '',
       website: launchpadDetail ? launchpadDetail.WEBSITE_URL.toString() : '',
+      projectDeck: launchpadDetail
+        ? launchpadDetail.PROJECT_DECK.toString()
+        : '',
       pitchdeck: launchpadDetail
         ? launchpadDetail.WHITEPAPER_URL.toString()
         : '',
@@ -1001,17 +1042,24 @@ export default function Page({ params }: TPage) {
       teamDescription: launchpadDetail?.TEAM_DESCRIPTION || '',
       saleRoundDetail: launchpadDetail?.SALE_ROUND_DETAIL || '',
       email: launchpadDetail ? launchpadDetail.EMAIL.toString() : '',
-      projectTwitter: launchpadDetail ? launchpadDetail.TWITTER?.toString() : '',
+      projectTwitter: launchpadDetail
+        ? launchpadDetail.TWITTER?.toString()
+        : '',
+      github: launchpadDetail ? launchpadDetail.GITHUB?.toString() : '',
       contactTelegram: launchpadDetail
         ? launchpadDetail.TELEGRAM.toString()
         : '',
-      contactDiscord: launchpadDetail ? launchpadDetail.DISCORD?.toString() : '',
+      contactDiscord: launchpadDetail
+        ? launchpadDetail.DISCORD?.toString()
+        : '',
       contactMedium: launchpadDetail ? launchpadDetail.MEDIUM?.toString() : '',
       totalToken: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US')
         : '',
       leadVC: launchpadDetail?.LEAD_VC || '',
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
+      investorDetail:
+        JSON.parse(launchpadDetail?.INVESTOR_DETAIL || '[]').join(', ') || '',
       controlledCap: launchpadDetail?.CONTROLLED_CAP || '',
       daoApprovedMetrics: launchpadDetail?.DAO_APPROVED_METRICS || '',
       tokenType: launchpadDetail?.TOKEN_TYPE || '',
@@ -1067,7 +1115,7 @@ export default function Page({ params }: TPage) {
                   name="tokenName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Name *</FormLabel>
+                      <FormLabel>Name *</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
@@ -1090,7 +1138,7 @@ export default function Page({ params }: TPage) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex">
-                        <span className="mr-2">Project Overview *</span>
+                        <span className="mr-2">Overview *</span>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -1127,7 +1175,7 @@ export default function Page({ params }: TPage) {
                   name="website"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project URL *</FormLabel>
+                      <FormLabel>Website *</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
@@ -1146,10 +1194,32 @@ export default function Page({ params }: TPage) {
                 />
                 <FormField
                   control={form.control}
+                  name="projectDeck"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Project Deck *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://docsend.com/view/..."
+                          {...field}
+                          onChange={(e) => {
+                            const temp = e
+                            temp.target.value = temp.target.value.trim()
+                            field.onChange(temp)
+                          }}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="pitchdeck"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Whitepaper Link *</FormLabel>
+                      <FormLabel>Whitepaper Link *</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
@@ -1204,6 +1274,28 @@ export default function Page({ params }: TPage) {
                             temp.target.value = temp.target.value.trim()
                             field.onChange(temp)
                           }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="github"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Github Link *</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://github.com/JohnDoe"
+                          {...field}
+                          onChange={(e) => {
+                            const temp = e
+                            temp.target.value = temp.target.value.trim()
+                            field.onChange(temp)
+                          }}
+                          autoComplete="off"
                         />
                       </FormControl>
                       <FormMessage />
@@ -2309,7 +2401,7 @@ export default function Page({ params }: TPage) {
                 <Separator className="bg-gray-400"></Separator>
                 <div className="text-center w-full mt-6">
                   <FormLabel className="text-2xl text-center">
-                    Other Info
+                    Other Details
                   </FormLabel>
                 </div>
                 <FormField
@@ -2349,6 +2441,89 @@ export default function Page({ params }: TPage) {
                             const temp = e
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="investorDetail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex">
+                        <span className="mr-2">Investor List *</span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>
+                                Write down the investor list, separated by
+                                commas.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="e.g. Jhon, Jane, James"
+                          {...field}
+                          onChange={(e) => {
+                            const temp = e
+                            temp.target.value = temp.target.value.trimStart()
+                            field.onChange(temp)
+                          }}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="raised"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex">
+                        <span className="mr-2">Total Raised Amount *</span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>
+                                Please write down the total amount <br /> you
+                                have raised so far.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          autoComplete="off"
+                          type="string"
+                          placeholder="e.g. 1000"
+                          {...field}
+                          onChange={(e) => {
+                            // Remove commas from the input value
+                            const inputValue = e.target.value.replace(/,/g, '')
+                            // Set the formatted value with commas
+                            const formattedValue =
+                              inputValue === '0-'
+                                ? '-'
+                                : (
+                                    parseInt(inputValue, 10) || 0
+                                  ).toLocaleString('en-US')
+                            // Update the input value in the form
+                            field.onChange(formattedValue)
                           }}
                         />
                       </FormControl>

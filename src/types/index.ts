@@ -570,6 +570,10 @@ export type TLaunchpadDetailInfo = {
   PROJECT_IMAGE: string
   LEAD_VC_IMAGE: string
   MARKET_MAKER_IMAGE: string
+  PROJECT_DECK: string
+  RAISED: number
+  GITHUB: string
+
 }
 
 export type TRequestLaunchpadContractInfo = {
@@ -646,13 +650,19 @@ export interface ProjectObject {
   projectImage?: string
   teamDescription?: string
   saleRoundDetail?: string
-
+  projectDeck: string
+  github: string
+  
   leadVC: string
   marketMaker: string
+  raised: number | string
+  investorDetail: string
+
   leadVCImage: string
   marketMakerImage: string
   controlledCap: string
   daoApprovedMetrics: string
+
 
   tokenType: string
   isVesting: boolean
