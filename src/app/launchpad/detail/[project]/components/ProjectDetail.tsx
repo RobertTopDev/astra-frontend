@@ -609,7 +609,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectTwitter: data ? data.TWITTER.toString() : '',
       contactTelegram: data ? data.TELEGRAM.toString() : '',
       contactDiscord: data ? data.DISCORD.toString() : '',
-      contactMedium: data ? data.MEDIUM : '',
+      contactMedium: data ? data.MEDIUM.toString() : '',
       totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',

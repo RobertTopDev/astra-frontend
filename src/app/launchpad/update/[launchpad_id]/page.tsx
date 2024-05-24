@@ -231,7 +231,9 @@ export default function Page({ params }: TPage) {
     contactMedium: '',
     totalToken: '',
     leadVC: '',
+    leadVCImage: '',
     marketMaker: '',
+    marketMakerImage: '',
     controlledCap: '',
     daoApprovedMetrics: '',
     tokenType: '',
@@ -817,7 +819,7 @@ export default function Page({ params }: TPage) {
     value_temp.teamDescription = launchpadDetail?.TEAM_DESCRIPTION || ''
     value_temp.projectImage = launchpadDetail?.PROJECT_IMAGE || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
-    value_temp.projectImage = url
+    value_temp.projectImage = url ? url : launchpadDetail?.PROJECT_IMAGE
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
 
@@ -1000,18 +1002,24 @@ export default function Page({ params }: TPage) {
         : '',
       teamDescription: launchpadDetail?.TEAM_DESCRIPTION || '',
       saleRoundDetail: launchpadDetail?.SALE_ROUND_DETAIL || '',
-      email: launchpadDetail ? launchpadDetail.EMAIL.toString() : '',
-      projectTwitter: launchpadDetail ? launchpadDetail.TWITTER?.toString() : '',
-      contactTelegram: launchpadDetail
-        ? launchpadDetail.TELEGRAM.toString()
+      email: launchpadDetail ? launchpadDetail.EMAIL?.toString() : '',
+      projectTwitter: launchpadDetail
+        ? launchpadDetail.TWITTER?.toString()
         : '',
-      contactDiscord: launchpadDetail ? launchpadDetail.DISCORD?.toString() : '',
+      contactTelegram: launchpadDetail
+        ? launchpadDetail.TELEGRAM?.toString()
+        : '',
+      contactDiscord: launchpadDetail
+        ? launchpadDetail.DISCORD?.toString()
+        : '',
       contactMedium: launchpadDetail ? launchpadDetail.MEDIUM?.toString() : '',
       totalToken: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US')
         : '',
       leadVC: launchpadDetail?.LEAD_VC || '',
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
+      leadVCImage: launchpadDetail?.LEAD_VC_IMAGE || '',
+      marketMakerImage: launchpadDetail?.MARKET_MAKER_IMAGE || '',
       controlledCap: launchpadDetail?.CONTROLLED_CAP || '',
       daoApprovedMetrics: launchpadDetail?.DAO_APPROVED_METRICS || '',
       tokenType: launchpadDetail?.TOKEN_TYPE || '',
