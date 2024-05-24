@@ -146,19 +146,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [open, setOpen] = useState(false)
-  const teamInfo =
-    data?.TEAM_INFO && data?.TEAM_INFO !== 'none'
-      ? data?.TEAM_INFO.split(',')
-      : []
-  const teamInfoArray = teamInfo.map((item) => {
-    const pairs = item.split('?')
-    const obj = pairs.reduce((acc: any, currentPair) => {
-      const [key, value] = currentPair.split('=')
-      acc[key] = value
-      return acc
-    }, {})
-    return obj
-  })
+  const teamInfoArray = JSON.parse(data?.TEAM_INFO || '[]')
   const [team, setTeam] = useState<TeamObject[]>([
     {
       name: '',
@@ -229,14 +217,19 @@ export default function TeamPartner({ data, refetchData }: Props) {
   const teamDefaultValues: Record<string, any> = {
     teamDescription: data?.TEAM_DESCRIPTION || '',
   }
-  teamInfoArray.map((item, key) => {
-    teamDefaultValues[`name${key}`] = item.name.trim()
-    teamDefaultValues[`position${key}`] = item.position.trim()
-    teamDefaultValues[`description${key}`] = item.description.trim()
-    teamDefaultValues[`linkedin${key}`] = item?.linkedin?.trim() || ''
-    teamDefaultValues[`twitter${key}`] = item?.twitter?.trim() || ''
-    teamDefaultValues[`avatar${key}`] = item?.avatar?.trim() || ''
-  })
+  teamInfoArray.map(
+    (
+      item: TeamObject,
+      key: any
+    ) => {
+      teamDefaultValues[`name${key}`] = item.name.trim()
+      teamDefaultValues[`position${key}`] = item.position.trim()
+      teamDefaultValues[`description${key}`] = item.description.trim()
+      teamDefaultValues[`linkedin${key}`] = item?.linkedin?.trim() || ''
+      teamDefaultValues[`twitter${key}`] = item?.twitter?.trim() || ''
+      teamDefaultValues[`avatar${key}`] = item?.avatar?.trim() || ''
+    }
+  )
 
   useEffect(() => {
     setTeam(teamInfoArray)
@@ -258,15 +251,6 @@ export default function TeamPartner({ data, refetchData }: Props) {
     defaultValues: teamDefaultValues,
   })
 
-  const convertTeamInfoToString = (team: TeamObject[]) => {
-    return team
-      .map((member: TeamObject) => {
-        return Object.entries(member)
-          .map(([key, value]) => `${key}=${value}`)
-          .join('?')
-      })
-      .join(',')
-  }
   async function onSubmit(value: z.infer<typeof teamSchema>) {
     if (isLoading) {
       alert('Loading')
@@ -315,7 +299,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
       projectDetail: data?.PROJECT_DETAIL,
       projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
       projectImage: data?.PROJECT_IMAGE,
-      teamInfo: convertTeamInfoToString(valueArray),
+      teamInfo: JSON.stringify(valueArray),
       teamDescription: value.teamDescription || '',
       metrics: data?.METRICS,
       saleRoundDetail: data?.SALE_ROUND_DETAIL || '',

@@ -27,12 +27,6 @@ export default function Overview({ launchpadDetail }: TComponent) {
 
   const socialLinks: TLogoLink[] = [
     {
-      alt: 'Medium Logo',
-      logoUrl: '/images/medium-logo.png',
-      redirectUrl: 'https://astradao.medium.com/',
-      background: 'bg-[#f6832e]',
-    },
-    {
       alt: 'Twitter Logo',
       logoUrl: '/svgs/twitter.svg',
       redirectUrl: launchpadDetail?.TWITTER || '#',
@@ -61,6 +55,14 @@ export default function Overview({ launchpadDetail }: TComponent) {
       background: 'bg-astra-orange',
     })
   }
+  if (launchpadDetail?.MEDIUM) {
+    socialLinks.push({
+      alt: 'Medium Logo',
+      logoUrl: '/images/medium-logo.png',
+      redirectUrl: launchpadDetail?.MEDIUM || '#',
+      background: 'bg-[#f6832e]',
+    })
+  }
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xlshadow-xl p-[1px] bg-gradient-to-b from-transparent to-gray-200">
@@ -68,7 +70,10 @@ export default function Overview({ launchpadDetail }: TComponent) {
         <CardHeader className="p-0 flex flex-row items-center gap-8">
           <div className="relative self-stretch w-3/4 flex items-stretch justify-between gap-8 mt-6">
             <div className="relative h-32 w-32">
-              <MiniIdenticon seed="ddd" image={launchpadDetail?.PROJECT_IMAGE} />
+              <MiniIdenticon
+                seed="ddd"
+                image={launchpadDetail?.PROJECT_IMAGE}
+              />
             </div>
             <div className="self-center flex grow basis-[0%] flex-col items-stretch my-auto">
               <div className="text-white text-xl tracking-[2px]">

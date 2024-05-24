@@ -541,6 +541,7 @@ export type TLaunchpadDetailInfo = {
   TEAM_INFO: string
   TELEGRAM: string
   DISCORD: string
+  MEDIUM: string
   TOTAL_SALE_AMOUNT: number
   TWITTER: string
   WEBSITE_URL: string
@@ -638,6 +639,7 @@ export interface ProjectObject {
   projectTwitter: string
   contactTelegram: string
   contactDiscord: string
+  contactMedium: string
   projectDescription: string
   totalToken: number | string
   projectDescriptionDetail?: string

@@ -228,6 +228,7 @@ export default function Page({ params }: TPage) {
     projectTwitter: '',
     contactTelegram: '',
     contactDiscord: '',
+    contactMedium: '',
     totalToken: '',
     leadVC: '',
     marketMaker: '',
@@ -267,29 +268,8 @@ export default function Page({ params }: TPage) {
     { label: '', value: 0 },
   ])
   const [vesting, setVesting] = useState<boolean>(defaultValues.isVesting)
-
-  const metricsInfo =
-    launchpadDetail?.METRICS && launchpadDetail?.METRICS !== 'none'
-      ? launchpadDetail?.METRICS.split(',')
-      : []
-  const metricsInfoArray = metricsInfo.map((item) => {
-    const pairs = item.split(':')
-    const obj: MetricsObject = { label: pairs[0], value: parseFloat(pairs[1]) }
-    return obj
-  })
-  const teamInfo =
-    launchpadDetail?.TEAM_INFO && launchpadDetail?.TEAM_INFO !== 'none'
-      ? launchpadDetail?.TEAM_INFO.split(',')
-      : []
-  const teamInfoArray = teamInfo.map((item) => {
-    const pairs = item.split('?')
-    const obj = pairs.reduce((acc: any, currentPair) => {
-      const [key, value] = currentPair.split('=')
-      acc[key] = value
-      return acc
-    }, {})
-    return obj
-  })
+  const teamInfoArray = JSON.parse(launchpadDetail?.TEAM_INFO || '[]')
+  const metricsInfoArray = JSON.parse(launchpadDetail?.METRICS || '[]')
 
   const temp: Record<string, any> = {
     saleStartDate: z.date({
@@ -512,6 +492,11 @@ export default function Page({ params }: TPage) {
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL',
       }),
+    contactMedium: z
+      .string()
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL',
+      }),
     projectDescription: z
       .string()
       .min(1, {
@@ -665,12 +650,12 @@ export default function Page({ params }: TPage) {
       }
     )
   const tempDefaultValues = defaultValues
-  teamInfoArray.map((item, key) => {
+  teamInfoArray.map((item: TeamObject, key: number) => {
     tempDefaultValues[`name${key}`] = item.name
     tempDefaultValues[`position${key}`] = item.position
     tempDefaultValues[`description${key}`] = item.description
   })
-  metricsInfoArray.map((item, key) => {
+  metricsInfoArray.map((item: MetricsObject, key: number) => {
     tempDefaultValues[`label${key}`] = item.label
     tempDefaultValues[`value${key}`] = item.value
   })
@@ -926,7 +911,7 @@ export default function Page({ params }: TPage) {
   }
 
   useEffect(() => {
-    teamInfoArray.map((item, key) => {
+    teamInfoArray.map((item: TeamObject, key: number) => {
       form.setValue(`name${key}`, item.name)
       form.setValue(`position${key}`, item.position)
       form.setValue(`description${key}`, item.description)
@@ -934,7 +919,7 @@ export default function Page({ params }: TPage) {
     setTeam(teamInfoArray)
   }, [launchpadDetail?.TEAM_INFO])
   useEffect(() => {
-    metricsInfoArray.map((item, key) => {
+    metricsInfoArray.map((item: MetricsObject, key: number) => {
       form.setValue(`label${key}`, item.label)
       form.setValue(`value${key}`, item.value)
     })
@@ -1016,11 +1001,12 @@ export default function Page({ params }: TPage) {
       teamDescription: launchpadDetail?.TEAM_DESCRIPTION || '',
       saleRoundDetail: launchpadDetail?.SALE_ROUND_DETAIL || '',
       email: launchpadDetail ? launchpadDetail.EMAIL.toString() : '',
-      projectTwitter: launchpadDetail ? launchpadDetail.TWITTER.toString() : '',
+      projectTwitter: launchpadDetail ? launchpadDetail.TWITTER?.toString() : '',
       contactTelegram: launchpadDetail
         ? launchpadDetail.TELEGRAM.toString()
         : '',
-      contactDiscord: launchpadDetail ? launchpadDetail.DISCORD.toString() : '',
+      contactDiscord: launchpadDetail ? launchpadDetail.DISCORD?.toString() : '',
+      contactMedium: launchpadDetail ? launchpadDetail.MEDIUM?.toString() : '',
       totalToken: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US')
         : '',
@@ -1084,6 +1070,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Project Name *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. ASTRA"
                           {...field}
                           onChange={(e) => {
@@ -1143,6 +1130,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Project URL *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="https://project.com"
                           {...field}
                           onChange={(e) => {
@@ -1164,6 +1152,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Project Whitepaper Link *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="https://drive.google.com/drive/..."
                           {...field}
                           onChange={(e) => {
@@ -1185,6 +1174,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Email *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. abc@abc.xyz"
                           {...field}
                           onChange={(e) => {
@@ -1206,6 +1196,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Twitter Handle *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="https://twitter.com/"
                           {...field}
                           onChange={(e) => {
@@ -1244,6 +1235,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. @johndoe or https://t.me/johndoe"
                           {...field}
                           onChange={(e) => {
@@ -1265,7 +1257,30 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Discord Handle *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="https://discord.com"
+                          {...field}
+                          onChange={(e) => {
+                            const temp = e
+                            temp.target.value = temp.target.value.trim()
+                            field.onChange(temp)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="contactMedium"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Medium Handle *</FormLabel>
+                      <FormControl>
+                        <Input
+                          autoComplete="off"
+                          placeholder="https://Medium.com"
                           {...field}
                           onChange={(e) => {
                             const temp = e
@@ -1399,53 +1414,6 @@ export default function Page({ params }: TPage) {
                     </FormItem>
                   )}
                 />
-
-                {/* <FormField
-                  control={form.control}
-                  name="projectValuation"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="flex">
-                        <span className="mr-2">Project Valuation *</span>
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <InfoCircledIcon className="w-[1rem] h-[1rem]" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>
-                                Project valuation is total value of the project
-                                <br /> at the time of its launch.
-                              </p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="string"
-                          placeholder="e.g. $50000 (Must be positive)"
-                          {...field}
-                          onChange={(e) => {
-                            // Remove commas from the input value
-                            const inputValue = e.target.value.replace(/,/g, '')
-                            // Set the formatted value with commas
-                            const formattedValue =
-                              inputValue === '0-'
-                                ? '-'
-                                : (
-                                    parseInt(inputValue, 10) || 0
-                                  ).toLocaleString('en-US')
-                            // Update the input value in the form
-                            field.onChange(formattedValue)
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-
                 <Separator className="bg-gray-400"></Separator>
                 <div className="text-center w-full mt-6">
                   <FormLabel className="text-2xl text-center">
@@ -1476,6 +1444,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="e.g. 10000000  (Must be positive integer)"
                           {...field}
@@ -1506,6 +1475,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Token Symbol *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. ASTRA"
                           {...field}
                           onChange={(e) => {
@@ -1544,6 +1514,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="number"
                           placeholder="e.g. 18 (Must be positive)"
                           {...field}
@@ -1606,6 +1577,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. 0xDF356S8F76SD87SDFS78FSDSDF8SD8SDFFSD8f01"
                           {...field}
                           onChange={(e) => {
@@ -1667,6 +1639,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="e.g. 1000 (Must be positive integer)"
                           {...field}
@@ -1697,6 +1670,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Token Price *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="number"
                           placeholder="e.g. $10 (Must be positive)"
                           {...field}
@@ -1733,6 +1707,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="Maximum user contribution($)  e.g. $30"
                           {...field}
@@ -1766,6 +1741,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="e.g. $30,000,000 (Must be positive)"
                           {...field}
@@ -1948,6 +1924,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="e.g. $100  (Must be positive)"
                           {...field}
@@ -1994,6 +1971,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="e.g. $10000 (Must be positive)"
                           {...field}
@@ -2040,6 +2018,7 @@ export default function Page({ params }: TPage) {
                       </FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           type="string"
                           placeholder="e.g. $50000 (Must be positive)"
                           {...field}
@@ -2189,6 +2168,7 @@ export default function Page({ params }: TPage) {
                           </FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               type="number"
                               placeholder="e.g. 1(day) (Must be positive)"
                               {...field}
@@ -2227,6 +2207,7 @@ export default function Page({ params }: TPage) {
                           </FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               type="number"
                               placeholder="e.g. 365(days) (Must be positive)"
                               {...field}
@@ -2266,6 +2247,7 @@ export default function Page({ params }: TPage) {
                           </FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               type="number"
                               placeholder="e.g. 1(day) (Must be positive)"
                               {...field}
@@ -2306,6 +2288,7 @@ export default function Page({ params }: TPage) {
                           </FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               type="number"
                               placeholder="e.g. 10(%) (Must be positive integer between 1 - 100)"
                               {...field}
@@ -2337,6 +2320,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Lead VC *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. Acura Capital"
                           {...field}
                           onChange={(e) => {
@@ -2358,6 +2342,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Market Maker *</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="off"
                           placeholder="e.g. Kairon Labs"
                           {...field}
                           onChange={(e) => {
@@ -2378,7 +2363,7 @@ export default function Page({ params }: TPage) {
                     <FormItem>
                       <FormLabel>Controlled Cap</FormLabel>
                       <FormControl>
-                        <Input
+                        <Input autoComplete='off'
                           placeholder="Controlled Cap"
                           {...field}
                           onChange={(e) => {
@@ -2399,7 +2384,7 @@ export default function Page({ params }: TPage) {
                     <FormItem>
                       <FormLabel>DAO Approved Metrics</FormLabel>
                       <FormControl>
-                        <Input
+                        <Input autoComplete='off'
                           placeholder="DAO Approved Metrics"
                           {...field}
                           onChange={(e) => {
@@ -2435,6 +2420,7 @@ export default function Page({ params }: TPage) {
                           <FormLabel>Team Member Name *</FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               placeholder="Ayush"
                               // value={input['label']}
                               {...field}
@@ -2458,6 +2444,7 @@ export default function Page({ params }: TPage) {
                           <FormLabel>Team Member Position *</FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               placeholder="Full stack developer"
                               // onChange={(e) =>
                               //   handleInputChange(index, e.target.value, 'value')
@@ -2537,6 +2524,7 @@ export default function Page({ params }: TPage) {
                           <FormLabel>Category *</FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               placeholder="e.g. Marketing"
                               {...field}
                               onChange={(e) => {
@@ -2559,6 +2547,7 @@ export default function Page({ params }: TPage) {
                           <FormLabel>Allocation (%) *</FormLabel>
                           <FormControl>
                             <Input
+                              autoComplete="off"
                               type="number"
                               placeholder="e.g. 50 (%) (Must be positive number between 0 - 100)"
                               {...field}
