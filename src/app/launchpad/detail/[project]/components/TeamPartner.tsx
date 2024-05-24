@@ -217,19 +217,14 @@ export default function TeamPartner({ data, refetchData }: Props) {
   const teamDefaultValues: Record<string, any> = {
     teamDescription: data?.TEAM_DESCRIPTION || '',
   }
-  teamInfoArray.map(
-    (
-      item: TeamObject,
-      key: any
-    ) => {
-      teamDefaultValues[`name${key}`] = item.name.trim()
-      teamDefaultValues[`position${key}`] = item.position.trim()
-      teamDefaultValues[`description${key}`] = item.description.trim()
-      teamDefaultValues[`linkedin${key}`] = item?.linkedin?.trim() || ''
-      teamDefaultValues[`twitter${key}`] = item?.twitter?.trim() || ''
-      teamDefaultValues[`avatar${key}`] = item?.avatar?.trim() || ''
-    }
-  )
+  teamInfoArray.map((item: TeamObject, key: any) => {
+    teamDefaultValues[`name${key}`] = item.name.trim()
+    teamDefaultValues[`position${key}`] = item.position.trim()
+    teamDefaultValues[`description${key}`] = item.description.trim()
+    teamDefaultValues[`linkedin${key}`] = item?.linkedin?.trim() || ''
+    teamDefaultValues[`twitter${key}`] = item?.twitter?.trim() || ''
+    teamDefaultValues[`avatar${key}`] = item?.avatar?.trim() || ''
+  })
 
   useEffect(() => {
     setTeam(teamInfoArray)
@@ -383,7 +378,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
               <Button
                 className="px-16"
                 variant="astra-blue"
-                // disabled={data?.STATUS === 'approved'}
+                disabled={data?.STATUS === 'approved'}
               >
                 Edit
               </Button>

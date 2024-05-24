@@ -767,7 +767,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
               <Button
                 className="px-16"
                 variant="astra-blue"
-                // disabled={data.STATUS === 'approved'}
+                disabled={data.STATUS === 'approved'}
               >
                 Edit
               </Button>
