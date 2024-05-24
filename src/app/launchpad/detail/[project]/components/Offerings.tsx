@@ -233,12 +233,13 @@ export default function Offering({ launchpadData }: TComponent) {
                   <div className="h-8 w-8 mr-4">
                     <Image
                       alt="twitter"
-                      className="!relative"
-                      src="/svgs/document.svg"
+                      className="!relative object-contain"
+                      // src="/svgs/document.svg"
+                      src="/svgs/purefi.png"
                       fill={true}
                     />
                   </div>
-                  User needs to complete KYC.
+                  User needs to complete PureFi KYC.
                 </div>
                 <div>
                   <AstraLoading isLoading={isLoading} className="w-6 h-6">

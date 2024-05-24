@@ -28,6 +28,7 @@ import {
   useDecimals,
   useErcBalanceOf,
   useLaunchpadCountdown,
+  useFollowCheck,
 } from '@/hooks/'
 import { useAccount } from 'wagmi'
 import { formatUnits, parseEther, parseUnits } from 'viem'
@@ -74,6 +75,12 @@ export default function BuyContent({
       address: chainConfig.WETHContractAddress,
     },
   ]
+
+  const followingTemp = useFollowCheck(address)
+  const followingData = followingTemp.data
+  const follwingDataLoading = followingTemp.isLoading
+  const telegramfollowing: boolean =
+    followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
 
   const { remainingTime: startRemainingTime, ...startCountdown } =
     useLaunchpadCountdown({
@@ -201,7 +208,8 @@ export default function BuyContent({
             !!approveError ||
             approveLoading ||
             !buyRuleStatus[0]?.result ||
-            buyRuleStatus[1]?.result[0] <= 0
+            buyRuleStatus[1]?.result[0] <= 0 ||
+            !telegramfollowing
           }
           isLoading={isFetchLoading || isActionLoading}
           onClick={() => approve?.()}
@@ -219,7 +227,8 @@ export default function BuyContent({
             !!buyTokenError ||
             !buyRuleStatus ||
             (buyRuleStatus &&
-              (!buyRuleStatus[0]?.result || !buyRuleStatus[1]?.result))
+              (!buyRuleStatus[0]?.result || !buyRuleStatus[1]?.result)) ||
+            !telegramfollowing
           }
           isLoading={isFetchLoading || isActionLoading}
           onClick={() => buyToken?.()}
@@ -238,7 +247,10 @@ export default function BuyContent({
 
   // loading
   const isFetchLoading =
-    factoryLoading || launchpadLoading || tokenDecimalsLoading
+    factoryLoading ||
+    launchpadLoading ||
+    tokenDecimalsLoading ||
+    follwingDataLoading
   const isActionLoading =
     tokenAllowanceLoading ||
     approveLoading ||

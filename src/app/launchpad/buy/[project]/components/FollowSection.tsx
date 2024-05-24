@@ -42,11 +42,11 @@ export default function FollowSection({
       <CardContent className="p-0 flex flex-row items-center">
         <div className="self-stretch w-1/2 flex justify-between gap-8 pr-8 border-[#FFFFFF21] border-r-2 border-solid">
           <div className="relative h-32 w-32">
-            <MiniIdenticon seed="ddd" image={launchpadData?.projectImage} />
+            <MiniIdenticon seed="ddd" image={detail?.PROJECT_IMAGE} />
           </div>
           <div className="flex grow basis-[0%] flex-col items-stretch">
             <div className="text-white text-3xl tracking-[2px]">
-              Participate in Polygon Ecosystem
+              Participate in {detail?.LAUNCHPAD_TOKEN_SYMBOL} token sale
             </div>
             <div className="h-0.5 my-4 bg-[#FFFFFF21]"></div>
             <div className="text-white text-sm">
@@ -77,7 +77,8 @@ export default function FollowSection({
             <a href="#" aria-label="View">
               {buyRuleStatus &&
               buyRuleStatus?.[0]?.result &&
-              buyRuleStatus?.[1]?.result?.[0] > 0 ? (
+              buyRuleStatus?.[1]?.result?.[0] > 0 &&
+              telegramfollowing ? (
                 <Button
                   variant="astra-blue"
                   className="py-2 mt-4 rounded w-[150px]"
@@ -229,12 +230,13 @@ export default function FollowSection({
                   <div className="h-8 w-8 mr-4">
                     <Image
                       alt="twitter"
-                      className="!relative"
-                      src="/svgs/document.svg"
+                      className="!relative object-contain"
+                      // src="/svgs/document.svg"
+                      src="/svgs/purefi.png"
                       fill={true}
                     />
                   </div>
-                  User needs to complete KYC.
+                  User needs to complete PureFi KYC.
                 </div>
                 <div>
                   <AstraLoading isLoading={isLoading} className="w-6 h-6">
