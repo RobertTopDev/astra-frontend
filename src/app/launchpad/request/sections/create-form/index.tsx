@@ -836,6 +836,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -894,6 +895,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -915,6 +917,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -936,6 +939,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -957,6 +961,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -995,6 +1000,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1016,6 +1022,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1037,6 +1044,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1140,28 +1148,7 @@ const CreateForm = () => {
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="projectDescriptionDetail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Project Description</FormLabel>
-                  <FormControl>
-                    <div style={{ color: 'black' }}>
-                      <ReactQuill
-                        ref={reactQuillRef}
-                        value={field.value}
-                        onChange={field.onChange}
-                        modules={quillModules}
-                        formats={quillFormats}
-                        className="w-full h-[70%] mt-10 bg-white"
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
+            
             <Separator className="bg-gray-400"></Separator>
             <div className="text-center w-full mt-6">
               <FormLabel className="text-2xl text-center">
@@ -1208,6 +1195,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1229,6 +1217,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1264,6 +1253,7 @@ const CreateForm = () => {
                       placeholder="e.g. 18  (Must be positive)"
                       {...field}
                       onWheel={(event) => event.currentTarget.blur()}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1326,6 +1316,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trim()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1398,6 +1389,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1416,6 +1408,7 @@ const CreateForm = () => {
                       placeholder="e.g. $10 (Must be positive)"
                       {...field}
                       onWheel={(event) => event.currentTarget.blur()}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1462,6 +1455,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1495,6 +1489,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1676,6 +1671,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1722,6 +1718,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1768,6 +1765,7 @@ const CreateForm = () => {
                         // Update the input value in the form
                         field.onChange(formattedValue)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -1902,6 +1900,7 @@ const CreateForm = () => {
                           placeholder="e.g. 1(day) (Must be positive)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormDescription>
@@ -1939,6 +1938,7 @@ const CreateForm = () => {
                           placeholder="e.g. 365(days) (Must be positive)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormDescription>
@@ -1978,6 +1978,7 @@ const CreateForm = () => {
                           placeholder="e.g. 1(day) (Must be positive)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormDescription>
@@ -2016,6 +2017,7 @@ const CreateForm = () => {
                           placeholder="e.g. 10(%) (Must be positive integer between 1 - 100)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormDescription>
@@ -2049,6 +2051,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -2070,6 +2073,7 @@ const CreateForm = () => {
                         temp.target.value = temp.target.value.trimStart()
                         field.onChange(temp)
                       }}
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />
@@ -2145,6 +2149,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormMessage />
@@ -2166,6 +2171,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormMessage />
@@ -2188,6 +2194,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormMessage />
@@ -2240,6 +2247,7 @@ const CreateForm = () => {
                             temp.target.value = temp.target.value.trimStart()
                             field.onChange(temp)
                           }}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormMessage />
@@ -2258,6 +2266,7 @@ const CreateForm = () => {
                           placeholder="e.g. 50 (%) (Must be positive number between 0 - 100)"
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
+                          autoComplete='off'
                         />
                       </FormControl>
                       <FormMessage />

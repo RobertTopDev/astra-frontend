@@ -146,7 +146,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [open, setOpen] = useState(false)
-  const teamInfoArray = JSON.parse(data?.TEAM_INFO || '')
+  const teamInfoArray = JSON.parse(data?.TEAM_INFO || '[]')
   const [team, setTeam] = useState<TeamObject[]>([
     {
       name: '',
