@@ -822,7 +822,7 @@ export default function Page({ params }: TPage) {
       })
     }
     setMetrics(metricsValues)
-    
+
     let baseTokenTemp = ''
     if (value.baseToken === 'USDC')
       baseTokenTemp = chainConfig.USDCContractAddress
@@ -838,7 +838,6 @@ export default function Page({ params }: TPage) {
     value_temp.tokenSymbol = value_temp.tokenSymbol.trim()
     value_temp.leadVC = value_temp.leadVC.trim()
     value_temp.marketMaker = value_temp.marketMaker.trim()
-    value_temp.investorDetail = value_temp.investorDetail.trim()
     value_temp.controlledCap = ''
     value_temp.daoApprovedMetrics = ''
     value_temp.projectValuation = 0
