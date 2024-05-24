@@ -504,7 +504,7 @@ export default function Metrics({ data, refetchData }: Props) {
         <></>
       )}
 
-      <p className="text-3xl text-center mb-12">Token Ownership Allocation</p>
+      <p className="text-3xl text-center">Token Ownership Allocation</p>
       {xSymbol.length > 0 ? (
         // <div className="token-distribution-chart my-0 mx-auto w-[700px] rounded-3xl p-[0.8px] bg-gradient-to-b from-transparent to-gray-200 shadow-xl mb-12">
         //   <div className="bg-[#515475] lg:p-18 p-8 rounded-[calc(1.5rem-1px)]">
