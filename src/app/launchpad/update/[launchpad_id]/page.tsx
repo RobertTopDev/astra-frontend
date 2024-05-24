@@ -851,7 +851,6 @@ export default function Page({ params }: TPage) {
     value_temp.projectImage = projectImageUrl
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
-    value_temp.whitepaperUrl = value.pitchdeck
     value_temp.investorDetail = JSON.stringify(
       value_temp.investorDetail
         .split(',')
