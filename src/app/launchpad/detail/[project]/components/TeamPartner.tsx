@@ -258,7 +258,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
       valueArray.push({
         name: value[`name${i}`].trim(),
         position: value[`position${i}`].trim(),
-        description: value[`description${i}`].trim(),
+        description: value[`description${i}`].replace(/\n/g, '\\n').trim(),
         linkedin: value[`linkedin${i}`].trim(),
         twitter: value[`twitter${i}`].trim(),
         avatar: url,

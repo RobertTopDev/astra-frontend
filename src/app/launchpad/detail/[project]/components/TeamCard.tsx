@@ -78,7 +78,7 @@ export default function TeamCard({ data }: Props) {
 
         <div className="relative flex w-full flex-col items-stretch p-6">
           <div className="text-white text-xl font-black">{data.name}</div>
-          <div className="text-white text-sm mt-4">{data.description}</div>
+          <pre className="text-white text-sm mt-4">{data.description}</pre>
         </div>
       </Card>
     </div>
