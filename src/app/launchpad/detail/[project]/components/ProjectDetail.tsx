@@ -653,7 +653,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       totalToken: data ? data.LAUNCHPAD_TOKEN_FDV?.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
-      investorDetail: JSON.parse(data?.INVESTOR_DETAIL || '[]').join(", ") || '',
+      investorDetail:
+        JSON.parse(data?.INVESTOR_DETAIL || '[]').join(', ') || '',
       leadVCImage: urlRegex.test(data?.LEAD_VC_IMAGE)
         ? data?.LEAD_VC_IMAGE
         : '',
@@ -703,11 +704,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
       : value?.marketMakerImage
 
-      const tempInvestorDetail = JSON.stringify(
-        value.investorDetail
-          .split(',')
-          .map((investor: string) => investor.trim())
-      )
+    const tempInvestorDetail = JSON.stringify(
+      value.investorDetail.split(',').map((investor: string) => investor.trim())
+    )
 
     const requestData = {
       owner: data.OWNER as `0x${string}`,
