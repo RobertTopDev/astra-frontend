@@ -2576,7 +2576,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       ) : (
         <></>
       )}
-      <div id="projectDescriptionDetail"></div>
+      <div id="projectDescriptionDetail" className="view ql-editor"></div>
     </div>
   )
 }
