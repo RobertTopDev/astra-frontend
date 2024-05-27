@@ -621,36 +621,36 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       saleStartDate: data ? new Date(data.SALE_START_TIME + 'Z') : new Date(),
       saleEndDate: data ? new Date(data.SALE_END_TIME + 'Z') : new Date(),
       tokenAddress: data ? data.LAUNCHPAD_TOKEN_ADDRESS : '',
-      tokenAmount: data ? data.TOTAL_SALE_AMOUNT.toLocaleString('en-US') : '',
+      tokenAmount: data ? data.TOTAL_SALE_AMOUNT?.toLocaleString('en-US') : '',
       tokenPrice: data ? data.LAUNCHPAD_TOKEN_PRICE : '',
       baseAmount: data
-        ? data.MAX_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
+        ? data.MAX_PURCHASE_BASE_AMOUNT?.toLocaleString('en-US')
         : '',
       tokenDecimals: data ? data.LAUNCHPAD_TOKEN_DECIMAL : '18',
-      tokenSymbol: data ? data.LAUNCHPAD_TOKEN_SYMBOL.toString() : '',
+      tokenSymbol: data ? data.LAUNCHPAD_TOKEN_SYMBOL?.toString() : '',
       totalSupply: data
-        ? data.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString('en-US')
+        ? data.LAUNCHPAD_TOKEN_TOTAL_SUPPLY?.toLocaleString('en-US')
         : '',
-      raised: data ? data.RAISED.toLocaleString('en-US') : '',
-      softCap: data ? data.SOFT_CAP.toLocaleString('en-US') : '',
-      hardCap: data ? data.HARD_CAP.toLocaleString('en-US') : '',
+      raised: data ? data.RAISED?.toLocaleString('en-US') : '',
+      softCap: data ? data.SOFT_CAP?.toLocaleString('en-US') : '',
+      hardCap: data ? data.HARD_CAP?.toLocaleString('en-US') : '',
       initialMarketCap: data
-        ? data.INITIAL_MARKET_CAP.toLocaleString('en-US')
+        ? data.INITIAL_MARKET_CAP?.toLocaleString('en-US')
         : '',
       projectValuation: '', // should remove project valuation
       tokenName: data ? data.LAUNCHPAD_TOKEN_NAME.toString() : '',
       website: data ? data.WEBSITE_URL.toString() : '',
-      projectDeck: data ? data.PROJECT_DECK.toString() : '',
-      pitchdeck: data ? data.WHITEPAPER_URL.toString() : '',
-      projectDescription: data ? data?.PROJECT_DETAIL.toString() : '',
+      projectDeck: data ? data.PROJECT_DECK?.toString() : '',
+      pitchdeck: data ? data.WHITEPAPER_URL?.toString() : '',
+      projectDescription: data ? data?.PROJECT_DETAIL?.toString() : '',
       projectImage: data ? data?.PROJECT_IMAGE : '',
-      email: data ? data.EMAIL.toString() : '',
-      projectTwitter: data ? data.TWITTER.toString() : '',
-      github: data ? data.GITHUB.toString() : '',
-      contactTelegram: data ? data.TELEGRAM.toString() : '',
-      contactDiscord: data ? data.DISCORD.toString() : '',
-      contactMedium: data ? data.MEDIUM.toString() : '',
-      totalToken: data ? data.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US') : '',
+      email: data ? data.EMAIL?.toString() : '',
+      projectTwitter: data ? data.TWITTER?.toString() : '',
+      github: data ? data.GITHUB?.toString() : '',
+      contactTelegram: data ? data.TELEGRAM?.toString() : '',
+      contactDiscord: data ? data.DISCORD?.toString() : '',
+      contactMedium: data ? data.MEDIUM?.toString() : '',
+      totalToken: data ? data.LAUNCHPAD_TOKEN_FDV?.toLocaleString('en-US') : '',
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
       investorDetail: JSON.parse(data?.INVESTOR_DETAIL || '[]').join(", ") || '',
