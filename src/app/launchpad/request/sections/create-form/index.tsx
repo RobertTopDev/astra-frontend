@@ -710,7 +710,7 @@ const CreateForm = () => {
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
-        id: value[`value${i}`].trim(0),
+        id: value[`label${i}`].trim(),
         value: value[`value${i}`],
         label: value[`label${i}`].trim(),
       })
@@ -868,7 +868,7 @@ const CreateForm = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className={clsx(styles['index-form'], 'w-full flex flex-col gap-8')}
           >
-            <div className="text-center w-full mt-6">
+            <div className="text-center w-full">
               <FormLabel className="text-2xl text-center">
                 Project Details
               </FormLabel>

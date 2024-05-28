@@ -818,7 +818,7 @@ export default function Page({ params }: TPage) {
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
-        id: value[`value${i}`].trim(),
+        id: value[`label${i}`].trim(),
         value: value[`value${i}`],
         label: value[`label${i}`].trim(),
       })
