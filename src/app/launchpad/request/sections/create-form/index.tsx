@@ -182,7 +182,7 @@ const CreateForm = () => {
     { name: '', position: '', description: '' },
   ])
   const [metrics, setMetrics] = useState<MetricsObject[]>([
-    { label: '', value: 0 },
+    { id: '', label: '', value: 0 },
   ])
   const [vesting, setVesting] = useState<boolean>(false)
 
@@ -669,8 +669,9 @@ const CreateForm = () => {
   }
   metrics.map(
     (item, key) => (
+      (defaultValues[`id${key}`] = item.id),
       (defaultValues[`label${key}`] = item.label),
-      (defaultValues[`value${key}`] = '')
+      (defaultValues[`value${key}`] = item.value)
     )
   )
   team.map(
@@ -709,6 +710,7 @@ const CreateForm = () => {
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
+        id: value[`value${i}`].trim(0),
         value: value[`value${i}`],
         label: value[`label${i}`].trim(),
       })
@@ -820,10 +822,11 @@ const CreateForm = () => {
     } else {
       const index = metrics.length
       const values = form.getValues()
+      values[`id${index}`] = ''
       values[`label${index}`] = ''
       values[`value${index}`] = ''
       form.reset(values)
-      setMetrics([...metrics, { label: '', value: 0 }])
+      setMetrics([...metrics, { id: '', label: '', value: 0 }])
     }
   }
   const handleDeleteInput = (str: string) => {
@@ -838,6 +841,7 @@ const CreateForm = () => {
     } else {
       const index = metrics.length
       const values = form.getValues()
+      delete values[`id${index - 1}`]
       delete values[`label${index - 1}`]
       delete values[`value${index - 1}`]
       form.reset(values)

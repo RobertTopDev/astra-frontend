@@ -31,7 +31,7 @@ import {
 } from '@/types'
 import { updateLaunchpadForDB } from '@/util/updateLaunchpadForDB'
 import _ from 'lodash'
-import TokenDistributeChart from '../../../chart/'
+import TokenDistributeChart, { PieChart } from '../../../chart/'
 import { convertUSD } from '@/util'
 
 interface Props {
@@ -64,7 +64,7 @@ export default function Metrics({ data, refetchData }: Props) {
   const [open, setOpen] = useState(false)
 
   const [metrics, setMetrics] = useState<MetricsObject[]>([
-    { label: '', value: 0 },
+    { id: '', label: '', value: 0 },
   ])
   const [saleRoundDetail, setSaleRoundDetail] = useState<
     SaleRoundDetailObject[]
@@ -94,6 +94,7 @@ export default function Metrics({ data, refetchData }: Props) {
   const metricsDefaultValues: Record<string, any> = {}
   metricsInfoArray.map(
     (item: MetricsObject, key: number) => (
+      (metricsDefaultValues[`id${key}`] = item.id.trim()),
       (metricsDefaultValues[`label${key}`] = item.label.trim()),
       (metricsDefaultValues[`value${key}`] = item.value)
     )
@@ -142,6 +143,7 @@ export default function Metrics({ data, refetchData }: Props) {
     const saleValueArray = []
     for (let i = 0; i < metrics.length; i++) {
       valueArray.push({
+        id: value[`label${i}`].trim(),
         value: value[`value${i}`],
         label: value[`label${i}`].trim(),
       })
@@ -250,10 +252,11 @@ export default function Metrics({ data, refetchData }: Props) {
     if (str === 'team') {
       const index = metrics.length
       const values = form.getValues()
+      values[`id${index}`] = ''
       values[`label${index}`] = ''
       values[`value${index}`] = ''
       form.reset(values)
-      setMetrics([...metrics, { label: '', value: 0 }])
+      setMetrics([...metrics, { id: '', label: '', value: 0 }])
     } else {
       const index = saleRoundDetail.length
       const values = form.getValues()
@@ -271,6 +274,7 @@ export default function Metrics({ data, refetchData }: Props) {
     if (str === 'team') {
       const index = metrics.length
       const values = form.getValues()
+      delete values[`id${index - 1}`]
       delete values[`label${index - 1}`]
       delete values[`value${index - 1}`]
       form.reset(values)
@@ -505,9 +509,9 @@ export default function Metrics({ data, refetchData }: Props) {
       )}
 
       <p className="text-3xl text-center">Token Ownership Allocation</p>
-      {xSymbol.length > 0 ? (
-        // <div className="token-distribution-chart my-0 mx-auto w-[700px] rounded-3xl p-[0.8px] bg-gradient-to-b from-transparent to-gray-200 shadow-xl mb-12">
-        //   <div className="bg-[#515475] lg:p-18 p-8 rounded-[calc(1.5rem-1px)]">
+      {/* {xSymbol.length > 0 ? (
+        <div className="token-distribution-chart my-0 mx-auto w-[700px] rounded-3xl p-[0.8px] bg-gradient-to-b from-transparent to-gray-200 shadow-xl mb-12">
+          <div className="bg-[#515475] lg:p-18 p-8 rounded-[calc(1.5rem-1px)]">
         <div className="w-[600px] h-[600px] my-0 mx-auto">
           <TokenDistributeChart
             isTitle={true}
@@ -516,11 +520,22 @@ export default function Metrics({ data, refetchData }: Props) {
           />
         </div>
       ) : (
-        //     <p className="text-center mt-5">Data provided by project</p>
-        //   </div>
-        // </div>
+        <p className="text-center mt-5">Data provided by project</p>
+        </div>
+        </div>
         <></>
-      )}
+      )} */}
+
+      <div className="w-[600px] h-[600px] my-0 mx-auto">
+        {/* <TokenDistributeChart
+            isTitle={true}
+            xSymbol={xSymbol}
+            ySymbol={ySymbol}
+          /> */}
+
+        <PieChart data={metricsInfoArray} />
+      </div>
+
       {saleRoundDetail.length > 0 ? (
         <div className="sales-round-details lg:p-16 p-4 rounded-3xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl color-white">
           <div className="caption-top pb-8 text-2xl font-bold text-center w-full">

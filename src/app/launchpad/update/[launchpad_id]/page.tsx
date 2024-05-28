@@ -255,7 +255,7 @@ export default function Page({ params }: TPage) {
     { name: '', position: '', description: '' },
   ])
   const [metrics, setMetrics] = useState<MetricsObject[]>([
-    { label: '', value: 0 },
+    { id: '', label: '', value: 0 },
   ])
   const [vesting, setVesting] = useState<boolean>(defaultValues.isVesting)
   const teamInfoArray = JSON.parse(launchpadDetail?.TEAM_INFO || '[]')
@@ -683,6 +683,7 @@ export default function Page({ params }: TPage) {
     tempDefaultValues[`description${key}`] = item.description
   })
   metricsInfoArray.map((item: MetricsObject, key: number) => {
+    tempDefaultValues[`id${key}`] = item.id
     tempDefaultValues[`label${key}`] = item.label
     tempDefaultValues[`value${key}`] = item.value
   })
@@ -817,6 +818,7 @@ export default function Page({ params }: TPage) {
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
+        id: value[`value${i}`].trim(),
         value: value[`value${i}`],
         label: value[`label${i}`].trim(),
       })
@@ -917,10 +919,11 @@ export default function Page({ params }: TPage) {
     } else {
       const index = metrics.length
       const values = form.getValues()
+      values[`id${index}`] = ''
       values[`label${index}`] = ''
       values[`value${index}`] = ''
       form.reset(values)
-      setMetrics([...metrics, { label: '', value: 0 }])
+      setMetrics([...metrics, { id: '', label: '', value: 0 }])
     }
   }
   const handleDeleteInput = (str: string) => {
@@ -935,6 +938,7 @@ export default function Page({ params }: TPage) {
     } else {
       const index = metrics.length
       const values = form.getValues()
+      delete values[`id${index - 1}`]
       delete values[`label${index - 1}`]
       delete values[`value${index - 1}`]
       form.reset(values)

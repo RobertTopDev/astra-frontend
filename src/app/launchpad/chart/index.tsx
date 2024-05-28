@@ -140,6 +140,8 @@ import {
   ChartOptions,
 } from 'chart.js'
 
+import { ResponsivePie } from '@nivo/pie'
+
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 type Props = {
@@ -212,3 +214,100 @@ export default function TokenDistributeChart({
 
   return <Pie options={options} data={data} />
 }
+
+export const PieChart = ({ data }: any) => (
+  <div style={{ width: '600px', height: '500px' }}>
+    <ResponsivePie
+      data={data}
+      margin={{ top: 40, right: 150, bottom: 80, left: 150 }}
+      innerRadius={0.5}
+      padAngle={0.7}
+      cornerRadius={3}
+      activeOuterRadiusOffset={8}
+      borderWidth={1}
+      borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
+      arcLinkLabelsSkipAngle={10}
+      arcLinkLabelsTextColor="#fff"
+      arcLinkLabelsThickness={2}
+      arcLinkLabelsColor={{ from: 'color' }}
+      arcLabelsSkipAngle={10}
+      arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
+      valueFormat={(value) => `${Number(value)} %`}
+      tooltip={(data: any) => {
+        return (
+          <div
+            style={{
+              background: '#fff',
+              color: '#000',
+              padding: '9px 12px',
+              border: '1px solid #ccc',
+              display: 'flex',
+              gap: '10px',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                background: data.datum.color,
+                width: '10px',
+                height: '10px',
+              }}
+            />
+            <div>{data.datum.label + ': ' + data.datum.value + '%'}</div>
+          </div>
+        )
+      }}
+      defs={[
+        {
+          id: 'dots',
+          type: 'patternDots',
+          background: 'inherit',
+          color: 'rgba(255, 255, 255, 0.3)',
+          size: 4,
+          padding: 1,
+          stagger: true,
+        },
+        {
+          id: 'lines',
+          type: 'patternLines',
+          background: 'inherit',
+          color: 'rgba(255, 255, 255, 0.3)',
+          rotation: -45,
+          lineWidth: 6,
+          spacing: 10,
+        },
+      ]}
+      fill={data.map((d: any) => ({
+        match: {
+          id: d.id,
+        },
+        id: Math.random() > 0.5 ? 'dots' : 'lines',
+      }))}
+      legends={[
+        {
+          anchor: 'bottom',
+          direction: 'row',
+          justify: false,
+          translateX: 0,
+          translateY: 56,
+          itemsSpacing: 0,
+          itemWidth: 90,
+          itemHeight: 18,
+          itemTextColor: '#ddd',
+          itemDirection: 'left-to-right',
+          itemOpacity: 1,
+          symbolSize: 15,
+          symbolShape: 'circle',
+          effects: [
+            {
+              on: 'hover',
+              style: {
+                itemTextColor: '#fff',
+              },
+            },
+          ],
+        },
+      ]}
+    />
+  </div>
+)
