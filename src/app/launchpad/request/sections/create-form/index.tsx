@@ -66,7 +66,7 @@ const CreateForm = () => {
   const { chainConfig } = useChainConfig()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
-  const urlRegex = new RegExp('^(http|https|blob:http)://[^ "]+$')
+  const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {

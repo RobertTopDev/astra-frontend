@@ -68,7 +68,7 @@ interface ImageFiles {
 
 export default function ProjectDetail({ data, refetchData }: Props) {
   const pathname = usePathname()
-  const urlRegex = new RegExp('^(http|https|blob:http)://[^ "]+$')
+  const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
   const { chainConfig } = useChainConfig()
   const [open, setOpen] = useState(false)
 

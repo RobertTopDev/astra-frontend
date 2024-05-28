@@ -147,7 +147,7 @@ export default function Page({ params }: TPage) {
       }
     }
   }, [])
-  const urlRegex = new RegExp('^(http|https|blob:http)://[^ "]+$')
+  const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
   const [uploading, setUploading] = useState<boolean>(false)
 
   const quillModules = {
