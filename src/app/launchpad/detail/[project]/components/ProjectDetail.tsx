@@ -1095,7 +1095,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="contactMedium"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Medium Blog *</FormLabel>
+                        <FormLabel>Blog *</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"

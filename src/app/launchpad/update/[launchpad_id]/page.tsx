@@ -1375,7 +1375,7 @@ export default function Page({ params }: TPage) {
                   name="contactMedium"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Medium Blog *</FormLabel>
+                      <FormLabel>Blog *</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
