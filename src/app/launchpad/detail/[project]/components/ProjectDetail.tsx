@@ -465,7 +465,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
 
     totalToken: z
       .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
+      .refine((value) => /^[0-9,.]+$/.test(value), {
         // Ensure input contains only numbers and commas
         message: 'Total Token Price must be a valid number',
       })
@@ -480,10 +480,10 @@ export default function ProjectDetail({ data, refetchData }: Props) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Total Token Price must be a positive integer',
+          message: 'Total Token Price must be a positive number',
         }
       )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+      .transform((value) => parseFloat(value.replace(/,/g, ''))), // Transform the string to an integer without commas
 
     //Dao Screening
     leadVC: z.string().min(1, {
@@ -885,7 +885,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormControl>
                           <Input
                             autoComplete="off"
-                            placeholder="Please write project overview. Minimum 300 characters."
+                            placeholder="Please write project overview. Maximum 300 characters."
                             {...field}
                             onChange={(e) => {
                               const temp = e
@@ -1095,7 +1095,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="contactMedium"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Medium Handle *</FormLabel>
+                        <FormLabel>Medium Blog *</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -1633,9 +1633,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               const formattedValue =
                                 inputValue === '0-'
                                   ? '-'
-                                  : (
-                                      parseInt(inputValue, 10) || 0
-                                    ).toLocaleString('en-US')
+                                  : /^[0-9]+\.$/.test(inputValue)
+                                    ? (
+                                        parseFloat(inputValue) || 0
+                                      ).toLocaleString('en-US') + '.'
+                                    : (
+                                        parseFloat(inputValue) || 0
+                                      ).toLocaleString('en-US')
                               // Update the input value in the form
                               field.onChange(formattedValue)
                             }}
