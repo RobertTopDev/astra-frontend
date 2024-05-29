@@ -216,10 +216,22 @@ export default function TokenDistributeChart({
 }
 
 export const PieChart = ({ data }: any) => (
-  <div style={{ width: '600px', height: '500px' }}>
+  <div style={{ width: '1000px', height: '600px' }}>
     <ResponsivePie
       data={data}
-      margin={{ top: 40, right: 150, bottom: 80, left: 150 }}
+      theme={{
+        labels: {
+          text: {
+            fontSize: '14px',
+          },
+        },
+        legends: {
+          text: {
+            fontSize: '14px',
+          },
+        },
+      }}
+      margin={{ top: 100, right: 150, bottom: 100, left: 150 }}
       innerRadius={0.5}
       padAngle={0.7}
       cornerRadius={3}
@@ -253,7 +265,9 @@ export const PieChart = ({ data }: any) => (
                 height: '10px',
               }}
             />
-            <div>{data.datum.label + ': ' + data.datum.value + '%'}</div>
+            <div style={{ fontSize: '14px' }}>
+              {data.datum.label + ': ' + data.datum.value + '%'}
+            </div>
           </div>
         )
       }}
@@ -285,14 +299,14 @@ export const PieChart = ({ data }: any) => (
       }))}
       legends={[
         {
-          anchor: 'bottom',
-          direction: 'row',
+          anchor: 'right',
+          direction: 'column',
           justify: false,
-          translateX: 0,
-          translateY: 56,
+          translateX: 100,
+          translateY: 0,
           itemsSpacing: 0,
-          itemWidth: 90,
-          itemHeight: 18,
+          itemWidth: 100,
+          itemHeight: 20,
           itemTextColor: '#ddd',
           itemDirection: 'left-to-right',
           itemOpacity: 1,
