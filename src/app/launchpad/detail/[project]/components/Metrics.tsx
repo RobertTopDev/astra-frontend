@@ -338,6 +338,7 @@ export default function Metrics({ data, refetchData }: Props) {
                             <FormLabel>Category *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 placeholder="e.g. Marketing"
                                 {...field}
                                 onChange={(e) => {
@@ -360,6 +361,7 @@ export default function Metrics({ data, refetchData }: Props) {
                             <FormLabel>Allocation (%) *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 type="number"
                                 placeholder="e.g. 50(%) (Must be positive number between 0 - 100)"
                                 {...field}
@@ -412,6 +414,7 @@ export default function Metrics({ data, refetchData }: Props) {
                             <FormLabel>Price *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 type="number"
                                 placeholder="e.g. $0.1 (Must be positive number)"
                                 {...field}
@@ -430,6 +433,7 @@ export default function Metrics({ data, refetchData }: Props) {
                             <FormLabel>Fund Raised *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 type="number"
                                 placeholder="e.g. 50(%) (Must be positive number between 0 - 100)"
                                 {...field}
@@ -448,6 +452,7 @@ export default function Metrics({ data, refetchData }: Props) {
                             <FormLabel>Lock Up</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 placeholder="e.g. 15% at TGE, 1 month cliff and 1.5 years vesting with daily unlocks"
                                 {...field}
                                 onChange={(e) => {

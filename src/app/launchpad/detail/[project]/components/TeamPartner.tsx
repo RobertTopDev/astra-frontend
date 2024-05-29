@@ -416,6 +416,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                             <FormLabel>Team Member Name *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 placeholder="Ayush"
                                 {...field}
                                 onChange={(e) => {
@@ -438,6 +439,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                             <FormLabel>Team Member Position *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 placeholder="Full stack developer"
                                 // onChange={(e) =>
                                 //   handleInputChange(index, e.target.value, 'value')
@@ -486,6 +488,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                             <FormLabel>Team Member Linkedin</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 placeholder="Team member linkedin profile url"
                                 {...field}
                                 onChange={(e) => {
@@ -508,6 +511,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                             <FormLabel>Team Member Twitter Handle *</FormLabel>
                             <FormControl>
                               <Input
+                                autoComplete="off"
                                 placeholder="Team member twitter address"
                                 {...field}
                                 onChange={(e) => {
