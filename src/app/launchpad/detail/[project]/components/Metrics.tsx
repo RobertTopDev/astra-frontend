@@ -531,7 +531,7 @@ export default function Metrics({ data, refetchData }: Props) {
         <></>
       )} */}
 
-      <div className="w-[600px] h-[600px] my-0 mx-auto">
+      <div className="w-[1000px] h-[600px] my-0 mx-auto">
         {/* <TokenDistributeChart
             isTitle={true}
             xSymbol={xSymbol}
