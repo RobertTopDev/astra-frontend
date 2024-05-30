@@ -168,9 +168,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
     },
   ])
   const temp: Record<string, any> = {
-    teamDescription: z
-      .string()
-      .min(1, { message: 'Team description is required.' }),
+    teamDescription: z.coerce.string()
   }
   for (let i = 0; i < team.length; i++) {
     temp[`name${i}`] = z
