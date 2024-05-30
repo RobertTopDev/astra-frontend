@@ -77,11 +77,11 @@ export default function Metrics({ data, refetchData }: Props) {
       .min(1, {
         message: 'Category is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message: 'Label can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Category cannot contain single or double quotes.',
       })
     temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
-      message: 'Metrics allocation must be from 0 to 100',
+      message: 'Metrics allocation must be from 0 to 100.',
     })
   }
   for (let i = 0; i < saleRoundDetail.length; i++) {

@@ -273,25 +273,28 @@ export default function Page({ params }: TPage) {
       required_error: 'Sale start date is required.',
     }),
     saleEndDate: z.date({
-      required_error: 'Sale end date is required',
+      required_error: 'Sale end date is required.',
     }),
     tokenAddress: z
       .string()
       .min(1, {
-        message: 'Token Address is required',
+        message: 'Token address is required.',
+      })
+      .regex(/^[^'"]*$/, {
+        message: 'Token address cannot contain single or double quotes.',
       })
       .refine((value) => isAddress(value), {
-        message: 'Token Address is invalid',
+        message: 'Token address is invalid.',
       }),
     tokenAmount: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'Token Sale Amount must be a valid number',
+        message: 'Token sale amount must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'Token Sale Amount is required',
+        message: 'Token sale amount is required.',
       })
       .refine(
         (value) => {
@@ -300,28 +303,27 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Token Sale Amount must be a positive integer',
+          message: 'Token sale amount must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
-
     tokenPrice: z.coerce
       .number()
       .nonnegative({
-        message: 'Token Price is required and must be positive',
+        message: 'Token price is required and must be positive.',
       })
       .refine((value) => value !== 0, {
-        message: 'Token Price cannot be zero',
+        message: 'Token price cannot be zero.',
       }),
     baseAmount: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'Maximum user contribution must be a valid number',
+        message: 'Maximum user contribution must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'Maximum user contribution is required',
+        message: 'Maximum user contribution is required.',
       })
       .refine(
         (value) => {
@@ -330,31 +332,34 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Maximum user contribution must be a positive integer',
+          message: 'Maximum user contribution must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenDecimals: z.coerce
-      .number()
-      .nonnegative({
-        message: 'Token Decimals are required and must be positive',
-      })
-      .refine((value) => value !== 0, {
-        message: 'Token Decimals cannot be zero',
-      }),
-    tokenSymbol: z.string().min(1, {
-      message: 'Token Symbol is required',
+    tokenDecimals: z.coerce.number().nonnegative({
+      message: 'Token decimals are required and must be positive.',
     }),
+    // .refine((value) => value !== 0, {
+    //   message: 'Token decimals cannot be zero.',
+    // }),
+    tokenSymbol: z
+      .string()
+      .min(1, {
+        message: 'Token symbol is required.',
+      })
+      .regex(/^[^'"]*$/, {
+        message: 'Token symbol cannot contain single or double quotes.',
+      }),
     totalSupply: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'Total Supply must be a valid number',
+        message: 'Total supply must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'Total Supply is required',
+        message: 'Total supply is required.',
       })
       .refine(
         (value) => {
@@ -363,7 +368,7 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Total Supply must be a positive integer',
+          message: 'Total supply must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
@@ -372,11 +377,11 @@ export default function Page({ params }: TPage) {
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'SoftCap must be a valid number',
+        message: 'Soft cap must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'SoftCap is required',
+        message: 'Soft cap is required.',
       })
       .refine(
         (value) => {
@@ -385,7 +390,7 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'SoftCap must be a positive integer',
+          message: 'Soft cap must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
@@ -394,11 +399,11 @@ export default function Page({ params }: TPage) {
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'hardCap must be a valid number',
+        message: 'Hard cap must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'hardCap is required',
+        message: 'Hard cap is required.',
       })
       .refine(
         (value) => {
@@ -407,7 +412,7 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'hardCap must be a positive integer',
+          message: 'Hard cap must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
@@ -416,11 +421,11 @@ export default function Page({ params }: TPage) {
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'Initial MarketCap must be a valid number',
+        message: 'Initial market cap must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'Initial MarketCap is required',
+        message: 'Initial market cap is required.',
       })
       .refine(
         (value) => {
@@ -429,53 +434,79 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Initial MarketCap must be a positive integer',
+          message: 'Initial market cap must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenName: z.string().min(1, {
-      message: 'Project Name is required',
-    }),
+    tokenName: z
+      .string()
+      .min(1, {
+        message: 'Project Name is required.',
+      })
+      .regex(/^[^'"]*$/, {
+        message: 'Project Name cannot contain single or double quotes.',
+      }),
     website: z
       .string()
       .min(1, {
         message: 'Website url is required',
       })
-      .url({ message: 'Invalid url' }),
+      .url({ message: 'Invalid url.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Website url cannot contain single or double quotes.',
+      }),
     projectDeck: z
       .string()
       .min(1, {
-        message: 'Project deck url is required',
+        message: 'Project deck url is required.',
       })
-      .url({ message: 'Invalid url' }),
+      .url({ message: 'Invalid url.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Project deck url cannot contain single or double quotes.',
+      }),
     pitchdeck: z
       .string()
       .min(1, {
         message: 'Whitepaper URL is required.',
       })
-      .url({ message: 'Invalid url' }),
+      .url({ message: 'Invalid url.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Whitepaper URL cannot contain single or double quotes.',
+      }),
     email: z
       .string()
       .min(1, {
-        message: 'Email is required',
+        message: 'Email address is required.',
       })
-      .email({ message: 'Invalid email address' }),
+      .email({ message: 'Invalid email address.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Email address cannot contain single or double quotes.',
+      }),
     projectTwitter: z
       .string()
       .min(1, {
-        message: 'Project Twitter is required',
+        message: 'Project twitter is required.',
       })
-      .url({ message: 'Invalid url' }),
+      .url({ message: 'Invalid url.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Project twitter cannot contain single or double quotes.',
+      }),
     github: z
       .string()
       .min(1, {
         message: 'Github link is required',
       })
-      .url({ message: 'Invalid url' }),
+      .url({ message: 'Invalid url.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Github link cannot contain single or double quotes.',
+      }),
     contactTelegram: z
       .string()
-      .min(1, { message: 'Contact Telegram is required' })
+      .min(1, { message: 'Contact telegram is required.' })
+      .regex(/^[^'"]*$/, {
+        message: 'Contact telegram cannot contain single or double quotes.',
+      })
       .refine(
         (value) => {
           // Check if the value starts with "@" (username format)
@@ -493,34 +524,43 @@ export default function Page({ params }: TPage) {
         },
         {
           message:
-            'Contact Telegram must start with "@" or be a valid t.me URL',
+            'Contact telegram must start with "@" or be a valid t.me URL.',
         }
       ),
     contactDiscord: z
       .string()
+      .regex(/^[^'"]*$/, {
+        message: 'Contact discord cannot contain single or double quotes.',
+      })
       .refine((value) => value.trim() === '' || isUrl(value), {
-        message: 'Invalid URL',
+        message: 'Invalid URL.',
       }),
     contactMedium: z
       .string()
+      .regex(/^[^'"]*$/, {
+        message: 'Blog cannot contain single or double quotes.',
+      })
       .refine((value) => value.trim() === '' || isUrl(value), {
-        message: 'Invalid URL',
+        message: 'Invalid URL.',
       }),
     projectDescription: z
       .string()
       .min(1, {
-        message: 'Project Description is required',
+        message: 'Project overview is required.',
       })
-      .max(300, 'Project Description is too long'),
+      .max(300, 'Project overview is too long.')
+      .regex(/^[^'"]*$/, {
+        message: 'Project overview cannot contain single or double quotes.',
+      }),
     totalToken: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,.]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'Total Token Price must be a valid number',
+        message: 'Total token price must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'Total Token Price is required',
+        message: 'Total token price is required.',
       })
       .refine(
         (value) => {
@@ -529,30 +569,46 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Total Token Price must be a positive number',
+          message: 'Total token price must be a positive number.',
         }
       )
       .transform((value) => parseFloat(value.replace(/,/g, ''))), // Transform the string to an integer without commas
 
     //Dao Screening
-    leadVC: z.string().min(1, {
-      message: 'Lead VC information is required',
-    }),
-    marketMaker: z.string().min(1, {
-      message: 'Market Maker information is required',
-    }),
-    investorDetail: z.string().min(1, {
-      message: 'Investor List is required',
-    }),
+    leadVC: z
+      .string()
+      .min(1, {
+        message: 'Lead VC information is required.',
+      })
+      .regex(/^[^'"]*$/, {
+        message: 'Lead VC information cannot contain single or double quotes.',
+      }),
+    marketMaker: z
+      .string()
+      .min(1, {
+        message: 'Market maker information is required.',
+      })
+      .regex(/^[^'"]*$/, {
+        message:
+          'Market maker information cannot contain single or double quotes.',
+      }),
+    investorDetail: z
+      .string()
+      .min(1, {
+        message: 'Investor list is required.',
+      })
+      .regex(/^[^'"]*$/, {
+        message: 'Investor list cannot contain single or double quotes.',
+      }),
     raised: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
-        message: 'Total raised amount must be a valid number',
+        message: 'Total raised amount must be a valid number.',
       })
       .refine((value) => value !== '', {
         // Ensure input is not empty
-        message: 'Total raised amount is required',
+        message: 'Total raised amount is required.',
       })
       .refine(
         (value) => {
@@ -561,7 +617,7 @@ export default function Page({ params }: TPage) {
           return !isNaN(numValue) && numValue > 0
         },
         {
-          message: 'Total raised amount must be a positive integer',
+          message: 'Total raised amount must be a positive integer.',
         }
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
@@ -577,16 +633,16 @@ export default function Page({ params }: TPage) {
     projectImage: z
       .string()
       .min(1, {
-        message: 'Project image is required',
+        message: 'Project image is required.',
       })
-      .url({ message: 'Invalid url' }),
+      .url({ message: 'Invalid url.' }),
   }
   if (vesting) {
     temp['vest_start'] = z.date({
       required_error: 'Vesting start date is required.',
     })
     temp['vest_cliff'] = z.coerce.number().nonnegative({
-      message: 'Cliff is required and must be positive',
+      message: 'Cliff is required and must be positive.',
     })
     // .refine((value) => value !== 0, {
     //   message: 'Cliff cannot be zero',
@@ -594,30 +650,30 @@ export default function Page({ params }: TPage) {
     temp['vest_duration'] = z.coerce
       .number()
       .nonnegative({
-        message: 'Vesting duration is required and must be positive',
+        message: 'Vesting duration is required and must be positive.',
       })
       .refine((value) => value !== 0, {
-        message: 'Vesting duration cannot be zero',
+        message: 'Vesting duration cannot be zero.',
       })
     temp['vest_slice_period_seconds'] = z.coerce
       .number()
       .nonnegative({
-        message: 'Vesting frequency is required and must be positive',
+        message: 'Vesting frequency is required and must be positive.',
       })
       .refine((value) => value !== 0, {
-        message: 'Vesting frequency cannot be zero',
+        message: 'Vesting frequency cannot be zero.',
       })
     temp['vest_initial_unlock'] = z.coerce
       .number()
       .int()
       .nonnegative({
-        message: 'Vesting initial unlock is required and must be positive',
+        message: 'Vesting initial unlock is required and must be positive.',
       })
       .refine((value) => value !== 0, {
-        message: 'Vesting initial unlock cannot be zero',
+        message: 'Vesting initial unlock cannot be zero.',
       })
       .refine((value) => value >= 1 && value <= 100, {
-        message: 'Vesting initial unlock must be between 1 and 100',
+        message: 'Vesting initial unlock must be between 1 and 100.',
       })
   }
   for (let i = 0; i < metrics.length; i++) {
@@ -626,11 +682,11 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Category is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message: 'Label can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Category cannot contain single or double quotes.',
       })
     temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
-      message: 'Metrics allocation must be from 0 to 100',
+      message: 'Metrics allocation must be from 0 to 100.',
     })
   }
   for (let i = 0; i < team.length; i++) {
@@ -639,25 +695,24 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Member name is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message: 'Name can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Member name cannot contain single or double quotes.',
       })
     temp[`position${i}`] = z
       .string()
       .min(1, {
-        message: 'Member position is required',
+        message: 'Member position is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message: 'Position can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Member position cannot contain single or double quotes.',
       })
     temp[`description${i}`] = z
       .string()
       .min(1, {
-        message: 'Member description is required',
+        message: 'Member description is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message:
-          'Description can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Member description cannot contain single or double quotes.',
       })
   }
   const createIndexFormSchema = z

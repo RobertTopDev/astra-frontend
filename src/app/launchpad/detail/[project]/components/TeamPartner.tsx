@@ -178,48 +178,41 @@ export default function TeamPartner({ data, refetchData }: Props) {
       .min(1, {
         message: 'Member name is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message: 'Name can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Member name cannot contain single or double quotes.',
       })
     temp[`position${i}`] = z
       .string()
       .min(1, {
-        message: 'Member position is required',
+        message: 'Member position is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message: 'Position can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Member position cannot contain single or double quotes.',
       })
     temp[`description${i}`] = z
       .string()
       .min(1, {
-        message: 'Member description is required',
+        message: 'Member description is required.',
       })
-      .refine((val) => !(val.includes('?') || val.includes('=')), {
-        message:
-          'Description can not contain special characters such as ? or =',
+      .regex(/^[^'"]*$/, {
+        message: 'Member description cannot contain single or double quotes.',
       })
     temp[`linkedin${i}`] = z
       .string()
-      .refine(
-        (val) =>
-          val.trim() === '' ||
-          (!(val.includes('?') || val.includes('=')) && isUrl(val)),
-        {
-          message:
-            'Linkedin must be url and can not contain special characters such as ? or =',
-        }
-      )
+      .regex(/^[^'"]*$/, {
+        message: 'Linkedin url cannot contain single or double quotes.',
+      })
+      .refine((val) => val.trim() === '' || isUrl(val), {
+        message: 'Linkedin must be valid url ',
+      })
     temp[`twitter${i}`] = z
       .string()
-      .refine(
-        (val) =>
-          val.trim() === '' ||
-          (!(val.includes('?') || val.includes('=')) && isUrl(val)),
-        {
-          message:
-            'Twitter must be url and can not contain special characters such as ? or =',
-        }
-      )
+      .regex(/^[^'"]*$/, {
+        message: 'Twitter url cannot contain single or double quotes.',
+      })
+      .refine((val) => val.trim() === '' || isUrl(val), {
+        message: 'Twitter must be valid url',
+      })
     temp[`avatar${i}`] = z.any()
   }
   const teamSchema = z.object(temp)
