@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import dynamic from 'next/dynamic'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -30,7 +31,7 @@ import clsx from 'clsx'
 import { TeamObject, TLaunchpadDetailInfo } from '@/types'
 import _ from 'lodash'
 import { updateLaunchpadForDB } from '@/util/updateLaunchpadForDB'
-import 'react-quill/dist/quill.snow.css'
+// import 'react-quill/dist/quill.snow.css'
 import ReactQuill from 'react-quill'
 import Image from 'next/image'
 
@@ -42,6 +43,13 @@ interface Props {
 export default function TeamPartner({ data, refetchData }: Props) {
   const pathname = usePathname()
   const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
+
+  const DynamicTextEditor = useMemo(() => {
+    return dynamic(() => import('@/components/Editor'), {
+      loading: () => <p>loading...</p>,
+      ssr: true,
+    })
+  }, [])
 
   const reactQuillRef = useRef<ReactQuill>(null)
   const [imageFile, setImageFile] = useState<Record<`avatar${number}`, string>>(
@@ -583,14 +591,19 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         <FormLabel>Team Description *</FormLabel>
                         <FormControl>
                           <div style={{ color: 'black' }}>
-                            <ReactQuill
+                            {/* <ReactQuill
                               ref={reactQuillRef}
                               value={field.value}
                               onChange={field.onChange}
                               modules={quillModules}
                               formats={quillFormats}
                               className="w-full h-[70%] mt-10 bg-white"
-                            />
+                            /> */}
+                            <DynamicTextEditor
+                              quillRef={reactQuillRef}
+                              value={field.value}
+                              onChange={field.onChange}
+                            ></DynamicTextEditor>
                           </div>
                         </FormControl>
                         <FormMessage />

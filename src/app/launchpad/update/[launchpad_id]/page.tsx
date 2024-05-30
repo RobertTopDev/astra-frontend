@@ -65,6 +65,7 @@ import ReactQuill from 'react-quill'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
+import dynamic from 'next/dynamic'
 
 interface Errors {
   totalMetrics?: string
@@ -76,6 +77,12 @@ type TPage = {
 }
 
 export default function Page({ params }: TPage) {
+  const DynamicTextEditor = useMemo(() => {
+    return dynamic(() => import('@/components/Editor'), {
+      loading: () => <p>loading...</p>,
+      ssr: true,
+    })
+  }, [])
   const router = useRouter()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
@@ -1499,14 +1506,19 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Project Description</FormLabel>
                       <FormControl>
                         <div style={{ color: 'black' }}>
-                          <ReactQuill
+                          {/* <ReactQuill
                             ref={reactQuillRef}
                             value={field.value}
                             onChange={field.onChange}
                             modules={quillModules}
                             formats={quillFormats}
                             className="w-full h-[70%] mt-10 bg-white"
-                          />
+                          /> */}
+                          <DynamicTextEditor
+                            quillRef={reactQuillRef}
+                            value={field.value}
+                            onChange={field.onChange}
+                          ></DynamicTextEditor>
                         </div>
                       </FormControl>
                       <FormMessage />

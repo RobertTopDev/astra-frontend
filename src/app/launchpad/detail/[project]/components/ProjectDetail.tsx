@@ -1,6 +1,7 @@
 'use client'
 
-import { useCallback, useState, useRef } from 'react'
+import dynamic from 'next/dynamic'
+import { useCallback, useState, useRef, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -50,7 +51,7 @@ import { TimeField } from '@/components/astra/time-field'
 import { updateLaunchpadForDB } from '@/util/updateLaunchpadForDB'
 import { useChainConfig } from '@/hooks'
 import { isAddress } from 'viem'
-import 'react-quill/dist/quill.snow.css'
+// import 'react-quill/dist/quill.snow.css'
 import ReactQuill from 'react-quill'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
@@ -67,6 +68,13 @@ interface ImageFiles {
 }
 
 export default function ProjectDetail({ data, refetchData }: Props) {
+  const DynamicTextEditor = useMemo(() => {
+    return dynamic(() => import('@/components/Editor'), {
+      loading: () => <p>loading...</p>,
+      ssr: true,
+    })
+  }, [])
+
   const pathname = usePathname()
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
   const { chainConfig } = useChainConfig()
@@ -805,7 +813,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   const marketMakerDropzoneProps = useDropzone({
     onDrop: createOnDropHandler('marketMakerImage'),
   })
-
   return (
     <div>
       {isAdmin ? (
@@ -1219,14 +1226,15 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
                           <div style={{ color: 'black' }}>
-                            <ReactQuill
+                            {/* <ReactQuill
                               ref={reactQuillRef}
                               value={field.value}
                               onChange={field.onChange}
                               modules={quillModules}
                               formats={quillFormats}
                               className="w-full h-[70%] mt-10 bg-white"
-                            />
+                            /> */}
+                            <DynamicTextEditor quillRef={reactQuillRef} value={field.value} onChange={field.onChange}  ></DynamicTextEditor>
                           </div>
                         </FormControl>
                         <FormMessage />
