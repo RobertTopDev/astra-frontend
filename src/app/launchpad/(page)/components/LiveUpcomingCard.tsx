@@ -99,14 +99,17 @@ export default function LiveUpcomingCard({
   ])
 
   // approve the requested launchpad for admin
-  const { approveLaunchpad, isLoading: approveLaunchpadLoading } =
-    useApproveLaunchpad({
-      enabled: isTokenApproved && !!launchpadData?.LAUNCHPAD_INDEX,
-      args: [BigInt(launchpadData?.LAUNCHPAD_INDEX ?? 0)],
-      onSuccessTx: () => {
-        window.location.reload()
-      },
-    })
+  const {
+    approveLaunchpad,
+    error: approveLaunchpadError,
+    isLoading: approveLaunchpadLoading,
+  } = useApproveLaunchpad({
+    enabled: isTokenApproved && !!launchpadData?.LAUNCHPAD_INDEX,
+    args: [BigInt(launchpadData?.LAUNCHPAD_INDEX ?? 0)],
+    onSuccessTx: () => {
+      window.location.reload()
+    },
+  })
 
   // set vesting address to launchpad contract hook for creator
   const { configureVestAddress, isLoading: setVestAddressLoading } =

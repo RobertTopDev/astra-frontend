@@ -37,7 +37,7 @@ export default function KeyMetrics({ launchpadDetail }: TComponent) {
         <div className="flex flex-col justify-center h-full">
           <div className="text-md text-white">Project Valuation</div>
           <div className="text-2xl truncate text-[#00E7FF] font-bold">
-            {convertUSD(launchpadDetail?.PROJECT_VALUATION)}
+            {convertUSD(launchpadDetail?.LAUNCHPAD_TOKEN_FDV)}
           </div>
         </div>
       </div>

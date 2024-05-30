@@ -1130,7 +1130,7 @@ const CreateForm = () => {
               name="contactMedium"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Medium Blog</FormLabel>
+                  <FormLabel>Blog</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://Medium.com"
