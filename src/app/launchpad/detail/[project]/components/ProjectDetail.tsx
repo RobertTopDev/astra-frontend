@@ -273,12 +273,14 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenDecimals: z.coerce.number().nonnegative({
-      message: 'Token decimals are required and must be positive.',
-    }),
-    // .refine((value) => value !== 0, {
-    //   message: 'Token decimals cannot be zero.',
-    // }),
+    tokenDecimals: z.coerce
+      .number()
+      .nonnegative({
+        message: 'Token decimals are required and must be positive.',
+      })
+      .refine((value) => value !== 0, {
+        message: 'Token decimals cannot be zero.',
+      }),
     tokenSymbol: z
       .string()
       .min(1, {
