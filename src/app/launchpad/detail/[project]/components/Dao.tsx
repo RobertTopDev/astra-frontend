@@ -11,7 +11,7 @@ export default function Dao({ launchpadDetail }: TComponent) {
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
       <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        <div className="flex md:flex-row flex-col items-center gap-4">
+        <div className="flex md:flex-row flex-col h-full items-center gap-4">
           <div className="rounded-full flex items-center justify-center">
             <div className="relative w-[60px] h-[60px]">
               <MiniIdenticon seed="ddd" image={
@@ -29,7 +29,7 @@ export default function Dao({ launchpadDetail }: TComponent) {
         </div>
       </div>
       <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        <div className="flex md:flex-row flex-col items-center gap-4">
+        <div className="flex md:flex-row flex-col h-full items-center gap-4">
           <div className="rounded-full flex items-center justify-center">
             <div className="relative w-[60px] h-[60px]">
               <MiniIdenticon seed="ddd" image={
