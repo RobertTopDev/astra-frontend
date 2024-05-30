@@ -136,6 +136,7 @@ export const useRequestLaunchpad = ({
           totalSaleAmount: Number(databaseData.data.tokenAmount),
           saleStartTime: new Date(databaseData.data.saleStartDate).getTime(),
           saleEndTime: new Date(databaseData.data.saleEndDate).getTime(),
+          minPurchaseBaseAmount: Number(databaseData.data.minPurchaseAmount),
           maxPurchaseBaseAmount: Number(databaseData.data.baseAmount),
           softCap: Number(databaseData.data.softCap), // update
           hardCap: Number(databaseData.data.hardCap), // update

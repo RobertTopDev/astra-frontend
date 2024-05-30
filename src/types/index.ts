@@ -528,6 +528,7 @@ export type TLaunchpadDetailInfo = {
   LAUNCHPAD_TOKEN_PRICE: number
   LAUNCHPAD_TOKEN_SYMBOL: string
   LAUNCHPAD_TOKEN_TOTAL_SUPPLY: number
+  MIN_PURCHASE_BASE_AMOUNT: number
   MAX_PURCHASE_BASE_AMOUNT: number
   METRICS: string
   OTHER_URL: string
@@ -628,6 +629,7 @@ export interface ProjectObject {
   tokenAddress: string
   tokenAmount: number | string
   tokenPrice: number | string
+  minPurchaseAmount: number | string
   baseAmount: number | string
   tokenDecimals: number | string
   tokenSymbol: string

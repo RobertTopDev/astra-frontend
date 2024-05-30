@@ -251,6 +251,28 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .refine((value) => value !== 0, {
         message: 'Token price cannot be zero.',
       }),
+
+    minPurchaseAmount: z
+      .string() // Accept input as string
+      .refine((value) => /^[0-9,]+$/.test(value), {
+        // Ensure input contains only numbers and commas
+        message: 'Minimum user contribution must be a valid number.',
+      })
+      .refine((value) => value !== '', {
+        // Ensure input is not empty
+        message: 'Minimum user contribution is required.',
+      })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Minimum user contribution must be a positive integer.',
+        }
+      )
+      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
     baseAmount: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -672,6 +694,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         path: ['vest_start'],
       }
     )
+    .refine((data) => data.baseAmount > data.minPurchaseAmount, {
+      message:
+        'Maximum user contribution must be greater than minimum user contribution.',
+      path: ['baseAmount'],
+    })
 
   let baseTokenTemp = ''
   if (data?.BASE_TOKEN === chainConfig.USDCContractAddress)
@@ -689,6 +716,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       tokenAddress: data ? data.LAUNCHPAD_TOKEN_ADDRESS : '',
       tokenAmount: data ? data.TOTAL_SALE_AMOUNT?.toLocaleString('en-US') : '',
       tokenPrice: data ? data.LAUNCHPAD_TOKEN_PRICE : '',
+      minPurchaseAmount: data
+        ? data.MIN_PURCHASE_BASE_AMOUNT?.toLocaleString('en-US')
+        : '',
       baseAmount: data
         ? data.MAX_PURCHASE_BASE_AMOUNT?.toLocaleString('en-US')
         : '',
@@ -791,6 +821,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       totalSaleAmount: value.tokenAmount,
       saleStartTime: new Date(value.saleStartDate).getTime(),
       saleEndTime: new Date(value.saleEndDate).getTime(),
+      minPurchaseBaseAmount: value.minPurchaseAmount,
       maxPurchaseBaseAmount: value.baseAmount,
       softCap: value.softCap, // update
       hardCap: value.hardCap, // update
@@ -1620,6 +1651,58 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                             placeholder="e.g. $10"
                             {...field}
                             onWheel={(event) => event.currentTarget.blur()}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="minPurchaseAmount"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex">
+                          <span className="mr-2">
+                            Minimum User Contribution *
+                          </span>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>
+                                  Minimum User Contribution is the minimum
+                                  amount that an individual <br /> participant
+                                  can contribute during a token sale event.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="string"
+                            placeholder="Minimum user contribution  e.g. $10"
+                            {...field}
+                            onChange={(e) => {
+                              // Remove commas from the input value
+                              const inputValue = e.target.value.replace(
+                                /,/g,
+                                ''
+                              )
+                              // Set the formatted value with commas
+                              const formattedValue =
+                                inputValue === '0-'
+                                  ? '-'
+                                  : (
+                                      parseInt(inputValue, 10) || 0
+                                    ).toLocaleString('en-US')
+                              // Update the input value in the form
+                              field.onChange(formattedValue)
+                            }}
+                            autoComplete="off"
                           />
                         </FormControl>
                         <FormMessage />

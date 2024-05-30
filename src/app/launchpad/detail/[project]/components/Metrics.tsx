@@ -198,6 +198,7 @@ export default function Metrics({ data, refetchData }: Props) {
         totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
         saleStartTime: data?.SALE_START_TIME,
         saleEndTime: data?.SALE_END_TIME,
+        minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
         maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
         softCap: data?.SOFT_CAP, // update
         hardCap: data?.HARD_CAP, // update

@@ -199,6 +199,7 @@ export default function Page({ params }: TPage) {
     tokenAddress: '',
     tokenAmount: '',
     tokenPrice: '',
+    minPurchaseAmount:'',
     baseAmount: '',
     tokenDecimals: 18,
     tokenSymbol: '',
@@ -250,6 +251,7 @@ export default function Page({ params }: TPage) {
       tokenPrice: '',
       baseToken: '' as `0x${string}`,
       tokenAmount: '',
+      // minPurchaseAmount:'',
       baseAmount: '',
       isVesting: false,
     })
@@ -315,6 +317,28 @@ export default function Page({ params }: TPage) {
       .refine((value) => value !== 0, {
         message: 'Token price cannot be zero.',
       }),
+      minPurchaseAmount: z
+      .string() // Accept input as string
+      .refine((value) => /^[0-9,]+$/.test(value), {
+        // Ensure input contains only numbers and commas
+        message: 'Minimum user contribution must be a valid number.',
+      })
+      .refine((value) => value !== '', {
+        // Ensure input is not empty
+        message: 'Minimum user contribution is required.',
+      })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Minimum user contribution must be a positive integer.',
+        }
+      )
+      
+      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
     baseAmount: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -740,6 +764,10 @@ export default function Page({ params }: TPage) {
         path: ['vest_start'],
       }
     )
+    .refine((data) => data.baseAmount > data.minPurchaseAmount, {
+      message: 'Maximum user contribution must be greater than minimum user contribution.',
+      path: ['baseAmount'], 
+    });
   const tempDefaultValues = defaultValues
   teamInfoArray.map((item: TeamObject, key: number) => {
     tempDefaultValues[`name${key}`] = item.name
@@ -806,6 +834,7 @@ export default function Page({ params }: TPage) {
       !!contractData.saleEndTime &&
       !!contractData.tokenPrice &&
       !!contractData.tokenAmount &&
+      // !!contractData.minPurchaseAmount &&
       !!contractData.baseAmount &&
       !!contractData.baseToken &&
       !!contractData.tokenDecimals &&
@@ -828,7 +857,8 @@ export default function Page({ params }: TPage) {
           Number(contractData.tokenDecimals)
         )
       ),
-      BigInt(parseUnits(contractData.baseAmount || '', 6)), // USDC decimal
+      // BigInt(parseUnits(contractData.minPurchaseAmount || '', 6)),
+      BigInt(parseUnits(contractData.baseAmount || '', 6)),
       contractData.isVesting,
     ],
     databaseData: databaseData ?? undefined,
@@ -961,6 +991,7 @@ export default function Page({ params }: TPage) {
       tokenAddress: value.tokenAddress as `0x${string}`,
       tokenPrice: value.tokenPrice.toString(),
       tokenAmount: value.tokenAmount.toString(),
+      // minPurchaseAmount: value.minPurchaseAmount.toString(),
       baseAmount: value.baseAmount.toString(),
       baseToken: baseTokenTemp as `0x${string}`,
       tokenDecimals: value.tokenDecimals.toString(),
@@ -1062,6 +1093,9 @@ export default function Page({ params }: TPage) {
         ? launchpadDetail.TOTAL_SALE_AMOUNT.toLocaleString('en-US')
         : '',
       tokenPrice: launchpadDetail ? launchpadDetail.LAUNCHPAD_TOKEN_PRICE : '',
+      minPurchaseAmount: launchpadDetail
+        ? launchpadDetail.MIN_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
+        : 0,
       baseAmount: launchpadDetail
         ? launchpadDetail.MAX_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
         : 0,
@@ -1849,6 +1883,53 @@ export default function Page({ params }: TPage) {
                     </FormItem>
                   )}
                 />
+                <FormField
+              control={form.control}
+              name="minPurchaseAmount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex">
+                    <span className="mr-2">Minimum User Contribution *</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            Minimum User Contribution is the minimum amount that
+                            an individual <br /> participant can contribute
+                            during a token sale event.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="string"
+                      placeholder="Minimum user contribution  e.g. $10"
+                      {...field}
+                      onChange={(e) => {
+                        // Remove commas from the input value
+                        const inputValue = e.target.value.replace(/,/g, '')
+                        // Set the formatted value with commas
+                        const formattedValue =
+                          inputValue === '0-'
+                            ? '-'
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
+                        // Update the input value in the form
+                        field.onChange(formattedValue)
+                      }}
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
                 <FormField
                   control={form.control}
                   name="baseAmount"
