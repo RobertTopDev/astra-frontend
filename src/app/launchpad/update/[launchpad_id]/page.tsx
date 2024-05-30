@@ -1417,7 +1417,7 @@ export default function Page({ params }: TPage) {
                   name="contactDiscord"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Discord Handle *</FormLabel>
+                      <FormLabel>Discord Handle</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
@@ -1439,7 +1439,7 @@ export default function Page({ params }: TPage) {
                   name="contactMedium"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Blog *</FormLabel>
+                      <FormLabel>Blog</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"

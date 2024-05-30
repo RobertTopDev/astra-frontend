@@ -1138,7 +1138,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="contactDiscord"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Discord Handle *</FormLabel>
+                        <FormLabel>Discord Handle</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -1160,7 +1160,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="contactMedium"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Blog *</FormLabel>
+                        <FormLabel>Blog</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"

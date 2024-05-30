@@ -515,7 +515,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`twitter${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Twitter Handle *</FormLabel>
+                            <FormLabel>Team Member Twitter Handle</FormLabel>
                             <FormControl>
                               <Input
                                 autoComplete="off"
@@ -538,7 +538,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`avatar${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Avatar *</FormLabel>
+                            <FormLabel>Team Member Avatar</FormLabel>
                             <div className="text-center">
                               <div className="flex justify-center mb-3">
                                 <div style={{ width: '150px' }}>
@@ -587,7 +587,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                     name="teamDescription"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Team Description *</FormLabel>
+                        <FormLabel>Team Description</FormLabel>
                         <FormControl>
                           <div style={{ color: 'black' }}>
                             {/* <ReactQuill
