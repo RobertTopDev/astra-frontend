@@ -22,7 +22,6 @@ export default function TeamCard({ data }: Props) {
                     ? '/images/partner.png'
                     : data?.avatar || '/images/partner.png'
                 }
-                // src="http:/res.cloudinary.com/dhomnwjnx/image/upload/v1715177374/m3clsicr6u5hrauhhsaf.png"
                 alt="Astra Logo"
                 width={140}
                 height={140}
@@ -78,7 +77,7 @@ export default function TeamCard({ data }: Props) {
 
         <div className="relative flex w-full flex-col items-stretch p-6">
           <div className="text-white text-xl font-black">{data.name}</div>
-          <pre className="text-white text-sm mt-4">{data.description}</pre>
+          <pre className="text-white text-sm mt-4 text-wrap">{data.description}</pre>
         </div>
       </Card>
     </div>

@@ -231,7 +231,7 @@ export const PieChart = ({ data }: any) => (
           },
         },
       }}
-      margin={{ top: 100, right: 150, bottom: 100, left: 150 }}
+      margin={{ top: 100, right: 150, bottom: 100, left: 0 }}
       innerRadius={0.5}
       padAngle={0.7}
       cornerRadius={3}
@@ -305,7 +305,7 @@ export const PieChart = ({ data }: any) => (
           translateX: 100,
           translateY: 0,
           itemsSpacing: 0,
-          itemWidth: 100,
+          itemWidth: 150,
           itemHeight: 20,
           itemTextColor: '#ddd',
           itemDirection: 'left-to-right',

@@ -39,17 +39,23 @@ export const useLaunchpadCountdown = ({
 
   const timeObject = useMemo(() => {
     // GET REMAINING TIME FORMATTED AS D:HH:MM:SS
-    const days = pad(Math.floor(remainingTime / (1000 * 60 * 60 * 24)))
-    const hours = pad(
-      Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-    )
+    // const days = pad(Math.floor(remainingTime / (1000 * 60 * 60 * 24)))
+    // const hours = pad(
+    //   Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    // )
+    // const minutes = pad(
+    //   Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))
+    // )
+    // const seconds = pad(Math.floor((remainingTime % (1000 * 60)) / 1000))
+
+    const hours = pad(Math.floor(remainingTime / (1000 * 60 * 60)))
     const minutes = pad(
       Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))
     )
     const seconds = pad(Math.floor((remainingTime % (1000 * 60)) / 1000))
 
     return {
-      days,
+      // days,
       hours,
       minutes,
       seconds,
