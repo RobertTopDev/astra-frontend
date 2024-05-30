@@ -38,15 +38,15 @@ export default function TeamCard({ data }: Props) {
                       className="whitespace-nowrap flex bg-white justify-center items-center p-2 rounded"
                       style={{
                         // borderRadius: '50%',
-                        height: '30px',
-                        width: '80px',
+                        height: '40px',
+                        width: '40px',
                       }}
                     >
                       <Image
                         src="/svgs/linkedin_blue.svg"
                         alt="Astra Logo"
-                        width={40}
-                        height={40}
+                        width={25}
+                        height={25}
                       />
                     </div>
                   </Link>
@@ -57,15 +57,15 @@ export default function TeamCard({ data }: Props) {
                       className="whitespace-nowrap flex bg-white justify-center items-center p-2 rounded"
                       style={{
                         // borderRadius: '50%',
-                        height: '30px',
-                        width: '80px',
+                        height: '40px',
+                        width: '40px',
                       }}
                     >
                       <Image
                         src="/svgs/twitter_logo.svg"
                         alt="Astra Logo"
-                        width={40}
-                        height={40}
+                        width={25}
+                        height={25}
                       />
                     </div>
                   </Link>
