@@ -237,6 +237,28 @@ const CreateForm = () => {
       .refine((value) => value !== 0, {
         message: 'Token price cannot be zero.',
       }),
+
+    minPurchaseAmount: z
+      .string() // Accept input as string
+      .refine((value) => /^[0-9,]+$/.test(value), {
+        // Ensure input contains only numbers and commas
+        message: 'Minimum user contribution must be a valid number.',
+      })
+      .refine((value) => value !== '', {
+        // Ensure input is not empty
+        message: 'Minimum user contribution is required.',
+      })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Minimum user contribution must be a positive integer.',
+        }
+      )
+      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
     baseAmount: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -247,6 +269,16 @@ const CreateForm = () => {
         // Ensure input is not empty
         message: 'Maximum user contribution is required.',
       })
+      .refine(
+        (value) => {
+          // Remove commas and check if the resulting string represents a valid number
+          const numValue = Number(value.replace(/,/g, ''))
+          return !isNaN(numValue) && numValue > 0
+        },
+        {
+          message: 'Maximum user contribution must be a positive integer.',
+        }
+      )
       .refine(
         (value) => {
           // Remove commas and check if the resulting string represents a valid number
@@ -583,6 +615,7 @@ const CreateForm = () => {
       })
       .url({ message: 'Invalid url.' }),
   }
+
   if (vesting) {
     temp['vest_start'] = z.date({
       required_error: 'Vesting start date is required.',
@@ -684,11 +717,16 @@ const CreateForm = () => {
         path: ['vest_start'],
       }
     )
+    .refine((data) => data.baseAmount > data.minPurchaseAmount, {
+      message: 'Maximum user contribution must be greater than minimum user contribution.',
+      path: ['baseAmount'], 
+    });
 
   const defaultValues: Record<string, any> = {
     tokenAddress: '',
     tokenAmount: '',
     tokenPrice: '',
+    minPurchaseAmount: '',
     baseAmount: '',
     tokenDecimals: 18,
     tokenSymbol: '',
@@ -813,6 +851,7 @@ const CreateForm = () => {
         totalSaleAmount: Number(result_values.data.tokenAmount),
         saleStartTime: new Date(result_values.data.saleStartDate).getTime(),
         saleEndTime: new Date(result_values.data.saleEndDate).getTime(),
+        minPurchaseBaseAmount: Number(result_values.data.minPurchaseAmount),
         maxPurchaseBaseAmount: Number(result_values.data.baseAmount),
         softCap: Number(result_values.data.softCap),
         hardCap: Number(result_values.data.hardCap),
@@ -1562,6 +1601,53 @@ const CreateForm = () => {
                       placeholder="e.g. $10 (Must be positive)"
                       {...field}
                       onWheel={(event) => event.currentTarget.blur()}
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="minPurchaseAmount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="flex">
+                    <span className="mr-2">Minimum User Contribution *</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            Minimum User Contribution is the minimum amount that
+                            an individual <br /> participant can contribute
+                            during a token sale event.
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="string"
+                      placeholder="Minimum user contribution  e.g. $10"
+                      {...field}
+                      onChange={(e) => {
+                        // Remove commas from the input value
+                        const inputValue = e.target.value.replace(/,/g, '')
+                        // Set the formatted value with commas
+                        const formattedValue =
+                          inputValue === '0-'
+                            ? '-'
+                            : (parseInt(inputValue, 10) || 0).toLocaleString(
+                                'en-US'
+                              )
+                        // Update the input value in the form
+                        field.onChange(formattedValue)
+                      }}
                       autoComplete="off"
                     />
                   </FormControl>
