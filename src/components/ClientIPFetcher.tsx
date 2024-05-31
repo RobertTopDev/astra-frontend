@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import Loading from '@/app/loading'
 
 const ClientIPFetcher: React.FC = () => {
   const router = useRouter()
@@ -38,7 +39,7 @@ const ClientIPFetcher: React.FC = () => {
   }, [pathname])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   return null
