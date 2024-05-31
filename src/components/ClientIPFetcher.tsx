@@ -22,6 +22,8 @@ const ClientIPFetcher: React.FC = () => {
         console.error('Error fetching IP: ', err)
       }
     }
+
+    fetchIP();
   }, [pathname])
 
   return null
