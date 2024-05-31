@@ -69,6 +69,19 @@ export const astraDaoWhitelistAbi = [
       {
         indexed: true,
         internalType: 'address',
+        name: 'verifier',
+        type: 'address',
+      },
+    ],
+    name: 'VerifierUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
         name: 'account',
         type: 'address',
       },

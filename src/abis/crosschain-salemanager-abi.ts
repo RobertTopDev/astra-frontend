@@ -23,7 +23,7 @@ export const crosschainSaleManagerAbi = [
       },
       {
         internalType: 'address',
-        name: 'configAddress_',
+        name: 'chefAddress_',
         type: 'address',
       },
     ],
@@ -39,6 +39,38 @@ export const crosschainSaleManagerAbi = [
     inputs: [],
     name: 'NotApprovedByGateway',
     type: 'error',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'chain',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'crossChainSaleManagerAddress',
+        type: 'address',
+      },
+    ],
+    name: 'CrossChainSaleManagerAdded',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'chain',
+        type: 'string',
+      },
+    ],
+    name: 'CrossChainSaleManagerRemoved',
+    type: 'event',
   },
   {
     anonymous: false,
@@ -106,7 +138,7 @@ export const crosschainSaleManagerAbi = [
   },
   {
     inputs: [],
-    name: 'config',
+    name: 'chef',
     outputs: [
       {
         internalType: 'address',

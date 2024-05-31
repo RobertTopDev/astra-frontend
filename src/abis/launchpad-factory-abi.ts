@@ -16,13 +16,13 @@ export const launchpadFactoryAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'requestId',
         type: 'uint256',
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: 'address',
         name: 'launchpadAddress',
         type: 'address',
@@ -35,7 +35,7 @@ export const launchpadFactoryAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'requestId',
         type: 'uint256',
@@ -48,7 +48,7 @@ export const launchpadFactoryAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'requestId',
         type: 'uint256',
@@ -60,7 +60,7 @@ export const launchpadFactoryAbi = [
         type: 'address',
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: 'address',
         name: 'tokenAddress',
         type: 'address',
@@ -90,6 +90,11 @@ export const launchpadFactoryAbi = [
   },
   {
     inputs: [
+      {
+        internalType: 'address',
+        name: '_admin',
+        type: 'address',
+      },
       {
         internalType: 'address',
         name: '_tokenAddress',
@@ -123,6 +128,11 @@ export const launchpadFactoryAbi = [
       {
         internalType: 'uint256',
         name: '_baseAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_minAmount',
         type: 'uint256',
       },
       {
@@ -247,6 +257,11 @@ export const launchpadFactoryAbi = [
             type: 'uint256',
           },
           {
+            internalType: 'uint256',
+            name: 'minAmount',
+            type: 'uint256',
+          },
+          {
             internalType: 'bool',
             name: 'approved',
             type: 'bool',
@@ -267,7 +282,7 @@ export const launchpadFactoryAbi = [
             type: 'bool',
           },
         ],
-        internalType: 'struct LaunchpadFactory.LaunchpadRequest',
+        internalType: 'struct ILaunchpadFactory.LaunchpadRequest',
         name: '',
         type: 'tuple',
       },
@@ -378,6 +393,11 @@ export const launchpadFactoryAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+      {
         internalType: 'bool',
         name: '_isVestingEnabled',
         type: 'bool',
@@ -436,6 +456,11 @@ export const launchpadFactoryAbi = [
       {
         internalType: 'uint256',
         name: 'baseAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'minAmount',
         type: 'uint256',
       },
       {

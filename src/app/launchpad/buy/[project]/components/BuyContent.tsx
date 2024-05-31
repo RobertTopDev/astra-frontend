@@ -164,15 +164,17 @@ export default function BuyContent({
       !!detail,
     args:
       selectedToken === chainConfig.WETHContractAddress
-        ? [address as `0x${string}`, [], []]
+        ? [
+            address as `0x${string}`,
+            `${chainConfig.WETHContractAddress}`,
+            BigInt(0),
+          ]
         : [
             address as `0x${string}`,
-            [selectedToken as `0x${string}`],
-            [
-              tokenDecimals
-                ? parseUnits(buyAmount || '0', tokenDecimals)
-                : BigInt(0),
-            ],
+            selectedToken as `0x${string}`,
+            tokenDecimals
+              ? parseUnits(buyAmount || '0', tokenDecimals)
+              : BigInt(0),
           ],
     value:
       selectedToken === chainConfig.WETHContractAddress

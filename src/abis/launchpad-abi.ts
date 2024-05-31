@@ -47,6 +47,11 @@ export const launchpadAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+      {
         internalType: 'bool',
         name: '_isVestingEnabled',
         type: 'bool',
@@ -54,6 +59,32 @@ export const launchpadAbi = [
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'BaseAmountUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MinimumAmountUpdated',
+    type: 'event',
   },
   {
     anonymous: false,
@@ -312,6 +343,19 @@ export const launchpadAbi = [
   },
   {
     inputs: [],
+    name: 'minAmount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'owner',
     outputs: [
       {
@@ -331,14 +375,14 @@ export const launchpadAbi = [
         type: 'address',
       },
       {
-        internalType: 'address[]',
-        name: '_tokens',
-        type: 'address[]',
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
       },
       {
-        internalType: 'uint256[]',
-        name: '_values',
-        type: 'uint256[]',
+        internalType: 'uint256',
+        name: '_value',
+        type: 'uint256',
       },
     ],
     name: 'purchaseTokens',
@@ -479,6 +523,19 @@ export const launchpadAbi = [
       },
     ],
     name: 'updateBaseAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateMinAmount',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

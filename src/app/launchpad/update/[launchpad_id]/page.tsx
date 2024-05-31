@@ -199,7 +199,7 @@ export default function Page({ params }: TPage) {
     tokenAddress: '',
     tokenAmount: '',
     tokenPrice: '',
-    minPurchaseAmount:'',
+    minPurchaseAmount: '',
     baseAmount: '',
     tokenDecimals: 18,
     tokenSymbol: '',
@@ -251,7 +251,7 @@ export default function Page({ params }: TPage) {
       tokenPrice: '',
       baseToken: '' as `0x${string}`,
       tokenAmount: '',
-      // minPurchaseAmount:'',
+      minPurchaseAmount: '',
       baseAmount: '',
       isVesting: false,
     })
@@ -317,7 +317,7 @@ export default function Page({ params }: TPage) {
       .refine((value) => value !== 0, {
         message: 'Token price cannot be zero.',
       }),
-      minPurchaseAmount: z
+    minPurchaseAmount: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
         // Ensure input contains only numbers and commas
@@ -337,7 +337,7 @@ export default function Page({ params }: TPage) {
           message: 'Minimum user contribution must be a positive integer.',
         }
       )
-      
+
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
     baseAmount: z
       .string() // Accept input as string
@@ -765,9 +765,10 @@ export default function Page({ params }: TPage) {
       }
     )
     .refine((data) => data.baseAmount > data.minPurchaseAmount, {
-      message: 'Maximum user contribution must be greater than minimum user contribution.',
-      path: ['baseAmount'], 
-    });
+      message:
+        'Maximum user contribution must be greater than minimum user contribution.',
+      path: ['baseAmount'],
+    })
   const tempDefaultValues = defaultValues
   teamInfoArray.map((item: TeamObject, key: number) => {
     tempDefaultValues[`name${key}`] = item.name
@@ -818,7 +819,7 @@ export default function Page({ params }: TPage) {
     launchpadDetail,
   ])
   const isLaunchpadRequested = useMemo(() => {
-    return launchpadDetail?.LAUNCHPAD_INDEX ? true : false
+    return launchpadDetail?.LAUNCHPAD_INDEX !== null ? true : false
   }, [launchpadDetail])
   const { data: buyRuleStatus } = useGetBuyRuleLaunchpad() // [0]: whitelisted result
 
@@ -834,7 +835,7 @@ export default function Page({ params }: TPage) {
       !!contractData.saleEndTime &&
       !!contractData.tokenPrice &&
       !!contractData.tokenAmount &&
-      // !!contractData.minPurchaseAmount &&
+      !!contractData.minPurchaseAmount &&
       !!contractData.baseAmount &&
       !!contractData.baseToken &&
       !!contractData.tokenDecimals &&
@@ -857,8 +858,8 @@ export default function Page({ params }: TPage) {
           Number(contractData.tokenDecimals)
         )
       ),
-      // BigInt(parseUnits(contractData.minPurchaseAmount || '', 6)),
       BigInt(parseUnits(contractData.baseAmount || '', 6)),
+      BigInt(parseUnits(contractData.minPurchaseAmount || '', 6)),
       contractData.isVesting,
     ],
     databaseData: databaseData ?? undefined,
@@ -991,7 +992,7 @@ export default function Page({ params }: TPage) {
       tokenAddress: value.tokenAddress as `0x${string}`,
       tokenPrice: value.tokenPrice.toString(),
       tokenAmount: value.tokenAmount.toString(),
-      // minPurchaseAmount: value.minPurchaseAmount.toString(),
+      minPurchaseAmount: value.minPurchaseAmount.toString(),
       baseAmount: value.baseAmount.toString(),
       baseToken: baseTokenTemp as `0x${string}`,
       tokenDecimals: value.tokenDecimals.toString(),
@@ -1884,52 +1885,54 @@ export default function Page({ params }: TPage) {
                   )}
                 />
                 <FormField
-              control={form.control}
-              name="minPurchaseAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex">
-                    <span className="mr-2">Minimum User Contribution *</span>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <InfoCircledIcon className="w-[1rem] h-[1rem]" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>
-                            Minimum User Contribution is the minimum amount that
-                            an individual <br /> participant can contribute
-                            during a token sale event.
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="string"
-                      placeholder="Minimum user contribution  e.g. $10"
-                      {...field}
-                      onChange={(e) => {
-                        // Remove commas from the input value
-                        const inputValue = e.target.value.replace(/,/g, '')
-                        // Set the formatted value with commas
-                        const formattedValue =
-                          inputValue === '0-'
-                            ? '-'
-                            : (parseInt(inputValue, 10) || 0).toLocaleString(
-                                'en-US'
-                              )
-                        // Update the input value in the form
-                        field.onChange(formattedValue)
-                      }}
-                      autoComplete="off"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  control={form.control}
+                  name="minPurchaseAmount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex">
+                        <span className="mr-2">
+                          Minimum User Contribution *
+                        </span>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <InfoCircledIcon className="w-[1rem] h-[1rem]" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>
+                                Minimum User Contribution is the minimum amount
+                                that an individual <br /> participant can
+                                contribute during a token sale event.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="string"
+                          placeholder="Minimum user contribution  e.g. $10"
+                          {...field}
+                          onChange={(e) => {
+                            // Remove commas from the input value
+                            const inputValue = e.target.value.replace(/,/g, '')
+                            // Set the formatted value with commas
+                            const formattedValue =
+                              inputValue === '0-'
+                                ? '-'
+                                : (
+                                    parseInt(inputValue, 10) || 0
+                                  ).toLocaleString('en-US')
+                            // Update the input value in the form
+                            field.onChange(formattedValue)
+                          }}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="baseAmount"

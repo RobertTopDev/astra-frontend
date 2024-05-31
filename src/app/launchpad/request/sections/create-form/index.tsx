@@ -718,9 +718,10 @@ const CreateForm = () => {
       }
     )
     .refine((data) => data.baseAmount > data.minPurchaseAmount, {
-      message: 'Maximum user contribution must be greater than minimum user contribution.',
-      path: ['baseAmount'], 
-    });
+      message:
+        'Maximum user contribution must be greater than minimum user contribution.',
+      path: ['baseAmount'],
+    })
 
   const defaultValues: Record<string, any> = {
     tokenAddress: '',

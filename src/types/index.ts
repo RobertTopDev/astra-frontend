@@ -583,6 +583,7 @@ export type TRequestLaunchpadContractInfo = {
   tokenPrice: string
   baseToken: `0x${string}`
   tokenAmount: string
+  minPurchaseAmount: string
   baseAmount: string
   tokenDecimals: string
   isVesting: boolean
