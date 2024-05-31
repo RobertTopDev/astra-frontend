@@ -1090,74 +1090,74 @@ export default function Page({ params }: TPage) {
         ? launchpadDetail.LAUNCHPAD_TOKEN_ADDRESS
         : '',
       tokenAmount: launchpadDetail
-        ? launchpadDetail.TOTAL_SALE_AMOUNT.toLocaleString('en-US')
+        ? launchpadDetail.TOTAL_SALE_AMOUNT?.toLocaleString('en-US')
         : '',
       tokenPrice: launchpadDetail ? launchpadDetail.LAUNCHPAD_TOKEN_PRICE : '',
       minPurchaseAmount: launchpadDetail
-        ? launchpadDetail.MIN_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
+        ? launchpadDetail.MIN_PURCHASE_BASE_AMOUNT?.toLocaleString('en-US')
         : 0,
       baseAmount: launchpadDetail
-        ? launchpadDetail.MAX_PURCHASE_BASE_AMOUNT.toLocaleString('en-US')
+        ? launchpadDetail.MAX_PURCHASE_BASE_AMOUNT?.toLocaleString('en-US')
         : 0,
       tokenDecimals: launchpadDetail
         ? launchpadDetail.LAUNCHPAD_TOKEN_DECIMAL
         : 18,
       tokenSymbol: launchpadDetail
-        ? launchpadDetail.LAUNCHPAD_TOKEN_SYMBOL.toString()
+        ? launchpadDetail.LAUNCHPAD_TOKEN_SYMBOL?.toString()
         : '',
       totalSupply: launchpadDetail
-        ? launchpadDetail.LAUNCHPAD_TOKEN_TOTAL_SUPPLY.toLocaleString('en-US')
+        ? launchpadDetail.LAUNCHPAD_TOKEN_TOTAL_SUPPLY?.toLocaleString('en-US')
         : '',
       raised: launchpadDetail
-        ? launchpadDetail.RAISED.toLocaleString('en-US')
+        ? launchpadDetail.RAISED?.toLocaleString('en-US')
         : '',
       softCap: launchpadDetail
-        ? launchpadDetail.SOFT_CAP.toLocaleString('en-US')
+        ? launchpadDetail.SOFT_CAP?.toLocaleString('en-US')
         : '',
       hardCap: launchpadDetail
-        ? launchpadDetail.HARD_CAP.toLocaleString('en-US')
+        ? launchpadDetail.HARD_CAP?.toLocaleString('en-US')
         : '',
       initialMarketCap: launchpadDetail
-        ? launchpadDetail.INITIAL_MARKET_CAP.toLocaleString('en-US')
+        ? launchpadDetail.INITIAL_MARKET_CAP?.toLocaleString('en-US')
         : '',
       projectValuation: launchpadDetail
-        ? launchpadDetail.PROJECT_VALUATION.toLocaleString('en-US')
+        ? launchpadDetail.PROJECT_VALUATION?.toLocaleString('en-US')
         : '',
       tokenName: launchpadDetail
-        ? launchpadDetail.LAUNCHPAD_TOKEN_NAME.toString()
+        ? launchpadDetail.LAUNCHPAD_TOKEN_NAME?.toString()
         : '',
-      website: launchpadDetail ? launchpadDetail.WEBSITE_URL.toString() : '',
+      website: launchpadDetail ? launchpadDetail.WEBSITE_URL?.toString() : '',
       projectDeck: launchpadDetail
-        ? launchpadDetail.PROJECT_DECK.toString()
+        ? launchpadDetail.PROJECT_DECK?.toString()
         : '',
       pitchdeck: launchpadDetail
-        ? launchpadDetail.WHITEPAPER_URL.toString()
+        ? launchpadDetail.WHITEPAPER_URL?.toString()
         : '',
       projectDescription: launchpadDetail
-        ? launchpadDetail?.PROJECT_DETAIL.toString()
+        ? launchpadDetail?.PROJECT_DETAIL?.toString()
         : '',
       projectDescriptionDetail: launchpadDetail
-        ? launchpadDetail?.PROJECT_DESCRIPTION_DETAIL.toString()
+        ? launchpadDetail?.PROJECT_DESCRIPTION_DETAIL?.toString()
         : '',
       projectImage: launchpadDetail
-        ? launchpadDetail?.PROJECT_IMAGE.toString()
+        ? launchpadDetail?.PROJECT_IMAGE?.toString()
         : '',
       teamDescription: launchpadDetail?.TEAM_DESCRIPTION || '',
       saleRoundDetail: launchpadDetail?.SALE_ROUND_DETAIL || '',
-      email: launchpadDetail ? launchpadDetail.EMAIL.toString() : '',
+      email: launchpadDetail ? launchpadDetail.EMAIL?.toString() : '',
       projectTwitter: launchpadDetail
         ? launchpadDetail.TWITTER?.toString()
         : '',
       github: launchpadDetail ? launchpadDetail.GITHUB?.toString() : '',
       contactTelegram: launchpadDetail
-        ? launchpadDetail.TELEGRAM.toString()
+        ? launchpadDetail.TELEGRAM?.toString()
         : '',
       contactDiscord: launchpadDetail
         ? launchpadDetail.DISCORD?.toString()
         : '',
       contactMedium: launchpadDetail ? launchpadDetail.MEDIUM?.toString() : '',
       totalToken: launchpadDetail
-        ? launchpadDetail.LAUNCHPAD_TOKEN_FDV.toLocaleString('en-US')
+        ? launchpadDetail.LAUNCHPAD_TOKEN_FDV?.toLocaleString('en-US')
         : '',
       leadVC: launchpadDetail?.LEAD_VC || '',
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
