@@ -41,7 +41,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
     []
   )
   const [getOption, SetGetOption] = useState<SortType>({
-    sort: 'LAUNCHPAD_INDEX',
+    sort: 'SALE_START_TIME',
     filter: 'None',
     chain: 'None',
     search: '',
