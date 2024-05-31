@@ -1,10 +1,12 @@
-import axios from 'axios'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function middleware(req: NextRequest) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkip`)
-    console.log("location from server: ", await response.json());
+    const ipInfo = await fetch('https://jsonip.com')
+    const clientIp = (await ipInfo.json()).ip
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/checkip?clientIp=${clientIp}`
+    )
     if (response.status > 400)
       return new NextResponse('Access denided', { status: response.status })
   } catch (err) {
