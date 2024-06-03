@@ -3,7 +3,7 @@
 import { AstraRouterBack, Footer, Navbar } from '@/components'
 import '@rainbow-me/rainbowkit/styles.css'
 import clsx from 'clsx'
-import type { Metadata } from 'next'
+// import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Suspense } from 'react'
 import './globals.css'
@@ -15,10 +15,10 @@ import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'ASTRA DAO',
-  description: 'ASTRA DAO Website for staking and launchpads',
-}
+// export const metadata: Metadata = {
+//   title: 'ASTRA DAO',
+//   description: 'ASTRA DAO Website for staking and launchpads',
+// }
 
 const novaFont = localFont({
   display: 'swap',
