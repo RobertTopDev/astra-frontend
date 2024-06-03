@@ -1197,7 +1197,7 @@ export default function Page({ params }: TPage) {
     <main className="min-h-screen  ">
       <div className="container flex flex-col items-center gap-6 justify-center w-full h-full pb-20 xl:w-1/2">
         <AstraHeader className="text-center w-full">
-          Launchpad Update Form
+          Token Sale Update Form
         </AstraHeader>
         <AstraCard className="w-full bg-opacity-80">
           {isLoading ? (

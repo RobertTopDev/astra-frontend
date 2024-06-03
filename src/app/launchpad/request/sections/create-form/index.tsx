@@ -958,7 +958,7 @@ const CreateForm = () => {
   return (
     <>
       <AstraHeader className="text-center w-full">
-        Launchpad Create Form
+        Token Sale Create Form
       </AstraHeader>
       <AstraCard className="w-full bg-opacity-80">
         <Form {...form}>

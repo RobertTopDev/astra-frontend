@@ -8,7 +8,7 @@ export default function Page() {
         <div className="flex flex-col items-stretch w-[55%] max-md:w-full max-md:ml-0">
           <div className="flex flex-col items-stretch my-auto px-5 max-md:max-w-full max-md:mt-10">
             <h1 className="text-white text-2xl font-medium tracking-[2.5px] uppercase max-md:max-w-full">
-              AstraDao Launchpad For Launchpad Owner
+              AstraDao Launchpad For Token Sale Owner
             </h1>
             <p className="text-white text-base leading-6 tracking-wide mt-8 max-md:max-w-full">
               Providing exceptional projects and fostering confidence in the
