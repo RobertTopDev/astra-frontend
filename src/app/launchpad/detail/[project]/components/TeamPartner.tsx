@@ -168,7 +168,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
     },
   ])
   const temp: Record<string, any> = {
-    teamDescription: z.coerce.string()
+    teamDescription: z.coerce.string(),
   }
   for (let i = 0; i < team.length; i++) {
     temp[`name${i}`] = z
@@ -273,9 +273,8 @@ export default function TeamPartner({ data, refetchData }: Props) {
     setTeam(valueArray)
     const requestData = {
       owner: data?.OWNER as `0x${string}`,
-      launchpadIndex: data?.LAUNCHPAD_INDEX
-        ? Number(data?.LAUNCHPAD_INDEX)
-        : null,
+      launchpadIndex:
+        data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
       launchpadAddress: data?.LAUNCHPAD_ADDRESS,
       launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
       launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
@@ -298,10 +297,10 @@ export default function TeamPartner({ data, refetchData }: Props) {
       projectImage: data?.PROJECT_IMAGE,
       leadVCImage: data?.LEAD_VC_IMAGE,
       marketMakerImage: data?.MARKET_MAKER_IMAGE,
-      github: data?.GITHUB||'',
-      projectDeck: data?.PROJECT_DECK||'',
-      medium: data?.MEDIUM||'',
-      raised:data?.RAISED || 0,
+      github: data?.GITHUB || '',
+      projectDeck: data?.PROJECT_DECK || '',
+      medium: data?.MEDIUM || '',
+      raised: data?.RAISED || 0,
       teamInfo: JSON.stringify(valueArray),
       teamDescription: value.teamDescription || '',
       metrics: data?.METRICS,

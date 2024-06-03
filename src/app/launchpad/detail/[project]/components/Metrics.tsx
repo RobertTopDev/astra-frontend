@@ -184,9 +184,8 @@ export default function Metrics({ data, refetchData }: Props) {
     } else {
       const requestData = {
         owner: data?.OWNER as `0x${string}`,
-        launchpadIndex: data?.LAUNCHPAD_INDEX
-          ? Number(data?.LAUNCHPAD_INDEX)
-          : null,
+        launchpadIndex:
+          data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
         launchpadAddress: data?.LAUNCHPAD_ADDRESS,
         launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
         launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
