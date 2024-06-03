@@ -717,9 +717,9 @@ const CreateForm = () => {
         path: ['vest_start'],
       }
     )
-    .refine((data) => data.baseAmount > data.minPurchaseAmount, {
+    .refine((data) => data.baseAmount >= data.minPurchaseAmount, {
       message:
-        'Maximum user contribution must be greater than minimum user contribution.',
+        'Maximum user contribution must be greater or equal than minimum user contribution.',
       path: ['baseAmount'],
     })
 
