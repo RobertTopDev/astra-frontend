@@ -806,9 +806,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
 
     const requestData = {
       owner: data.OWNER as `0x${string}`,
-      launchpadIndex: data.LAUNCHPAD_INDEX != null
-        ? Number(data.LAUNCHPAD_INDEX)
-        : null,
+      launchpadIndex:
+        data.LAUNCHPAD_INDEX != null ? Number(data.LAUNCHPAD_INDEX) : null,
       launchpadAddress: data.LAUNCHPAD_ADDRESS,
       launchpadTokenAddress: value.tokenAddress,
       launchpadTokenName: value.tokenName.trim(),
@@ -971,8 +970,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               <TooltipContent>
                                 <p>
                                   Please provide a brief description of your
-                                  project <br /> within a maximum of 300
-                                  characters.
+                                  project <br /> within 300 characters.
                                 </p>
                               </TooltipContent>
                             </Tooltip>

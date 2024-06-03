@@ -1007,8 +1007,9 @@ const CreateForm = () => {
                         </TooltipTrigger>
                         <TooltipContent>
                           <p>
-                            Please provide a short description of your project.{' '}
-                            <br /> within a maximum of 300 characters.
+                            Please provide a brief description of your project
+                            <br />
+                            within 300 characters.
                           </p>
                         </TooltipContent>
                       </Tooltip>
