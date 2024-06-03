@@ -37,7 +37,7 @@ export default function KeyMetrics({ launchpadDetail }: TComponent) {
         <div className="flex flex-col justify-center h-full">
           <div className="text-md text-white">Project Valuation</div>
           <div className="text-2xl truncate text-[#00E7FF] font-bold">
-            {convertUSD(launchpadDetail?.LAUNCHPAD_TOKEN_FDV)}
+            {convertToInternationalCurrencySystem(launchpadDetail?.LAUNCHPAD_TOKEN_FDV)}
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default function KeyMetrics({ launchpadDetail }: TComponent) {
         <div className="flex flex-col justify-center h-full">
           <div className="text-md text-white">Initial Market Cap</div>
           <div className="text-2xl truncate text-[#00E7FF] font-bold">
-            {convertUSD(launchpadDetail?.INITIAL_MARKET_CAP)}
+            {convertToInternationalCurrencySystem(launchpadDetail?.INITIAL_MARKET_CAP)}
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ export default function KeyMetrics({ launchpadDetail }: TComponent) {
         <div className="flex flex-col justify-center h-full">
           <div className="text-md text-white">Hard Cap</div>
           <div className="text-2xl truncate text-[#00E7FF] font-bold">
-            {convertUSD(launchpadDetail?.HARD_CAP)}
+            {convertToInternationalCurrencySystem(launchpadDetail?.HARD_CAP)}
           </div>
         </div>
       </div>
