@@ -806,7 +806,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
 
     const requestData = {
       owner: data.OWNER as `0x${string}`,
-      launchpadIndex: data.LAUNCHPAD_INDEX
+      launchpadIndex: data.LAUNCHPAD_INDEX != null
         ? Number(data.LAUNCHPAD_INDEX)
         : null,
       launchpadAddress: data.LAUNCHPAD_ADDRESS,

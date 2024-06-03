@@ -85,6 +85,7 @@ export default function LiveUpcomingCard({
       !!launchpadData?.LAUNCHPAD_TOKEN_ADDRESS &&
       !!chainConfig.LaunchpadFactoryContractAddress,
   })
+
   const isTokenApproved = useMemo(() => {
     const safeTokenAllowance = tokenAllowance ?? BigInt(0)
     const totalSaleAmount = launchpadData?.TOTAL_SALE_AMOUNT.toString() ?? '0'
@@ -104,7 +105,7 @@ export default function LiveUpcomingCard({
     error: approveLaunchpadError,
     isLoading: approveLaunchpadLoading,
   } = useApproveLaunchpad({
-    enabled: isTokenApproved && !!launchpadData?.LAUNCHPAD_INDEX,
+    enabled: isTokenApproved && launchpadData?.LAUNCHPAD_INDEX != null,
     args: [BigInt(launchpadData?.LAUNCHPAD_INDEX ?? 0)],
     onSuccessTx: () => {
       window.location.reload()
@@ -212,7 +213,9 @@ export default function LiveUpcomingCard({
             <Button
               className="!px-6 !py-3"
               variant="astra-blue"
-              disabled={!isTokenApproved || !launchpadData?.LAUNCHPAD_INDEX}
+              disabled={
+                !isTokenApproved || launchpadData?.LAUNCHPAD_INDEX == null
+              }
             >
               Approve
             </Button>
