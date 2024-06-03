@@ -1,0 +1,28 @@
+.rhex {
+  position: relative;
+  z-index: 0;
+  margin: 1em auto;
+  // width: 5em;
+  // height: 8.66em;
+  border-radius: 1em/ 0.5em;
+  transition: opacity 0.5s;
+  cursor: pointer;
+  background: #55557d;
+  position: relative;
+  // top: 74px;
+}
+.rhex:before,
+.rhex:after {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  background: inherit;
+  content: '';
+}
+.rhex:before {
+  transform: rotate(60deg);
+}
+.rhex:after {
+  transform: rotate(-60deg);
+}

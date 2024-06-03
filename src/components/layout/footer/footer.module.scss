@@ -1,0 +1,36 @@
+.footer-content {
+  position: relative;
+  background: linear-gradient(180deg, #363657 0%, #282840 99.99%, #2e2e49 100%);
+}
+
+.sub-title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 22px;
+  text-transform: uppercase;
+  color: #00e7ff;
+  margin-bottom: 16px;
+}
+.sub-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffff;
+  margin-bottom: 16px;
+  .mail-link {
+    text-decoration-line: underline;
+    color: #00e7ff;
+  }
+}
+.unordered-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column-reverse;
+}
+
+// .footer-links {
+//   h2 {
+//   }
+// }

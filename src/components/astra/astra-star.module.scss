@@ -1,0 +1,78 @@
+.ag-star {
+  position: absolute;
+  height: 4.0625em;
+  width: 3.75em;
+  background-size: contain;
+  z-index: 10;
+  position: absolute;
+  -webkit-animation: an-star 2s 2s linear infinite;
+  -moz-animation: an-star 2s 2s linear infinite;
+  -o-animation: an-star 2s 2s linear infinite;
+  animation: an-star 2s 2s linear infinite;
+  image-rendering: optimize-contrast;
+  background-image: url('/images/star.png');
+  // @apply background-star;
+}
+
+@-webkit-keyframes an-star {
+  0% {
+    -webkit-transform: scale(1, 1) rotate(0deg);
+    transform: scale(1, 1) rotate(0deg);
+  }
+  50% {
+    -webkit-transform: scale(0.5, 0.5) rotate(180deg);
+    transform: scale(0.5, 0.5) rotate(180deg);
+  }
+  100% {
+    -webkit-transform: scale(1, 1) rotate(360deg);
+    transform: scale(1, 1) rotate(360deg);
+  }
+}
+@-moz-keyframes an-star {
+  0% {
+    -moz-transform: scale(1, 1) rotate(0deg);
+    transform: scale(1, 1) rotate(0deg);
+  }
+  50% {
+    -moz-transform: scale(0.5, 0.5) rotate(180deg);
+    transform: scale(0.5, 0.5) rotate(180deg);
+  }
+  100% {
+    -moz-transform: scale(1, 1) rotate(360deg);
+    transform: scale(1, 1) rotate(360deg);
+  }
+}
+@-o-keyframes an-star {
+  0% {
+    -o-transform: scale(1, 1) rotate(0deg);
+    transform: scale(1, 1) rotate(0deg);
+  }
+  50% {
+    -o-transform: scale(0.5, 0.5) rotate(180deg);
+    transform: scale(0.5, 0.5) rotate(180deg);
+  }
+  100% {
+    -o-transform: scale(1, 1) rotate(360deg);
+    transform: scale(1, 1) rotate(360deg);
+  }
+}
+@keyframes an-star {
+  0% {
+    -webkit-transform: scale(1, 1) rotate(0deg);
+    -moz-transform: scale(1, 1) rotate(0deg);
+    -o-transform: scale(1, 1) rotate(0deg);
+    transform: scale(1, 1) rotate(0deg);
+  }
+  50% {
+    -webkit-transform: scale(0.5, 0.5) rotate(180deg);
+    -moz-transform: scale(0.5, 0.5) rotate(180deg);
+    -o-transform: scale(0.5, 0.5) rotate(180deg);
+    transform: scale(0.5, 0.5) rotate(180deg);
+  }
+  100% {
+    -webkit-transform: scale(1, 1) rotate(360deg);
+    -moz-transform: scale(1, 1) rotate(360deg);
+    -o-transform: scale(1, 1) rotate(360deg);
+    transform: scale(1, 1) rotate(360deg);
+  }
+}

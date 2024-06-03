@@ -1,0 +1,43 @@
+.hero-backdrop {
+  background: radial-gradient(
+    47.13% 49.66% at 48.01% 41.92%,
+    rgba(129, 237, 215, 0.1004) 0%,
+    rgba(0, 0, 30, 0.76) 100%
+  );
+}
+
+.hero-heading {
+  font-size: clamp(3rem, 0.2718rem + 3.1068vw, 4rem);
+  text-align: center;
+}
+
+.video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* margin: 0 40px; */
+  iframe {
+    border: 2px solid #00e7ff;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+
+  h2 {
+    font-family: 'roboto-regular';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    margin-top: 42px;
+    color: #ffffff;
+  }
+}
+
+.astra-icon {
+  height: 32rem;
+  aspect-ratio: 9 / 16;
+  position: absolute;
+  bottom: -16rem;
+  right: -1rem;
+}

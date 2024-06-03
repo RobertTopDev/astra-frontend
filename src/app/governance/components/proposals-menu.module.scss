@@ -1,0 +1,7 @@
+.proposal-link {
+  @apply flex items-center gap-6 cursor-pointer pl-4 py-2 font-bold;
+}
+
+.proposal-link-active {
+  @apply border-l-2 border-astra-blue text-astra-blue;
+}

@@ -1,0 +1,371 @@
+'use client'
+
+import React, { useMemo, useState } from 'react'
+import {
+  Card,
+  Input,
+  Button,
+  CardContent,
+  Label,
+  Select,
+  SelectTrigger,
+  SelectLabel,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+} from '@/components/shadcn'
+import { AstraButtonAuthenticated, AstraLoading } from '@/components'
+import {
+  useLaunchpadFactoryInfo,
+  useLaunchpadInfo,
+  useLaunchpadBuy,
+  useAllowance,
+  useApprove,
+  useChainConfig,
+  useDecimals,
+  useErcBalanceOf,
+} from '@/hooks/'
+import { useAccount } from 'wagmi'
+import { formatUnits, parseUnits } from 'viem'
+import { useLaunchpadCountdown } from '@/hooks/'
+import { TLaunchpadDetailInfo } from '@/types'
+import Countdown from './Countdown'
+
+type Props = {
+  detail: TLaunchpadDetailInfo
+}
+
+export default function BuyContent({ detail }: Props) {
+  const { address } = useAccount()
+  const { chainConfig } = useChainConfig()
+
+  const [buyAmount, setBuyAmount] = useState<number>(0)
+  const [selectedToken, setSelectedToken] = useState<string>('')
+
+  const { data: factoryData, isLoading: factoryLoading } =
+    useLaunchpadFactoryInfo({ lIndex: detail.LAUNCHPAD_INDEX.toString() })
+  const launchpadAddress = useMemo(
+    () => factoryData?.[9] ?? ('' as `0x${string}`),
+    [factoryData]
+  )
+
+  const {
+    data: launchpadData,
+    isLoading: launchpadLoading,
+    refetch: refetchLaunchpadData,
+  } = useLaunchpadInfo({ launchpad: launchpadAddress })
+
+  const { remainingTime: startRemainingTime, ...startCountdown } =
+    useLaunchpadCountdown({
+      cooldownDate: launchpadData
+        ? new Date(Number(launchpadData[4].result) * 1000)
+        : undefined,
+    })
+  const { remainingTime: endRemainingTime, ...endCountdown } =
+    useLaunchpadCountdown({
+      cooldownDate: launchpadData
+        ? new Date(Number(launchpadData[5].result) * 1000)
+        : undefined,
+    })
+
+  // get accept token allowanced
+  const selectedTokenAddress = selectedToken as `0x${string}`
+  const {
+    data: tokenAllowance,
+    isLoading: tokenAllowanceLoading,
+    refetch: refetchTokenAllowance,
+  } = useAllowance({
+    address: selectedTokenAddress,
+    args: [address ?? ('' as `0x${string}`), launchpadAddress],
+    enabled: !!address && !!selectedToken && !!launchpadAddress,
+  })
+
+  // get accept token balance of wallet
+  const { data: balanceOf, isLoading: balanceOfLoading } = useErcBalanceOf({
+    address: selectedTokenAddress,
+    args: [address ?? ('' as `0x${string}`)],
+    enabled: !!address,
+  })
+
+  // accept token decimals
+  const { data: tokenDecimals, isLoading: tokenDecimalsLoading } = useDecimals({
+    address: selectedTokenAddress,
+    enabled: !!selectedToken,
+  })
+
+  const selectedTokenBalance = useMemo(
+    () =>
+      balanceOf && tokenDecimals
+        ? Number(formatUnits(balanceOf, tokenDecimals))
+        : 0,
+    [balanceOf, tokenDecimals]
+  )
+
+  // APPROVE
+  const {
+    approve,
+    error: approveError,
+    isLoading: approveLoading,
+  } = useApprove({
+    address: selectedToken as `0x${string}`,
+    minAmount: tokenDecimals
+      ? parseUnits(buyAmount.toString() || '0', tokenDecimals)
+      : 0,
+    enabled:
+      !!selectedToken &&
+      !!buyAmount &&
+      tokenAllowance !== undefined &&
+      tokenDecimals !== undefined &&
+      tokenAllowance < parseUnits(buyAmount.toString() ?? '0', tokenDecimals) &&
+      !!factoryData?.[9],
+    spender: factoryData?.[9] as `0x${string}`,
+    onSuccessTx: () => {
+      refetchTokenAllowance()
+    },
+  })
+  // Buy
+  const {
+    buyToken,
+    error: buyTokenError,
+    isLoading: buyTokenLoading,
+  } = useLaunchpadBuy({
+    enabled:
+      !!selectedToken &&
+      !!address &&
+      !!buyAmount &&
+      tokenAllowance !== undefined &&
+      tokenDecimals !== undefined &&
+      tokenAllowance >=
+        parseUnits(buyAmount.toString() || '0', tokenDecimals) &&
+      !!factoryData?.[9] &&
+      !!detail,
+    args: [
+      address as `0x${string}`,
+      [selectedToken as `0x${string}`],
+      [
+        tokenDecimals
+          ? parseUnits(buyAmount.toString() || '0', tokenDecimals)
+          : BigInt(0),
+      ],
+    ],
+    address: factoryData?.[9] || ('' as `0x${string}`),
+    databaseData: {
+      launchpadIndex: detail.LAUNCHPAD_INDEX,
+      launchpadAddress: factoryData?.[9] || ('' as `0x${string}`),
+      contributorAddress: address as `0x${string}`,
+      contributedAmount: buyAmount,
+    },
+    onSuccessTx: () => {
+      refetchLaunchpadData()
+    },
+  })
+
+  const buyButton = () => {
+    if (
+      tokenAllowance !== undefined &&
+      tokenDecimals !== undefined &&
+      tokenAllowance < parseUnits(buyAmount.toString() || '0', tokenDecimals)
+    ) {
+      return (
+        <Button
+          variant="astra-blue"
+          className="rounded-lg h-[52px]"
+          disabled={!approve || !!approveError || approveLoading}
+          isLoading={isFetchLoading || isActionLoading}
+          onClick={() => approve?.()}
+        >
+          <span className="text-base">Approve</span>
+        </Button>
+      )
+    } else {
+      return (
+        <Button
+          variant="astra-blue"
+          className="rounded-lg h-[52px]"
+          disabled={!buyToken || !!buyTokenError}
+          isLoading={isFetchLoading || isActionLoading}
+          onClick={() => buyToken?.()}
+        >
+          <span className="text-base">BUY</span>
+        </Button>
+      )
+    }
+  }
+  const onSelectToken = (value: string) => setSelectedToken(value)
+
+  // loading
+  const isFetchLoading =
+    factoryLoading || launchpadLoading || tokenDecimalsLoading
+  const isActionLoading =
+    tokenAllowanceLoading ||
+    approveLoading ||
+    buyTokenLoading ||
+    balanceOfLoading
+
+  // countdown time renderer
+  const countdownTimeRenderer = () => (
+    <div>
+      {startRemainingTime > 0 ? (
+        <>
+          <Countdown
+            remainingTime={startRemainingTime}
+            timeValues={startCountdown}
+          />
+          <div className="pt-4">Public Sale Starts In</div>
+        </>
+      ) : startRemainingTime <= 0 && endRemainingTime > 0 ? (
+        <>
+          <Countdown
+            remainingTime={endRemainingTime}
+            timeValues={endCountdown}
+          />
+          <div className="pt-4">Public Sale Ends In</div>
+        </>
+      ) : (
+        <>
+          <Countdown
+            remainingTime={endRemainingTime}
+            timeValues={endCountdown}
+          />
+          <div className="pt-4">Public Sale Finished</div>
+        </>
+      )}
+    </div>
+  )
+
+  return (
+    <Card className="w-full relative border-0 col-span-1 rounded-3xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl p-10">
+      <CardContent className="p-0 flex flex-row items-stretch gap-8">
+        <div className="w-1/2 px-12 py-16 bg-[#292944] rounded-3xl flex flex-col justify-center">
+          <div className="border border-solid border-[#00E7FF] p-6 rounded-xl w-fit mx-auto text-center">
+            {countdownTimeRenderer()}
+          </div>
+          <div className="mt-12">
+            <Label>Amount</Label>
+            <div className="bg-[#FBF8F8] rounded-lg p-2 flex w-full gap-2">
+              <div className="flex flex-col flex-grow">
+                <Input
+                  className="flex-grow px-4 py-0 text-black border-none focus-visible:outline-none focus-visible:ring-0  [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  placeholder="0.0"
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={buyAmount}
+                  onChange={(e) => setBuyAmount(Number(e.target.value))}
+                />
+              </div>
+              <Button
+                variant="outline"
+                className="text-[#292944] border-0"
+                onClick={() => setBuyAmount(selectedTokenBalance)} // should be changed with combine of limited amount
+              >
+                Max
+              </Button>
+            </div>
+          </div>
+          <div className="mt-12 flex justify-between gap-4 items-end">
+            <div className="flex-1">
+              <Label>Buy With</Label>
+              <Select disabled={isActionLoading} onValueChange={onSelectToken}>
+                <SelectTrigger className="bg-[#FBF8F8] rounded-lg p-4 flex w-full gap-2 h-[52px]">
+                  <SelectValue placeholder="Select Token" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Select Token</SelectLabel>
+                    <SelectItem value={chainConfig.USDTContractAddress}>
+                      USDT
+                    </SelectItem>
+                    <SelectItem value={chainConfig.USDCContractAddress}>
+                      USDC
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <AstraButtonAuthenticated>{buyButton()}</AstraButtonAuthenticated>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-3xl p-[1px] bg-gradient-to-b from-transparent to-gray-400 shadow-xl w-1/2">
+          <div className="p-12 bg-gradient-to-r from-[#51547590] to-[#51547599] rounded-[calc(1.5rem-1px)] flex flex-col gap-4">
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center` rounded-lg">
+              <span className="text-[#7E7E7E]">Status</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-[#EA8A1A]">
+                  {startRemainingTime > 0
+                    ? 'Upcoming'
+                    : startRemainingTime <= 0 && endRemainingTime > 0
+                      ? 'Inprogress'
+                      : 'Ended'}
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Tier</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">
+                  {' '}
+                  {Number(launchpadData?.[1].result ?? BigInt(0))}
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Multiplier</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">
+                  {formatUnits(launchpadData?.[9].result ?? BigInt(0), 13)}
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Max Contribution Amount</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">
+                  {' '}
+                  {formatUnits(launchpadData?.[2].result ?? BigInt(0), 6)} USDC
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Sale Type</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-[#189E72]">Public</span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Current Rate</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">
+                  {`1 ${detail.LAUNCHPAD_TOKEN_SYMBOL} = ${
+                    formatUnits(launchpadData?.[3].result ?? BigInt(0), 13) +
+                    ' USDC'
+                  }`}
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Total Contributors</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">
+                  {Number(launchpadData?.[6].result ?? 0)}
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">You Puchased</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">{`${formatUnits(
+                  launchpadData?.[8].result ?? BigInt(0),
+                  6
+                )} USDC`}</span>
+              </AstraLoading>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
