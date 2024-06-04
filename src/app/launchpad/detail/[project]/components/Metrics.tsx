@@ -45,7 +45,7 @@ interface Errors {
 export default function Metrics({ data, refetchData }: Props) {
   const pathname = usePathname()
 
-  const metricsInfoArray = JSON.parse(data?.METRICS || '[]')
+  const metricsInfoArray = JSON.parse(data?.METRICS.replace(/\n/g, '\\n') || '[]')
   const saleRoundDetailInfo = data?.SALE_ROUND_DETAIL
     ? data?.SALE_ROUND_DETAIL.split('<>')
     : []

@@ -69,7 +69,7 @@ export default function RootLayout({
               </div>
             </Suspense>
             {/* {pathname !== '/access-denied' && <Footer />} */}
-            {/* <Footer /> */}
+            <Footer />
           </Providers>
         </Suspense>
       </body>

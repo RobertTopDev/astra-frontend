@@ -267,8 +267,12 @@ export default function Page({ params }: TPage) {
     { id: '', label: '', value: 0 },
   ])
   const [vesting, setVesting] = useState<boolean>(defaultValues.isVesting)
-  const teamInfoArray = JSON.parse(launchpadDetail?.TEAM_INFO || '[]')
-  const metricsInfoArray = JSON.parse(launchpadDetail?.METRICS || '[]')
+  const teamInfoArray = JSON.parse(
+    launchpadDetail?.TEAM_INFO.replace(/\n/g, '\\n') || '[]'
+  )
+  const metricsInfoArray = JSON.parse(
+    launchpadDetail?.METRICS.replace(/\n/g, '\\n') || '[]'
+  )
 
   const temp: Record<string, any> = {
     saleStartDate: z.date({
@@ -895,6 +899,7 @@ export default function Page({ params }: TPage) {
   })
 
   async function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
+    console.log(value)
     if (isUploadLoading || !address) {
       alert('loading or address is undefined')
       return
@@ -1163,7 +1168,10 @@ export default function Page({ params }: TPage) {
       leadVC: launchpadDetail?.LEAD_VC || '',
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
       investorDetail:
-        JSON.parse(launchpadDetail?.INVESTOR_DETAIL || '[]').join(', ') || '',
+        JSON.parse(
+          launchpadDetail?.TEAM_INFO.replace(/\n/g, '\\n') || '[]'
+        ).join(', ') || '',
+
       leadVCImage: launchpadDetail?.LEAD_VC_IMAGE || '',
       marketMakerImage: launchpadDetail?.MARKET_MAKER_IMAGE || '',
       controlledCap: launchpadDetail?.CONTROLLED_CAP || '',
