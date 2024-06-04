@@ -14,7 +14,8 @@ service:
   type: LoadBalancer
   port: 8080
   sessionAffinity: ClientIP
-  externalTrafficPolicy: Local
+  externalTrafficPolicy: Cluster
+
 
 ingress:
   enabled: true
