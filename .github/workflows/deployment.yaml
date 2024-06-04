@@ -156,7 +156,7 @@ jobs:
             cluster_name: "cluster-alpha-us-central1"
             location: "us-central1"
 
-      - name: "Get GKE alpha credentials"
+      - name: "Get GKE prod credentials"
         if: ${{ steps.branch-names.outputs.ref_branch == 'mainnet' }}
         uses: "google-github-actions/get-gke-credentials@v2"
         with:
