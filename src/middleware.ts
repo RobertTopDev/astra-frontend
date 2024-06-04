@@ -3,7 +3,7 @@ import { NextRequest, NextFetchEvent, NextResponse } from 'next/server'
 export async function middleware(request: NextRequest, _next: NextFetchEvent) {
   const res = NextResponse.next()
 
-  let ip =
+  const ip =
     request.headers.get('x-real-ip') ||
     request.headers.get('x-forwarded-for')?.split(',')[0] ||
     request.ip ||
