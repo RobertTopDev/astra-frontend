@@ -47,11 +47,27 @@ jobs:
       - name: Get branch names.
         id: branch-names
         uses: tj-actions/branch-names@v8
-      - name: Write .env.production from secrets
+
+      - name: Write testnet from secrets
+        if: ${{ steps.branch-names.outputs.ref_branch != 'mainnet' || 'staging' }}
         run: |
           echo "${{ secrets.ENV }}" > .env
         env:
           ENV: ${{ secrets.ENV}}
+
+      - name: Write staging from secrets
+        if: ${{ steps.branch-names.outputs.ref_branch == 'staging' }}
+        run: |
+          echo "${{ secrets.STAGING_ENV }}" > .env
+        env:
+          ENV: ${{ secrets.STAGING_ENV}}
+
+      - name: Write mainnet env from secrets
+        if: ${{ steps.branch-names.outputs.ref_branch == 'mainnet' }}
+        run: |
+          echo "${{ secrets.MAINNET_ENV }}" > .env
+        env:
+          ENV: ${{ secrets.MAINNET_ENV}}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -93,6 +109,28 @@ jobs:
         run: |
           docker push us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:testnet-${GITHUB_SHA::7}
 
+      - name: Build staging docker image
+        if: ${{ steps.branch-names.outputs.ref_branch == 'staging' }}
+        run: |
+            gcloud auth configure-docker us-central1-docker.pkg.dev
+            docker build -t us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:staging-${GITHUB_SHA::7} .
+  
+      - name: Push image to staging registry
+        if: (github.ref == 'refs/heads/staging') && (github.event.pull_request.merged == true || github.event_name == 'push')
+        run: |
+          docker push us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:staging-${GITHUB_SHA::7}
+  
+      - name: Build mainnet docker image
+        if: ${{ steps.branch-names.outputs.ref_branch == 'mainnet' }}
+        run: |
+            gcloud auth configure-docker us-central1-docker.pkg.dev
+            docker build -t us-central1-docker.pkg.dev/tmgalaxy/tokenmetrics-prod/astra-frontend:mainnet-${GITHUB_SHA::7} .
+  
+      - name: Push image to mainnet registry
+        if: (github.ref == 'refs/heads/mainnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
+        run: |
+          docker push us-central1-docker.pkg.dev/tmgalaxy/tokenmetrics-prod/astra-frontend:mainnet-${GITHUB_SHA::7}
+
   release-to-k8s:
     name: "Release to k8s"
     runs-on: ubuntu-latest
@@ -118,13 +156,41 @@ jobs:
             cluster_name: "cluster-alpha-us-central1"
             location: "us-central1"
 
+      - name: "Get GKE alpha credentials"
+        if: ${{ steps.branch-names.outputs.ref_branch != 'mainnet' }}
+        uses: "google-github-actions/get-gke-credentials@v2"
+        with:
+            cluster_name: "cluster-prod-us-central1"
+            location: "us-central1"
+
       - name: Deploy to cluster
-        if: (github.ref == 'refs/heads/mainnet' || github.ref == 'refs/heads/testnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
+        if: (github.ref == 'refs/heads/testnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
         run: |
             helm upgrade --install astra-frontend ./helm/astra-frontend \
             --namespace astra-testnet \
             --values ./helm/astra-frontend/values.yaml \
+            --values ./helm/astra-frontend/helmvars/testnet/values.yaml \
             --set image.tag=testnet-${GITHUB_SHA::7} \
+            --timeout 5m0s --create-namespace --debug
+
+      - name: Deploy to staging cluster
+        if: (github.ref == 'refs/heads/staging') && (github.event.pull_request.merged == true || github.event_name == 'push')
+        run: |
+            helm upgrade --install astra-frontend ./helm/astra-frontend \
+            --namespace astra-staging \
+            --values ./helm/astra-frontend/values.yaml \
+            --values ./helm/astra-frontend/helmvars/staging/values.yaml \
+            --set image.tag=staging-${GITHUB_SHA::7} \
+            --timeout 5m0s --create-namespace --debug
+
+      - name: Deploy to mainnet cluster
+        if: (github.ref == 'refs/heads/mainnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
+        run: |
+            helm upgrade --install astra-frontend ./helm/astra-frontend \
+            --namespace astra-mainnet \
+            --values ./helm/astra-frontend/values.yaml \
+            --values ./helm/astra-frontend/helmvars/mainnet/values.yaml \
+            --set image.tag=mainnet-${GITHUB_SHA::7} \
             --timeout 5m0s --create-namespace --debug
 
 
