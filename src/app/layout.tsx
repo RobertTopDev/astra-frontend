@@ -1,9 +1,7 @@
-'use client'
-
 import { AstraRouterBack, Footer, Navbar } from '@/components'
 import '@rainbow-me/rainbowkit/styles.css'
 import clsx from 'clsx'
-// import type { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Suspense } from 'react'
 import './globals.css'
@@ -11,15 +9,15 @@ import { Providers } from './providers'
 import Loading from './loading'
 import localFont from 'next/font/local'
 // import ClientIPFetcher from '@/components/ClientIPFetcher'
-import { usePathname } from 'next/navigation'
+// import { usePathname } from 'next/navigation'
 // import { IpProvider } from '@/contexts/ip-context'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// export const metadata: Metadata = {
-//   title: 'ASTRA DAO',
-//   description: 'ASTRA DAO Website for staking and launchpads',
-// }
+export const metadata: Metadata = {
+  title: 'ASTRA DAO',
+  description: 'ASTRA DAO Website for staking and launchpads',
+}
 
 const novaFont = localFont({
   display: 'swap',
@@ -53,7 +51,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const pathname = usePathname()
+  // const pathname = usePathname()
   return (
     <html lang="en">
       <body
@@ -70,8 +68,8 @@ export default function RootLayout({
                 {children}
               </div>
             </Suspense>
-            {pathname !== '/access-denied' && <Footer />}
-            {/* </IpProvider> */}
+            {/* {pathname !== '/access-denied' && <Footer />} */}
+            <Footer />
           </Providers>
         </Suspense>
       </body>
