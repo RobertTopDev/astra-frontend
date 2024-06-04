@@ -7,7 +7,6 @@ import styles from './footer.module.scss'
 import clsx from 'clsx'
 import FooterInfo from './footer-info'
 import { Separator } from '@/components/shadcn'
-import { usePathname } from 'next/navigation'
 
 export const Footer = () => {
   return (
