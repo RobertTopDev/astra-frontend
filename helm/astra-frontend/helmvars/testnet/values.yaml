@@ -13,6 +13,8 @@ serviceAccount:
 service:
   type: LoadBalancer
   port: 8080
+  sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
 
 ingress:
   enabled: true
@@ -20,6 +22,7 @@ ingress:
   annotations: 
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
   hosts:
     - host: next.test.astradao.org
       paths:
