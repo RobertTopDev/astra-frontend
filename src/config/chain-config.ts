@@ -1,5 +1,11 @@
 import { TChainConfig } from '@/types'
-import { arbitrum, mainnet, polygonMumbai, arbitrumSepolia } from 'wagmi/chains'
+import {
+  arbitrum,
+  mainnet,
+  polygonMumbai,
+  arbitrumSepolia,
+  bscTestnet,
+} from 'wagmi/chains'
 
 export const defaultChainId =
   process.env.NODE_ENV === 'development' ? arbitrumSepolia.id : arbitrum.id
@@ -185,6 +191,60 @@ export const chainConfig: TChainConfig = {
     USDTContractAddress: '0x0660E38Ac08F1997136A317D1291E3b8C1B316D5',
     USDCContractAddress: '0xDEBC254Eb31c8a54DA05e586cbC7CF2e30ebb616',
     WETHContractAddress: '0x980B62Da83eFf3D4576C647993b0c1D7faf17c73',
+    AstraContractAddress: '0x6ea5046B9aB2F5100644f67EfBa797f8d08D7515',
+    factoryContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    routerContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    IndicesPaymentContractAddress: '0xaAfb6410Ff502fCf41346085E95288988DE53A66',
+    ethAddressForpaywithCrypto: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+    PoolConfigurationContractAddress:
+      '0x2833F1180a654c733bF2b40950f99356939536B4',
+    uniswapNFTAddress: '0x6b2937Bde17889EDCf8fbD8dE31C3C2a70Bc4d65',
+    VestingContractAddress: '0x76fa6bab73779164738B1b1C8E3d1ecf0865D152',
+    iTokenStakingContractAddress: '0x828650Bc3270dD27B21914CDa1f2650dC23100a9',
+    BatchVoteContractAddress: '0x9BeB87EBcf48Acb189d844da70991C7dF6AB2755',
+    ZeroAddress: '0x0000000000000000000000000000000000000000',
+    uniswapFeeTierValue: '3000',
+    astraSlashingFeeUnit: 'days',
+    astraSlashingFeeValue: 90,
+    // astraSlashingFeeUnit: 'minutes',
+    // astraSlashingFeeValue: 450,
+    iTokenHoursMultiplier: 3600,
+    cooldownDetails: {
+      ASTRAStakingCooldownDays: 5,
+      ASTRAStakingCoolDownMaxTimestampDays: 6,
+      ASTRAStakingCooldownDaysUnit: 'minutes',
+      iTokenStakingCooldownDays: 5,
+      iTokenStakingCoolDownMaxTimestampDays: 6,
+      iTokenStakingCooldownDaysUnit: 'minutes',
+      lmStakingCooldownDays: 5,
+      lmStakingCoolDownMaxTimestampDays: 6,
+      lmStakingCooldownDaysUnit: 'minutes',
+    },
+  },
+  [bscTestnet.id]: {
+    networkURL: 'https://testnet.bscscan.com/',
+    chainStackHTTPS:
+      'https://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
+    chainStackWS:
+      'wss://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
+    rpcURL:
+      'https://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
+    PURFI_CONFIGURE_URL: {
+      dashboard: 'https://stage.dashboard.purefi.io',
+      issuer: 'https://stage.issuer.app.purefi.io',
+    },
+    LaunchpadFactoryContractAddress:
+      '0xb4B1e63F0c4bc0714d0716E1434285AE2EEB9809',
+    LaunchpadConfigurationAddress: '0x24569F3D1a7e510FCA13282df183Cbe9833dd785',
+    AstraDAOWhitelistAddress: '0x52bB39Cca93828Da5B39f4C4791Be5b800A14994',
+    CrosschainSaleManagerAddress: '0x205C00E0eC42ed15Eb5E64Db2Ab5B1150Bc7eB48',
+    ChefContractAddress: '0xa527476575972e28F2055F28901B7767b6672928',
+    DAAContractAddress: '0x93Ee0bAcDbe4743a4fEEF68c91563ddCf913eD14',
+    DAOContractAddress: '0x7b251CF8a6b5382BcA1a6C414846Eb0749BD589E',
+    DAIContractAddress: '0xD127649432ED74b3857E2b3F2Aa44C9504a6cf0f',
+    USDTContractAddress: '0x9b52f9739F6eb7EB1548979d66d0E085D0De05ED',
+    USDCContractAddress: '0x76fa6bab73779164738B1b1C8E3d1ecf0865D152',
+    WETHContractAddress: '0xae13d989dac2f0debff460ac112a837c89baa7cd',
     AstraContractAddress: '0x6ea5046B9aB2F5100644f67EfBa797f8d08D7515',
     factoryContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
     routerContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
