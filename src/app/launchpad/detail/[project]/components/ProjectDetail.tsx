@@ -750,7 +750,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       leadVC: data?.LEAD_VC || '',
       marketMaker: data?.MARKET_MAKER || '',
       investorDetail:
-        JSON.parse(data?.INVESTOR_DETAIL || '[]').join(', ') || '',
+        JSON.parse(data?.INVESTOR_DETAIL?.replace(/\n/g, '\\n') || '[]').join(
+          ', '
+        ) || '',
       leadVCImage: urlRegex.test(data?.LEAD_VC_IMAGE)
         ? data?.LEAD_VC_IMAGE
         : '',
