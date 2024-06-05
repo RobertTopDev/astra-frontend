@@ -45,13 +45,16 @@ interface Errors {
 export default function Metrics({ data, refetchData }: Props) {
   const pathname = usePathname()
 
-  const metricsInfoArray = JSON.parse(data?.METRICS.replace(/\n/g, '\\n') || '[]')
+  const metricsInfoArray = JSON.parse(
+    data?.METRICS.replace(/\n/g, '\\n') || '[]'
+  )
   const saleRoundDetailInfo = data?.SALE_ROUND_DETAIL
     ? data?.SALE_ROUND_DETAIL.split('<>')
     : []
   const saleRoundDetailInfoArray = saleRoundDetailInfo.map((item) => {
     const pairs = item.split(':')
     const obj: SaleRoundDetailObject = {
+      saleType: pairs[3],
       price: parseFloat(pairs[0]),
       raised: parseFloat(pairs[1]),
       lockup: pairs[2],
@@ -85,9 +88,26 @@ export default function Metrics({ data, refetchData }: Props) {
     })
   }
   for (let i = 0; i < saleRoundDetail.length; i++) {
+    temp[`saleType${i}`] = z
+      .string()
+      .min(1, {
+        message: 'Sale type is required.',
+      })
+      .regex(/^[^'"<>:]*$/, {
+        message:
+          'Sale type cannot contain single or double quotes, less than, greater than, or colon.',
+      })
     temp[`price${i}`] = z.coerce.number().gte(0)
     temp[`raised${i}`] = z.coerce.number().gte(0)
-    temp[`lockup${i}`] = z.string().min(1)
+    temp[`lockup${i}`] = z
+      .string()
+      .min(1, {
+        message: 'Lockup is required.',
+      })
+      .regex(/^[^'"<>:]*$/, {
+        message:
+          'Lockup cannot contain single or double quotes, less than, greater than, or colon.',
+      })
   }
   const metricsSchema = z.object(temp)
 
@@ -103,7 +123,8 @@ export default function Metrics({ data, refetchData }: Props) {
     (item, key) => (
       (metricsDefaultValues[`price${key}`] = item.price),
       (metricsDefaultValues[`raised${key}`] = item.raised),
-      (metricsDefaultValues[`lockup${key}`] = item.lockup)
+      (metricsDefaultValues[`lockup${key}`] = item.lockup),
+      (metricsDefaultValues[`saleType${key}`] = item.saleType)
     )
   )
 
@@ -133,7 +154,7 @@ export default function Metrics({ data, refetchData }: Props) {
   ) => {
     return saleRoundDetail
       .map((member: SaleRoundDetailObject) => {
-        return `${member.price}:${member.raised}:${member.lockup}`
+        return `${member.price}:${member.raised}:${member.lockup}:${member.saleType}`
       })
       .join('<>')
   }
@@ -155,10 +176,12 @@ export default function Metrics({ data, refetchData }: Props) {
         price: value[`price${i}`],
         raised: value[`raised${i}`],
         lockup: value[`lockup${i}`],
+        saleType: value[`saleType${i}`],
       })
       form.setValue(`price${i}`, value[`price${i}`])
       form.setValue(`raised${i}`, value[`raised${i}`])
       form.setValue(`lockup${i}`, value[`lockup${i}`])
+      form.setValue(`saleType${i}`, value[`saleType${i}`])
     }
     setSaleRoundDetail(saleValueArray)
     if (isLoading) {
@@ -269,10 +292,11 @@ export default function Metrics({ data, refetchData }: Props) {
       values[`price${index}`] = ''
       values[`raised${index}`] = ''
       values[`lockup${index}`] = ''
+      values[`saleType${index}`] = ''
       form.reset(values)
       setSaleRoundDetail([
         ...saleRoundDetail,
-        { price: 0, raised: 0, lockup: '' },
+        { price: 0, raised: 0, lockup: '', saleType: '' },
       ])
     }
   }
@@ -291,6 +315,7 @@ export default function Metrics({ data, refetchData }: Props) {
       delete values[`price${index - 1}`]
       delete values[`raised${index - 1}`]
       delete values[`lockup${index - 1}`]
+      delete values[`saleType${index - 1}`]
       form.reset(values)
       setSaleRoundDetail((saleRoundDetail) => [...saleRoundDetail.slice(0, -1)])
     }
@@ -412,6 +437,30 @@ export default function Metrics({ data, refetchData }: Props) {
                       ) : (
                         <Separator className="bg-gray-400"></Separator>
                       )}
+                      <FormField
+                        control={form.control}
+                        name={`saleType${index}`}
+                        render={({ field }) => (
+                          <FormItem className="my-8">
+                            <FormLabel>Sale Type *</FormLabel>
+                            <FormControl>
+                              <Input
+                                autoComplete="off"
+                                type="string"
+                                placeholder="e.g. Private Sale"
+                                {...field}
+                                onChange={(e) => {
+                                  const temp = e
+                                  temp.target.value =
+                                    temp.target.value.trimStart()
+                                  field.onChange(temp)
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       <FormField
                         control={form.control}
                         name={`price${index}`}
@@ -550,7 +599,7 @@ export default function Metrics({ data, refetchData }: Props) {
       {saleRoundDetail.length > 0 ? (
         <div className="sales-round-details lg:p-16 p-4 rounded-3xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl color-white">
           <div className="caption-top pb-8 text-2xl font-bold text-center w-full">
-            Sale Round Details
+            Sale Round Detail
           </div>
           <div className="mobile:overflow-x-auto">
             <table className="w-full text-left min-w-[1000px]">

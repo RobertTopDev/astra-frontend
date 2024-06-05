@@ -622,6 +622,7 @@ export interface SaleRoundDetailObject {
   price: number
   raised: number
   lockup: string
+  saleType: string
 }
 
 export interface ProjectObject {
