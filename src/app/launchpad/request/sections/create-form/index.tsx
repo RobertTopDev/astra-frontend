@@ -1471,6 +1471,10 @@ const CreateForm = () => {
                       <SelectItem value="gaming">Gaming</SelectItem>
                       <SelectItem value="metaverse">Metaverse</SelectItem>
                       <SelectItem value="defi">DeFi</SelectItem>
+                      <SelectItem value="dex">DEX</SelectItem>
+                      <SelectItem value="cex">CEX</SelectItem>
+                      <SelectItem value="meme">Meme</SelectItem>
+                      <SelectItem value="ai">AI</SelectItem>
                       <SelectItem value="socialNetwork">
                         Social Network
                       </SelectItem>
