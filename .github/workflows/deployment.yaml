@@ -1,4 +1,4 @@
-name: Code Quality Gate - SonarQube
+name: Astra Frontend CI/CD Pipeline
 
 on:
   push:
