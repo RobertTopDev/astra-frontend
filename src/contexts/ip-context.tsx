@@ -1,3 +1,5 @@
+'use client'
+
 // contexts/IpContext.tsx
 import React, {
   createContext,
@@ -51,7 +53,7 @@ export const IpProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       }
     }
 
-    // fetchIP()
+    fetchIP()
   }, [pathname])
 
   return (

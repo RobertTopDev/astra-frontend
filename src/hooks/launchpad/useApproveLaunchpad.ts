@@ -83,16 +83,18 @@ export const useApproveLaunchpad = ({
   useEffect(() => {
     async function init() {
       if (txReceipt?.status === 'success' && props.args) {
-        let data
+        let data, topics
         if (txReceipt.logs.length > 6) {
           data = txReceipt.logs[6].data
-        } else data = txReceipt.logs[4].data
+          topics = txReceipt.logs[6].topics
+        } else {
+          data = txReceipt.logs[4].data
+          topics = txReceipt.logs[4].topics
+        }
         const decodedEvent = decodeEventLog({
           abi: launchpadFactoryAbi,
-          data: data,
-          topics: [
-            '0x517c092e9fcfa43f741c15936e5d584fc52f351b8a86131817ee1ec1558439ed',
-          ],
+          data,
+          topics,
           eventName: 'LaunchpadRequestApproved',
         })
         const launchpadAddress = decodedEvent.args?.launchpadAddress
