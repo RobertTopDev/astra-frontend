@@ -2,9 +2,9 @@ export async function getApyInfo() {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/proposals/APY/details/`,
-      {
-        next: { revalidate: 3600 * 3 },
-      }
+      // {
+      //   next: { revalidate: 3600 * 3 },
+      // }
     )
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
