@@ -1,5 +1,3 @@
-'use client'
-
 import { FooterBottom } from './footer-bottom'
 import { FooterLinks } from './footer-links'
 import { FooterTermsOfUse } from './footer-terms-of-use'
