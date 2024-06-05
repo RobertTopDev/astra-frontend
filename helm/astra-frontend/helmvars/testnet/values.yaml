@@ -11,13 +11,12 @@ serviceAccount:
   name: "astra-frontend"
 
 service:
-  type: ClusterIP
-  port: 80
-  targetPort: 8080
+  type: LoadBalancer
+  port: 8080
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
   annotations:
-    cloud.google.com/backend-config: '{"ports": {"80":"astra-backendconfig"}}'
+    cloud.google.com/backend-config: '{"ports": {"8080":"astra-backendconfig"}}'
     cloud.google.com/neg: '{"ingress": true}'
 
 ingress:
