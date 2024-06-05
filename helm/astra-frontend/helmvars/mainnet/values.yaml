@@ -26,7 +26,7 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls:
-  - secretName: astra-staging-tlss
+  - secretName: astra-mainnet-tls
     hosts:
       - astradao.org
 
@@ -65,3 +65,6 @@ pvc:
     - ReadWriteOnce
   size: 10Gi
   storageClassName: standard-rwo
+
+backendConfig:
+  namespace: astra-mainnet
