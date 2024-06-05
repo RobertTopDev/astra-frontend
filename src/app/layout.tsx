@@ -70,6 +70,7 @@ export default function RootLayout({
             </Suspense>
             {/* {pathname !== '/access-denied' && <Footer />} */}
             <Footer />
+            {/* </IpProvider> */}
           </Providers>
         </Suspense>
       </body>

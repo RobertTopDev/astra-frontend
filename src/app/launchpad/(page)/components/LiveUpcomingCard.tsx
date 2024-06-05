@@ -66,9 +66,10 @@ export default function LiveUpcomingCard({
     lIndex: launchpadIndexString,
   })
   const launchpadAddress = useMemo(
-    () => factoryData?.[10] ?? launchpadData?.LAUNCHPAD_ADDRESS,
+    () => factoryData?.[11] ?? launchpadData?.LAUNCHPAD_ADDRESS,
     [factoryData]
   )
+
   const { data: launchpadContractData } = useLaunchpadInfo({
     launchpad: launchpadAddress as `0x${string}`,
   })
@@ -247,20 +248,6 @@ export default function LiveUpcomingCard({
       launchpadData?.IS_VESTING
     )
       return (
-        // <Button
-        //   className="!px-6 !py-3"
-        //   variant="astra-blue"
-        //   disabled={
-        //     !launchpadData?.ID ||
-        //     !deployVestingContract ||
-        //     launchpadData.VESTING_DEPLOYED
-        //   }
-        //   isLoading={isLoading}
-        //   onClick={() => deployVestingContract?.()}
-        // >
-        //   VESTING
-        // </Button>
-
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
