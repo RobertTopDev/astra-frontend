@@ -930,6 +930,7 @@ export default function Page({ params }: TPage) {
     value_temp.teamDescription = launchpadDetail?.TEAM_DESCRIPTION || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
     value_temp.projectImage = projectImageUrl
+    value_temp.chain = launchpadDetail?.CHAIN || ''
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
     value_temp.investorDetail = JSON.stringify(

@@ -367,6 +367,9 @@ export default function LiveUpcomingCard({
               {launchpadStatus}
             </div>
             <div className="flex gap-2">
+              <div className="text-xs bg-[#fff] rounded-xl text-[#fff] bg-opacity-15 px-3 py-1">
+                {launchpadData?.CHAIN}
+              </div>
               <div className="text-xs bg-astra-blue rounded-xl text-astra-blue bg-opacity-15 px-3 py-1">
                 Audit
               </div>

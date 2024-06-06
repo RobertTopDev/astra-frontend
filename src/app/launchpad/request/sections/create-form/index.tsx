@@ -1250,7 +1250,7 @@ const CreateForm = () => {
                           accept="image/png, image/jpeg"
                           type="file"
                           className="hidden"
-                          disabled={ field.value !== null}
+                          disabled={field.value !== null}
                           onChange={handleImageChange}
                         />
                       </div>

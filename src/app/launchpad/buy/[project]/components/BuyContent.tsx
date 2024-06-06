@@ -114,10 +114,10 @@ export default function BuyContent({
     enabled: !!address,
   })
 
-  // accept token decimals
+  // base token decimals
   const { data: tokenDecimals, isLoading: tokenDecimalsLoading } = useDecimals({
-    address: selectedTokenAddress,
-    enabled: !!selectedToken,
+    address: detail.BASE_TOKEN as `0x${string}`,
+    enabled: !!detail,
   })
 
   const selectedTokenBalance = useMemo(
@@ -416,7 +416,10 @@ export default function BuyContent({
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
                   {' '}
-                  {formatUnits(launchpadData?.[2].result ?? BigInt(0), 6)}{' '}
+                  {formatUnits(
+                    launchpadData?.[2].result ?? BigInt(0),
+                    tokenDecimals ?? 0
+                  )}{' '}
                   {tokenArray
                     .filter((token) => token.address === detail.BASE_TOKEN)
                     .map((token) => token.symbol)}
@@ -428,7 +431,10 @@ export default function BuyContent({
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
                   {' '}
-                  {formatUnits(launchpadData?.[12].result ?? BigInt(0), 6)}{' '}
+                  {formatUnits(
+                    launchpadData?.[12].result ?? BigInt(0),
+                    tokenDecimals ?? 0
+                  )}{' '}
                   {tokenArray
                     .filter((token) => token.address === detail.BASE_TOKEN)
                     .map((token) => token.symbol)}
