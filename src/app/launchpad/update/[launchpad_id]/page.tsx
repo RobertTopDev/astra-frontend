@@ -50,6 +50,7 @@ import {
   useGetBuyRuleLaunchpad,
   useApprove,
   useGetLaunchpadDetailById,
+  useDecimals,
 } from '@/hooks'
 import { useAccount } from 'wagmi'
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons'
@@ -827,6 +828,12 @@ export default function Page({ params }: TPage) {
   }, [launchpadDetail])
   const { data: buyRuleStatus } = useGetBuyRuleLaunchpad() // [0]: whitelisted result
 
+  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
+    useDecimals({
+      address: launchpadDetail?.BASE_TOKEN as `0x${string}`,
+      enabled: !!launchpadDetail,
+    })
+
   // request launchpad after approve
   const {
     requestLaunchpad,
@@ -844,7 +851,8 @@ export default function Page({ params }: TPage) {
       !!contractData.baseToken &&
       !!contractData.tokenDecimals &&
       databaseData !== undefined &&
-      team.length > 0,
+      team.length > 0 &&
+      !!baseTokenDecimals,
     args: [
       contractData.tokenAddress as `0x${string}`,
       BigInt(parseInt(contractData.saleStartTime.toString())),
@@ -858,12 +866,19 @@ export default function Page({ params }: TPage) {
       contractData.baseToken as `0x${string}`,
       BigInt(
         parseUnits(
-          contractData.tokenAmount || '',
+          contractData.tokenAmount || '0',
           Number(contractData.tokenDecimals)
         )
       ),
-      BigInt(parseUnits(contractData.baseAmount || '', 6)),
-      BigInt(parseUnits(contractData.minPurchaseAmount || '', 6)),
+      BigInt(
+        parseUnits(contractData.baseAmount || '0', baseTokenDecimals ?? 18)
+      ),
+      BigInt(
+        parseUnits(
+          contractData.minPurchaseAmount || '0',
+          baseTokenDecimals ?? 18
+        )
+      ),
       contractData.isVesting,
     ],
     databaseData: databaseData ?? undefined,
