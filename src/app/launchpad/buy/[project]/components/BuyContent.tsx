@@ -416,7 +416,22 @@ export default function BuyContent({
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
                   {' '}
-                  {formatUnits(launchpadData?.[2].result ?? BigInt(0), 6)} USDC
+                  {formatUnits(launchpadData?.[2].result ?? BigInt(0), 6)}{' '}
+                  {tokenArray
+                    .filter((token) => token.address === detail.BASE_TOKEN)
+                    .map((token) => token.symbol)}
+                </span>
+              </AstraLoading>
+            </div>
+            <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
+              <span className="text-[#7E7E7E]">Min Contribution Amount</span>
+              <AstraLoading isLoading={isFetchLoading}>
+                <span className="text-white">
+                  {' '}
+                  {formatUnits(launchpadData?.[12].result ?? BigInt(0), 6)}{' '}
+                  {tokenArray
+                    .filter((token) => token.address === detail.BASE_TOKEN)
+                    .map((token) => token.symbol)}
                 </span>
               </AstraLoading>
             </div>
@@ -426,7 +441,9 @@ export default function BuyContent({
                 <span className="text-white">
                   {`1 ${detail.LAUNCHPAD_TOKEN_SYMBOL} = ${
                     formatUnits(launchpadData?.[3].result ?? BigInt(0), 13) +
-                    ' USDC'
+                    ` ${tokenArray
+                      .filter((token) => token.address === detail.BASE_TOKEN)
+                      .map((token) => token.symbol)}`
                   }`}
                 </span>
               </AstraLoading>
@@ -445,7 +462,9 @@ export default function BuyContent({
                 <span className="text-white">{`${formatUnits(
                   launchpadData?.[10].result ?? BigInt(0),
                   6
-                )} USDC`}</span>
+                )} ${tokenArray
+                  .filter((token) => token.address === detail.BASE_TOKEN)
+                  .map((token) => token.symbol)}`}</span>
               </AstraLoading>
             </div>
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">

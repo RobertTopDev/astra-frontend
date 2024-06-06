@@ -162,7 +162,7 @@ export const useRequestLaunchpad = ({
           otherUrl: '',
           email: databaseData.data.email,
           investorDetail: databaseData.data.investorDetail,
-          chain: 'Arbitrum',
+          chain: databaseData.data.chain,
           requestTransaction: txReceipt.transactionHash,
           approveTransaction: '',
           leadVC: databaseData.data.leadVC,

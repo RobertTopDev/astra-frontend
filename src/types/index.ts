@@ -106,6 +106,8 @@ export type TToken = {
   _totalValueLockedUSD?: string
 }
 
+export type IDTOCHAIN = Record<number, string>
+
 export type TChainConfig = Record<
   number,
   {

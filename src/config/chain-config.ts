@@ -1,4 +1,4 @@
-import { TChainConfig } from '@/types'
+import { IDTOCHAIN, TChainConfig } from '@/types'
 import {
   arbitrum,
   mainnet,
@@ -11,6 +11,13 @@ export const defaultChainId =
   process.env.NODE_ENV === 'development' ? arbitrumSepolia.id : arbitrum.id
 export const defaultChain =
   process.env.NODE_ENV === 'development' ? arbitrumSepolia : arbitrum
+export const idToChain: IDTOCHAIN = {
+  [arbitrum.id]: 'Arbitrum',
+  [mainnet.id]: 'Ethereum',
+  [polygonMumbai.id]: 'Polygon',
+  [arbitrumSepolia.id]: 'Arbitrum',
+  [bscTestnet.id]: 'Binanace',
+}
 
 export const chainConfig: TChainConfig = {
   [arbitrum.id]: {

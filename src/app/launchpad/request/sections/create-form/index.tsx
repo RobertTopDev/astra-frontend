@@ -41,7 +41,7 @@ import {
   MetricsObject,
   RequestLaunchpadResultValues,
 } from '@/types'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -55,6 +55,7 @@ import 'react-quill/dist/quill.snow.css'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
+import { idToChain } from '@/config'
 
 interface Errors {
   totalMetrics?: string
@@ -63,6 +64,7 @@ interface Errors {
 const CreateForm = () => {
   const router = useRouter()
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const { chainConfig } = useChainConfig()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
@@ -874,7 +876,7 @@ const CreateForm = () => {
         medium: result_values.data.contactMedium,
         otherUrl: '',
         email: result_values.data.email,
-        chain: 'Arbitrum',
+        chain: (chain && idToChain[chain.id]) || 'Arbitrum',
         requestTransaction: '',
         approveTransaction: '',
         leadVC: result_values.data.leadVC.trim(),
