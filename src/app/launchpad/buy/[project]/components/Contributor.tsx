@@ -14,15 +14,35 @@ import {
 } from '@/components/shadcn'
 import { AstraHeader, AstraLoading } from '@/components'
 import { shorten } from '@/util'
+import { TLaunchpadDetailInfo } from '@/types'
 
 type Props = {
   launchpadAddress: `0x${string}`
+  launchpadData: TLaunchpadDetailInfo
 }
-export default function Contributor({ launchpadAddress }: Props) {
+export default function Contributor({
+  launchpadAddress,
+  launchpadData,
+}: Props) {
   const { chainConfig } = useChainConfig()
 
   const { data: contributorList, isLoading: contributorListLoading } =
     useGetContributorListForDB(launchpadAddress)
+
+  const tokenArray = [
+    {
+      symbol: 'USDT',
+      address: chainConfig.USDTContractAddress,
+    },
+    {
+      symbol: 'USDC',
+      address: chainConfig.USDCContractAddress,
+    },
+    {
+      symbol: 'ETH',
+      address: chainConfig.WETHContractAddress,
+    },
+  ]
 
   return (
     <>
@@ -55,7 +75,15 @@ export default function Contributor({ launchpadAddress }: Props) {
                       }
                     >
                       <TableCell>{shorten(con.CONTRIBUTOR_ADDRESS)}</TableCell>
-                      <TableCell>{con.CONTRIBUTED_AMOUNT} USDC</TableCell>
+                      <TableCell>
+                        {con.CONTRIBUTED_AMOUNT}{' '}
+                        {tokenArray
+                          .filter(
+                            (token) =>
+                              token.address === launchpadData?.BASE_TOKEN
+                          )
+                          .map((token) => token.symbol)}
+                      </TableCell>
                       <TableCell>
                         {shorten(con.CONTRIBUTE_TRANSACTION)}
                       </TableCell>

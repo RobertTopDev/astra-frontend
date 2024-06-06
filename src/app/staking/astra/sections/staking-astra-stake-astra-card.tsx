@@ -20,7 +20,12 @@ import {
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useApprove, useChainConfig, useStakeAstra } from '@/hooks'
+import {
+  useApprove,
+  useChainConfig,
+  useStakeAstra,
+  useVerifyMultiplierCrosschain,
+} from '@/hooks'
 import { parseUnits } from 'viem'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -90,6 +95,11 @@ const StakingAstraStakeAstraCard = ({
   })
   const formValues = form.watch()
 
+  // // Verify Multiplier Cross Chain
+  // const { data: verifyMultiplierCrosschain, error: verifyMultiplierCrsschainError, isLoading: verifyMultiplierCrosschainLoading } = useVerifyMultiplierCrosschain({});
+
+  // get verify multiplier transaction fee from third party
+
   // APPROVE
   const {
     approve,
@@ -137,6 +147,7 @@ const StakingAstraStakeAstraCard = ({
     onSuccessTx: () => {
       refetchDatas()
       setStakedAmount('')
+      // call cross chain verify multiplier function (check eth value)
     },
   })
 

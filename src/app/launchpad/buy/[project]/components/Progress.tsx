@@ -65,7 +65,10 @@ export default function Progress({ data, launchpadLoading }: TProgress) {
       </div>
       {data?.OWNER === address ? (
         <div className="contributor-list mt-12">
-          <Contributor launchpadAddress={launchpadAddress as `0x${string}`} />
+          <Contributor
+            launchpadAddress={launchpadAddress as `0x${string}`}
+            launchpadData={data}
+          />
         </div>
       ) : (
         <></>

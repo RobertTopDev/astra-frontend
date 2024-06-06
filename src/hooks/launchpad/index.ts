@@ -19,3 +19,4 @@ export * from './useDeployVestingContract'
 export * from './useSetVestingToLaunchpad'
 export * from './useFollowCheck'
 export * from "./useLaunchpadClaimVestingRewards"
+export * from "./useVerifyMultiplierCrosschain"
