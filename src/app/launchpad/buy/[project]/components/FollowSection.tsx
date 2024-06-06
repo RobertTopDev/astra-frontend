@@ -205,7 +205,7 @@ export default function FollowSection({
                       fill={true}
                     />
                   </div>
-                  {`Increase your token sale allocation by staking ${detail?.LAUNCHPAD_TOKEN_SYMBOL} in a lockup vault.`}
+                  {`Increase your token sale allocation by staking $ASTRADAO in a lockup vault.`}
                 </div>
                 <div>
                   <AstraLoading isLoading={isLoading} className="w-6 h-6">

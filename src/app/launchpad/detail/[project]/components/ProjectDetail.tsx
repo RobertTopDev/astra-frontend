@@ -51,7 +51,6 @@ import { TimeField } from '@/components/astra/time-field'
 import { updateLaunchpadForDB } from '@/util/updateLaunchpadForDB'
 import { useChainConfig } from '@/hooks'
 import { isAddress } from 'viem'
-// import 'react-quill/dist/quill.snow.css'
 import ReactQuill from 'react-quill'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
@@ -81,8 +80,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   const [open, setOpen] = useState(false)
 
   const [tempImageFile, setTempImageFile] = useState<ImageFiles>({})
-
-  const [uploading, setUploading] = useState<boolean>(false)
   const [fileError, setFileError] = useState<string>('')
 
   const handleImageChange =
@@ -132,73 +129,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
 
     return url
   }
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
-    input.click()
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        const quill = reactQuillRef.current
-        if (quill) {
-          const range = quill.getEditorSelection()
-          range && quill.getEditor().insertEmbed(range.index, 'image', url)
-        }
-      }
-    }
-  }, [])
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        [{ align: [] }],
-        [{ color: [] }],
-        ['code-block'],
-        ['clean'],
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }
-
-  const quillFormats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'align',
-    'color',
-    'code-block',
-    'video',
-  ]
-
-  const uploadImage = useCallback(() => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
-    input.click()
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        setUploading(true)
-        const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        form.setValue(`projectImage`, url)
-        setUploading(false)
-      }
-    }
-  }, [])
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [vesting, setVesting] = useState<boolean>(data?.IS_VESTING || false)
@@ -1225,69 +1155,51 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                 htmlFor="dropzone-file"
                                 className="relative flex items-center justify-center w-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                               >
-                                {uploading && (
-                                  <div className=" text-center max-w-md  ">
-                                    {/* <RadialProgress progress={progress} /> */}
+                                {!urlRegex.test(field.value || '') && (
+                                  <div className=" text-center">
+                                    <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                      <IoCloudUploadOutline size="1.6em" />
+                                    </div>
+
+                                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                      <span className="font-semibold">
+                                        Drag an image
+                                      </span>
+                                    </p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-400">
+                                      Click to upload &#40; image should be
+                                      500x500 px & under 10 MB &#41;
+                                    </p>
+                                  </div>
+                                )}
+
+                                {urlRegex.test(field.value || '') && (
+                                  <div className="text-center">
+                                    <Image
+                                      width={1000}
+                                      height={1000}
+                                      src={field.value as string}
+                                      className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                      alt="uploaded image"
+                                    />
                                     <p className=" text-sm font-semibold">
-                                      Image Uploading
+                                      Image Uploaded
                                     </p>
-                                    <p className=" text-xs text-gray-400">
-                                      Do not refresh or perform any other action
-                                      while the image is being upload
-                                    </p>
+                                    <Button
+                                      className="px-2 mt-2"
+                                      variant="astra-red"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        form.setValue(`projectImage`, '')
+                                      }}
+                                    >
+                                      Delete Image
+                                    </Button>
                                     <p className=" text-xs text-red-500">
                                       {fileError}
                                     </p>
                                   </div>
                                 )}
-
-                                {!uploading &&
-                                  !urlRegex.test(field.value || '') && (
-                                    <div className=" text-center">
-                                      <div className=" border p-2 rounded-md max-w-min mx-auto">
-                                        <IoCloudUploadOutline size="1.6em" />
-                                      </div>
-
-                                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                        <span className="font-semibold">
-                                          Drag an image
-                                        </span>
-                                      </p>
-                                      <p className="text-xs text-gray-400 dark:text-gray-400">
-                                        Click to upload &#40; image should be
-                                        500x500 px & under 10 MB &#41;
-                                      </p>
-                                    </div>
-                                  )}
-
-                                {urlRegex.test(field.value || '') &&
-                                  !uploading && (
-                                    <div className="text-center">
-                                      <Image
-                                        width={1000}
-                                        height={1000}
-                                        src={field.value as string}
-                                        className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
-                                        alt="uploaded image"
-                                      />
-                                      <p className=" text-sm font-semibold">
-                                        Image Uploaded
-                                      </p>
-                                      <Button
-                                        className="px-2 mt-2"
-                                        variant="astra-red"
-                                        onClick={(e) => {
-                                          e.stopPropagation()
-                                          form.setValue(`projectImage`, '')
-                                        }}
-                                      >
-                                        Delete Image
-                                      </Button>
-                                      <p className=" text-xs text-red-500">
-                                        {fileError}
-                                      </p>
-                                    </div>
-                                  )}
                               </label>
 
                               <Input
@@ -1296,7 +1208,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                 accept="image/*"
                                 type="file"
                                 className="hidden"
-                                disabled={uploading || field.value !== null}
+                                disabled={field.value !== null}
                                 onChange={handleImageChange('projectImage')}
                               />
                             </div>
@@ -1315,14 +1227,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
                           <div style={{ color: 'black' }}>
-                            {/* <ReactQuill
-                              ref={reactQuillRef}
-                              value={field.value}
-                              onChange={field.onChange}
-                              modules={quillModules}
-                              formats={quillFormats}
-                              className="w-full h-[70%] mt-10 bg-white"
-                            /> */}
                             <DynamicTextEditor
                               quillRef={reactQuillRef}
                               value={field.value}
@@ -2524,69 +2428,51 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     htmlFor="dropzone-file"
                                     className="flex items-center justify-center w-full h-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                   >
-                                    {uploading && (
-                                      <div className=" text-center max-w-md  ">
-                                        {/* <RadialProgress progress={progress} /> */}
+                                    {!urlRegex.test(field.value || '') && (
+                                      <div className=" text-center">
+                                        <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                          <IoCloudUploadOutline size="1.6em" />
+                                        </div>
+
+                                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                          <span className="font-semibold">
+                                            Drag an image
+                                          </span>
+                                        </p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-400">
+                                          Click to upload &#40; image should be
+                                          500x500 px & under 10 MB &#41;
+                                        </p>
+                                      </div>
+                                    )}
+
+                                    {urlRegex.test(field.value || '') && (
+                                      <div className="text-center">
+                                        <Image
+                                          width={1000}
+                                          height={1000}
+                                          src={field.value as string}
+                                          className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                          alt="uploaded image"
+                                        />
                                         <p className=" text-sm font-semibold">
-                                          Image Uploading
+                                          Image Uploaded
                                         </p>
-                                        <p className=" text-xs text-gray-400">
-                                          Do not refresh or perform any other
-                                          action while the image is being upload
-                                        </p>
+                                        <Button
+                                          className="px-1 mt-2"
+                                          variant="astra-red"
+                                          onClick={(e) => {
+                                            e.stopPropagation()
+                                            form.setValue(`leadVCImage`, '')
+                                          }}
+                                        >
+                                          Delete Image
+                                        </Button>
                                         <p className=" text-xs text-red-500">
                                           {fileError}
                                         </p>
                                       </div>
                                     )}
-
-                                    {!uploading &&
-                                      !urlRegex.test(field.value || '') && (
-                                        <div className=" text-center">
-                                          <div className=" border p-2 rounded-md max-w-min mx-auto">
-                                            <IoCloudUploadOutline size="1.6em" />
-                                          </div>
-
-                                          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span className="font-semibold">
-                                              Drag an image
-                                            </span>
-                                          </p>
-                                          <p className="text-xs text-gray-400 dark:text-gray-400">
-                                            Click to upload &#40; image should
-                                            be 500x500 px & under 10 MB &#41;
-                                          </p>
-                                        </div>
-                                      )}
-
-                                    {urlRegex.test(field.value || '') &&
-                                      !uploading && (
-                                        <div className="text-center">
-                                          <Image
-                                            width={1000}
-                                            height={1000}
-                                            src={field.value as string}
-                                            className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
-                                            alt="uploaded image"
-                                          />
-                                          <p className=" text-sm font-semibold">
-                                            Image Uploaded
-                                          </p>
-                                          <Button
-                                            className="px-1 mt-2"
-                                            variant="astra-red"
-                                            onClick={(e) => {
-                                              e.stopPropagation()
-                                              form.setValue(`leadVCImage`, '')
-                                            }}
-                                          >
-                                            Delete Image
-                                          </Button>
-                                          <p className=" text-xs text-red-500">
-                                            {fileError}
-                                          </p>
-                                        </div>
-                                      )}
                                   </label>
 
                                   <Input
@@ -2595,7 +2481,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     accept="image/*"
                                     type="file"
                                     className="hidden"
-                                    disabled={uploading || field.value !== null}
+                                    disabled={field.value !== null}
                                     onChange={handleImageChange('leadVCImage')}
                                   />
                                 </div>
@@ -2625,72 +2511,54 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     htmlFor="dropzone-file"
                                     className="flex items-center justify-center w-full h-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                   >
-                                    {uploading && (
-                                      <div className=" text-center max-w-md  ">
-                                        {/* <RadialProgress progress={progress} /> */}
+                                    {!urlRegex.test(field.value || '') && (
+                                      <div className=" text-center">
+                                        <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                          <IoCloudUploadOutline size="1.6em" />
+                                        </div>
+
+                                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                          <span className="font-semibold">
+                                            Drag an image
+                                          </span>
+                                        </p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-400">
+                                          Click to upload &#40; image should be
+                                          500x500 px & under 10 MB &#41;
+                                        </p>
+                                      </div>
+                                    )}
+
+                                    {urlRegex.test(field.value || '') && (
+                                      <div className="text-center">
+                                        <Image
+                                          width={1000}
+                                          height={1000}
+                                          src={field.value as string}
+                                          className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                          alt="uploaded image"
+                                        />
                                         <p className=" text-sm font-semibold">
-                                          Image Uploading
+                                          Image Uploaded
                                         </p>
-                                        <p className=" text-xs text-gray-400">
-                                          Do not refresh or perform any other
-                                          action while the image is being upload
-                                        </p>
+                                        <Button
+                                          className="px-1 mt-2"
+                                          variant="astra-red"
+                                          onClick={(e) => {
+                                            e.stopPropagation()
+                                            form.setValue(
+                                              `marketMakerImage`,
+                                              ''
+                                            )
+                                          }}
+                                        >
+                                          Delete Image
+                                        </Button>
                                         <p className=" text-xs text-red-500">
                                           {fileError}
                                         </p>
                                       </div>
                                     )}
-
-                                    {!uploading &&
-                                      !urlRegex.test(field.value || '') && (
-                                        <div className=" text-center">
-                                          <div className=" border p-2 rounded-md max-w-min mx-auto">
-                                            <IoCloudUploadOutline size="1.6em" />
-                                          </div>
-
-                                          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                            <span className="font-semibold">
-                                              Drag an image
-                                            </span>
-                                          </p>
-                                          <p className="text-xs text-gray-400 dark:text-gray-400">
-                                            Click to upload &#40; image should
-                                            be 500x500 px & under 10 MB &#41;
-                                          </p>
-                                        </div>
-                                      )}
-
-                                    {urlRegex.test(field.value || '') &&
-                                      !uploading && (
-                                        <div className="text-center">
-                                          <Image
-                                            width={1000}
-                                            height={1000}
-                                            src={field.value as string}
-                                            className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
-                                            alt="uploaded image"
-                                          />
-                                          <p className=" text-sm font-semibold">
-                                            Image Uploaded
-                                          </p>
-                                          <Button
-                                            className="px-1 mt-2"
-                                            variant="astra-red"
-                                            onClick={(e) => {
-                                              e.stopPropagation()
-                                              form.setValue(
-                                                `marketMakerImage`,
-                                                ''
-                                              )
-                                            }}
-                                          >
-                                            Delete Image
-                                          </Button>
-                                          <p className=" text-xs text-red-500">
-                                            {fileError}
-                                          </p>
-                                        </div>
-                                      )}
                                   </label>
 
                                   <Input
@@ -2699,7 +2567,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     accept="image/*"
                                     type="file"
                                     className="hidden"
-                                    disabled={uploading || field.value !== null}
+                                    disabled={field.value !== null}
                                     onChange={handleImageChange(
                                       'marketMakerImage'
                                     )}
