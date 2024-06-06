@@ -879,7 +879,6 @@ export default function Page({ params }: TPage) {
   })
 
   async function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
-    console.log(value)
     if (isUploadLoading || !address) {
       alert('loading or address is undefined')
       return
