@@ -187,7 +187,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
               <SelectContent>
                 <SelectItem value="None">No Filter</SelectItem>
                 <SelectItem value="Arbitrum">Arbitrum</SelectItem>
-                <SelectItem value="BSC">BSC</SelectItem>
+                <SelectItem value="Binance">Binance</SelectItem>
                 <SelectItem value="Ethereum">Ethereum</SelectItem>
               </SelectContent>
             </Select>
