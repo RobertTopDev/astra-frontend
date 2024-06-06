@@ -345,7 +345,7 @@ export default function LiveUpcomingCard({
           <div className="flex justify-between items-center pb-2">
             <div
               className={clsx(
-                'text-center flex text-xs font-medium whitespace-nowrap justify-center items-stretch px-6 py-2 rounded-3xl capitalize',
+                'text-center flex text-xs font-medium whitespace-nowrap justify-center items-stretch px-3 py-2 rounded-3xl capitalize',
                 (launchpadStatus === 'in progress' ||
                   launchpadStatus === 'requested') &&
                   'text-astra-dark-green bg-astra-green',
