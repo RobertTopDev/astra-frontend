@@ -33,6 +33,7 @@ import {
   useLaunchpadInfo,
   useDeployVestingContract,
   useSetVestingToLaunchpad,
+  useDecimals,
 } from '@/hooks'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount } from 'wagmi'
@@ -58,6 +59,31 @@ export default function LiveUpcomingCard({
   const [vestAddress, setVestAddress] = useState<string>('')
   const { chainConfig } = useChainConfig()
   const { address } = useAccount()
+
+  const tokenArray = [
+    {
+      symbol: 'USDT',
+      address: chainConfig.USDTContractAddress,
+    },
+    {
+      symbol: 'USDC',
+      address: chainConfig.USDCContractAddress,
+    },
+    {
+      symbol: 'ETH',
+      address: chainConfig.WETHContractAddress,
+    },
+  ]
+  const baseTokenSymbol = tokenArray
+    .filter((token) => token.address === launchpadData?.BASE_TOKEN)
+    .map((token) => token.symbol)
+
+  // base token decimals
+  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
+    useDecimals({
+      address: launchpadData?.BASE_TOKEN as `0x${string}`,
+      enabled: !!launchpadData,
+    })
 
   const launchpadIndexString = launchpadData?.LAUNCHPAD_INDEX
     ? launchpadData.LAUNCHPAD_INDEX.toString()
@@ -165,7 +191,7 @@ export default function LiveUpcomingCard({
 
   const curRaisedAmount = useMemo(() => {
     const tokenAmount = launchpadContractData?.[7]?.result
-      ? formatUnits(launchpadContractData[7].result, 6)
+      ? formatUnits(launchpadContractData[7].result, baseTokenDecimals ?? 18)
       : 0
     return Number(tokenAmount).toFixed(2)
   }, [launchpadContractData])
@@ -409,7 +435,7 @@ export default function LiveUpcomingCard({
               </div>
               <div className="text-white text-sm mt-3.5">
                 {1 + ' ' + launchpadData?.LAUNCHPAD_TOKEN_SYMBOL} ={' '}
-                {launchpadData?.LAUNCHPAD_TOKEN_PRICE + ' USDC'}
+                {launchpadData?.LAUNCHPAD_TOKEN_PRICE + ` ${baseTokenSymbol}`}
               </div>
             </div>
           </div>
@@ -424,8 +450,8 @@ export default function LiveUpcomingCard({
               overflow: 'hidden',
             }}
           >
-            {launchpadData?.SOFT_CAP ?? 0} USDC - {launchpadData?.HARD_CAP ?? 0}{' '}
-            USDC
+            {launchpadData?.SOFT_CAP ?? 0} {baseTokenSymbol} -{' '}
+            {launchpadData?.HARD_CAP ?? 0} {baseTokenSymbol}
           </div>
           <div className="text-white text-sm mt-6">
             Progress ({percentageRaised}
@@ -443,10 +469,10 @@ export default function LiveUpcomingCard({
             }}
           >
             <div className="text-white text-sm font-black">
-              {curRaisedAmount} USDC
+              {curRaisedAmount} {baseTokenSymbol}
             </div>
             <div className="text-white text-right text-sm font-black">
-              {launchpadData?.HARD_CAP ?? 0} USDC
+              {launchpadData?.HARD_CAP ?? 0} {baseTokenSymbol}
             </div>
           </div>
 

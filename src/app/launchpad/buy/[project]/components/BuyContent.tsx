@@ -75,6 +75,9 @@ export default function BuyContent({
       address: chainConfig.WETHContractAddress,
     },
   ]
+  const baseTokenSymbol = tokenArray
+    .filter((token) => token.address === detail?.BASE_TOKEN)
+    .map((token) => token.symbol)
 
   const followingTemp = useFollowCheck(address)
   const followingData = followingTemp.data
@@ -115,15 +118,18 @@ export default function BuyContent({
   })
 
   // base token decimals
-  const { data: tokenDecimals, isLoading: tokenDecimalsLoading } = useDecimals({
-    address: detail.BASE_TOKEN as `0x${string}`,
-    enabled: !!detail,
-  })
+  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
+    useDecimals({
+      address: detail.BASE_TOKEN as `0x${string}`,
+      enabled: !!detail,
+    })
 
   const selectedTokenBalance = useMemo(
     () =>
-      balanceOf && tokenDecimals ? formatUnits(balanceOf, tokenDecimals) : '',
-    [balanceOf, tokenDecimals]
+      balanceOf && baseTokenDecimals
+        ? formatUnits(balanceOf, baseTokenDecimals)
+        : '',
+    [balanceOf, baseTokenDecimals]
   )
 
   // APPROVE
@@ -133,13 +139,13 @@ export default function BuyContent({
     isLoading: approveLoading,
   } = useApprove({
     address: selectedToken as `0x${string}`,
-    minAmount: tokenDecimals ? parseUnits(buyAmount || '0', tokenDecimals) : 0,
+    minAmount: parseUnits(buyAmount || '0', baseTokenDecimals ?? 0),
     enabled:
       !!selectedToken &&
       !!buyAmount &&
       tokenAllowance !== undefined &&
-      tokenDecimals !== undefined &&
-      tokenAllowance < parseUnits(buyAmount ?? '0', tokenDecimals) &&
+      baseTokenDecimals !== undefined &&
+      tokenAllowance < parseUnits(buyAmount ?? '0', baseTokenDecimals) &&
       !!launchpadAddress,
     spender: launchpadAddress as `0x${string}`,
     onSuccessTx: () => {
@@ -158,8 +164,8 @@ export default function BuyContent({
       (selectedToken === chainConfig.WETHContractAddress
         ? Number(buyAmount) > 0
         : tokenAllowance !== undefined &&
-          tokenDecimals !== undefined &&
-          tokenAllowance >= parseUnits(buyAmount || '0', tokenDecimals)) &&
+          baseTokenDecimals !== undefined &&
+          tokenAllowance >= parseUnits(buyAmount || '0', baseTokenDecimals)) &&
       !!launchpadAddress &&
       !!detail,
     args:
@@ -172,9 +178,7 @@ export default function BuyContent({
         : [
             address as `0x${string}`,
             selectedToken as `0x${string}`,
-            tokenDecimals
-              ? parseUnits(buyAmount || '0', tokenDecimals)
-              : BigInt(0),
+            parseUnits(buyAmount || '0', baseTokenDecimals ?? 18),
           ],
     value:
       selectedToken === chainConfig.WETHContractAddress
@@ -197,8 +201,8 @@ export default function BuyContent({
   const buyButton = () => {
     if (
       tokenAllowance !== undefined &&
-      tokenDecimals !== undefined &&
-      tokenAllowance < parseUnits(buyAmount || '0', tokenDecimals) &&
+      baseTokenDecimals !== undefined &&
+      tokenAllowance < parseUnits(buyAmount || '0', baseTokenDecimals) &&
       selectedToken !== chainConfig.WETHContractAddress
     ) {
       return (
@@ -251,7 +255,7 @@ export default function BuyContent({
   const isFetchLoading =
     factoryLoading ||
     launchpadLoading ||
-    tokenDecimalsLoading ||
+    baseTokenDecimalsLoading ||
     follwingDataLoading
   const isActionLoading =
     tokenAllowanceLoading ||
@@ -383,7 +387,6 @@ export default function BuyContent({
               </div>
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
-                  {' '}
                   {Number(launchpadData?.[1].result ?? BigInt(0))}
                 </span>
               </AstraLoading>
@@ -418,11 +421,9 @@ export default function BuyContent({
                   {' '}
                   {formatUnits(
                     launchpadData?.[2].result ?? BigInt(0),
-                    tokenDecimals ?? 0
+                    baseTokenDecimals ?? 18
                   )}{' '}
-                  {tokenArray
-                    .filter((token) => token.address === detail.BASE_TOKEN)
-                    .map((token) => token.symbol)}
+                  {baseTokenSymbol}
                 </span>
               </AstraLoading>
             </div>
@@ -433,11 +434,9 @@ export default function BuyContent({
                   {' '}
                   {formatUnits(
                     launchpadData?.[12].result ?? BigInt(0),
-                    tokenDecimals ?? 0
+                    baseTokenDecimals ?? 18
                   )}{' '}
-                  {tokenArray
-                    .filter((token) => token.address === detail.BASE_TOKEN)
-                    .map((token) => token.symbol)}
+                  {baseTokenSymbol}
                 </span>
               </AstraLoading>
             </div>
@@ -467,10 +466,8 @@ export default function BuyContent({
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">{`${formatUnits(
                   launchpadData?.[10].result ?? BigInt(0),
-                  6
-                )} ${tokenArray
-                  .filter((token) => token.address === detail.BASE_TOKEN)
-                  .map((token) => token.symbol)}`}</span>
+                  baseTokenDecimals ?? 18
+                )} ${baseTokenSymbol}`}</span>
               </AstraLoading>
             </div>
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
