@@ -156,41 +156,6 @@ export default function Page({ params }: TPage) {
     }
   }, [])
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
-  const [uploading, setUploading] = useState<boolean>(false)
-
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        [{ align: [] }],
-        [{ color: [] }],
-        ['code-block'],
-        ['clean'],
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }
-
-  const quillFormats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'align',
-    'color',
-    'code-block',
-  ]
 
   const { chainConfig } = useChainConfig()
   const { address } = useAccount()
@@ -1530,69 +1495,51 @@ export default function Page({ params }: TPage) {
                               htmlFor="dropzone-file"
                               className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
-                              {uploading && (
-                                <div className=" text-center max-w-md  ">
-                                  {/* <RadialProgress progress={progress} /> */}
+                              {!urlRegex.test(field.value || '') && (
+                                <div className=" text-center">
+                                  <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                    <IoCloudUploadOutline size="1.6em" />
+                                  </div>
+
+                                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    <span className="font-semibold">
+                                      Drag an image
+                                    </span>
+                                  </p>
+                                  <p className="text-xs text-gray-400 dark:text-gray-400">
+                                    Click to upload &#40; image should be
+                                    500x500 px & under 10 MB &#41;
+                                  </p>
+                                </div>
+                              )}
+
+                              {urlRegex.test(field.value || '') && (
+                                <div className="text-center">
+                                  <Image
+                                    width={1000}
+                                    height={1000}
+                                    src={field.value}
+                                    className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                    alt="uploaded image"
+                                  />
                                   <p className=" text-sm font-semibold">
-                                    Image Uploading
+                                    Image Uploaded
                                   </p>
-                                  <p className=" text-xs text-gray-400">
-                                    Do not refresh or perform any other action
-                                    while the image is being upload
-                                  </p>
+                                  <Button
+                                    className="px-2 mt-2"
+                                    variant="astra-red"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      form.setValue(`projectImage`, '')
+                                    }}
+                                  >
+                                    Delete Image
+                                  </Button>
                                   <p className=" text-xs text-red-500">
                                     {fileError}
                                   </p>
                                 </div>
                               )}
-
-                              {!uploading &&
-                                !urlRegex.test(field.value || '') && (
-                                  <div className=" text-center">
-                                    <div className=" border p-2 rounded-md max-w-min mx-auto">
-                                      <IoCloudUploadOutline size="1.6em" />
-                                    </div>
-
-                                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                      <span className="font-semibold">
-                                        Drag an image
-                                      </span>
-                                    </p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-400">
-                                      Click to upload &#40; image should be
-                                      500x500 px & under 10 MB &#41;
-                                    </p>
-                                  </div>
-                                )}
-
-                              {urlRegex.test(field.value || '') &&
-                                !uploading && (
-                                  <div className="text-center">
-                                    <Image
-                                      width={1000}
-                                      height={1000}
-                                      src={field.value}
-                                      className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
-                                      alt="uploaded image"
-                                    />
-                                    <p className=" text-sm font-semibold">
-                                      Image Uploaded
-                                    </p>
-                                    <Button
-                                      className="px-2 mt-2"
-                                      variant="astra-red"
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        form.setValue(`projectImage`, '')
-                                      }}
-                                    >
-                                      Delete Image
-                                    </Button>
-                                    <p className=" text-xs text-red-500">
-                                      {fileError}
-                                    </p>
-                                  </div>
-                                )}
                             </label>
 
                             <Input
@@ -1601,7 +1548,7 @@ export default function Page({ params }: TPage) {
                               accept="image/png, image/jpeg"
                               type="file"
                               className="hidden"
-                              disabled={uploading || field.value !== null}
+                              disabled={field.value !== null}
                               onChange={handleImageChange}
                             />
                           </div>
