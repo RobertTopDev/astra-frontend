@@ -52,7 +52,7 @@ import {
   useGetLaunchpadDetailById,
   useDecimals,
 } from '@/hooks'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons'
 import Loading from '@/app/loading'
 import { format } from 'date-fns'
@@ -67,6 +67,7 @@ import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
 import dynamic from 'next/dynamic'
+import { idToChain } from '@/config'
 
 interface Errors {
   totalMetrics?: string
@@ -85,6 +86,7 @@ export default function Page({ params }: TPage) {
     })
   }, [])
   const router = useRouter()
+  const { chain } = useNetwork()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
 
@@ -930,13 +932,14 @@ export default function Page({ params }: TPage) {
     value_temp.teamDescription = launchpadDetail?.TEAM_DESCRIPTION || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
     value_temp.projectImage = projectImageUrl
-    value_temp.chain = launchpadDetail?.CHAIN || ''
+    value_temp.chain =
+      launchpadDetail?.CHAIN || (chain && idToChain[chain.id]) || 'Arbitrum'
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
     value_temp.investorDetail = JSON.stringify(
-      value_temp.investorDetail
-        .split(',')
-        .map((investor: string) => investor.trim())
+      launchpadDetail?.INVESTOR_DETAIL?.split(',')?.map((investor: string) =>
+        investor.trim()
+      )
     )
 
     const result_values: RequestLaunchpadResultValues = {
@@ -1149,7 +1152,7 @@ export default function Page({ params }: TPage) {
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
       investorDetail:
         JSON.parse(
-          launchpadDetail?.TEAM_INFO.replace(/\n/g, '\\n') || '[]'
+          (launchpadDetail?.INVESTOR_DETAIL ?? '').replace(/\n/g, '\\n')
         ).join(', ') || '',
 
       leadVCImage: launchpadDetail?.LEAD_VC_IMAGE || '',

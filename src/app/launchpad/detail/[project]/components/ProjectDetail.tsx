@@ -55,6 +55,8 @@ import ReactQuill from 'react-quill'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
+import { useNetwork } from 'wagmi'
+import { idToChain } from '@/config'
 
 interface Props {
   data: TLaunchpadDetailInfo
@@ -74,6 +76,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     })
   }, [])
 
+  const { chain } = useNetwork();
   const pathname = usePathname()
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
   const { chainConfig } = useChainConfig()
@@ -776,7 +779,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       medium: value.contactMedium,
       otherUrl: data.OTHER_URL,
       email: value.email,
-      chain: data.CHAIN,
+      chain: data.CHAIN || (chain && idToChain[chain.id]) || 'Arbitrum',
       requestTransaction: data.REQUEST_TRANSACTION,
       approveTransaction: data.APPROVE_TRANSACTION,
       status: data.STATUS,
