@@ -77,4 +77,4 @@ backendConfig:
   namespace: astra-testnet
   securityPolicy:
     enabled: true
-    name: "projects/tmgalaxy/global/securityPolicies/ddos-policy-alpha-us-central1"
+    name: "ddos-policy-alpha-us-central1"
