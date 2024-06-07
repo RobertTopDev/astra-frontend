@@ -40,6 +40,7 @@ import { useAccount } from 'wagmi'
 import { clsx } from 'clsx'
 import { deleteLaunchpadForDB } from '@/util/deleteLaunchpadForDB'
 import { convertToCSV } from '@/util/convertToCSV'
+import { convertToInternationalCurrencySystem } from '@/util'
 
 type Props = {
   status: string
@@ -450,8 +451,8 @@ export default function LiveUpcomingCard({
               overflow: 'hidden',
             }}
           >
-            {launchpadData?.SOFT_CAP ?? 0} {baseTokenSymbol} -{' '}
-            {launchpadData?.HARD_CAP ?? 0} {baseTokenSymbol}
+            {convertToInternationalCurrencySystem(launchpadData?.SOFT_CAP || 0)} {baseTokenSymbol} -{' '}
+            {convertToInternationalCurrencySystem(launchpadData?.HARD_CAP || 0)} {baseTokenSymbol}
           </div>
           <div className="text-white text-sm mt-6">
             Progress ({percentageRaised}
