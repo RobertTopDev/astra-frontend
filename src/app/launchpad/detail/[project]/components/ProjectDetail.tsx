@@ -76,7 +76,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     })
   }, [])
 
-  const { chain } = useNetwork();
+  const { chain } = useNetwork()
   const pathname = usePathname()
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
   const { chainConfig } = useChainConfig()
@@ -1431,6 +1431,12 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                             <SelectItem value="socialNetwork">
                               Social Network
                             </SelectItem>
+                            <SelectItem value="depin">DePin</SelectItem>
+                            <SelectItem value="rwa">
+                              Real World Assets
+                            </SelectItem>
+                            <SelectItem value="privacy">Privacy</SelectItem>
+                            <SelectItem value="bridge">Bridge</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

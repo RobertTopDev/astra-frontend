@@ -346,7 +346,7 @@ export default function BuyContent({
           </div>
           {detail?.IS_VESTING ? (
             <div className="mt-12 mb-4 border border-solid border-[#00E7FF] p-4 rounded-xl">
-              This is the vesting launchpad.
+              This is a vesting launchpad/token sale
             </div>
           ) : (
             <></>

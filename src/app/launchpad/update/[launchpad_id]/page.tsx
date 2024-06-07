@@ -1727,6 +1727,10 @@ export default function Page({ params }: TPage) {
                           <SelectItem value="socialNetwork">
                             Social Network
                           </SelectItem>
+                          <SelectItem value="depin">DePin</SelectItem>
+                          <SelectItem value="rwa">Real World Assets</SelectItem>
+                          <SelectItem value="privacy">Privacy</SelectItem>
+                          <SelectItem value="bridge">Bridge</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
