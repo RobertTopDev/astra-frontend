@@ -40,17 +40,12 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   }
 
   useEffect(() => {
-    console.log('Launchpads changed:', launchpads) // Debugging log
+    console.log('Launchpads changed:', launchpads)
     if (launchpads?.length === 0) return
     refetchDatas()
   }, [launchpads])
 
-  useEffect(() => {
-    console.log('Vesting rewards changed:', vestingRewards) // Debugging log
-  }, [vestingRewards])
-
   if (vestingRewardLoading || launchpadLoading) {
-    console.log('Loading...')
     return <Loading />
   }
 
@@ -59,7 +54,6 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
     return <></>
   }
 
-  console.log('Rendering vesting rewards table')
   return (
     <div className="flex flex-col items-center gap-4 py-8 mt-12">
       <AstraHeader>My Launchpad Vesting</AstraHeader>

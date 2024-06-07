@@ -50,8 +50,9 @@ import {
   useGetBuyRuleLaunchpad,
   useApprove,
   useGetLaunchpadDetailById,
+  useDecimals,
 } from '@/hooks'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons'
 import Loading from '@/app/loading'
 import { format } from 'date-fns'
@@ -66,6 +67,7 @@ import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
 import dynamic from 'next/dynamic'
+import { idToChain } from '@/config'
 
 interface Errors {
   totalMetrics?: string
@@ -84,6 +86,7 @@ export default function Page({ params }: TPage) {
     })
   }, [])
   const router = useRouter()
+  const { chain } = useNetwork()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
 
@@ -155,41 +158,6 @@ export default function Page({ params }: TPage) {
     }
   }, [])
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
-  const [uploading, setUploading] = useState<boolean>(false)
-
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        [{ align: [] }],
-        [{ color: [] }],
-        ['code-block'],
-        ['clean'],
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }
-
-  const quillFormats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'align',
-    'color',
-    'code-block',
-  ]
 
   const { chainConfig } = useChainConfig()
   const { address } = useAccount()
@@ -827,6 +795,12 @@ export default function Page({ params }: TPage) {
   }, [launchpadDetail])
   const { data: buyRuleStatus } = useGetBuyRuleLaunchpad() // [0]: whitelisted result
 
+  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
+    useDecimals({
+      address: launchpadDetail?.BASE_TOKEN as `0x${string}`,
+      enabled: !!launchpadDetail,
+    })
+
   // request launchpad after approve
   const {
     requestLaunchpad,
@@ -844,7 +818,8 @@ export default function Page({ params }: TPage) {
       !!contractData.baseToken &&
       !!contractData.tokenDecimals &&
       databaseData !== undefined &&
-      team.length > 0,
+      team.length > 0 &&
+      !!baseTokenDecimals,
     args: [
       contractData.tokenAddress as `0x${string}`,
       BigInt(parseInt(contractData.saleStartTime.toString())),
@@ -858,12 +833,19 @@ export default function Page({ params }: TPage) {
       contractData.baseToken as `0x${string}`,
       BigInt(
         parseUnits(
-          contractData.tokenAmount || '',
+          contractData.tokenAmount || '0',
           Number(contractData.tokenDecimals)
         )
       ),
-      BigInt(parseUnits(contractData.baseAmount || '', 6)),
-      BigInt(parseUnits(contractData.minPurchaseAmount || '', 6)),
+      BigInt(
+        parseUnits(contractData.baseAmount || '0', baseTokenDecimals ?? 18)
+      ),
+      BigInt(
+        parseUnits(
+          contractData.minPurchaseAmount || '0',
+          baseTokenDecimals ?? 18
+        )
+      ),
       contractData.isVesting,
     ],
     databaseData: databaseData ?? undefined,
@@ -899,7 +881,6 @@ export default function Page({ params }: TPage) {
   })
 
   async function onSubmit(value: z.infer<typeof createIndexFormSchema>) {
-    console.log(value)
     if (isUploadLoading || !address) {
       alert('loading or address is undefined')
       return
@@ -951,12 +932,14 @@ export default function Page({ params }: TPage) {
     value_temp.teamDescription = launchpadDetail?.TEAM_DESCRIPTION || ''
     value_temp.saleRoundDetail = launchpadDetail?.SALE_ROUND_DETAIL || ''
     value_temp.projectImage = projectImageUrl
+    value_temp.chain =
+      launchpadDetail?.CHAIN || (chain && idToChain[chain.id]) || 'Arbitrum'
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
     value_temp.investorDetail = JSON.stringify(
-      value_temp.investorDetail
-        .split(',')
-        .map((investor: string) => investor.trim())
+      launchpadDetail?.INVESTOR_DETAIL?.split(',')?.map((investor: string) =>
+        investor.trim()
+      )
     )
 
     const result_values: RequestLaunchpadResultValues = {
@@ -1169,7 +1152,7 @@ export default function Page({ params }: TPage) {
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
       investorDetail:
         JSON.parse(
-          launchpadDetail?.TEAM_INFO.replace(/\n/g, '\\n') || '[]'
+          (launchpadDetail?.INVESTOR_DETAIL ?? '').replace(/\n/g, '\\n')
         ).join(', ') || '',
 
       leadVCImage: launchpadDetail?.LEAD_VC_IMAGE || '',
@@ -1516,69 +1499,51 @@ export default function Page({ params }: TPage) {
                               htmlFor="dropzone-file"
                               className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                             >
-                              {uploading && (
-                                <div className=" text-center max-w-md  ">
-                                  {/* <RadialProgress progress={progress} /> */}
+                              {!urlRegex.test(field.value || '') && (
+                                <div className=" text-center">
+                                  <div className=" border p-2 rounded-md max-w-min mx-auto">
+                                    <IoCloudUploadOutline size="1.6em" />
+                                  </div>
+
+                                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                    <span className="font-semibold">
+                                      Drag an image
+                                    </span>
+                                  </p>
+                                  <p className="text-xs text-gray-400 dark:text-gray-400">
+                                    Click to upload &#40; image should be
+                                    500x500 px & under 10 MB &#41;
+                                  </p>
+                                </div>
+                              )}
+
+                              {urlRegex.test(field.value || '') && (
+                                <div className="text-center">
+                                  <Image
+                                    width={1000}
+                                    height={1000}
+                                    src={field.value}
+                                    className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
+                                    alt="uploaded image"
+                                  />
                                   <p className=" text-sm font-semibold">
-                                    Image Uploading
+                                    Image Uploaded
                                   </p>
-                                  <p className=" text-xs text-gray-400">
-                                    Do not refresh or perform any other action
-                                    while the image is being upload
-                                  </p>
+                                  <Button
+                                    className="px-2 mt-2"
+                                    variant="astra-red"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      form.setValue(`projectImage`, '')
+                                    }}
+                                  >
+                                    Delete Image
+                                  </Button>
                                   <p className=" text-xs text-red-500">
                                     {fileError}
                                   </p>
                                 </div>
                               )}
-
-                              {!uploading &&
-                                !urlRegex.test(field.value || '') && (
-                                  <div className=" text-center">
-                                    <div className=" border p-2 rounded-md max-w-min mx-auto">
-                                      <IoCloudUploadOutline size="1.6em" />
-                                    </div>
-
-                                    <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                                      <span className="font-semibold">
-                                        Drag an image
-                                      </span>
-                                    </p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-400">
-                                      Click to upload &#40; image should be
-                                      500x500 px & under 10 MB &#41;
-                                    </p>
-                                  </div>
-                                )}
-
-                              {urlRegex.test(field.value || '') &&
-                                !uploading && (
-                                  <div className="text-center">
-                                    <Image
-                                      width={1000}
-                                      height={1000}
-                                      src={field.value}
-                                      className=" w-full object-contain max-h-16 mx-auto mt-2 mb-3 opacity-70"
-                                      alt="uploaded image"
-                                    />
-                                    <p className=" text-sm font-semibold">
-                                      Image Uploaded
-                                    </p>
-                                    <Button
-                                      className="px-2 mt-2"
-                                      variant="astra-red"
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        form.setValue(`projectImage`, '')
-                                      }}
-                                    >
-                                      Delete Image
-                                    </Button>
-                                    <p className=" text-xs text-red-500">
-                                      {fileError}
-                                    </p>
-                                  </div>
-                                )}
                             </label>
 
                             <Input
@@ -1587,7 +1552,7 @@ export default function Page({ params }: TPage) {
                               accept="image/png, image/jpeg"
                               type="file"
                               className="hidden"
-                              disabled={uploading || field.value !== null}
+                              disabled={field.value !== null}
                               onChange={handleImageChange}
                             />
                           </div>
@@ -1762,6 +1727,10 @@ export default function Page({ params }: TPage) {
                           <SelectItem value="socialNetwork">
                             Social Network
                           </SelectItem>
+                          <SelectItem value="depin">DePin</SelectItem>
+                          <SelectItem value="rwa">Real World Assets</SelectItem>
+                          <SelectItem value="privacy">Privacy</SelectItem>
+                          <SelectItem value="bridge">Bridge</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

@@ -41,7 +41,7 @@ import {
   MetricsObject,
   RequestLaunchpadResultValues,
 } from '@/types'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -55,6 +55,7 @@ import 'react-quill/dist/quill.snow.css'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
+import { idToChain } from '@/config'
 
 interface Errors {
   totalMetrics?: string
@@ -63,6 +64,7 @@ interface Errors {
 const CreateForm = () => {
   const router = useRouter()
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const { chainConfig } = useChainConfig()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
@@ -109,74 +111,6 @@ const CreateForm = () => {
 
     return url
   }
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
-    input.click()
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        const quill = reactQuillRef.current
-        if (quill) {
-          const range = quill.getEditorSelection()
-          range && quill.getEditor().insertEmbed(range.index, 'image', url)
-        }
-      }
-    }
-  }, [])
-
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        [{ align: [] }],
-        [{ color: [] }],
-        ['code-block'],
-        ['clean'],
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }
-
-  const quillFormats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'align',
-    'color',
-    'code-block',
-  ]
-
-  // const uploadImage = useCallback(() => {
-  //   const input = document.createElement('input')
-  //   input.setAttribute('type', 'file')
-  //   input.setAttribute('accept', 'image/*')
-  //   input.click()
-  //   input.onchange = async () => {
-  //     if (input !== null && input.files !== null) {
-  //       setUploading(true)
-  //       const file = input.files[0]
-  //       const url = await uploadToCloudinary(file)
-  //       form.setValue(`projectImage`, url)
-  //       setUploading(false)
-  //     }
-  //   }
-  // }, [])
-  const [uploading, setUploading] = useState<boolean>(false)
 
   const [team, setTeam] = useState<TeamObject[]>([
     { name: '', position: '', description: '' },
@@ -874,7 +808,7 @@ const CreateForm = () => {
         medium: result_values.data.contactMedium,
         otherUrl: '',
         email: result_values.data.email,
-        chain: 'Arbitrum',
+        chain: (chain && idToChain[chain.id]) || 'Arbitrum',
         requestTransaction: '',
         approveTransaction: '',
         leadVC: result_values.data.leadVC.trim(),
@@ -1263,23 +1197,7 @@ const CreateForm = () => {
                           htmlFor="dropzone-file"
                           className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                         >
-                          {uploading && (
-                            <div className=" text-center max-w-md  ">
-                              {/* <RadialProgress progress={progress} /> */}
-                              <p className=" text-sm font-semibold">
-                                Image Uploading
-                              </p>
-                              <p className=" text-xs text-gray-400">
-                                Do not refresh or perform any other action while
-                                the image is being upload
-                              </p>
-                              <p className=" text-xs text-red-500">
-                                {fileError}
-                              </p>
-                            </div>
-                          )}
-
-                          {!uploading && !urlRegex.test(field.value || '') && (
+                          {!urlRegex.test(field.value || '') && (
                             <div className=" text-center">
                               <div className=" border p-2 rounded-md max-w-min mx-auto">
                                 <IoCloudUploadOutline size="1.6em" />
@@ -1297,7 +1215,7 @@ const CreateForm = () => {
                             </div>
                           )}
 
-                          {urlRegex.test(field.value || '') && !uploading && (
+                          {urlRegex.test(field.value || '') && (
                             <div className="text-center">
                               <Image
                                 width={1000}
@@ -1332,7 +1250,7 @@ const CreateForm = () => {
                           accept="image/png, image/jpeg"
                           type="file"
                           className="hidden"
-                          disabled={uploading || field.value !== null}
+                          disabled={field.value !== null}
                           onChange={handleImageChange}
                         />
                       </div>
@@ -1478,6 +1396,10 @@ const CreateForm = () => {
                       <SelectItem value="socialNetwork">
                         Social Network
                       </SelectItem>
+                      <SelectItem value="depin">DePin</SelectItem>
+                      <SelectItem value="rwa">Real World Assets</SelectItem>
+                      <SelectItem value="privacy">Privacy</SelectItem>
+                      <SelectItem value="bridge">Bridge</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -2631,15 +2553,6 @@ const CreateForm = () => {
 
             <Separator className="bg-gray-400"></Separator>
             <div className="flex items-center justify-center">
-              {/* {buyRuleStatus && buyRuleStatus[0].result ? (
-                <Button variant="astra-blue" type="submit">
-                  Submit Information
-                </Button>
-              ) : (
-                <AstraLink link="/launchpad/kyc">
-                  <Button variant="astra-blue">Join Whitelist</Button>
-                </AstraLink>
-              )} */}
               <Button variant="astra-blue" type="submit" isLoading={isLoading}>
                 Submit Information
               </Button>

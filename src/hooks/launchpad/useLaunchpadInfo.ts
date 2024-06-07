@@ -84,6 +84,10 @@ export const useLaunchpadInfo = ({ ...props }: Props) => {
         ...launchpadConfigurationContract,
         functionName: 'COMPLETION_FEE',
       },
+      {
+        ...launchpadContract,
+        functionName: 'minAmount',
+      },
     ],
   })
 }

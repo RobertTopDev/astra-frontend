@@ -297,50 +297,45 @@ const StakingAstraClaimAstra = ({
                 </AstraLoading>
               </div>
             </div>
-            {(!claimAstra && !restakeAstraRewards) ||
-            Number(balanceOfAstraStaked) === 0 ? (
-              <Button variant="astra-blue" className="my-2">
-                CLAIM
-              </Button>
-            ) : (
-              <ClaimRewardsDialog
-                maxSlashingFee={slashingRewards}
-                eligibleToWithdraw={astraEligibleToWithdraw}
-                accruedRewards={accruedRewards}
-                receivedRewardValue={actualClaimableReward}
-                stakingType="ASTRADAO"
-                payout={
-                  <Button
-                    variant="astra-blue"
-                    disabled={!claimAstra || !!claimAstraError}
-                    isLoading={claimAstraLoading || isLoading}
-                    onClick={() => claimAstra?.()}
-                  >
-                    PAYOUT
-                  </Button>
-                }
-                restake={
-                  <Button
-                    variant="astra-blue"
-                    disabled={
-                      !restakeAstraRewards || !!restakeAstraRewardsError
-                    }
-                    isLoading={restakeAstraRewardsLoading || isLoading}
-                    onClick={() => restakeAstraRewards?.()}
-                  >
-                    RE-STAKE
-                  </Button>
-                }
-              >
+            <ClaimRewardsDialog
+              maxSlashingFee={slashingRewards}
+              eligibleToWithdraw={astraEligibleToWithdraw}
+              accruedRewards={accruedRewards}
+              receivedRewardValue={actualClaimableReward}
+              stakingType="ASTRADAO"
+              payout={
                 <Button
                   variant="astra-blue"
-                  isLoading={isLoading}
-                  className="my-2"
+                  disabled={!claimAstra || !!claimAstraError}
+                  isLoading={claimAstraLoading || isLoading}
+                  onClick={() => claimAstra?.()}
                 >
-                  CLAIM
+                  PAYOUT
                 </Button>
-              </ClaimRewardsDialog>
-            )}
+              }
+              restake={
+                <Button
+                  variant="astra-blue"
+                  disabled={!restakeAstraRewards || !!restakeAstraRewardsError}
+                  isLoading={restakeAstraRewardsLoading || isLoading}
+                  onClick={() => restakeAstraRewards?.()}
+                >
+                  RE-STAKE
+                </Button>
+              }
+            >
+              <Button
+                variant="astra-blue"
+                isLoading={isLoading}
+                className="my-2"
+                disabled={
+                  (!claimAstra && !restakeAstraRewards) ||
+                  Number(balanceOfAstraStaked) === 0
+                }
+              >
+                CLAIM
+              </Button>
+            </ClaimRewardsDialog>
           </div>
         </div>
       </div>

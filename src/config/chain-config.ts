@@ -1,4 +1,4 @@
-import { TChainConfig } from '@/types'
+import { IDTOCHAIN, TChainConfig } from '@/types'
 import {
   arbitrum,
   mainnet,
@@ -11,6 +11,13 @@ export const defaultChainId =
   process.env.NODE_ENV === 'development' ? arbitrumSepolia.id : arbitrum.id
 export const defaultChain =
   process.env.NODE_ENV === 'development' ? arbitrumSepolia : arbitrum
+export const idToChain: IDTOCHAIN = {
+  [arbitrum.id]: 'Arbitrum',
+  [mainnet.id]: 'Ethereum',
+  [polygonMumbai.id]: 'Polygon',
+  [arbitrumSepolia.id]: 'Arbitrum',
+  [bscTestnet.id]: 'Binanace',
+}
 
 export const chainConfig: TChainConfig = {
   [arbitrum.id]: {
@@ -37,14 +44,12 @@ export const chainConfig: TChainConfig = {
     WETHContractAddress: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
     rpcURL: `https://production.infura.io/v3/bf18b01d017c4dbf8e15a1e633e3c68a`,
     ChefContractAddress: '0x6fE79b531b2b1d5378631B3Ab33B0994E297355E',
-    // DAAContractAddress: '0x8e265fF847CC660Cd89786D4308076a9f921428f',
     DAAContractAddress: '0xFa3e6EC87941d4e29b1738F8F7f5C27B23Eb3f94',
     DAOContractAddress: '0x8D9cbe442C664872A526cE65cfE0c4a4CfF89A7d',
     AstraContractAddress: '0xd3188e0df68559c0B63361f6160c57Ad88B239D8',
     IndicesPaymentContractAddress: '0xec67485B3D4DfD4BCA8c3DD3049e3A9c46E15bEE',
     PoolConfigurationContractAddress:
       '0xEE435FFB3c1f0bAf5C9B62cA3e1D8285C3a2a642',
-    // iTokenStakingContractAddress: '0x2214363a217f113DaFf0dD58086d9F029a40FeaF',
     iTokenStakingContractAddress: '0xB38b6827757b40c08BB83cfe7D9fB2e69D12CD3D',
     BatchVoteContractAddress: '0xeBC2624085f4710e9E7A25332df8108ECDa86670',
     uniswapNFTAddress: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
@@ -193,7 +198,7 @@ export const chainConfig: TChainConfig = {
     WETHContractAddress: '0x980B62Da83eFf3D4576C647993b0c1D7faf17c73',
     AstraContractAddress: '0x6ea5046B9aB2F5100644f67EfBa797f8d08D7515',
     factoryContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
-    routerContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    routerContractAddress: '0x101F443B4d1b059569D643917553c771E1b9663E',
     IndicesPaymentContractAddress: '0xaAfb6410Ff502fCf41346085E95288988DE53A66',
     ethAddressForpaywithCrypto: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     PoolConfigurationContractAddress:
@@ -238,16 +243,16 @@ export const chainConfig: TChainConfig = {
     LaunchpadConfigurationAddress: '0x24569F3D1a7e510FCA13282df183Cbe9833dd785',
     AstraDAOWhitelistAddress: '0x52bB39Cca93828Da5B39f4C4791Be5b800A14994',
     CrosschainSaleManagerAddress: '0x205C00E0eC42ed15Eb5E64Db2Ab5B1150Bc7eB48',
-    ChefContractAddress: '0xa527476575972e28F2055F28901B7767b6672928',
+    ChefContractAddress: '0x954Ba68d08fFe8F9cf33C13FCcCdf8376d18F04b',
     DAAContractAddress: '0x93Ee0bAcDbe4743a4fEEF68c91563ddCf913eD14',
     DAOContractAddress: '0x7b251CF8a6b5382BcA1a6C414846Eb0749BD589E',
     DAIContractAddress: '0xD127649432ED74b3857E2b3F2Aa44C9504a6cf0f',
     USDTContractAddress: '0x9b52f9739F6eb7EB1548979d66d0E085D0De05ED',
     USDCContractAddress: '0x76fa6bab73779164738B1b1C8E3d1ecf0865D152',
     WETHContractAddress: '0xae13d989dac2f0debff460ac112a837c89baa7cd',
-    AstraContractAddress: '0x6ea5046B9aB2F5100644f67EfBa797f8d08D7515',
+    AstraContractAddress: '0x2850e9f193579b5Fc43459a9190Ab881AdE1ab98',
     factoryContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
-    routerContractAddress: '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f',
+    routerContractAddress: '0xD99D1c33F9fC3444f8101754aBC46c52416550D1',
     IndicesPaymentContractAddress: '0xaAfb6410Ff502fCf41346085E95288988DE53A66',
     ethAddressForpaywithCrypto: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     PoolConfigurationContractAddress:

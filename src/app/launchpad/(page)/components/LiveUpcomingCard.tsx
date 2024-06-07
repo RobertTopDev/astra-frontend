@@ -33,12 +33,14 @@ import {
   useLaunchpadInfo,
   useDeployVestingContract,
   useSetVestingToLaunchpad,
+  useDecimals,
 } from '@/hooks'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount } from 'wagmi'
 import { clsx } from 'clsx'
 import { deleteLaunchpadForDB } from '@/util/deleteLaunchpadForDB'
 import { convertToCSV } from '@/util/convertToCSV'
+import { convertToInternationalCurrencySystem } from '@/util'
 
 type Props = {
   status: string
@@ -58,6 +60,31 @@ export default function LiveUpcomingCard({
   const [vestAddress, setVestAddress] = useState<string>('')
   const { chainConfig } = useChainConfig()
   const { address } = useAccount()
+
+  const tokenArray = [
+    {
+      symbol: 'USDT',
+      address: chainConfig.USDTContractAddress,
+    },
+    {
+      symbol: 'USDC',
+      address: chainConfig.USDCContractAddress,
+    },
+    {
+      symbol: 'ETH',
+      address: chainConfig.WETHContractAddress,
+    },
+  ]
+  const baseTokenSymbol = tokenArray
+    .filter((token) => token.address === launchpadData?.BASE_TOKEN)
+    .map((token) => token.symbol)
+
+  // base token decimals
+  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
+    useDecimals({
+      address: launchpadData?.BASE_TOKEN as `0x${string}`,
+      enabled: !!launchpadData,
+    })
 
   const launchpadIndexString = launchpadData?.LAUNCHPAD_INDEX
     ? launchpadData.LAUNCHPAD_INDEX.toString()
@@ -165,7 +192,7 @@ export default function LiveUpcomingCard({
 
   const curRaisedAmount = useMemo(() => {
     const tokenAmount = launchpadContractData?.[7]?.result
-      ? formatUnits(launchpadContractData[7].result, 6)
+      ? formatUnits(launchpadContractData[7].result, baseTokenDecimals ?? 18)
       : 0
     return Number(tokenAmount).toFixed(2)
   }, [launchpadContractData])
@@ -345,7 +372,7 @@ export default function LiveUpcomingCard({
           <div className="flex justify-between items-center pb-2">
             <div
               className={clsx(
-                'text-center flex text-xs font-medium whitespace-nowrap justify-center items-stretch px-6 py-2 rounded-3xl capitalize',
+                'text-center flex text-xs font-medium whitespace-nowrap justify-center items-stretch px-3 py-2 rounded-3xl capitalize',
                 (launchpadStatus === 'in progress' ||
                   launchpadStatus === 'requested') &&
                   'text-astra-dark-green bg-astra-green',
@@ -367,6 +394,9 @@ export default function LiveUpcomingCard({
               {launchpadStatus}
             </div>
             <div className="flex gap-2">
+              <div className="text-xs bg-[#fff] rounded-xl text-[#fff] bg-opacity-15 px-3 py-1">
+                {launchpadData?.CHAIN}
+              </div>
               <div className="text-xs bg-astra-blue rounded-xl text-astra-blue bg-opacity-15 px-3 py-1">
                 Audit
               </div>
@@ -406,7 +436,7 @@ export default function LiveUpcomingCard({
               </div>
               <div className="text-white text-sm mt-3.5">
                 {1 + ' ' + launchpadData?.LAUNCHPAD_TOKEN_SYMBOL} ={' '}
-                {launchpadData?.LAUNCHPAD_TOKEN_PRICE + ' USDC'}
+                {launchpadData?.LAUNCHPAD_TOKEN_PRICE + ` ${baseTokenSymbol}`}
               </div>
             </div>
           </div>
@@ -421,8 +451,8 @@ export default function LiveUpcomingCard({
               overflow: 'hidden',
             }}
           >
-            {launchpadData?.SOFT_CAP ?? 0} USDC - {launchpadData?.HARD_CAP ?? 0}{' '}
-            USDC
+            {convertToInternationalCurrencySystem(launchpadData?.SOFT_CAP || 0)} {baseTokenSymbol} -{' '}
+            {convertToInternationalCurrencySystem(launchpadData?.HARD_CAP || 0)} {baseTokenSymbol}
           </div>
           <div className="text-white text-sm mt-6">
             Progress ({percentageRaised}
@@ -440,10 +470,10 @@ export default function LiveUpcomingCard({
             }}
           >
             <div className="text-white text-sm font-black">
-              {curRaisedAmount} USDC
+              {curRaisedAmount} {baseTokenSymbol}
             </div>
             <div className="text-white text-right text-sm font-black">
-              {launchpadData?.HARD_CAP ?? 0} USDC
+              {launchpadData?.HARD_CAP ?? 0} {baseTokenSymbol}
             </div>
           </div>
 

@@ -28,6 +28,7 @@
     ]
   },
   "dependencies": {
+    "@axelar-network/axelarjs-sdk": "^0.16.1",
     "@eslint/eslintrc": "^3.0.2",
     "@faker-js/faker": "^8.4.1",
     "@hookform/resolvers": "^3.3.2",

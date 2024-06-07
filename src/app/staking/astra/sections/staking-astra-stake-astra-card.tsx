@@ -18,12 +18,21 @@ import {
   TooltipTrigger,
 } from '@/components/shadcn'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useApprove, useChainConfig, useStakeAstra } from '@/hooks'
-import { parseUnits } from 'viem'
+import {
+  useApprove,
+  useChainConfig,
+  useStakeAstra,
+  useVerifyMultiplierCrosschain,
+} from '@/hooks'
+import { formatEther, parseUnits } from 'viem'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
+import { useAccount } from 'wagmi'
+
+const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
 
 const LOCKUP_PERIODS = [
   {
@@ -78,7 +87,11 @@ const StakingAstraStakeAstraCard = ({
   refetchDatas,
 }: TStakingAstraStakeAstraCardProps) => {
   const { chainConfig } = useChainConfig()
-  const [stakedAmount, setStakedAmount] = useState('')
+  const { address } = useAccount()
+
+  const [stakedAmount, setStakedAmount] = useState<string>('')
+  const [gasFee, setGasFee] = useState<string>('')
+
   // FORM
   const form = useForm<StakeAstraFormValues>({
     resolver: zodResolver(stakeAstraFormSchema),
@@ -89,6 +102,17 @@ const StakingAstraStakeAstraCard = ({
     },
   })
   const formValues = form.watch()
+
+  // // Verify Multiplier Cross Chain
+  const {
+    verifyMultiplierCrosschain,
+    error: verifyMultiplierCrsschainError,
+    isLoading: verifyMultiplierCrosschainLoading,
+  } = useVerifyMultiplierCrosschain({
+    enabled: !!address && Number(gasFee) > 0,
+    args: ['binance', address as `0x${string}`],
+    gasFee,
+  })
 
   // APPROVE
   const {
@@ -137,6 +161,8 @@ const StakingAstraStakeAstraCard = ({
     onSuccessTx: () => {
       refetchDatas()
       setStakedAmount('')
+      // call cross chain verify multiplier function (check eth value)
+      verifyMultiplierCrosschain?.()
     },
   })
 
@@ -172,6 +198,21 @@ const StakingAstraStakeAstraCard = ({
       )
     }
   }
+
+  useEffect(() => {
+    async function init() {
+      // get verify multiplier transaction fee from third party
+      const axelarResult: any = await axelarSDK.estimateGasFee(
+        'arbitrum-sepolia',
+        'binance',
+        BigInt(21000),
+        'auto'
+      )
+      setGasFee(axelarResult.toString())
+    }
+
+    init()
+  }, [axelarSDK])
 
   return (
     <Form {...form}>

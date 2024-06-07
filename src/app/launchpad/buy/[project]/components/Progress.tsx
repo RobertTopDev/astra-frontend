@@ -24,7 +24,7 @@ export default function Progress({ data, launchpadLoading }: TProgress) {
   const { data: factoryData, isLoading: factoryLoading } =
     useLaunchpadFactoryInfo({ lIndex: data.LAUNCHPAD_INDEX.toString() })
   const launchpadAddress = useMemo(
-    () => factoryData?.[10] ?? data.LAUNCHPAD_ADDRESS,
+    () => factoryData?.[11] ?? data.LAUNCHPAD_ADDRESS,
     [factoryData]
   )
   const { data: buyRuleStatus, isLoading: buyRuleStatusLoading } =
@@ -65,7 +65,10 @@ export default function Progress({ data, launchpadLoading }: TProgress) {
       </div>
       {data?.OWNER === address ? (
         <div className="contributor-list mt-12">
-          <Contributor launchpadAddress={launchpadAddress as `0x${string}`} />
+          <Contributor
+            launchpadAddress={launchpadAddress as `0x${string}`}
+            launchpadData={data}
+          />
         </div>
       ) : (
         <></>

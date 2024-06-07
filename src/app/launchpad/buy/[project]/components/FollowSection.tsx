@@ -8,7 +8,7 @@ import { MiniIdenticon } from '@/components/mini-identicon'
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons'
 import { TLaunchpadDetailInfo } from '@/types'
 import { formatUnits } from 'viem'
-import { useFollowCheck } from '@/hooks'
+import { useDecimals, useFollowCheck } from '@/hooks'
 import { useAccount } from 'wagmi'
 
 type Props = {
@@ -36,6 +36,12 @@ export default function FollowSection({
 
   const isLoading =
     buyRuleStatusLoading || launchpadLoading || follwingDataLoading
+
+  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
+    useDecimals({
+      address: detail?.BASE_TOKEN as `0x${string}`,
+      enabled: !!detail,
+    })
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xl bg-[#363653] shadow-xl p-10">
@@ -67,7 +73,10 @@ export default function FollowSection({
                     ${' '}
                     {(launchpadData &&
                       Number(
-                        formatUnits(launchpadData?.[7]?.result, 6)
+                        formatUnits(
+                          launchpadData?.[7]?.result ?? 0,
+                          baseTokenDecimals ?? 0
+                        )
                       ).toFixed(2)) ||
                       0}
                   </span>
@@ -77,7 +86,7 @@ export default function FollowSection({
             <a href="#" aria-label="View">
               {buyRuleStatus &&
               buyRuleStatus?.[0]?.result &&
-              buyRuleStatus?.[1]?.result?.[0] > 0 &&
+              // buyRuleStatus?.[1]?.result?.[0] > 0 &&
               telegramfollowing ? (
                 <Button
                   variant="astra-blue"
@@ -205,7 +214,7 @@ export default function FollowSection({
                       fill={true}
                     />
                   </div>
-                  {`Increase your token sale allocation by staking ${detail?.LAUNCHPAD_TOKEN_SYMBOL} in a lockup vault.`}
+                  {`Increase your token sale allocation by staking $ASTRADAO in a lockup vault.`}
                 </div>
                 <div>
                   <AstraLoading isLoading={isLoading} className="w-6 h-6">
