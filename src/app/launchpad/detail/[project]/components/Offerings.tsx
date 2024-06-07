@@ -92,7 +92,7 @@ export default function Offering({ launchpadData }: TComponent) {
     <div className="flex flex-col gap-4">
       <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
         <div className="flex justify-between">
-          {`$${launchpadData?.LAUNCHPAD_TOKEN_SYMBOL} Public Sale`}
+          {`$${(launchpadData?.LAUNCHPAD_TOKEN_SYMBOL||'').toUpperCase()} Public Sale`}
           {saleStartsIn === '00:00:00' ? ' ends in' : ' coming up soon'}:
         </div>
         <div className="flex justify-between items-center">
