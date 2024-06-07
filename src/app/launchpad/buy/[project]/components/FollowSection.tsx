@@ -86,7 +86,7 @@ export default function FollowSection({
             <a href="#" aria-label="View">
               {buyRuleStatus &&
               buyRuleStatus?.[0]?.result &&
-              buyRuleStatus?.[1]?.result?.[0] > 0 &&
+              // buyRuleStatus?.[1]?.result?.[0] > 0 &&
               telegramfollowing ? (
                 <Button
                   variant="astra-blue"

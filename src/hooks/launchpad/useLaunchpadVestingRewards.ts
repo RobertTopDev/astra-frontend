@@ -43,6 +43,7 @@ export const useLaunchpadVestingRewards = ({
           )
             continue
           const vestingAddress = launchpad.VEST_ADDRESS
+
           const vestingSchedulesCountByBeneficiary =
             await publicClient.readContract({
               address: vestingAddress as `0x${string}`,
@@ -50,6 +51,7 @@ export const useLaunchpadVestingRewards = ({
               functionName: 'getVestingSchedulesCountByBeneficiary',
               args: [address],
             })
+
           for (let i = 0; i < Number(vestingSchedulesCountByBeneficiary); i++) {
             let releasableAmount = 0
             const [vestingIndexDetails, vestingScheduleID] = await Promise.all([
@@ -66,6 +68,7 @@ export const useLaunchpadVestingRewards = ({
                 args: [address, BigInt(i)],
               }),
             ])
+
             if (vestingIndexDetails.revoked) {
               vestingRewards.push({
                 releaseAmount: 0,
@@ -79,18 +82,41 @@ export const useLaunchpadVestingRewards = ({
               })
             }
             if (vestingScheduleID) {
-              const computedReleasableAmount = await publicClient.readContract({
-                address: vestingAddress as `0x${string}`,
-                abi: launchpadVestingAbi,
-                functionName: 'computeReleasableAmount',
-                args: [vestingScheduleID],
-              })
-              releasableAmount = Number(
-                formatUnits(
-                  computedReleasableAmount,
-                  launchpad.LAUNCHPAD_TOKEN_DECIMAL
+              const currentDate = new Date()
+              const vestingStartDate = new Date(launchpad.VEST_START! + 'Z')
+              if (currentDate > vestingStartDate) {
+                const computedReleasableAmount =
+                  await publicClient.readContract({
+                    address: vestingAddress as `0x${string}`,
+                    abi: launchpadVestingAbi,
+                    functionName: 'computeReleasableAmount',
+                    args: [vestingScheduleID],
+                  })
+                console.log(computedReleasableAmount)
+                releasableAmount = Number(
+                  formatUnits(
+                    computedReleasableAmount,
+                    launchpad.LAUNCHPAD_TOKEN_DECIMAL
+                  )
                 )
-              )
+              } else {
+                releasableAmount = 0
+              }
+
+              // console.log('======== computeReleasableAmount ==========')
+              // const computedReleasableAmount = await publicClient.readContract({
+              //   address: vestingAddress as `0x${string}`,
+              //   abi: launchpadVestingAbi,
+              //   functionName: 'computeReleasableAmount',
+              //   args: [vestingScheduleID],
+              // })
+              // console.log(computedReleasableAmount)
+              // releasableAmount = Number(
+              //   formatUnits(
+              //     computedReleasableAmount,
+              //     launchpad.LAUNCHPAD_TOKEN_DECIMAL
+              //   )
+              // )
             }
             vestingRewards.push({
               launchpadAddress: launchpad.LAUNCHPAD_ADDRESS as `0x${string}`,

@@ -214,7 +214,6 @@ export default function BuyContent({
             !!approveError ||
             approveLoading ||
             !buyRuleStatus[0]?.result ||
-            buyRuleStatus[1]?.result[0] <= 0 ||
             !telegramfollowing
           }
           isLoading={isFetchLoading || isActionLoading}
@@ -232,8 +231,7 @@ export default function BuyContent({
             !buyToken ||
             !!buyTokenError ||
             !buyRuleStatus ||
-            (buyRuleStatus &&
-              (!buyRuleStatus[0]?.result || !buyRuleStatus[1]?.result)) ||
+            (buyRuleStatus && !buyRuleStatus[0]?.result) ||
             !telegramfollowing
           }
           isLoading={isFetchLoading || isActionLoading}

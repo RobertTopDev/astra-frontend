@@ -1,6 +1,5 @@
 'use client'
 
-import { launchpadAbi } from '@/abis/launchpad-abi'
 import { useChainConfig } from '..'
 import { useTransactionIndicator } from '@/contexts'
 import {
@@ -9,17 +8,23 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
-import { TransactionReceipt } from 'viem'
+import { TransactionReceipt, parseEther } from 'viem'
 import { useEffect } from 'react'
+import { crosschainSaleManagerAbi } from '@/abis'
 
 type Props = {
   onSuccessTx?: (data: TransactionReceipt) => void
   onRevert?: (data: TransactionReceipt) => void
-} & UsePrepareContractWriteConfig<typeof launchpadAbi, 'withdrawBaseTokens'>
+  gasFee: string
+} & UsePrepareContractWriteConfig<
+  typeof crosschainSaleManagerAbi,
+  'verifyMultiplierCrossChain'
+>
 
 export const useVerifyMultiplierCrosschain = ({
   onSuccessTx,
   onRevert,
+  gasFee,
   ...props
 }: Props) => {
   const { chainConfig } = useChainConfig()
@@ -31,9 +36,11 @@ export const useVerifyMultiplierCrosschain = ({
     isLoading: prepareLoading,
   } = usePrepareContractWrite({
     ...props,
-    address: chainConfig.LaunchpadFactoryContractAddress,
-    abi: launchpadAbi,
-    functionName: 'withdrawBaseTokens',
+    address: chainConfig.CrosschainSaleManagerAddress,
+    abi: crosschainSaleManagerAbi,
+    functionName: 'verifyMultiplierCrossChain',
+    // value: BigInt(Number(gasFee)),
+    value: parseEther('0.001'),
   })
 
   const {
@@ -49,7 +56,7 @@ export const useVerifyMultiplierCrosschain = ({
       setTransactionObj({
         status: 'loading',
         reset,
-        transactionAction: 'Withdrawing Base Token',
+        transactionAction: 'Verifying Multiplier CrossChain',
       })
     },
     onError: (error) => {
@@ -82,6 +89,7 @@ export const useVerifyMultiplierCrosschain = ({
         ...transactionObj,
         status: 'success',
         transactionHash: txReceipt.transactionHash,
+        transactionAction: 'Verified Multiplier CrossChain Successfully',
       })
       onSuccessTx?.(txReceipt)
     } else if (txReceipt?.status === 'reverted') {
@@ -95,9 +103,9 @@ export const useVerifyMultiplierCrosschain = ({
   }, [txReceipt])
 
   return {
-    withdrawBaseToken:
+    verifyMultiplierCrosschain:
       props.enabled || props.enabled === undefined ? write : undefined,
-    withdrawBaseTokenAsync:
+    verifyMultiplierCrosschainAsync:
       props.enabled || props.enabled === undefined ? writeAsync : undefined,
     error: prepareError || writeError || txError,
     isLoading: prepareLoading || writeLoading || txLoading,
