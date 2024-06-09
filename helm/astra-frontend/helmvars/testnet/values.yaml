@@ -16,16 +16,13 @@ service:
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
   annotations:
-    cloud.google.com/backend-config: '{"default": "astra-backendconfig"}'
     cloud.google.com/neg: '{"ingress": true}'
 
 ingress:
   enabled: true
-  # className: "nginx"
   annotations: 
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    # nginx.ingress.kubernetes.io/rewrite-target: /
-    # nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    ingress.gcp.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: gce
   hosts:
     - host: next.test.astradao.org
@@ -76,5 +73,4 @@ pvc:
 backendConfig:
   namespace: astra-testnet
   securityPolicy:
-    enabled: true
     name: "ddos-policy-alpha-us-central1"
