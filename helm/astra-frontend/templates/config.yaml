@@ -5,7 +5,7 @@ metadata:
   name: astra-backendconfig
 spec:
   securityPolicy:
-    name: "ddos-policy-alpha-us-central1"
+    name: {{ .Values.backendConfig.securityPolicy.name }}
   sessionAffinity:
     affinityType: "CLIENT_IP"
   timeoutSec: 30
