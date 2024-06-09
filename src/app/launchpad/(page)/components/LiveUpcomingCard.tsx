@@ -509,7 +509,7 @@ export default function LiveUpcomingCard({
               </div>
             </div>
             <div className="gap-2 flex items-center">
-              <div>
+              {/* <div>
                 <div
                   className={clsx(
                     'bg-white justify-center items-stretch p-3 rounded-3xl  cursor-pointer  hover:bg-astra-blue',
@@ -518,7 +518,7 @@ export default function LiveUpcomingCard({
                 >
                   <BellIcon className="stroke-[#7573BC]" />
                 </div>
-              </div>
+              </div> */}
               <div>
                 <div
                   className={`
