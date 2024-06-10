@@ -4,5 +4,5 @@ metadata:
   name: astra-frontend
 spec:
   redirectToHttps:
-    enabled: "true"
+    enabled: true
     responseCodeName: "301"
