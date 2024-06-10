@@ -8,9 +8,6 @@ import './globals.css'
 import { Providers } from './providers'
 import Loading from './loading'
 import localFont from 'next/font/local'
-// import ClientIPFetcher from '@/components/ClientIPFetcher'
-// import { usePathname } from 'next/navigation'
-// import { IpProvider } from '@/contexts/ip-context'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -51,7 +48,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // const pathname = usePathname()
   return (
     <html lang="en">
       <body
@@ -59,18 +55,14 @@ export default function RootLayout({
       >
         <Suspense>
           <Providers>
-            {/* <IpProvider> */}
             <Navbar />
             <Suspense fallback={<Loading />}>
               <div className="bg-gradient mt-32 relative">
                 <AstraRouterBack></AstraRouterBack>
-                {/* <ClientIPFetcher /> */}
                 {children}
               </div>
             </Suspense>
-            {/* {pathname !== '/access-denied' && <Footer />} */}
             <Footer />
-            {/* </IpProvider> */}
           </Providers>
         </Suspense>
       </body>
