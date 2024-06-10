@@ -17,6 +17,7 @@ service:
   externalTrafficPolicy: Local
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
+    # cloud.google.com/backend-config: '{"default": "astra-backendconfig"}'
 
 ingress:
   enabled: true
@@ -24,6 +25,8 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     ingress.gcp.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: gce
+    # networking.gke.io/v1beta1.FrontendConfig: "astra-frontend"
+    kubernetes.io/ingress.allow-http: "true"
   hosts:
     - host: next.test.astradao.org
       paths:

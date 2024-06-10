@@ -9,8 +9,3 @@ spec:
   sessionAffinity:
     affinityType: "CLIENT_IP"
   timeoutSec: 30
-  customRequestHeaders:
-    headers:
-    - "X-Client-Region:{client_region}"
-    - "X-Client-City:{client_city}"
-    - "X-Client-CityLatLong:{client_city_lat_long}"
