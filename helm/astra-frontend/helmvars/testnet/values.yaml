@@ -17,7 +17,7 @@ service:
   externalTrafficPolicy: Local
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
-    # cloud.google.com/backend-config: '{"default": "astra-backendconfig"}'
+    cloud.google.com/backend-config: '{"default": "astra-backendconfig"}'
 
 ingress:
   enabled: true
