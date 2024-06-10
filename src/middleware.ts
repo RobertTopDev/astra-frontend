@@ -6,7 +6,8 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
     request.headers.get('x-real-ip') ||
     request.headers.get('x-forwarded-for')?.split(',')[0] ||
     request.ip ||
-    '127.0.0.1' // try {
+    '127.0.0.1'
+  // try {
   //   const response = await fetch('https://jsonip.com')
   //   const data = await response.json()
   //   ip = data.ip
@@ -21,7 +22,8 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
       `${process.env.NEXT_PUBLIC_API_URL}/checkip?clientIp=${ip}`
     )
     if (serverResponse.status > 400) {
-      return new NextResponse('Access Denied', { status: 403 })
+      // return new NextResponse('Access Denied', { status: 403 })
+      return NextResponse.redirect('/access-denied')
     }
   } catch (error) {
     console.error('Error checking IP with server:', error)
