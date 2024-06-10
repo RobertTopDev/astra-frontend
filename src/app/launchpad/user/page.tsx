@@ -20,8 +20,8 @@ export default function ClaimPage() {
   }, [buyRuleStatus])
 
   return (
-    <main className="container py-16 max-w-full xl:max-w-[1200px] 2xl:max-w-[1400px]">
-      <div className="kyc-status text-center py-2 px-8 bg-white rounded-sm w-fit my-0 mx-auto">
+    <main className="container py-16 max-w-full xl:max-w-[1200px] 2xl:max-w-[1400px] relative">
+      <div className="kyc-status text-center py-2 px-8 bg-white rounded-sm w-fit my-0 mx-auto absolute " style={{top:"-30px", right:"50px"}}>
         {isKycVerified ? (
           <span className="text-black">KYC Verified</span>
         ) : (
