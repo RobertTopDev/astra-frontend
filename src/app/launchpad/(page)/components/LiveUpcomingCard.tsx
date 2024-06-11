@@ -451,8 +451,10 @@ export default function LiveUpcomingCard({
               overflow: 'hidden',
             }}
           >
-            {convertToInternationalCurrencySystem(launchpadData?.SOFT_CAP || 0)} {baseTokenSymbol} -{' '}
-            {convertToInternationalCurrencySystem(launchpadData?.HARD_CAP || 0)} {baseTokenSymbol}
+            {convertToInternationalCurrencySystem(launchpadData?.SOFT_CAP || 0)}{' '}
+            {baseTokenSymbol} -{' '}
+            {convertToInternationalCurrencySystem(launchpadData?.HARD_CAP || 0)}{' '}
+            {baseTokenSymbol}
           </div>
           <div className="text-white text-sm mt-6">
             Progress ({percentageRaised}
@@ -470,10 +472,12 @@ export default function LiveUpcomingCard({
             }}
           >
             <div className="text-white text-sm font-black">
-              {curRaisedAmount} {baseTokenSymbol}
+              {Number(curRaisedAmount).toLocaleString('en-US')}{' '}
+              {baseTokenSymbol}
             </div>
             <div className="text-white text-right text-sm font-black">
-              {launchpadData?.HARD_CAP ?? 0} {baseTokenSymbol}
+              {Number(launchpadData?.HARD_CAP).toLocaleString('en-US') ?? 0}{' '}
+              {baseTokenSymbol}
             </div>
           </div>
 

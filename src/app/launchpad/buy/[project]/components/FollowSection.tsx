@@ -61,7 +61,11 @@ export default function FollowSection({
                 &nbsp;
                 <AstraLoading isLoading={isLoading} className="w-4 h-4">
                   <span className="text-astra-blue ">
-                    {(launchpadData && Number(launchpadData?.[6]?.result)) || 0}{' '}
+                    {(launchpadData &&
+                      Number(launchpadData?.[6]?.result).toLocaleString(
+                        'en-US'
+                      )) ||
+                      0}{' '}
                     participants
                   </span>
                 </AstraLoading>
@@ -77,7 +81,7 @@ export default function FollowSection({
                           launchpadData?.[7]?.result ?? 0,
                           baseTokenDecimals ?? 0
                         )
-                      ).toFixed(2)) ||
+                      ).toLocaleString('en-US')) ||
                       0}
                   </span>
                 </AstraLoading>

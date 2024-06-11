@@ -14,7 +14,12 @@ import {
   DialogTrigger,
 } from '@/components/shadcn'
 import { useMemo, useState } from 'react'
-import { useFinishLaunchpad, useLaunchpadInfo } from '@/hooks'
+import {
+  useChainConfig,
+  useDecimals,
+  useFinishLaunchpad,
+  useLaunchpadInfo,
+} from '@/hooks'
 import { useAccount } from 'wagmi'
 import { formatUnits } from 'viem'
 import ProjectDetail from '@/app/launchpad/detail/[project]/components/ProjectDetail'
@@ -31,6 +36,25 @@ type TProgress = {
 export default function Finished({ data, launchpadLoading }: TProgress) {
   const { address } = useAccount()
   const [open, setOpen] = useState<boolean>(false)
+  const { chainConfig } = useChainConfig()
+
+  const tokenArray = [
+    {
+      symbol: 'USDT',
+      address: chainConfig.USDTContractAddress,
+    },
+    {
+      symbol: 'USDC',
+      address: chainConfig.USDCContractAddress,
+    },
+    {
+      symbol: 'ETH',
+      address: chainConfig.WETHContractAddress,
+    },
+  ]
+  const baseTokenSymbol = tokenArray
+    .filter((token) => token.address === data?.BASE_TOKEN)
+    .map((token) => token.symbol)
 
   const socialLinks: TLogoLink[] = [
     {
@@ -92,15 +116,24 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
     launchpad: data?.LAUNCHPAD_ADDRESS as `0x${string}`,
   })
 
-  const withdrawAmount = useMemo(() => {
-    if (launchpadContractData?.[7]?.result === undefined) return 0
-    return Number(formatUnits(launchpadContractData?.[7]?.result, 6))
-  }, [launchpadContractData, address])
+  // base token decimals
+  const { data: baseTokenDecimals } = useDecimals({
+    address: data.BASE_TOKEN as `0x${string}`,
+    enabled: !!data,
+  })
 
+  const withdrawAmount = useMemo(() => {
+    if (launchpadContractData?.[7]?.result === undefined || !baseTokenDecimals)
+      return 0
+    return Number(
+      formatUnits(launchpadContractData?.[7]?.result, baseTokenDecimals)
+    )
+  }, [launchpadContractData, address])
   const platformFee = useMemo(() => {
     if (launchpadContractData?.[11]?.result === undefined) return 0
     return Number(launchpadContractData?.[11]?.result) / 10
   }, [launchpadContractData, address])
+  const receiveAmount = withdrawAmount - withdrawAmount * (platformFee / 100)
 
   const isOwner = useMemo(() => {
     return data.OWNER === address
@@ -124,19 +157,22 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
                   <DialogTitle>Withdraw Base Token</DialogTitle>
                 </DialogHeader>
                 <div className="content">
-                  <div className="flex justify-between gap-4 w-[50%]">
-                    <div>Withdraw Amount:</div>
-                    <div>{withdrawAmount} USDC</div>
+                  <div className="flex justify-start gap-4">
+                    <div className="min-w-[150px]">Withdraw Amount:</div>
+                    <div>
+                      {Number(withdrawAmount).toLocaleString('en-US')}{' '}
+                      {baseTokenSymbol}
+                    </div>
                   </div>
-                  <div className="flex justify-between gap-4 w-[50%]">
-                    <div>Platform Fee:</div>
+                  <div className="flex justify-start gap-4">
+                    <div className="min-w-[150px]">Platform Fee:</div>
                     <div>{platformFee} %</div>
                   </div>
-                  <div className="flex justify-between gap-4 w-[50%]">
-                    <div>Receive Amount:</div>
+                  <div className="flex justify-start gap-4">
+                    <div className="min-w-[150px]">Receive Amount:</div>
                     <div>
-                      {withdrawAmount - withdrawAmount * (platformFee / 100)}{' '}
-                      USDC
+                      {Number(receiveAmount).toLocaleString('en-US')}{' '}
+                      {baseTokenSymbol}
                     </div>
                   </div>
                 </div>
@@ -250,19 +286,28 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
                   Whitepaper
                 </span>
               </Link>
-              {/* <span className="bg-[#1C69F520] text-[#88B1FC] text-xs font-medium inline-flex items-center p-2.5 rounded-md">
-                <svg
-                  className="w-2.5 h-2.5 me-1.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                </svg>
-                HOOK Research Report
-              </span>
-              <span className="bg-[#1ADDA320] text-[#1ADDA3] text-xs font-medium inline-flex items-center p-2.5 rounded-md">
+              <Link
+                href={
+                  chainConfig.networkURL +
+                  'token/' +
+                  data?.LAUNCHPAD_TOKEN_ADDRESS
+                }
+                target="_blank"
+              >
+                <span className="bg-[#1C69F520] text-[#88B1FC] text-xs font-medium inline-flex items-center p-2.5 rounded-md">
+                  <svg
+                    className="w-2.5 h-2.5 me-1.5"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+                  </svg>
+                  Token Contract Address
+                </span>
+              </Link>
+              {/* <span className="bg-[#1ADDA320] text-[#1ADDA3] text-xs font-medium inline-flex items-center p-2.5 rounded-md">
                 <svg
                   className="w-2.5 h-2.5 me-1.5"
                   aria-hidden="true"
@@ -296,30 +341,39 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
               <p>Sale Price</p>
               <p>
                 1 {data?.LAUNCHPAD_TOKEN_SYMBOL} = {data?.LAUNCHPAD_TOKEN_PRICE}{' '}
-                USDC
+                {baseTokenSymbol}
               </p>
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">
               <p>Tokens Offered</p>
               <p>
-                {data?.TOTAL_SALE_AMOUNT + ' ' + data?.LAUNCHPAD_TOKEN_SYMBOL}
+                {Number(data?.TOTAL_SALE_AMOUNT).toLocaleString('en-US') +
+                  ' ' +
+                  data?.LAUNCHPAD_TOKEN_SYMBOL}
               </p>
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">
               <p>Single Initial Investment</p>
-              <p>0.1 USDC</p>
+              <p>
+                {Number(data?.MIN_PURCHASE_BASE_AMOUNT).toLocaleString('en-US')}{' '}
+                {baseTokenSymbol}
+              </p>
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">
               <p>Hard cap per user</p>
               <p>
-                {(1 / data?.LAUNCHPAD_TOKEN_PRICE) *
-                  data?.MAX_PURCHASE_BASE_AMOUNT +
+                {Number(
+                  (1 / data?.LAUNCHPAD_TOKEN_PRICE) *
+                    data?.MAX_PURCHASE_BASE_AMOUNT
+                ).toLocaleString('en-US') +
                   ' ' +
                   data?.LAUNCHPAD_TOKEN_SYMBOL}{' '}
-                = {data?.MAX_PURCHASE_BASE_AMOUNT} USD
+                ={' '}
+                {Number(data?.MAX_PURCHASE_BASE_AMOUNT).toLocaleString('en-US')}{' '}
+                {baseTokenSymbol}
               </p>
             </div>
           </div>

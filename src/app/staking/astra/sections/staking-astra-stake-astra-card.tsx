@@ -228,7 +228,7 @@ const StakingAstraStakeAstraCard = ({
             <h3>Staking Score</h3>
             <p>
               <AstraLoading isLoading={isLoading}>
-                {Number(stakingScore).toFixed(2)}
+                {Number(stakingScore).toLocaleString('en-US')}
               </AstraLoading>
             </p>
             <div>

@@ -408,7 +408,9 @@ export default function BuyContent({
               </div>
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
-                  {formatUnits(launchpadData?.[8].result ?? BigInt(0), 13)}
+                  {Number(
+                    formatUnits(launchpadData?.[8].result ?? BigInt(0), 13)
+                  ).toFixed(2)}
                 </span>
               </AstraLoading>
             </div>
@@ -417,10 +419,12 @@ export default function BuyContent({
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
                   {' '}
-                  {formatUnits(
-                    launchpadData?.[2].result ?? BigInt(0),
-                    baseTokenDecimals ?? 18
-                  )}{' '}
+                  {Number(
+                    formatUnits(
+                      launchpadData?.[2].result ?? BigInt(0),
+                      baseTokenDecimals ?? 18
+                    )
+                  ).toLocaleString('en-US')}{' '}
                   {baseTokenSymbol}
                 </span>
               </AstraLoading>
@@ -455,26 +459,34 @@ export default function BuyContent({
               <span className="text-[#7E7E7E]">Total Contributors</span>
               <AstraLoading isLoading={isFetchLoading}>
                 <span className="text-white">
-                  {Number(launchpadData?.[6].result ?? 0)}
+                  {Number(launchpadData?.[6].result ?? 0).toLocaleString(
+                    'en-US'
+                  )}
                 </span>
               </AstraLoading>
             </div>
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
               <span className="text-[#7E7E7E]">You Invested</span>
               <AstraLoading isLoading={isFetchLoading}>
-                <span className="text-white">{`${formatUnits(
-                  launchpadData?.[10].result ?? BigInt(0),
-                  baseTokenDecimals ?? 18
-                )} ${baseTokenSymbol}`}</span>
+                <span className="text-white">{`${Number(
+                  formatUnits(
+                    launchpadData?.[10].result ?? BigInt(0),
+                    baseTokenDecimals ?? 18
+                  )
+                ).toLocaleString('en-US')} ${baseTokenSymbol}`}</span>
               </AstraLoading>
             </div>
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">
               <span className="text-[#7E7E7E]">You Purchased</span>
               <AstraLoading isLoading={isFetchLoading}>
-                <span className="text-white">{`${formatUnits(
-                  launchpadData?.[0].result ?? BigInt(0),
-                  detail.LAUNCHPAD_TOKEN_DECIMAL
-                )} ${detail.LAUNCHPAD_TOKEN_SYMBOL}`}</span>
+                <span className="text-white">{`${Number(
+                  formatUnits(
+                    launchpadData?.[0].result ?? BigInt(0),
+                    detail.LAUNCHPAD_TOKEN_DECIMAL
+                  )
+                ).toLocaleString('en-US')} ${
+                  detail.LAUNCHPAD_TOKEN_SYMBOL
+                }`}</span>
               </AstraLoading>
             </div>
           </div>
