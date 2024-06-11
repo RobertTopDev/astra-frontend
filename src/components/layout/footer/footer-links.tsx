@@ -69,7 +69,7 @@ const FooterLinks = () => {
       </div>
       <div className="col-span-2">
         <h2 className="text-astra-blue mb-4 font-medium text-base">
-          Our Social
+          Our Socials
         </h2>
         <ul className="gap-6 flex flex-wrap">
           {socialLinks.map((link) => (
