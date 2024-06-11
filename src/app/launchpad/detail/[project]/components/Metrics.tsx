@@ -605,7 +605,7 @@ export default function Metrics({ data, refetchData }: Props) {
             <table className="w-full text-left min-w-[1000px]">
               <thead className="text-xl">
                 <tr className="border-t-[1px] border-b-[1px] border-white border-opacity-20">
-                  <th className="px-4 py-6"></th>
+                  <th className="px-4 py-6">Type</th>
                   <th className="px-4 py-6">Price</th>
                   <th className="px-4 py-6">Fundraised</th>
                   <th className="px-4 py-6">Lock-up</th>
@@ -614,7 +614,7 @@ export default function Metrics({ data, refetchData }: Props) {
               <tbody className="text-lg">
                 {saleRoundDetail.map((item, index) => (
                   <tr key={index}>
-                    <td className="p-4 pt-6">Private Sale</td>
+                    <td className="p-4 pt-6">{item.saleType}</td>
                     <td className="p-4 pt-6">{convertUSD(item.price)}</td>
                     <td className="p-4 pt-6">{convertUSD(item.raised)}</td>
                     <td className="p-4 pt-6">{item.lockup}</td>

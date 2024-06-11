@@ -15,13 +15,11 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
   //   console.error('Error fetching IP from jsonip.com:', error)
   //   ip = 'Unknown'
   // }
-  console.log('========== client IP address ============')
-  console.log(ip)
   try {
     const serverResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/checkip?clientIp=${ip}`
     )
-    if (serverResponse.status > 400) {
+    if (serverResponse.status == 403) {
       // return new NextResponse('Access Denied', { status: 403 })
       return NextResponse.redirect('/access-denied')
     }
