@@ -162,6 +162,7 @@ export const useRequestLaunchpad = ({
           otherUrl: '',
           email: databaseData.data.email,
           investorDetail: databaseData.data.investorDetail,
+          raised: databaseData.data.raised,
           chain: databaseData.data.chain,
           requestTransaction: txReceipt.transactionHash,
           approveTransaction: '',
