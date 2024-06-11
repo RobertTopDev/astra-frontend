@@ -42,7 +42,7 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
     {
       alt: 'Git Logo',
       logoUrl: '/svgs/github.svg',
-      redirectUrl: data?.WEBSITE_URL || '#',
+      redirectUrl: data?.GITHUB || '#',
       background: 'bg-[#d9d9d9]',
     },
     {
