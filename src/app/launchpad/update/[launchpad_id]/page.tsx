@@ -1152,7 +1152,7 @@ export default function Page({ params }: TPage) {
       marketMaker: launchpadDetail?.MARKET_MAKER || '',
       investorDetail:
         JSON.parse(
-          (launchpadDetail?.INVESTOR_DETAIL ?? '').replace(/\n/g, '\\n')
+          (launchpadDetail?.INVESTOR_DETAIL ?? '[]').replace(/\n/g, '\\n')
         ).join(', ') || '',
 
       leadVCImage: launchpadDetail?.LEAD_VC_IMAGE || '',
