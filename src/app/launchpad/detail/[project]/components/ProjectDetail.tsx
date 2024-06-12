@@ -727,11 +727,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectImage: projectImageUrl,
       leadVCImage: leadVCImageUrl,
       marketMakerImage: marketMakerImageUrl,
-      // teamInfo: 
-      // JSON.stringify(JSON.parse(
-      //   data?.TEAM_INFO.replace(/\n/g, '\\n') || '[]'
-      // ).)
-      // ,
+      teamInfo: data.TEAM_INFO,
       teamDescription: data.TEAM_DESCRIPTION || '',
       metrics: data.METRICS,
       websiteUrl: value.website,
