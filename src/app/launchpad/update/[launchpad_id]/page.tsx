@@ -750,11 +750,10 @@ export default function Page({ params }: TPage) {
   }, [launchpadDetail])
   const { data: buyRuleStatus } = useGetBuyRuleLaunchpad() // [0]: whitelisted result
 
-  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
-    useDecimals({
-      address: launchpadDetail?.BASE_TOKEN as `0x${string}`,
-      enabled: !!launchpadDetail,
-    })
+  const { data: baseTokenDecimals } = useDecimals({
+    address: launchpadDetail?.BASE_TOKEN as `0x${string}`,
+    enabled: !!launchpadDetail,
+  })
 
   // request launchpad after approve
   const {
@@ -892,9 +891,9 @@ export default function Page({ params }: TPage) {
     value_temp.leadVCImage = launchpadDetail?.LEAD_VC_IMAGE || ''
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
     value_temp.investorDetail = JSON.stringify(
-      launchpadDetail?.INVESTOR_DETAIL?.split(',')?.map((investor: string) =>
-        investor.trim().replace(/"/g, '\\"')
-      )
+      value_temp?.investorDetail
+        ?.split(',')
+        ?.map((investor: string) => investor.trim().replace(/"/g, '\\"'))
     )
 
     const result_values: RequestLaunchpadResultValues = {
