@@ -1370,6 +1370,7 @@ const CreateForm = () => {
                       <SelectItem value="rwa">Real World Assets</SelectItem>
                       <SelectItem value="privacy">Privacy</SelectItem>
                       <SelectItem value="bridge">Bridge</SelectItem>
+                      <SelectItem value="others">Others</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

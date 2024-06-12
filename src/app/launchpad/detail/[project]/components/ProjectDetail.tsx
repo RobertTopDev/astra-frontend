@@ -1402,6 +1402,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                             </SelectItem>
                             <SelectItem value="privacy">Privacy</SelectItem>
                             <SelectItem value="bridge">Bridge</SelectItem>
+                            <SelectItem value="others">Others</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

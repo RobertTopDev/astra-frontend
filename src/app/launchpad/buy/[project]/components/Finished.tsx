@@ -357,7 +357,7 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
             <div className="md:text-left text-center">
               <p>Single Initial Investment</p>
               <p>
-                {Number(data?.MIN_PURCHASE_BASE_AMOUNT).toLocaleString('en-US')}{' '}
+                {Number(withdrawAmount).toLocaleString('en-US')}{' '}
                 {baseTokenSymbol}
               </p>
             </div>

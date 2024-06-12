@@ -16,7 +16,7 @@ export const idToChain: IDTOCHAIN = {
   [mainnet.id]: 'Ethereum',
   [polygonMumbai.id]: 'Polygon',
   [arbitrumSepolia.id]: 'Arbitrum',
-  [bscTestnet.id]: 'Binanace',
+  [bscTestnet.id]: 'Binance',
 }
 
 export const chainConfig: TChainConfig = {

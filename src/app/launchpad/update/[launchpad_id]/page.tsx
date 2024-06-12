@@ -1685,6 +1685,7 @@ export default function Page({ params }: TPage) {
                           <SelectItem value="rwa">Real World Assets</SelectItem>
                           <SelectItem value="privacy">Privacy</SelectItem>
                           <SelectItem value="bridge">Bridge</SelectItem>
+                          <SelectItem value="others">Others</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

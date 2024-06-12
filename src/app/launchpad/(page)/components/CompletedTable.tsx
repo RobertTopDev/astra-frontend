@@ -80,7 +80,7 @@ export default function CompletedTable({ data, children }: DataTableProps) {
                     data-state={row.getIsSelected() && 'selected'}
                     onClick={() => {
                       router.push(
-                        `/launchpad/detail/${row.original.ID}`
+                        `/launchpad/buy/${row.original.ID}`
                       )
                     }}
                     className="cursor-pointer [&_td]:p-4"
