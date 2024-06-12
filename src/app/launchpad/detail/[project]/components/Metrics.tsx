@@ -88,9 +88,9 @@ export default function Metrics({ data, refetchData }: Props) {
       .min(1, {
         message: 'Sale type is required.',
       })
-      .regex(/^[^'"<>:]*$/, {
+      .regex(/^[^<>:]*$/, {
         message:
-          'Sale type cannot contain single or double quotes, less than, greater than, or colon.',
+          'Sale type cannot contain less than, greater than, or colon.',
       })
     temp[`price${i}`] = z.coerce.number().gte(0)
     temp[`raised${i}`] = z.coerce.number().gte(0)
@@ -99,9 +99,9 @@ export default function Metrics({ data, refetchData }: Props) {
       .min(1, {
         message: 'Lockup is required.',
       })
-      .regex(/^[^'"<>:]*$/, {
+      .regex(/^[^<>:]*$/, {
         message:
-          'Lockup cannot contain single or double quotes, less than, greater than, or colon.',
+          'Lockup cannot contain less than, greater than, or colon.',
       })
   }
   const metricsSchema = z.object(temp)
@@ -170,8 +170,8 @@ export default function Metrics({ data, refetchData }: Props) {
       saleValueArray.push({
         price: value[`price${i}`],
         raised: value[`raised${i}`],
-        lockup: value[`lockup${i}`],
-        saleType: value[`saleType${i}`],
+        lockup: value[`lockup${i}`].replace(/"/g, '\\"').trim(),
+        saleType: value[`saleType${i}`].replace(/"/g, '\\"').trim(),
       })
       form.setValue(`price${i}`, value[`price${i}`])
       form.setValue(`raised${i}`, value[`raised${i}`])

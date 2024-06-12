@@ -254,9 +254,6 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Token address is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Token address cannot contain single or double quotes.',
-      })
       .refine((value) => isAddress(value), {
         message: 'Token address is invalid.',
       }),
@@ -624,10 +621,7 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Category is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Category cannot contain single or double quotes.',
-      })
-    temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
+          temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
       message: 'Metrics allocation must be from 0 to 100.',
     })
   }
@@ -637,24 +631,15 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Member name is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Member name cannot contain single or double quotes.',
-      })
     temp[`position${i}`] = z
       .string()
       .min(1, {
         message: 'Member position is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Member position cannot contain single or double quotes.',
-      })
     temp[`description${i}`] = z
       .string()
       .min(1, {
         message: 'Member description is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Member description cannot contain single or double quotes.',
       })
   }
   const createIndexFormSchema = z
@@ -832,9 +817,9 @@ export default function Page({ params }: TPage) {
     const teamValues = []
     for (let i = 0; i < team.length; i++) {
       teamValues.push({
-        name: value[`name${i}`].trim(),
-        position: value[`position${i}`].trim(),
-        description: value[`description${i}`].trim(),
+        name: value[`name${i}`].replace(/"/g, '\\"').trim(),
+        position: value[`position${i}`].replace(/"/g, '\\"').trim(),
+        description: value[`description${i}`].replace(/"/g, '\\"').trim(),
       })
     }
     setTeam(teamValues)
@@ -842,9 +827,9 @@ export default function Page({ params }: TPage) {
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
-        id: value[`label${i}`].trim(),
+        id: value[`label${i}`].replace(/"/g, '\\"').trim(),
         value: value[`value${i}`],
-        label: value[`label${i}`].trim(),
+        label: value[`label${i}`].replace(/"/g, '\\"').trim(),
       })
     }
     setMetrics(metricsValues)
