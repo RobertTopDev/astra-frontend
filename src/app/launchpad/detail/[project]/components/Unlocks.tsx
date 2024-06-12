@@ -25,29 +25,28 @@ export default function Unlocks({ launchpadDetail }: TComponent) {
           </div>
         </div>
       </div>
-      <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        {launchpadDetail.SALE_ROUND_DETAIL
-          ? launchpadDetail.SALE_ROUND_DETAIL?.split('<>').map((item, idx) => (
-              <div
-                className="flex flex-col justify-center text-white"
-                key={idx}
-              >
-                <div className="text-md">{item.split(':')[3]}</div>
-                <div className="md:text-xl text-md font-medium">
-                  {item.split(':')[2]}
-                </div>
+      {launchpadDetail.SALE_ROUND_DETAIL ? (
+        launchpadDetail.SALE_ROUND_DETAIL?.split('<>').map((item, idx) => (
+          <div
+            className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl"
+            key={idx}
+          >
+            <div className="flex flex-col justify-center text-white">
+              <div className="text-md">{item.split(':')[3]}</div>
+              <div className="md:text-xl text-md font-medium">
+                {item.split(':')[2]}
               </div>
-            ))
-          : 'N/A'}
-        {/* <div className="flex flex-col justify-center h-full text-white">
-          <div className="text-md">Private Sale</div>
-          <div className="md:text-xl text-md font-medium">
-            {launchpadDetail.SALE_ROUND_DETAIL
-              ? launchpadDetail.SALE_ROUND_DETAIL.split('<>')[0].split(':')[2]
-              : 'N/A'}
+            </div>
           </div>
-        </div> */}
-      </div>
+        ))
+      ) : (
+        <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
+          <div className="flex flex-col justify-center text-white">
+            <div className="text-md"></div>
+            <div className="md:text-xl text-md font-medium">N/A</div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
