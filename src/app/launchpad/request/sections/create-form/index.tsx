@@ -233,12 +233,9 @@ const CreateForm = () => {
       .refine((value) => value !== 0, {
         message: 'Token decimals cannot be zero.',
       }),
-    tokenSymbol: z
-      .string()
-      .min(1, {
-        message: 'Token symbol is required.',
-      })
-      ,
+    tokenSymbol: z.string().min(1, {
+      message: 'Token symbol is required.',
+    }),
     totalSupply: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -349,57 +346,49 @@ const CreateForm = () => {
     //   )
     //   .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenName: z
-      .string()
-      .min(1, {
-        message: 'Project Name is required.',
-      }),
+    tokenName: z.string().min(1, {
+      message: 'Project Name is required.',
+    }),
     website: z
       .string()
       .min(1, {
         message: 'Website url is required',
       })
-      .url({ message: 'Invalid url.' })
-      ,
+      .url({ message: 'Invalid url.' }),
     projectDeck: z
       .string()
       .min(1, {
         message: 'Project deck url is required.',
       })
-      .url({ message: 'Invalid url.' })
-      ,
+      .url({ message: 'Invalid url.' }),
     pitchdeck: z
       .string()
       .min(1, {
         message: 'Whitepaper URL is required.',
       })
-      .url({ message: 'Invalid url.' })
-      ,
+      .url({ message: 'Invalid url.' }),
     email: z
       .string()
       .min(1, {
         message: 'Email address is required.',
       })
-      .email({ message: 'Invalid email address.' })
-      ,
+      .email({ message: 'Invalid email address.' }),
     projectTwitter: z
       .string()
       .min(1, {
         message: 'Project twitter is required.',
       })
-      .url({ message: 'Invalid url.' })
-      ,
+      .url({ message: 'Invalid url.' }),
     github: z
       .string()
       .min(1, {
         message: 'Github link is required',
       })
-      .url({ message: 'Invalid url.' })
-      ,
+      .url({ message: 'Invalid url.' }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
-      
+
       .refine(
         (value) => {
           // Check if the value starts with "@" (username format)
@@ -422,13 +411,13 @@ const CreateForm = () => {
       ),
     contactDiscord: z
       .string()
-      
+
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
     contactMedium: z
       .string()
-      
+
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
@@ -437,8 +426,7 @@ const CreateForm = () => {
       .min(1, {
         message: 'Project overview is required.',
       })
-      .max(300, 'Project overview is too long.')
-      ,
+      .max(300, 'Project overview is too long.'),
     totalToken: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,.]+$/.test(value), {
@@ -462,26 +450,15 @@ const CreateForm = () => {
       .transform((value) => parseFloat(value.replace(/,/g, ''))), // Transform the string to an integer without commas
 
     //Dao Screening
-    leadVC: z
-      .string()
-      .min(1, {
-        message: 'Lead VC information is required.',
-      })
-      ,
-    marketMaker: z
-      .string()
-      .min(1, {
-        message: 'Market maker information is required.',
-      })
-      ,
-    investorDetail: z
-      .string()
-      .min(1, {
-        message: 'Investor list is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Investor list cannot contain single or double quotes.',
-      }),
+    leadVC: z.string().min(1, {
+      message: 'Lead VC information is required.',
+    }),
+    marketMaker: z.string().min(1, {
+      message: 'Market maker information is required.',
+    }),
+    investorDetail: z.string().min(1, {
+      message: 'Investor list is required.',
+    }),
     raised: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -560,43 +537,23 @@ const CreateForm = () => {
       })
   }
   for (let i = 0; i < metrics.length; i++) {
-    temp[`label${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Category is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Category cannot contain single or double quotes.',
-      })
+    temp[`label${i}`] = z.string().min(1, {
+      message: 'Category is required.',
+    })
     temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
       message: 'Metrics allocation must be from 0 to 100.',
     })
   }
   for (let i = 0; i < team.length; i++) {
-    temp[`name${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member name is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Member name cannot contain single or double quotes.',
-      })
-    temp[`position${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member position is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Member position cannot contain single or double quotes.',
-      })
-    temp[`description${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member description is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Member description cannot contain single or double quotes.',
-      })
+    temp[`name${i}`] = z.string().min(1, {
+      message: 'Member name is required.',
+    })
+    temp[`position${i}`] = z.string().min(1, {
+      message: 'Member position is required.',
+    })
+    temp[`description${i}`] = z.string().min(1, {
+      message: 'Member description is required.',
+    })
   }
   const createIndexFormSchema = z
     .object(temp)
@@ -702,18 +659,18 @@ const CreateForm = () => {
     const teamValues = []
     for (let i = 0; i < team.length; i++) {
       teamValues.push({
-        name: value[`name${i}`].trim(),
-        position: value[`position${i}`].trim(),
-        description: value[`description${i}`].trim(),
+        name: value[`name${i}`].trim().replace(/"/g, '\\"'),
+        position: value[`position${i}`].trim().replace(/"/g, '\\"'),
+        description: value[`description${i}`].trim().replace(/"/g, '\\"'),
       })
     }
     setTeam(teamValues)
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
       metricsValues.push({
-        id: value[`label${i}`].trim(),
+        id: value[`label${i}`].trim().replace(/"/g, '\\"'),
         value: value[`value${i}`],
-        label: value[`label${i}`].trim(),
+        label: value[`label${i}`].trim().replace(/"/g, '\\"'),
       })
     }
     setMetrics(metricsValues)

@@ -75,14 +75,9 @@ export default function Metrics({ data, refetchData }: Props) {
 
   const temp: Record<string, any> = {}
   for (let i = 0; i < metrics.length; i++) {
-    temp[`label${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Category is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Category cannot contain single or double quotes.',
-      })
+    temp[`label${i}`] = z.string().min(1, {
+      message: 'Category is required.',
+    })
     temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
       message: 'Metrics allocation must be from 0 to 100.',
     })
@@ -164,9 +159,9 @@ export default function Metrics({ data, refetchData }: Props) {
     const saleValueArray = []
     for (let i = 0; i < metrics.length; i++) {
       valueArray.push({
-        id: value[`label${i}`].trim(),
+        id: value[`label${i}`].replace(/"/g, '\\"').trim(),
         value: value[`value${i}`],
-        label: value[`label${i}`].trim(),
+        label: value[`label${i}`].replace(/"/g, '\\"').trim(),
       })
       form.setValue(`label${i}`, value[`label${i}`].trim())
     }
@@ -235,7 +230,7 @@ export default function Metrics({ data, refetchData }: Props) {
         projectDeck: data?.PROJECT_DECK || '',
         medium: data?.MEDIUM || '',
         raised: data?.RAISED || 0,
-        teamInfo: data?.TEAM_INFO,
+        // teamInfo: data?.TEAM_INFO,
         teamDescription: data?.TEAM_DESCRIPTION || '',
         metrics: JSON.stringify(valueArray),
         saleRoundDetail:
@@ -249,7 +244,7 @@ export default function Metrics({ data, refetchData }: Props) {
         discord: data?.DISCORD,
         otherUrl: data?.OTHER_URL,
         email: data?.EMAIL,
-        investorDetail: data?.INVESTOR_DETAIL || '',
+        // investorDetail: data?.INVESTOR_DETAIL || '',
         chain: data?.CHAIN,
         requestTransaction: data?.REQUEST_TRANSACTION,
         approveTransaction: data?.APPROVE_TRANSACTION,

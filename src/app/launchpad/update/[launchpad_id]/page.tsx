@@ -533,26 +533,15 @@ export default function Page({ params }: TPage) {
       .transform((value) => parseFloat(value.replace(/,/g, ''))), // Transform the string to an integer without commas
 
     //Dao Screening
-    leadVC: z
-      .string()
-      .min(1, {
-        message: 'Lead VC information is required.',
-      })
-      ,
-    marketMaker: z
-      .string()
-      .min(1, {
-        message: 'Market maker information is required.',
-      })
-      ,
-      investorDetail: z
-      .string()
-      .min(1, {
-        message: 'Investor list is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Investor list cannot contain single or double quotes.',
-      }),
+    leadVC: z.string().min(1, {
+      message: 'Lead VC information is required.',
+    }),
+    marketMaker: z.string().min(1, {
+      message: 'Market maker information is required.',
+    }),
+    investorDetail: z.string().min(1, {
+      message: 'Investor list is required.',
+    }),
     raised: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {

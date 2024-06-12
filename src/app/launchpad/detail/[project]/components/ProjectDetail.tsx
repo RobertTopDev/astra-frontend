@@ -472,9 +472,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .min(1, {
         message: 'Investor list is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Investor list cannot contain single or double quotes.',
-      }),
+      ,
     raised: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -727,9 +725,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       projectImage: projectImageUrl,
       leadVCImage: leadVCImageUrl,
       marketMakerImage: marketMakerImageUrl,
-      teamInfo: data.TEAM_INFO,
+      // teamInfo: data.TEAM_INFO,
       teamDescription: data.TEAM_DESCRIPTION || '',
-      metrics: data.METRICS,
+      // metrics: data.METRICS,
       websiteUrl: value.website,
       projectDeck: value.projectDeck,
       whitepaperUrl: value.pitchdeck,

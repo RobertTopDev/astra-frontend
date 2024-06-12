@@ -176,40 +176,25 @@ export default function TeamPartner({ data, refetchData }: Props) {
       .min(1, {
         message: 'Member name is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Member name cannot contain single or double quotes.',
-      })
     temp[`position${i}`] = z
       .string()
       .min(1, {
         message: 'Member position is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Member position cannot contain single or double quotes.',
       })
     temp[`description${i}`] = z
       .string()
       .min(1, {
         message: 'Member description is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Member description cannot contain single or double quotes.',
-      })
     temp[`linkedin${i}`] = z
       .string()
       .regex(/^[^'"]*$/, {
         message: 'Linkedin url cannot contain single or double quotes.',
       })
-      .refine((val) => val.trim() === '' || isUrl(val), {
-        message: 'Linkedin must be valid url ',
-      })
     temp[`twitter${i}`] = z
       .string()
       .regex(/^[^'"]*$/, {
         message: 'Twitter url cannot contain single or double quotes.',
-      })
-      .refine((val) => val.trim() === '' || isUrl(val), {
-        message: 'Twitter must be valid url',
       })
     temp[`avatar${i}`] = z.any()
   }
@@ -303,7 +288,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
       raised: data?.RAISED || 0,
       teamInfo: JSON.stringify(valueArray),
       teamDescription: value.teamDescription || '',
-      metrics: data?.METRICS,
+      // metrics: data?.METRICS,
       saleRoundDetail: data?.SALE_ROUND_DETAIL || '',
       websiteUrl: data?.WEBSITE_URL,
       whitepaperUrl: data?.WHITEPAPER_URL,
@@ -312,15 +297,15 @@ export default function TeamPartner({ data, refetchData }: Props) {
       discord: data?.DISCORD,
       otherUrl: data?.OTHER_URL,
       email: data?.EMAIL,
-      investorDetail: JSON.stringify(
-        (
-          JSON.parse(data?.INVESTOR_DETAIL?.replace(/\n/g, '\\n') || '[]').join(
-            ', '
-          ) || ''
-        )
-          .split(',')
-          .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
-      ),
+      // investorDetail: JSON.stringify(
+      //   (
+      //     JSON.parse(data?.INVESTOR_DETAIL?.replace(/\n/g, '\\n') || '[]').join(
+      //       ', '
+      //     ) || ''
+      //   )
+      //     .split(',')
+      //     .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
+      // ),
       chain: data?.CHAIN,
       requestTransaction: data?.REQUEST_TRANSACTION,
       approveTransaction: data?.APPROVE_TRANSACTION,
