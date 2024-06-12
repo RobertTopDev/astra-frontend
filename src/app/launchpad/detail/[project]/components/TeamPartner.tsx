@@ -257,11 +257,11 @@ export default function TeamPartner({ data, refetchData }: Props) {
     for (let i = 0; i < team.length; i++) {
       const url = await uploadToCloudinary(value[`avatar${i}`])
       valueArray.push({
-        name: value[`name${i}`].trim(),
-        position: value[`position${i}`].trim(),
+        name: value[`name${i}`].replace(/"/g, '\\"').trim(),
+        position: value[`position${i}`].replace(/"/g, '\\"').trim(),
         description: value[`description${i}`].replace(/\n/g, '\\n').trim(),
-        linkedin: value[`linkedin${i}`].trim(),
-        twitter: value[`twitter${i}`].trim(),
+        linkedin: value[`linkedin${i}`].replace(/"/g, '\\"').trim(),
+        twitter: value[`twitter${i}`].replace(/"/g, '\\"').trim(),
         avatar: url,
       })
       form.setValue(`name${i}`, value[`name${i}`].trim())
@@ -312,7 +312,15 @@ export default function TeamPartner({ data, refetchData }: Props) {
       discord: data?.DISCORD,
       otherUrl: data?.OTHER_URL,
       email: data?.EMAIL,
-      investorDetail: data?.INVESTOR_DETAIL || '',
+      investorDetail: JSON.stringify(
+        (
+          JSON.parse(data?.INVESTOR_DETAIL?.replace(/\n/g, '\\n') || '[]').join(
+            ', '
+          ) || ''
+        )
+          .split(',')
+          .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
+      ),
       chain: data?.CHAIN,
       requestTransaction: data?.REQUEST_TRANSACTION,
       approveTransaction: data?.APPROVE_TRANSACTION,

@@ -341,14 +341,9 @@ export default function Page({ params }: TPage) {
       .refine((value) => value !== 0, {
         message: 'Token decimals cannot be zero.',
       }),
-    tokenSymbol: z
-      .string()
-      .min(1, {
-        message: 'Token symbol is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Token symbol cannot contain single or double quotes.',
-      }),
+    tokenSymbol: z.string().min(1, {
+      message: 'Token symbol is required.',
+    }),
     totalSupply: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -437,74 +432,48 @@ export default function Page({ params }: TPage) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenName: z
-      .string()
-      .min(1, {
-        message: 'Project Name is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Project Name cannot contain single or double quotes.',
-      }),
+    tokenName: z.string().min(1, {
+      message: 'Project Name is required.',
+    }),
     website: z
       .string()
       .min(1, {
         message: 'Website url is required',
       })
-      .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Website url cannot contain single or double quotes.',
-      }),
+      .url({ message: 'Invalid url.' }),
     projectDeck: z
       .string()
       .min(1, {
         message: 'Project deck url is required.',
       })
-      .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Project deck url cannot contain single or double quotes.',
-      }),
+      .url({ message: 'Invalid url.' }),
     pitchdeck: z
       .string()
       .min(1, {
         message: 'Whitepaper URL is required.',
       })
-      .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Whitepaper URL cannot contain single or double quotes.',
-      }),
+      .url({ message: 'Invalid url.' }),
     email: z
       .string()
       .min(1, {
         message: 'Email address is required.',
       })
-      .email({ message: 'Invalid email address.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Email address cannot contain single or double quotes.',
-      }),
+      .email({ message: 'Invalid email address.' }),
     projectTwitter: z
       .string()
       .min(1, {
         message: 'Project twitter is required.',
       })
-      .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Project twitter cannot contain single or double quotes.',
-      }),
+      .url({ message: 'Invalid url.' }),
     github: z
       .string()
       .min(1, {
         message: 'Github link is required',
       })
-      .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Github link cannot contain single or double quotes.',
-      }),
+      .url({ message: 'Invalid url.' }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Contact telegram cannot contain single or double quotes.',
-      })
       .refine(
         (value) => {
           // Check if the value starts with "@" (username format)
@@ -527,17 +496,11 @@ export default function Page({ params }: TPage) {
       ),
     contactDiscord: z
       .string()
-      .regex(/^[^'"]*$/, {
-        message: 'Contact discord cannot contain single or double quotes.',
-      })
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
     contactMedium: z
       .string()
-      .regex(/^[^'"]*$/, {
-        message: 'Blog cannot contain single or double quotes.',
-      })
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
@@ -546,10 +509,7 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Project overview is required.',
       })
-      .max(300, 'Project overview is too long.')
-      .regex(/^[^'"]*$/, {
-        message: 'Project overview cannot contain single or double quotes.',
-      }),
+      .max(300, 'Project overview is too long.'),
     totalToken: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,.]+$/.test(value), {
@@ -578,19 +538,14 @@ export default function Page({ params }: TPage) {
       .min(1, {
         message: 'Lead VC information is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Lead VC information cannot contain single or double quotes.',
-      }),
+      ,
     marketMaker: z
       .string()
       .min(1, {
         message: 'Market maker information is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message:
-          'Market maker information cannot contain single or double quotes.',
-      }),
-    investorDetail: z
+      ,
+      investorDetail: z
       .string()
       .min(1, {
         message: 'Investor list is required.',
@@ -938,7 +893,7 @@ export default function Page({ params }: TPage) {
     value_temp.marketMakerImage = launchpadDetail?.MARKET_MAKER_IMAGE || ''
     value_temp.investorDetail = JSON.stringify(
       launchpadDetail?.INVESTOR_DETAIL?.split(',')?.map((investor: string) =>
-        investor.trim()
+        investor.trim().replace(/"/g, '\\"')
       )
     )
 

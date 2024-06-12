@@ -238,9 +238,7 @@ const CreateForm = () => {
       .min(1, {
         message: 'Token symbol is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Token symbol cannot contain single or double quotes.',
-      }),
+      ,
     totalSupply: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -355,9 +353,6 @@ const CreateForm = () => {
       .string()
       .min(1, {
         message: 'Project Name is required.',
-      })
-      .regex(/^[^'"]*$/, {
-        message: 'Project Name cannot contain single or double quotes.',
       }),
     website: z
       .string()
@@ -365,60 +360,46 @@ const CreateForm = () => {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Website url cannot contain single or double quotes.',
-      }),
+      ,
     projectDeck: z
       .string()
       .min(1, {
         message: 'Project deck url is required.',
       })
       .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Project deck url cannot contain single or double quotes.',
-      }),
+      ,
     pitchdeck: z
       .string()
       .min(1, {
         message: 'Whitepaper URL is required.',
       })
       .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Whitepaper URL cannot contain single or double quotes.',
-      }),
+      ,
     email: z
       .string()
       .min(1, {
         message: 'Email address is required.',
       })
       .email({ message: 'Invalid email address.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Email address cannot contain single or double quotes.',
-      }),
+      ,
     projectTwitter: z
       .string()
       .min(1, {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Project twitter cannot contain single or double quotes.',
-      }),
+      ,
     github: z
       .string()
       .min(1, {
         message: 'Github link is required',
       })
       .url({ message: 'Invalid url.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Github link cannot contain single or double quotes.',
-      }),
+      ,
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
-      .regex(/^[^'"]*$/, {
-        message: 'Contact telegram cannot contain single or double quotes.',
-      })
+      
       .refine(
         (value) => {
           // Check if the value starts with "@" (username format)
@@ -441,17 +422,13 @@ const CreateForm = () => {
       ),
     contactDiscord: z
       .string()
-      .regex(/^[^'"]*$/, {
-        message: 'Contact discord cannot contain single or double quotes.',
-      })
+      
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
     contactMedium: z
       .string()
-      .regex(/^[^'"]*$/, {
-        message: 'Blog cannot contain single or double quotes.',
-      })
+      
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
@@ -461,9 +438,7 @@ const CreateForm = () => {
         message: 'Project overview is required.',
       })
       .max(300, 'Project overview is too long.')
-      .regex(/^[^'"]*$/, {
-        message: 'Project overview cannot contain single or double quotes.',
-      }),
+      ,
     totalToken: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,.]+$/.test(value), {
@@ -492,18 +467,13 @@ const CreateForm = () => {
       .min(1, {
         message: 'Lead VC information is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message: 'Lead VC information cannot contain single or double quotes.',
-      }),
+      ,
     marketMaker: z
       .string()
       .min(1, {
         message: 'Market maker information is required.',
       })
-      .regex(/^[^'"]*$/, {
-        message:
-          'Market maker information cannot contain single or double quotes.',
-      }),
+      ,
     investorDetail: z
       .string()
       .min(1, {
@@ -771,7 +741,7 @@ const CreateForm = () => {
       const tempInvestorDetail = JSON.stringify(
         result_values.data.investorDetail
           .split(',')
-          .map((investor: string) => investor.trim())
+          .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
       )
       const requestData: any = {
         owner: address as `0x${string}`,
