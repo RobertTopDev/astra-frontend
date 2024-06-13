@@ -71,6 +71,8 @@ const CreateForm = () => {
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
     if (event.target.files?.length) {
       const selectedImage = event.target.files[0]
       handleImageUpload(selectedImage)
@@ -1094,7 +1096,16 @@ const CreateForm = () => {
                         {...getRootProps()}
                         className=" flex items-center justify-center w-full"
                         ref={field.ref}
+                        onClick={(e) => e.stopPropagation()}
                       >
+                        <Input
+                          {...getInputProps()}
+                          id="dropzone-file"
+                          accept="image/png, image/jpeg"
+                          type="file"
+                          className="hidden"
+                          onChange={handleImageChange}
+                        />
                         <label
                           htmlFor="dropzone-file"
                           className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -1133,7 +1144,7 @@ const CreateForm = () => {
                                 className="px-2 mt-2"
                                 variant="astra-red"
                                 onClick={(e) => {
-                                  e.stopPropagation()
+                                  e.preventDefault();
                                   form.setValue(`projectImage`, '')
                                 }}
                               >
@@ -1145,16 +1156,6 @@ const CreateForm = () => {
                             </div>
                           )}
                         </label>
-
-                        <Input
-                          {...getInputProps()}
-                          id="dropzone-file"
-                          accept="image/png, image/jpeg"
-                          type="file"
-                          className="hidden"
-                          disabled={field.value !== null}
-                          onChange={handleImageChange}
-                        />
                       </div>
                     </FormControl>
                   </div>

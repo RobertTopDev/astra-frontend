@@ -85,13 +85,15 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   const [tempImageFile, setTempImageFile] = useState<ImageFiles>({})
   const [fileError, setFileError] = useState<string>('')
 
-  const handleImageChange =
-    (fieldId: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.files?.length) {
-        const selectedImage = event.target.files[0]
-        handleImageUpload(selectedImage, fieldId)
-      }
+  const handleImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    fieldId: string
+  ) => {
+    if (event.target.files?.length) {
+      const selectedImage = event.target.files[0]
+      handleImageUpload(selectedImage, fieldId)
     }
+  }
 
   const handleImageUpload = async (image: File, fieldId: string) => {
     const allowedTypes = ['image/jpeg', 'image/png']
@@ -375,8 +377,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .min(1, {
         message: 'Email address is required.',
       })
-      .email({ message: 'Invalid email address.' })
-      ,
+      .email({ message: 'Invalid email address.' }),
     projectTwitter: z
       .string()
       .min(1, {
@@ -455,24 +456,15 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .transform((value) => parseFloat(value.replace(/,/g, ''))), // Transform the string to an integer without commas
 
     //Dao Screening
-    leadVC: z
-      .string()
-      .min(1, {
-        message: 'Lead VC information is required.',
-      })
-      ,
-    marketMaker: z
-      .string()
-      .min(1, {
-        message: 'Market maker information is required.',
-      })
-      ,
-      investorDetail: z
-      .string()
-      .min(1, {
-        message: 'Investor list is required.',
-      })
-      ,
+    leadVC: z.string().min(1, {
+      message: 'Lead VC information is required.',
+    }),
+    marketMaker: z.string().min(1, {
+      message: 'Market maker information is required.',
+    }),
+    investorDetail: z.string().min(1, {
+      message: 'Investor list is required.',
+    }),
     raised: z
       .string() // Accept input as string
       .refine((value) => /^[0-9,]+$/.test(value), {
@@ -1112,9 +1104,20 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               {...projectDropzoneProps.getRootProps()}
                               className=" flex items-center justify-center w-full"
                               ref={field.ref}
+                              onClick={(e) => e.stopPropagation()}
                             >
+                              <Input
+                                {...projectDropzoneProps.getInputProps()}
+                                id="projectImage-dropzone-file"
+                                accept="image/*"
+                                type="file"
+                                className="hidden"
+                                onChange={(e) =>
+                                  handleImageChange(e, 'projectImage')
+                                }
+                              />
                               <label
-                                htmlFor="dropzone-file"
+                                htmlFor="projectImage-dropzone-file"
                                 className="relative flex items-center justify-center w-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                               >
                                 {!urlRegex.test(field.value || '') && (
@@ -1151,7 +1154,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                       className="px-2 mt-2"
                                       variant="astra-red"
                                       onClick={(e) => {
-                                        e.stopPropagation()
+                                        e.preventDefault()
                                         form.setValue(`projectImage`, '')
                                       }}
                                     >
@@ -1163,16 +1166,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   </div>
                                 )}
                               </label>
-
-                              <Input
-                                {...projectDropzoneProps.getInputProps()}
-                                id="dropzone-file"
-                                accept="image/*"
-                                type="file"
-                                className="hidden"
-                                disabled={field.value !== null}
-                                onChange={handleImageChange('projectImage')}
-                              />
                             </div>
                           </FormControl>
                         </div>
@@ -1200,56 +1193,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                       </FormItem>
                     )}
                   />
-
-                  {/* <FormField
-                    control={form.control}
-                    name="projectValuation"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex">
-                          <span className="mr-2">Project Valuation *</span>
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <InfoCircledIcon className="w-[1rem] h-[1rem]" />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>
-                                  Project valuation is total value of the
-                                  project
-                                  <br /> at the time of its launch.
-                                </p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </FormLabel>
-                        <FormControl>
-                          <Input autoComplete='off'
-                            type="string"
-                            placeholder="e.g. $50000"
-                            {...field}
-                            onChange={(e) => {
-                              // Remove commas from the input value
-                              const inputValue = e.target.value.replace(
-                                /,/g,
-                                ''
-                              )
-                              // Set the formatted value with commas
-                              const formattedValue =
-                                inputValue === '0-'
-                                  ? '-'
-                                  : (
-                                      parseInt(inputValue, 10) || 0
-                                    ).toLocaleString('en-US')
-                              // Update the input value in the form
-                              field.onChange(formattedValue)
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
                   <Separator className="bg-gray-400"></Separator>
                   <div className="text-center w-full mt-6">
                     <FormLabel className="text-2xl text-center">
@@ -2392,9 +2335,22 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   {...leadVCDropzoneProps.getRootProps()}
                                   className=" flex items-center justify-center w-full h-full"
                                   ref={field.ref}
+                                  onClick={(e) => {e.stopPropagation()}}
                                 >
+                                  <Input
+                                    {...leadVCDropzoneProps.getInputProps()}
+                                    id="leadVC-dropzone-file"
+                                    accept="image/*"
+                                    type="file"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      handleImageChange(e, 'leadVCImage')
+                                    }
+                                    }
+                                  />
+
                                   <label
-                                    htmlFor="dropzone-file"
+                                    htmlFor="leadVC-dropzone-file"
                                     className="flex items-center justify-center w-full h-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                   >
                                     {!urlRegex.test(field.value || '') && (
@@ -2431,7 +2387,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                           className="px-1 mt-2"
                                           variant="astra-red"
                                           onClick={(e) => {
-                                            e.stopPropagation()
+                                            e.preventDefault()
                                             form.setValue(`leadVCImage`, '')
                                           }}
                                         >
@@ -2443,16 +2399,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                       </div>
                                     )}
                                   </label>
-
-                                  <Input
-                                    {...leadVCDropzoneProps.getInputProps()}
-                                    id="dropzone-file"
-                                    accept="image/*"
-                                    type="file"
-                                    className="hidden"
-                                    disabled={field.value !== null}
-                                    onChange={handleImageChange('leadVCImage')}
-                                  />
                                 </div>
                               </FormControl>
                             </div>
@@ -2475,9 +2421,21 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   {...marketMakerDropzoneProps.getRootProps()}
                                   className=" flex items-center justify-center w-full h-full"
                                   ref={field.ref}
+                                  onClick={(e) => e.stopPropagation()}
                                 >
+                                  <Input
+                                    {...marketMakerDropzoneProps.getInputProps()}
+                                    id="marketMaker-dropzone-file"
+                                    accept="image/*"
+                                    type="file"
+                                    className="hidden"
+                                    onChange={(e) => {
+                                      handleImageChange(e, 'marketMakerImage')
+                                    }
+                                    }
+                                  />
                                   <label
-                                    htmlFor="dropzone-file"
+                                    htmlFor="marketMaker-dropzone-file"
                                     className="flex items-center justify-center w-full h-full py-2 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                   >
                                     {!urlRegex.test(field.value || '') && (
@@ -2514,7 +2472,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                           className="px-1 mt-2"
                                           variant="astra-red"
                                           onClick={(e) => {
-                                            e.stopPropagation()
+                                            e.preventDefault()
                                             form.setValue(
                                               `marketMakerImage`,
                                               ''
@@ -2529,18 +2487,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                       </div>
                                     )}
                                   </label>
-
-                                  <Input
-                                    {...marketMakerDropzoneProps.getInputProps()}
-                                    id="dropzone-file"
-                                    accept="image/*"
-                                    type="file"
-                                    className="hidden"
-                                    disabled={field.value !== null}
-                                    onChange={handleImageChange(
-                                      'marketMakerImage'
-                                    )}
-                                  />
                                 </div>
                               </FormControl>
                             </div>
