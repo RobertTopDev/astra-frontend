@@ -101,7 +101,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
           {favouriteLaunchpads.length !== 0 ? (
             <>
               <div className="flex">
-                <AstraHeader className="text-astra-blue">Favourite</AstraHeader>
+                <AstraHeader className="text-astra-blue">{favouriteLaunchpads.length===1?'Favourite':'Favourites'}</AstraHeader>
               </div>
               <div className="border white w-full mt-3"></div>
 
