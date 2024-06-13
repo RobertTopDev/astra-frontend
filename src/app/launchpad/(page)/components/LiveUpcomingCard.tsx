@@ -41,6 +41,8 @@ import { clsx } from 'clsx'
 import { deleteLaunchpadForDB } from '@/util/deleteLaunchpadForDB'
 import { convertToCSV } from '@/util/convertToCSV'
 import { convertToInternationalCurrencySystem } from '@/util'
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/shadcn/ui/button'
 
 type Props = {
   status: string
@@ -597,8 +599,15 @@ export default function LiveUpcomingCard({
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel
+                        className={cn(
+                          buttonVariants({ variant: 'astra-blue' })
+                        )}
+                      >
+                        Cancel
+                      </AlertDialogCancel>
                       <AlertDialogAction
+                        className={cn(buttonVariants({ variant: 'astra-red' }))}
                         onClick={() => onDelete(launchpadData?.ID)}
                       >
                         Delete
