@@ -324,28 +324,6 @@ const CreateForm = () => {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    // projectValuation: z
-    //   .string() // Accept input as string
-    //   .refine((value) => /^[0-9,]+$/.test(value), {
-    //     // Ensure input contains only numbers and commas
-    //     message: 'Project Valuation must be a valid number',
-    //   })
-    //   .refine((value) => value !== '', {
-    //     // Ensure input is not empty
-    //     message: 'Project Valuation is required',
-    //   })
-    //   .refine(
-    //     (value) => {
-    //       // Remove commas and check if the resulting string represents a valid number
-    //       const numValue = Number(value.replace(/,/g, ''))
-    //       return !isNaN(numValue) && numValue > 0
-    //     },
-    //     {
-    //       message: 'Project Valuation must be a positive integer',
-    //     }
-    //   )
-    //   .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
-
     tokenName: z.string().min(1, {
       message: 'Project Name is required.',
     }),
@@ -656,6 +634,18 @@ const CreateForm = () => {
       alert('loading or address is undefined')
       return
     }
+    let metricsSum = 0
+    for (let i = 0; i < metrics.length; i++) {
+      metricsSum += value[`value${i}`]
+    }
+    const temp_errors: Errors = {}
+    if (metricsSum !== 100) {
+      temp_errors.totalMetrics = `Total Metrics allocation is ${metricsSum}. Must be 100`
+      setErrors(temp_errors)
+      return
+    }
+    setIsLoading(true)
+
     const teamValues = []
     for (let i = 0; i < team.length; i++) {
       teamValues.push({
@@ -680,91 +670,76 @@ const CreateForm = () => {
       team: teamValues,
       metrics: metricsValues,
     }
-    setIsLoading(true)
 
-    //validation
-    // let isValid = true
-    const temp_errors: Errors = {}
-
-    //metrics value sum = 100 validation
-    const metrics_sum = _.sumBy(metricsValues, 'value')
-    if (metrics_sum !== 100) {
-      // isValid = false
-      temp_errors.totalMetrics = `Total Metrics allocation is ${metrics_sum}. Must be 100`
+    const url = await uploadToCloudinary(tempImageFile as File)
+    const tempInvestorDetail = JSON.stringify(
+      result_values.data.investorDetail
+        .split(',')
+        .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
+    )
+    const requestData: any = {
+      owner: address as `0x${string}`,
+      launchpadAddress: '',
+      launchpadTokenAddress: result_values.data.tokenAddress,
+      launchpadTokenName: result_values.data.tokenName.trim(),
+      launchpadTokenSymbol: result_values.data.tokenSymbol.trim(),
+      launchpadTotalSupply: result_values.data.totalSupply,
+      launchpadTokenDecimal: Number(result_values.data.tokenDecimals),
+      launchpadTokenPrice: Number(result_values.data.tokenPrice),
+      launchpadTokenFDV: Number(result_values.data.totalToken),
+      totalSaleAmount: Number(result_values.data.tokenAmount),
+      saleStartTime: new Date(result_values.data.saleStartDate).getTime(),
+      saleEndTime: new Date(result_values.data.saleEndDate).getTime(),
+      minPurchaseBaseAmount: Number(result_values.data.minPurchaseAmount),
+      maxPurchaseBaseAmount: Number(result_values.data.baseAmount),
+      softCap: Number(result_values.data.softCap),
+      hardCap: Number(result_values.data.hardCap),
+      initialMarketCap: Number(result_values.data.initialMarketCap),
+      projectValuation: 0, // should remove
+      projectDetail: result_values.data.projectDescription,
+      projectDescriptionDetail: result_values.data.projectDescriptionDetail,
+      projectImage: url,
+      teamInfo: JSON.stringify(result_values.team),
+      teamDescription: '',
+      metrics: JSON.stringify(result_values.metrics),
+      websiteUrl: result_values.data.website,
+      github: result_values.data.github,
+      projectDeck: result_values.data.projectDeck,
+      whitepaperUrl: result_values.data.pitchdeck,
+      twitter: result_values.data.projectTwitter,
+      telegram: result_values.data.contactTelegram,
+      discord: result_values.data.contactDiscord,
+      medium: result_values.data.contactMedium,
+      otherUrl: '',
+      email: result_values.data.email,
+      chain: (chain && idToChain[chain.id]) || 'Arbitrum',
+      requestTransaction: '',
+      approveTransaction: '',
+      leadVC: result_values.data.leadVC.trim(),
+      marketMaker: result_values.data.marketMaker.trim(),
+      investorDetail: tempInvestorDetail,
+      raised: result_values.data.raised,
+      controlledCap: '',
+      daoApprovedMetrics: '',
+      tokenType: result_values.data.tokenType,
+      isVesting: result_values.data.isVesting,
+      baseToken: result_values.data.baseToken,
+      vest_start: result_values.data.vest_start
+        ? new Date(result_values.data.vest_start).getTime()
+        : new Date(),
+      vest_cliff: Number(result_values.data.vest_cliff) * 86400 || 0,
+      vest_duration: Number(result_values.data.vest_duration) * 86400 || 0,
+      vest_slice_period_seconds:
+        Number(result_values.data.vest_slice_period_seconds) * 86400 || 0,
+      vest_initial_unlock: Number(result_values.data.vest_initial_unlock) || 0,
     }
-    setErrors(temp_errors)
-    if (_.isEmpty(temp_errors)) {
-      const url = await uploadToCloudinary(tempImageFile as File)
-      const tempInvestorDetail = JSON.stringify(
-        result_values.data.investorDetail
-          .split(',')
-          .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
-      )
-      const requestData: any = {
-        owner: address as `0x${string}`,
-        launchpadAddress: '',
-        launchpadTokenAddress: result_values.data.tokenAddress,
-        launchpadTokenName: result_values.data.tokenName.trim(),
-        launchpadTokenSymbol: result_values.data.tokenSymbol.trim(),
-        launchpadTotalSupply: result_values.data.totalSupply,
-        launchpadTokenDecimal: Number(result_values.data.tokenDecimals),
-        launchpadTokenPrice: Number(result_values.data.tokenPrice),
-        launchpadTokenFDV: Number(result_values.data.totalToken),
-        totalSaleAmount: Number(result_values.data.tokenAmount),
-        saleStartTime: new Date(result_values.data.saleStartDate).getTime(),
-        saleEndTime: new Date(result_values.data.saleEndDate).getTime(),
-        minPurchaseBaseAmount: Number(result_values.data.minPurchaseAmount),
-        maxPurchaseBaseAmount: Number(result_values.data.baseAmount),
-        softCap: Number(result_values.data.softCap),
-        hardCap: Number(result_values.data.hardCap),
-        initialMarketCap: Number(result_values.data.initialMarketCap),
-        projectValuation: 0, // should remove
-        projectDetail: result_values.data.projectDescription,
-        projectDescriptionDetail: result_values.data.projectDescriptionDetail,
-        projectImage: url,
-        teamInfo: JSON.stringify(result_values.team),
-        teamDescription: '',
-        metrics: JSON.stringify(result_values.metrics),
-        websiteUrl: result_values.data.website,
-        github: result_values.data.github,
-        projectDeck: result_values.data.projectDeck,
-        whitepaperUrl: result_values.data.pitchdeck,
-        twitter: result_values.data.projectTwitter,
-        telegram: result_values.data.contactTelegram,
-        discord: result_values.data.contactDiscord,
-        medium: result_values.data.contactMedium,
-        otherUrl: '',
-        email: result_values.data.email,
-        chain: (chain && idToChain[chain.id]) || 'Arbitrum',
-        requestTransaction: '',
-        approveTransaction: '',
-        leadVC: result_values.data.leadVC.trim(),
-        marketMaker: result_values.data.marketMaker.trim(),
-        investorDetail: tempInvestorDetail,
-        raised: result_values.data.raised,
-        controlledCap: '',
-        daoApprovedMetrics: '',
-        tokenType: result_values.data.tokenType,
-        isVesting: result_values.data.isVesting,
-        baseToken: result_values.data.baseToken,
-        vest_start: result_values.data.vest_start
-          ? new Date(result_values.data.vest_start).getTime()
-          : new Date(),
-        vest_cliff: Number(result_values.data.vest_cliff) * 86400 || 0,
-        vest_duration: Number(result_values.data.vest_duration) * 86400 || 0,
-        vest_slice_period_seconds:
-          Number(result_values.data.vest_slice_period_seconds) * 86400 || 0,
-        vest_initial_unlock:
-          Number(result_values.data.vest_initial_unlock) || 0,
-      }
-      const response = await requestLuanchpadForDB(requestData)
-      if (!response.ok) {
-        setIsLoading(false)
-        throw new Error(`HTTP error! status: ${response.status}`)
-      } else {
-        const data = await response.json()
-        router.push(`/launchpad/owner/detail/${data.id}`)
-      }
+    const response = await requestLuanchpadForDB(requestData)
+    if (!response.ok) {
+      setIsLoading(false)
+      throw new Error(`HTTP error! status: ${response.status}`)
+    } else {
+      const data = await response.json()
+      router.push(`/launchpad/owner/detail/${data.id}`)
     }
     setIsLoading(false)
   }

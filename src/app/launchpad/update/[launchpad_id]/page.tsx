@@ -616,31 +616,23 @@ export default function Page({ params }: TPage) {
       })
   }
   for (let i = 0; i < metrics.length; i++) {
-    temp[`label${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Category is required.',
-      })
-          temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
+    temp[`label${i}`] = z.string().min(1, {
+      message: 'Category is required.',
+    })
+    temp[`value${i}`] = z.coerce.number().gte(0).lte(100, {
       message: 'Metrics allocation must be from 0 to 100.',
     })
   }
   for (let i = 0; i < team.length; i++) {
-    temp[`name${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member name is required.',
-      })
-    temp[`position${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member position is required.',
-      })
-    temp[`description${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member description is required.',
-      })
+    temp[`name${i}`] = z.string().min(1, {
+      message: 'Member name is required.',
+    })
+    temp[`position${i}`] = z.string().min(1, {
+      message: 'Member position is required.',
+    })
+    temp[`description${i}`] = z.string().min(1, {
+      message: 'Member description is required.',
+    })
   }
   const createIndexFormSchema = z
     .object(temp)
@@ -813,6 +805,17 @@ export default function Page({ params }: TPage) {
       alert('loading or address is undefined')
       return
     }
+    let metricsSum = 0
+    for (let i = 0; i < metrics.length; i++) {
+      metricsSum += value[`value${i}`]
+    }
+    const temp_errors: Errors = {}
+    if (metricsSum !== 100) {
+      temp_errors.totalMetrics = `Total Metrics allocation is ${metricsSum}. Must be 100`
+      setErrors(temp_errors)
+      return
+    }
+    setIsUploadLoading(true)
 
     const teamValues = []
     for (let i = 0; i < team.length; i++) {
@@ -875,23 +878,6 @@ export default function Page({ params }: TPage) {
       team: teamValues,
       metrics: metricsValues,
     }
-    setIsUploadLoading(true)
-    //validation
-    let isValid = true
-    const temp_errors: Errors = {}
-
-    //metrics value sum = 100 validation
-    const metrics_sum = _.sumBy(metrics, 'value')
-    if (metrics_sum !== 100) {
-      isValid = false
-      temp_errors.totalMetrics = `Total Metrics allocation is ${metrics_sum}. Must be 100`
-    }
-    setErrors(temp_errors)
-    if (!isValid) {
-      setIsUploadLoading(false)
-      return
-    }
-
     // sale start and end time
     const startTime =
       new Date(result_values.data.saleStartDate).getTime() / 1000

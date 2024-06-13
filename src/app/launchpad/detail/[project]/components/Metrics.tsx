@@ -89,8 +89,7 @@ export default function Metrics({ data, refetchData }: Props) {
         message: 'Sale type is required.',
       })
       .regex(/^[^<>:]*$/, {
-        message:
-          'Sale type cannot contain less than, greater than, or colon.',
+        message: 'Sale type cannot contain less than, greater than, or colon.',
       })
     temp[`price${i}`] = z.coerce.number().gte(0)
     temp[`raised${i}`] = z.coerce.number().gte(0)
@@ -100,8 +99,7 @@ export default function Metrics({ data, refetchData }: Props) {
         message: 'Lockup is required.',
       })
       .regex(/^[^<>:]*$/, {
-        message:
-          'Lockup cannot contain less than, greater than, or colon.',
+        message: 'Lockup cannot contain less than, greater than, or colon.',
       })
   }
   const metricsSchema = z.object(temp)
@@ -155,7 +153,23 @@ export default function Metrics({ data, refetchData }: Props) {
   }
 
   async function onSubmit(value: z.infer<typeof metricsSchema>) {
-    const valueArray = []
+    if (isLoading) {
+      alert('Loading')
+      return
+    }
+    let metricsSum = 0
+    for (let i = 0; i < metrics.length; i++) {
+      metricsSum += value[`value${i}`]
+    }
+    const temp_errors: Errors = {}
+    if (metricsSum !== 100) {
+      temp_errors.totalMetrics = `Total Metrics allocation is ${metricsSum}. Must be 100`
+      setErrors(temp_errors)
+      return
+    }
+    setIsLoading(true)
+
+    const valueArray: MetricsObject[] = []
     const saleValueArray = []
     for (let i = 0; i < metrics.length; i++) {
       valueArray.push({
@@ -179,96 +193,75 @@ export default function Metrics({ data, refetchData }: Props) {
       form.setValue(`saleType${i}`, value[`saleType${i}`])
     }
     setSaleRoundDetail(saleValueArray)
-    if (isLoading) {
-      alert('Loading')
-      return
-    }
-    setIsLoading(true)
 
-    //validation
-    let isValid = true
-    const temp_errors: Errors = {}
-
-    //metrics value sum = 100 validation
-    const metrics_sum = _.sumBy(metrics, 'value')
-    if (metrics_sum !== 100) {
-      isValid = false
-      temp_errors.totalMetrics = `Total Metrics allocation is ${metrics_sum}. Must be 100`
+    const requestData = {
+      owner: data?.OWNER as `0x${string}`,
+      launchpadIndex:
+        data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
+      launchpadAddress: data?.LAUNCHPAD_ADDRESS,
+      launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
+      launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
+      launchpadTokenSymbol: data?.LAUNCHPAD_TOKEN_SYMBOL,
+      launchpadTotalSupply: data?.LAUNCHPAD_TOKEN_TOTAL_SUPPLY, // update
+      launchpadTokenDecimal: data?.LAUNCHPAD_TOKEN_DECIMAL,
+      launchpadTokenPrice: data?.LAUNCHPAD_TOKEN_PRICE,
+      launchpadTokenFDV: data?.LAUNCHPAD_TOKEN_FDV, // update
+      totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
+      saleStartTime: data?.SALE_START_TIME,
+      saleEndTime: data?.SALE_END_TIME,
+      minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
+      maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
+      softCap: data?.SOFT_CAP, // update
+      hardCap: data?.HARD_CAP, // update
+      initialMarketCap: data?.INITIAL_MARKET_CAP, // update
+      projectValuation: data?.PROJECT_VALUATION, // update
+      projectDetail: data?.PROJECT_DETAIL,
+      projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
+      projectImage: data?.PROJECT_IMAGE,
+      leadVCImage: data?.LEAD_VC_IMAGE,
+      marketMakerImage: data?.MARKET_MAKER_IMAGE,
+      github: data?.GITHUB || '',
+      projectDeck: data?.PROJECT_DECK || '',
+      medium: data?.MEDIUM || '',
+      raised: data?.RAISED || 0,
+      // teamInfo: data?.TEAM_INFO,
+      teamDescription: data?.TEAM_DESCRIPTION || '',
+      metrics: JSON.stringify(valueArray),
+      saleRoundDetail:
+        saleValueArray.length > 0
+          ? convertSaleRoundDetailObjectToString(saleValueArray)
+          : '',
+      websiteUrl: data?.WEBSITE_URL,
+      whitepaperUrl: data?.WHITEPAPER_URL,
+      twitter: data?.TWITTER,
+      telegram: data?.TELEGRAM,
+      discord: data?.DISCORD,
+      otherUrl: data?.OTHER_URL,
+      email: data?.EMAIL,
+      // investorDetail: data?.INVESTOR_DETAIL || '',
+      chain: data?.CHAIN,
+      requestTransaction: data?.REQUEST_TRANSACTION,
+      approveTransaction: data?.APPROVE_TRANSACTION,
+      status: data?.STATUS,
+      leadVC: data?.LEAD_VC,
+      marketMaker: data?.MARKET_MAKER,
+      controlledCap: data?.CONTROLLED_CAP,
+      daoApprovedMetrics: data?.DAO_APPROVED_METRICS,
+      baseToken: data?.BASE_TOKEN,
+      tokenType: data?.TOKEN_TYPE,
+      isVesting: data?.IS_VESTING,
+      vest_start: data?.VEST_START,
+      vest_cliff: data?.VEST_CLIFF,
+      vest_duration: data?.VEST_DURATION,
+      vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS,
+      vest_initial_unlock: data?.VEST_INITIAL_UNLOCK,
     }
-    setErrors(temp_errors)
-
-    if (!isValid) {
-      setIsLoading(false)
-    } else {
-      const requestData = {
-        owner: data?.OWNER as `0x${string}`,
-        launchpadIndex:
-          data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
-        launchpadAddress: data?.LAUNCHPAD_ADDRESS,
-        launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
-        launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
-        launchpadTokenSymbol: data?.LAUNCHPAD_TOKEN_SYMBOL,
-        launchpadTotalSupply: data?.LAUNCHPAD_TOKEN_TOTAL_SUPPLY, // update
-        launchpadTokenDecimal: data?.LAUNCHPAD_TOKEN_DECIMAL,
-        launchpadTokenPrice: data?.LAUNCHPAD_TOKEN_PRICE,
-        launchpadTokenFDV: data?.LAUNCHPAD_TOKEN_FDV, // update
-        totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
-        saleStartTime: data?.SALE_START_TIME,
-        saleEndTime: data?.SALE_END_TIME,
-        minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
-        maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
-        softCap: data?.SOFT_CAP, // update
-        hardCap: data?.HARD_CAP, // update
-        initialMarketCap: data?.INITIAL_MARKET_CAP, // update
-        projectValuation: data?.PROJECT_VALUATION, // update
-        projectDetail: data?.PROJECT_DETAIL,
-        projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
-        projectImage: data?.PROJECT_IMAGE,
-        leadVCImage: data?.LEAD_VC_IMAGE,
-        marketMakerImage: data?.MARKET_MAKER_IMAGE,
-        github: data?.GITHUB || '',
-        projectDeck: data?.PROJECT_DECK || '',
-        medium: data?.MEDIUM || '',
-        raised: data?.RAISED || 0,
-        // teamInfo: data?.TEAM_INFO,
-        teamDescription: data?.TEAM_DESCRIPTION || '',
-        metrics: JSON.stringify(valueArray),
-        saleRoundDetail:
-          saleValueArray.length > 0
-            ? convertSaleRoundDetailObjectToString(saleValueArray)
-            : '',
-        websiteUrl: data?.WEBSITE_URL,
-        whitepaperUrl: data?.WHITEPAPER_URL,
-        twitter: data?.TWITTER,
-        telegram: data?.TELEGRAM,
-        discord: data?.DISCORD,
-        otherUrl: data?.OTHER_URL,
-        email: data?.EMAIL,
-        // investorDetail: data?.INVESTOR_DETAIL || '',
-        chain: data?.CHAIN,
-        requestTransaction: data?.REQUEST_TRANSACTION,
-        approveTransaction: data?.APPROVE_TRANSACTION,
-        status: data?.STATUS,
-        leadVC: data?.LEAD_VC,
-        marketMaker: data?.MARKET_MAKER,
-        controlledCap: data?.CONTROLLED_CAP,
-        daoApprovedMetrics: data?.DAO_APPROVED_METRICS,
-        baseToken: data?.BASE_TOKEN,
-        tokenType: data?.TOKEN_TYPE,
-        isVesting: data?.IS_VESTING,
-        vest_start: data?.VEST_START,
-        vest_cliff: data?.VEST_CLIFF,
-        vest_duration: data?.VEST_DURATION,
-        vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS,
-        vest_initial_unlock: data?.VEST_INITIAL_UNLOCK,
-      }
-      await updateLaunchpadForDB(requestData, data?.ID + '')
-      if (refetchData) {
-        refetchData()
-      }
-      setIsLoading(false)
-      setOpen(false)
+    await updateLaunchpadForDB(requestData, data?.ID + '')
+    if (refetchData) {
+      refetchData()
     }
+    setIsLoading(false)
+    setOpen(false)
   }
   const xSymbol = _.map(metrics, 'value')
   const ySymbol = _.map(metrics, 'label')
