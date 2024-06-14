@@ -92,7 +92,9 @@ export default function Offering({ launchpadData }: TComponent) {
     <div className="flex flex-col gap-4">
       <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
         <div className="flex justify-between">
-          {`$${(launchpadData?.LAUNCHPAD_TOKEN_SYMBOL||'').toUpperCase()} Public Sale`}
+          {`$${(
+            launchpadData?.LAUNCHPAD_TOKEN_SYMBOL || ''
+          ).toUpperCase()} Public Sale`}
           {saleStartsIn === '00:00:00' ? ' ends in' : ' coming up soon'}:
         </div>
         <div className="flex justify-between items-center">
@@ -170,16 +172,20 @@ export default function Offering({ launchpadData }: TComponent) {
                   User needs to follow Astra DAO on Telegram.
                 </div>
                 <div>
-                  <AstraLoading
-                    isLoading={follwingDataLoading}
-                    className="w-6 h-6"
-                  >
-                    {telegramfollowing ? (
-                      <CheckIcon className="w-8 h-8 text-astra-blue" />
-                    ) : (
-                      <ResetIcon className="w-8 h-8" />
-                    )}
-                  </AstraLoading>
+                  {address ? (
+                    <AstraLoading
+                      isLoading={follwingDataLoading}
+                      className="w-6 h-6"
+                    >
+                      {telegramfollowing ? (
+                        <CheckIcon className="w-8 h-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>
@@ -207,17 +213,21 @@ export default function Offering({ launchpadData }: TComponent) {
                   {`Increase your token sale allocation by staking $ASTRADAO in a lockup vault.`}
                 </div>
                 <div>
-                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                    {buyRuleStatus &&
-                    buyRuleStatus !== undefined &&
-                    buyRuleStatus.length > 0 &&
-                    buyRuleStatus[1].result &&
-                    buyRuleStatus[1]?.result?.[0] > 0 ? (
-                      <CheckIcon className="w-8 h-8 text-astra-blue" />
-                    ) : (
-                      <ResetIcon className="w-8 h-8" />
-                    )}
-                  </AstraLoading>
+                  {address ? (
+                    <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                      {buyRuleStatus &&
+                      buyRuleStatus !== undefined &&
+                      buyRuleStatus.length > 0 &&
+                      buyRuleStatus[1].result &&
+                      buyRuleStatus[1]?.result?.[0] > 0 ? (
+                        <CheckIcon className="w-8 h-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>
@@ -242,13 +252,17 @@ export default function Offering({ launchpadData }: TComponent) {
                   User needs to complete PureFi KYC.
                 </div>
                 <div>
-                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                    {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
-                      <CheckIcon className="w-8 h-8 min-w-8 max-w-8 text-astra-blue" />
-                    ) : (
-                      <ResetIcon className="w-8 h-8 text-white" />
-                    )}
-                  </AstraLoading>
+                  {address ? (
+                    <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                      {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
+                        <CheckIcon className="w-8 h-8 min-w-8 max-w-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8 text-white" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>

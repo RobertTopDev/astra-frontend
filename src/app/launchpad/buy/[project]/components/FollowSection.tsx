@@ -157,13 +157,17 @@ export default function FollowSection({
                   User needs to follow Astra DAO on Telegram.
                 </div>
                 <div>
-                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                    {telegramfollowing ? (
-                      <CheckIcon className="w-8 h-8 text-astra-blue" />
-                    ) : (
-                      <ResetIcon className="w-8 h-8" />
-                    )}
-                  </AstraLoading>
+                  {address ? (
+                    <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                      {telegramfollowing ? (
+                        <CheckIcon className="w-8 h-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>
@@ -221,13 +225,17 @@ export default function FollowSection({
                   {`Increase your token sale allocation by staking $ASTRADAO in a lockup vault.`}
                 </div>
                 <div>
-                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                    {buyRuleStatus && buyRuleStatus?.[1]?.result?.[0] > 0 ? (
-                      <CheckIcon className="w-8 h-8 text-astra-blue" />
-                    ) : (
-                      <ResetIcon className="w-8 h-8" />
-                    )}
-                  </AstraLoading>
+                  {address ? (
+                    <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                      {buyRuleStatus && buyRuleStatus?.[1]?.result?.[0] > 0 ? (
+                        <CheckIcon className="w-8 h-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>
@@ -252,13 +260,17 @@ export default function FollowSection({
                   User needs to complete PureFi KYC.
                 </div>
                 <div>
-                  <AstraLoading isLoading={isLoading} className="w-6 h-6">
-                    {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
-                      <CheckIcon className="w-8 h-8 text-astra-blue" />
-                    ) : (
-                      <ResetIcon className="w-8 h-8 text-white" />
-                    )}
-                  </AstraLoading>
+                  {address ? (
+                    <AstraLoading isLoading={isLoading} className="w-6 h-6">
+                      {buyRuleStatus && buyRuleStatus?.[0]?.result ? (
+                        <CheckIcon className="w-8 h-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8 text-white" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>
