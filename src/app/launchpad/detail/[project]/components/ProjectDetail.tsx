@@ -487,8 +487,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenType: z.string({
-      required_error: 'Please select token category.',
+    tokenType: z.string().min(1, {
+      message: 'Please select token category.',
     }),
     baseToken: z.string().min(1, {
       message: 'Please select maximum contribute amount.',
@@ -1918,10 +1918,10 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               setVesting(checked)
                               const values = form.getValues()
                               values[`vest_start`] = undefined
-                              values[`vest_cliff`] = ''
-                              values[`vest_duration`] = ''
-                              values[`vest_slice_period_seconds`] = ''
-                              values[`vest_initial_unlock`] = ''
+                              values[`vest_cliff`] = '0'
+                              values[`vest_duration`] = '0'
+                              values[`vest_slice_period_seconds`] = '0'
+                              values[`vest_initial_unlock`] = '0'
                               form.reset(values)
                             }}
                           ></Checkbox>
@@ -2335,7 +2335,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   {...leadVCDropzoneProps.getRootProps()}
                                   className=" flex items-center justify-center w-full h-full"
                                   ref={field.ref}
-                                  onClick={(e) => {e.stopPropagation()}}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                  }}
                                 >
                                   <Input
                                     {...leadVCDropzoneProps.getInputProps()}
@@ -2345,8 +2347,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     className="hidden"
                                     onChange={(e) => {
                                       handleImageChange(e, 'leadVCImage')
-                                    }
-                                    }
+                                    }}
                                   />
 
                                   <label
@@ -2431,8 +2432,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     className="hidden"
                                     onChange={(e) => {
                                       handleImageChange(e, 'marketMakerImage')
-                                    }
-                                    }
+                                    }}
                                   />
                                   <label
                                     htmlFor="marketMaker-dropzone-file"

@@ -204,10 +204,10 @@ export default function Page({ params }: TPage) {
     baseToken: '',
     isVesting: false,
     vest_start: new Date(),
-    vest_cliff: '',
-    vest_duration: '',
-    vest_slice_period_seconds: '',
-    vest_initial_unlock: '',
+    vest_cliff: '0',
+    vest_duration: '0',
+    vest_slice_period_seconds: '0',
+    vest_initial_unlock: '0',
   })
 
   const [contractData, setContractData] =
@@ -561,8 +561,8 @@ export default function Page({ params }: TPage) {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenType: z.string({
-      required_error: 'Please select token category.',
+    tokenType: z.string().min(1, {
+      message: 'Please select token category.',
     }),
     baseToken: z.string().min(1, {
       message: 'Please select maximum contribute amount.',
@@ -919,7 +919,7 @@ export default function Page({ params }: TPage) {
       const values = form.getValues()
       values[`id${index}`] = ''
       values[`label${index}`] = ''
-      values[`value${index}`] = ''
+      values[`value${index}`] = '0'
       form.reset(values)
       setMetrics([...metrics, { id: '', label: '', value: 0 }])
     }
@@ -1408,7 +1408,7 @@ export default function Page({ params }: TPage) {
                             {...getRootProps()}
                             className=" flex items-center justify-center w-full"
                             ref={field.ref}
-                            onClick={e=>e.stopPropagation()}
+                            onClick={(e) => e.stopPropagation()}
                           >
                             <Input
                               {...getInputProps()}
@@ -2207,10 +2207,10 @@ export default function Page({ params }: TPage) {
                             setVesting(checked)
                             const values = form.getValues()
                             values[`vest_start`] = null
-                            values[`vest_cliff`] = ''
-                            values[`vest_duration`] = ''
-                            values[`vest_slice_period_seconds`] = ''
-                            values[`vest_initial_unlock`] = ''
+                            values[`vest_cliff`] = '0'
+                            values[`vest_duration`] = '0'
+                            values[`vest_slice_period_seconds`] = '0'
+                            values[`vest_initial_unlock`] = '0'
                             form.reset(values)
                           }}
                         ></Checkbox>
@@ -2786,6 +2786,14 @@ export default function Page({ params }: TPage) {
                               placeholder="e.g. 50 (%) (Must be positive number between 0 - 100)"
                               {...field}
                               onWheel={(event) => event.currentTarget.blur()}
+                              onChange={(e) => {
+                                const temp = e
+                                const str = temp.target.value
+                                if (str !== '0')
+                                  temp.target.value =
+                                    str.replace(/^0+/, '') || '0'
+                                field.onChange(temp)
+                              }}
                             />
                           </FormControl>
                           <FormMessage />

@@ -271,7 +271,7 @@ export default function Metrics({ data, refetchData }: Props) {
       const values = form.getValues()
       values[`id${index}`] = ''
       values[`label${index}`] = ''
-      values[`value${index}`] = ''
+      values[`value${index}`] = '0'
       form.reset(values)
       setMetrics([...metrics, { id: '', label: '', value: 0 }])
     } else {
@@ -385,6 +385,13 @@ export default function Metrics({ data, refetchData }: Props) {
                                 placeholder="e.g. 50(%) (Must be positive number between 0 - 100)"
                                 {...field}
                                 onWheel={(event) => event.currentTarget.blur()}
+                                onChange={(e) => {
+                                  const temp = e
+                                  const str = temp.target.value
+                                  if (str !== '0')
+                                    temp.target.value = str.replace(/^0+/, '') || '0'
+                                  field.onChange(temp)
+                                }}
                               />
                             </FormControl>
                             <FormMessage />

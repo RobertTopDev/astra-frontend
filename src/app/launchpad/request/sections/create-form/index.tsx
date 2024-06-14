@@ -71,8 +71,8 @@ const CreateForm = () => {
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
+    event.stopPropagation()
+    event.preventDefault()
     if (event.target.files?.length) {
       const selectedImage = event.target.files[0]
       handleImageUpload(selectedImage)
@@ -461,8 +461,8 @@ const CreateForm = () => {
       )
       .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
 
-    tokenType: z.string({
-      required_error: 'Please select token category.',
+    tokenType: z.string().min(1, {
+      message: 'Please select token category.',
     }),
     baseToken: z.string().min(1, {
       message: 'Please select maximum contribute amount.',
@@ -600,10 +600,10 @@ const CreateForm = () => {
     tokenType: '',
     baseToken: '',
     isVesting: false,
-    vest_cliff: '',
-    vest_duration: '',
-    vest_slice_period_seconds: '',
-    vest_initial_unlock: '',
+    vest_cliff: '0',
+    vest_duration: '0',
+    vest_slice_period_seconds: '0',
+    vest_initial_unlock: '0',
   }
   metrics.map(
     (item, key) => (
@@ -760,7 +760,7 @@ const CreateForm = () => {
       const values = form.getValues()
       values[`id${index}`] = ''
       values[`label${index}`] = ''
-      values[`value${index}`] = ''
+      values[`value${index}`] = '0'
       form.reset(values)
       setMetrics([...metrics, { id: '', label: '', value: 0 }])
     }
@@ -1144,7 +1144,7 @@ const CreateForm = () => {
                                 className="px-2 mt-2"
                                 variant="astra-red"
                                 onClick={(e) => {
-                                  e.preventDefault();
+                                  e.preventDefault()
                                   form.setValue(`projectImage`, '')
                                 }}
                               >
@@ -1864,10 +1864,10 @@ const CreateForm = () => {
                         setVesting(checked)
                         const values = form.getValues()
                         values[`vest_start`] = null
-                        values[`vest_cliff`] = ''
-                        values[`vest_duration`] = ''
-                        values[`vest_slice_period_seconds`] = ''
-                        values[`vest_initial_unlock`] = ''
+                        values[`vest_cliff`] = '0'
+                        values[`vest_duration`] = '0'
+                        values[`vest_slice_period_seconds`] = '0'
+                        values[`vest_initial_unlock`] = '0'
                         form.reset(values)
                       }}
                     />
@@ -2427,6 +2427,13 @@ const CreateForm = () => {
                           {...field}
                           onWheel={(event) => event.currentTarget.blur()}
                           autoComplete="off"
+                          onChange={(e) => {
+                            const temp = e
+                            const str = temp.target.value
+                            if (str !== '0')
+                              temp.target.value = str.replace(/^0+/, '') || '0'
+                            field.onChange(temp)
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
