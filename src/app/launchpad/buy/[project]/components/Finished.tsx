@@ -354,7 +354,7 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">
-              <p>Single Initial Investment</p>
+              <p>Total Raised Amount</p>
               <p>
                 {Number(withdrawAmount).toLocaleString('en-US')}{' '}
                 {baseTokenSymbol}
@@ -362,7 +362,7 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">
-              <p>Hard cap per user</p>
+              <p>Hard Cap Per User</p>
               <p>
                 {Number(
                   (1 / data?.LAUNCHPAD_TOKEN_PRICE) *
