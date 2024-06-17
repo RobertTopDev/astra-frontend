@@ -57,6 +57,7 @@ const useAssetsData = ({ index }: TUseAssetsDataProps) => {
       for (let i = 0; i < tokensIndices.length; i++) {
         try {
           const token = tokensIndices[i]
+          console.log(token)
 
           const [name, decimals, balance] = await Promise.all([
             publicClient.readContract({
