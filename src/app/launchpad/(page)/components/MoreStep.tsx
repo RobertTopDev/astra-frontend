@@ -34,7 +34,7 @@ export default function MoreStep() {
               <div className="text-2xl">Stake Astra</div>
             </div>
             <div className="font-normal text-lg text-justify">
-              Maximize yield by staking ASTRADAO
+              Maximize yield by staking $ASTRADAO.
             </div>
           </div>
         </AstraCard>
