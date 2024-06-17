@@ -52,7 +52,9 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
   const handleSearch = useDebouncedCallback((term: string) => {
     setLaunchpadTotal([])
     setPage(0)
-    SetGetOption({ ...getOption, search: term })
+    SetGetOption((prevGetOption) => {
+      return { ...prevGetOption, search: term }
+    })
   }, 300)
 
   const [priority, setPriority] = useState<string[]>(
@@ -88,7 +90,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
       setLaunchpadTotal(newLaunchpadTotal)
     }
     setIsReloading(false)
-  }, [launchpads])
+  },[launchpads,getOption])
 
   useEffect(() => {
     if (launchpads) {
