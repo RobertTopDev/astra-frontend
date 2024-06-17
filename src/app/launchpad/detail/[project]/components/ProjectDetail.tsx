@@ -680,7 +680,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     const leadVCImageUrl = tempImageFile?.leadVCImage
       ? await uploadToCloudinary(tempImageFile?.leadVCImage as File)
       : value?.leadVCImage
-    const marketMakerImageUrl = tempImageFile?.leadVCImage
+    const marketMakerImageUrl = tempImageFile?.marketMakerImage
       ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
       : value?.marketMakerImage
 
@@ -719,6 +719,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       marketMakerImage: marketMakerImageUrl,
       // teamInfo: data.TEAM_INFO,
       teamDescription: data.TEAM_DESCRIPTION || '',
+      saleRoundDetail: data.SALE_ROUND_DETAIL || '',
       // metrics: data.METRICS,
       websiteUrl: value.website,
       projectDeck: value.projectDeck,
