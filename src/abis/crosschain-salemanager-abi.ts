@@ -373,6 +373,25 @@ export const crosschainSaleManagerAbi = [
     inputs: [
       {
         internalType: 'string',
+        name: '_a',
+        type: 'string',
+      },
+    ],
+    name: 'parseAddress',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
         name: 'chain_',
         type: 'string',
       },
