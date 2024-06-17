@@ -444,7 +444,7 @@ export default function LiveUpcomingCard({
           </div>
         </CardHeader>
         <div className="relative flex w-full flex-col items-stretch p-6">
-          <div className="text-white text-sm font-black">Softcap - Hardcap</div>
+          <div className="text-white text-sm font-black">Soft Cap - Hard Cap</div>
           <div
             className="text-astra-blue text-xl tracking-[2px] mt-2"
             style={{
