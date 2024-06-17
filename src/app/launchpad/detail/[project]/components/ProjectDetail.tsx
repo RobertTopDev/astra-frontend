@@ -719,6 +719,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       marketMakerImage: marketMakerImageUrl,
       // teamInfo: data.TEAM_INFO,
       teamDescription: data.TEAM_DESCRIPTION || '',
+      saleRoundDetail: data.SALE_ROUND_DETAIL || '',
       // metrics: data.METRICS,
       websiteUrl: value.website,
       projectDeck: value.projectDeck,
