@@ -124,7 +124,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
               onChange={(e) => {
                 handleSearch(e.target.value)
               }}
-              disabled={isLoading || isReloading}
+              // disabled={isLoading || isReloading}
               defaultValue={getOption.search}
             />
           </div>
