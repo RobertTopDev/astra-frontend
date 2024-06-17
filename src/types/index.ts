@@ -576,6 +576,7 @@ export type TLaunchpadDetailInfo = {
   PROJECT_DECK: string
   RAISED: number
   GITHUB: string
+  TOTAL?: number
 }
 
 export type TRequestLaunchpadContractInfo = {

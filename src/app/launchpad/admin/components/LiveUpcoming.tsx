@@ -22,6 +22,7 @@ interface SortType {
 }
 
 const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
+  const [total, setTotal] = useState(0)
   const [page, setPage] = useState(0)
   const [isReloading, setIsReloading] = useState(false)
   const [launchpadTotal, setLaunchpadTotal] = useState<TLaunchpadDetailInfo[]>(
@@ -71,6 +72,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
     const temp = _.filter(launchpadTotal, (launchpad) => {
       return launchpad.ID.toString() !== id
     })
+    setTotal(total - 1)
     setLaunchpadTotal(temp)
   }
 
@@ -86,6 +88,14 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
     setIsReloading(false)
   }, [launchpads])
 
+  useEffect(() => {
+    if (launchpads) {
+      setTotal((prevTotal) => {
+        const maxItem = _.maxBy(launchpads, 'TOTAL')
+        return maxItem?.TOTAL || prevTotal
+      })
+    }
+  }, [launchpads])
   return (
     <div className="flex flex-col items-stretch py-8">
       <div className="flex justify-center">
@@ -101,7 +111,11 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
           {favouriteLaunchpads.length !== 0 ? (
             <>
               <div className="flex">
-                <AstraHeader className="text-astra-blue">{favouriteLaunchpads.length===1?'Favourite':'Favourites'}</AstraHeader>
+                <AstraHeader className="text-astra-blue">
+                  {favouriteLaunchpads.length === 1
+                    ? 'Favourite'
+                    : 'Favourites'}
+                </AstraHeader>
               </div>
               <div className="border white w-full mt-3"></div>
 
@@ -143,7 +157,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
           }}
           className="px-16"
           variant="astra-blue"
-          disabled={launchpads?.length !== 6}
+          disabled={launchpadTotal.length >= total}
           isLoading={isReloading}
         >
           {isReloading ? 'Loading...' : 'SEE MORE'}

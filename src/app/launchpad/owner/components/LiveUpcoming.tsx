@@ -34,7 +34,7 @@ interface SortType {
 
 const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
   const { address } = useAccount()
-
+  const [total, setTotal] = useState(0)
   const [page, setPage] = useState(0)
   const [isReloading, setIsReloading] = useState(false)
   const [launchpadTotal, setLaunchpadTotal] = useState<TLaunchpadDetailInfo[]>(
@@ -89,6 +89,15 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
       setLaunchpadTotal(newLaunchpadTotal)
     }
     setIsReloading(false)
+  }, [launchpads])
+
+  useEffect(() => {
+    if (launchpads) {
+      setTotal((prevTotal) => {
+        const maxItem = _.maxBy(launchpads, 'TOTAL')
+        return maxItem?.TOTAL || prevTotal
+      })
+    }
   }, [launchpads])
 
   return (
@@ -239,7 +248,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
           }}
           className="px-16"
           variant="astra-blue"
-          disabled={launchpads?.length !== 6}
+          disabled={launchpadTotal.length >= total}
           isLoading={isReloading}
         >
           {isReloading ? 'Loading...' : 'SEE MORE'}
