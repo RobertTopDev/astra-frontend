@@ -680,7 +680,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     const leadVCImageUrl = tempImageFile?.leadVCImage
       ? await uploadToCloudinary(tempImageFile?.leadVCImage as File)
       : value?.leadVCImage
-    const marketMakerImageUrl = tempImageFile?.leadVCImage
+    const marketMakerImageUrl = tempImageFile?.marketMakerImage
       ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
       : value?.marketMakerImage
 
