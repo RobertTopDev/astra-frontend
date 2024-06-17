@@ -27,6 +27,7 @@ import TeamPartner from '@/app/launchpad/detail/[project]/components/TeamPartner
 import Metrics from '@/app/launchpad/detail/[project]/components/Metrics'
 import { LogoLink } from '@/app/launchpad/detail/[project]/components/Overview'
 import LiveUpcoming from '@/app/launchpad/(page)/components/LiveUpcoming'
+import { MiniIdenticon } from '@/components/mini-identicon'
 
 type TProgress = {
   data: TLaunchpadDetailInfo
@@ -209,12 +210,10 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
           <></>
         )}
         <div className="flex lg:flex-row flex-col items-center lg:gap-12 gap-6">
-          <div className="w-[200px] h-[200px] min-w-[200px] p-2 border border-white rounded-full flex items-center justify-center">
-            <img
-              className="w-full"
-              src="/images/launchpad/hooked.png"
-              alt="img"
-            />
+          <div className="w-[200px] h-[200px] min-w-[200px] p-2 rounded-full flex items-center justify-center">
+            <div className="relative h-48 w-48">
+              <MiniIdenticon seed="ddd" image={data?.PROJECT_IMAGE} />
+            </div>
           </div>
           <div className="project-info w-full">
             <div className="text-md text-white">
