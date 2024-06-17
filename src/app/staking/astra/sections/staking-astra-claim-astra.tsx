@@ -175,7 +175,11 @@ const StakingAstraClaimAstra = ({
           payout={
             <Button
               variant="astra-blue"
-              disabled={!withdrawAstra || !!withdrawAstraError}
+              disabled={
+                !withdrawAstra ||
+                !!withdrawAstraError ||
+                Number(accruedRewards) <= 0
+              }
               isLoading={withdrawAstraLoading || isLoading}
               onClick={() => withdrawAstra?.()}
             >
@@ -186,7 +190,9 @@ const StakingAstraClaimAstra = ({
             <Button
               variant="astra-blue"
               disabled={
-                !withdrawAstraWithStaked || !!withdrawAstraWithStakedError
+                !withdrawAstraWithStaked ||
+                !!withdrawAstraWithStakedError ||
+                Number(accruedRewards) <= 0
               }
               isLoading={withdrawAstraWithStakedLoading || isLoading}
               onClick={() => withdrawAstraWithStaked?.()}
