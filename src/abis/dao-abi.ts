@@ -117,6 +117,13 @@ export const DAOAbi = [
   },
   {
     inputs: [],
+    name: 'ARBSYS_ADDRESS',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'ASTR',
     outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
     stateMutability: 'view',
@@ -478,6 +485,15 @@ export const DAOAbi = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'uint256', name: '_votingPeriod', type: 'uint256' },
+    ],
+    name: 'updateVotingPeriod',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'votersInfo',
     outputs: [
@@ -498,7 +514,7 @@ export const DAOAbi = [
     inputs: [],
     name: 'votingPeriod',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'pure',
+    stateMutability: 'view',
     type: 'function',
   },
 ] as const
