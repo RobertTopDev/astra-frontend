@@ -115,7 +115,7 @@ export default function Editor({ quillRef, value, onChange }: Props) {
     return {
       toolbar: {
         container: [
-          [{ header: [1, 2, 3, false] }],
+          // [{ header: [1, 2, 3, false] }],
           [{ size: fontSizeArr }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
           [{ list: 'ordered' }, { list: 'bullet' }],
@@ -140,7 +140,7 @@ export default function Editor({ quillRef, value, onChange }: Props) {
   }, [imageHandler])
 
   const quillFormats = [
-    'header',
+    // 'header',
     'size',
     'bold',
     'italic',
