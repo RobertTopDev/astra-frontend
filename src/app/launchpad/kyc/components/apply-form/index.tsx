@@ -179,25 +179,28 @@ const ApplyForm = () => {
         <div className="form w-full flex flex-col gap-4">
           <div className="message flex">
             <span className="label w-1/5">Message</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words">
+            <div className="input-form w-4/5 border border-white p-2 rounded break-words relative">
               <pre>
                 {JSON.stringify(dataPack, undefined, 2).replace(
                   /,\s*(?=\w+:)/g,
                   ',\n'
                 )}
               </pre>
+              <BlurComponent />
             </div>
           </div>
           <div className="signature flex">
             <span className="label w-1/5">Signature</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20">
+            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
               {signature}
+              <BlurComponent />
             </div>
           </div>
           <div className="purefi-data flex">
             <span className="label w-1/5">PureFI Data</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20">
+            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
               {purefiData}
+              <BlurComponent />
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">
@@ -217,3 +220,9 @@ const ApplyForm = () => {
 }
 
 export default ApplyForm
+
+export const BlurComponent = () => {
+  return (
+    <div className="absolute left-0 top-0 w-full h-full bg-gray backdrop-blur-md"></div>
+  )
+}

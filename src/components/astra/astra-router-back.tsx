@@ -9,7 +9,7 @@ const AstraRouterBack = () => {
 
   const BackButton = () => (
     <div className="w-full container">
-      <div className="flex relative z-40">
+      <div className="flex relative z-40 max-w-[200px]">
         <button
           type="button"
           className="cursor-pointer"

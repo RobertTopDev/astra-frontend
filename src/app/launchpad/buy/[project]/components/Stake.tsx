@@ -1,14 +1,15 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+// import Link from 'next/link'
 import { useAccount } from 'wagmi'
 import { formatUnits } from 'viem'
 import {
   useAstraStakingScoreAndMultiplier,
   useAstraUserInfo,
   useAstraDecimal,
+  useVerifyMultiplierCrosschain,
 } from '@/hooks'
 import {
   Card,
@@ -20,12 +21,25 @@ import {
   TableHead,
   TableBody,
   TableCell,
+  Select,
+  SelectTrigger,
+  SelectLabel,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
 } from '@/components/shadcn'
 import { AstraHeader, AstraLoading } from '@/components'
 import { numberFormatter } from '@/util'
+import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
+
+const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
 
 export default function Stake() {
   const { address } = useAccount()
+
+  const [gasFee, setGasFee] = useState<string>('')
+  const [selectedChain, setSelectedChain] = useState<string>('')
 
   const { data: astraDecimal } = useAstraDecimal()
   const { data: userInfo } = useAstraUserInfo({})
@@ -43,6 +57,35 @@ export default function Stake() {
       formatUnits(stakingScoreAndMultiplier[0], astraDecimal?.valueOf())
     )
   }, [stakingScoreAndMultiplier, astraDecimal])
+
+  // Verify Multiplier Cross Chain
+  const {
+    verifyMultiplierCrosschain,
+    error: verifyMultiplierCrsschainError,
+    isLoading: verifyMultiplierCrosschainLoading,
+  } = useVerifyMultiplierCrosschain({
+    enabled: !!address && Number(gasFee) > 0 && !!selectedChain,
+    args: [selectedChain, address as `0x${string}`],
+    gasFee,
+  })
+
+  const onSelectChain = (value: string) => setSelectedChain(value)
+
+  useEffect(() => {
+    async function init() {
+      if (!selectedChain) return
+      // get verify multiplier transaction fee from third party
+      const axelarResult: any = await axelarSDK.estimateGasFee(
+        'arbitrum-sepolia',
+        selectedChain,
+        BigInt(21000),
+        'auto'
+      )
+      setGasFee(axelarResult.toString())
+    }
+
+    init()
+  }, [axelarSDK, selectedChain])
 
   return (
     <>
@@ -78,6 +121,7 @@ export default function Stake() {
                   <TableHead>Challenges</TableHead>
                   <TableHead>Score Earned</TableHead>
                   <TableHead>About</TableHead>
+                  <TableHead>Chain</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
@@ -88,12 +132,45 @@ export default function Stake() {
                   <TableCell>
                     Staking $ASTRADAO tokens gives an additional bonus score
                   </TableCell>
+                  <TableCell>
+                    <Select
+                      disabled={verifyMultiplierCrosschainLoading}
+                      onValueChange={onSelectChain}
+                    >
+                      <SelectTrigger className="bg-[#FBF8F8] rounded-lg p-4 flex w-full gap-2 h-[52px]">
+                        <SelectValue placeholder="Select Chain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Chain</SelectLabel>
+                          <SelectItem value="binance">Binance</SelectItem>
+                          {/* <SelectItem value="ethereum">
+                            Ethereum
+                          </SelectItem>
+                          <SelectItem value="polygon">
+                            Polygon
+                          </SelectItem>
+                          <SelectItem value="base">
+                            Base
+                          </SelectItem> */}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
                   <TableCell className="text-right">
-                    <Link href="/staking/astra">
-                      <Button variant="astra-blue" className="rounded-lg w-fit">
-                        Stake AstraDAO
-                      </Button>
-                    </Link>
+                    {/* <Link href="/staking/astra"> */}
+                    <Button
+                      variant="astra-blue"
+                      className="rounded-lg w-fit"
+                      onClick={() => verifyMultiplierCrosschain?.()}
+                      isLoading={verifyMultiplierCrosschainLoading}
+                      disabled={
+                        !!verifyMultiplierCrsschainError && !selectedChain
+                      }
+                    >
+                      Transfer Staking Score
+                    </Button>
+                    {/* </Link> */}
                   </TableCell>
                 </TableRow>
               </TableBody>
