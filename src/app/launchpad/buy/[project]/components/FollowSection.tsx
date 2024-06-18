@@ -32,7 +32,8 @@ export default function FollowSection({
   const follwingDataLoading = followingTemp.isLoading
   const telegramfollowing: boolean =
     followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
-  const twitterfollowing: boolean = false
+  const twitterfollowing: boolean =
+    followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
 
   const isLoading =
     buyRuleStatusLoading || launchpadLoading || follwingDataLoading
@@ -135,7 +136,20 @@ export default function FollowSection({
                   User needs to follow Astra DAO on Twitter.
                 </div>
                 <div>
-                  <ResetIcon className="w-8 h-8" />
+                  {address ? (
+                    <AstraLoading
+                      isLoading={follwingDataLoading}
+                      className="w-6 h-6"
+                    >
+                      {twitterfollowing ? (
+                        <CheckIcon className="w-8 h-8 text-astra-blue" />
+                      ) : (
+                        <ResetIcon className="w-8 h-8" />
+                      )}
+                    </AstraLoading>
+                  ) : (
+                    <ResetIcon className="w-8 h-8" />
+                  )}
                 </div>
               </div>
             </AstraLink>
