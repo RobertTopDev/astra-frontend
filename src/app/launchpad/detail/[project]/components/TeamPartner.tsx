@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo, Key } from 'react'
 import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -72,23 +72,6 @@ export default function TeamPartner({ data, refetchData }: Props) {
 
     return url
   }
-  const imageHandler = useCallback(() => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
-    input.setAttribute('accept', 'image/*')
-    input.click()
-    input.onchange = async () => {
-      if (input !== null && input.files !== null) {
-        const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        const quill = reactQuillRef.current
-        if (quill) {
-          const range = quill.getEditorSelection()
-          range && quill.getEditor().insertEmbed(range.index, 'image', url)
-        }
-      }
-    }
-  }, [])
 
   const uploadImage = useCallback((index: number) => {
     const input = document.createElement('input')
@@ -108,49 +91,9 @@ export default function TeamPartner({ data, refetchData }: Props) {
           }))
         }
         reader.readAsDataURL(file)
-        // const url = await uploadToCloudinary(file)
-        // const quill = reactQuillRef.current
-        // if (quill) {
-        //   const range = quill.getEditorSelection()
-        //   range && quill.getEditor().insertEmbed(range.index, 'image', url)
-        // }
       }
     }
   }, [])
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ header: [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        [{ align: [] }],
-        [{ color: [] }],
-        ['code-block'],
-        ['clean'],
-      ],
-      handlers: {
-        image: imageHandler,
-      },
-    },
-  }
-
-  const quillFormats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'align',
-    'color',
-    'code-block',
-    'video',
-  ]
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [open, setOpen] = useState(false)
@@ -171,31 +114,21 @@ export default function TeamPartner({ data, refetchData }: Props) {
     teamDescription: z.coerce.string(),
   }
   for (let i = 0; i < team.length; i++) {
-    temp[`name${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member name is required.',
-      })
-    temp[`position${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member position is required.',
-      })
-    temp[`description${i}`] = z
-      .string()
-      .min(1, {
-        message: 'Member description is required.',
-      })
-    temp[`linkedin${i}`] = z
-      .string()
-      .regex(/^[^'"]*$/, {
-        message: 'Linkedin url cannot contain single or double quotes.',
-      })
-    temp[`twitter${i}`] = z
-      .string()
-      .regex(/^[^'"]*$/, {
-        message: 'Twitter url cannot contain single or double quotes.',
-      })
+    temp[`name${i}`] = z.string().min(1, {
+      message: 'Member name is required.',
+    })
+    temp[`position${i}`] = z.string().min(1, {
+      message: 'Member position is required.',
+    })
+    temp[`description${i}`] = z.string().min(1, {
+      message: 'Member description is required.',
+    })
+    temp[`linkedin${i}`] = z.string().regex(/^[^'"]*$/, {
+      message: 'Linkedin url cannot contain single or double quotes.',
+    })
+    temp[`twitter${i}`] = z.string().regex(/^[^'"]*$/, {
+      message: 'Twitter url cannot contain single or double quotes.',
+    })
     temp[`avatar${i}`] = z.any()
   }
   const teamSchema = z.object(temp)
@@ -237,98 +170,110 @@ export default function TeamPartner({ data, refetchData }: Props) {
       alert('Loading')
       return
     }
-    setIsLoading(true)
-    const valueArray = []
-    for (let i = 0; i < team.length; i++) {
-      const url = await uploadToCloudinary(value[`avatar${i}`])
-      valueArray.push({
-        name: value[`name${i}`].replace(/"/g, '\\"').trim(),
-        position: value[`position${i}`].replace(/"/g, '\\"').trim(),
-        description: value[`description${i}`].replace(/\n/g, '\\n').trim(),
-        linkedin: value[`linkedin${i}`].replace(/"/g, '\\"').trim(),
-        twitter: value[`twitter${i}`].replace(/"/g, '\\"').trim(),
-        avatar: url,
-      })
-      form.setValue(`name${i}`, value[`name${i}`].trim())
-      form.setValue(`position${i}`, value[`position${i}`].trim())
-      form.setValue(`description${i}`, value[`description${i}`].trim())
-      form.setValue(`linkedin${i}`, value[`linkedin${i}`].trim())
-      form.setValue(`twitter${i}`, value[`twitter${i}`].trim())
+
+    try {
+      setIsLoading(true)
+      const valueArray = []
+      for (let i = 0; i < team.length; i++) {
+        const url = await uploadToCloudinary(value[`avatar${i}`])
+        valueArray.push({
+          name: value[`name${i}`].replace(/"/g, '\\"').trim(),
+          position: value[`position${i}`].replace(/"/g, '\\"').trim(),
+          description: value[`description${i}`].replace(/\n/g, '\\n').trim(),
+          linkedin: value[`linkedin${i}`].replace(/"/g, '\\"').trim(),
+          twitter: value[`twitter${i}`].replace(/"/g, '\\"').trim(),
+          avatar: url,
+        })
+        form.setValue(`name${i}`, value[`name${i}`].trim())
+        form.setValue(`position${i}`, value[`position${i}`].trim())
+        form.setValue(`description${i}`, value[`description${i}`].trim())
+        form.setValue(`linkedin${i}`, value[`linkedin${i}`].trim())
+        form.setValue(`twitter${i}`, value[`twitter${i}`].trim())
+      }
+
+      const requestData = {
+        owner: data?.OWNER as `0x${string}`,
+        launchpadIndex:
+          data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
+        launchpadAddress: data?.LAUNCHPAD_ADDRESS,
+        launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
+        launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
+        launchpadTokenSymbol: data?.LAUNCHPAD_TOKEN_SYMBOL,
+        launchpadTotalSupply: data?.LAUNCHPAD_TOKEN_TOTAL_SUPPLY, // update
+        launchpadTokenDecimal: data?.LAUNCHPAD_TOKEN_DECIMAL,
+        launchpadTokenPrice: data?.LAUNCHPAD_TOKEN_PRICE,
+        launchpadTokenFDV: data?.LAUNCHPAD_TOKEN_FDV, // update
+        totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
+        saleStartTime: data?.SALE_START_TIME,
+        saleEndTime: data?.SALE_END_TIME,
+        minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
+        maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
+        softCap: data?.SOFT_CAP, // update
+        hardCap: data?.HARD_CAP, // update
+        initialMarketCap: data?.INITIAL_MARKET_CAP, // update
+        projectValuation: data?.PROJECT_VALUATION, // update
+        projectDetail: data?.PROJECT_DETAIL,
+        projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
+        projectImage: data?.PROJECT_IMAGE,
+        leadVCImage: data?.LEAD_VC_IMAGE,
+        marketMakerImage: data?.MARKET_MAKER_IMAGE,
+        github: data?.GITHUB || '',
+        projectDeck: data?.PROJECT_DECK || '',
+        medium: data?.MEDIUM || '',
+        raised: data?.RAISED || 0,
+        teamInfo: JSON.stringify(valueArray),
+        teamDescription: value.teamDescription || '',
+        // metrics: data?.METRICS,
+        saleRoundDetail: data?.SALE_ROUND_DETAIL || '',
+        websiteUrl: data?.WEBSITE_URL,
+        whitepaperUrl: data?.WHITEPAPER_URL,
+        twitter: data?.TWITTER,
+        telegram: data?.TELEGRAM,
+        discord: data?.DISCORD,
+        otherUrl: data?.OTHER_URL,
+        email: data?.EMAIL,
+        // investorDetail: JSON.stringify(
+        //   (
+        //     JSON.parse(data?.INVESTOR_DETAIL?.replace(/\n/g, '\\n') || '[]').join(
+        //       ', '
+        //     ) || ''
+        //   )
+        //     .split(',')
+        //     .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
+        // ),
+        chain: data?.CHAIN,
+        requestTransaction: data?.REQUEST_TRANSACTION,
+        approveTransaction: data?.APPROVE_TRANSACTION,
+        status: data?.STATUS,
+        leadVC: data?.LEAD_VC,
+        marketMaker: data?.MARKET_MAKER,
+        controlledCap: data?.CONTROLLED_CAP,
+        daoApprovedMetrics: data?.DAO_APPROVED_METRICS,
+        tokenType: data?.TOKEN_TYPE,
+        baseToken: data?.BASE_TOKEN,
+        isVesting: data?.IS_VESTING,
+        vest_start: data?.VEST_START,
+        vest_cliff: data?.VEST_CLIFF,
+        vest_duration: data?.VEST_DURATION,
+        vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS,
+        vest_initial_unlock: data?.VEST_INITIAL_UNLOCK,
+      }
+      const res = await updateLaunchpadForDB(requestData, data?.ID + '')
+      if (res.ok) {
+        setTeam(valueArray)
+        if (refetchData) {
+          refetchData()
+        }
+        setIsLoading(false)
+        setOpen(false)
+      } else {
+        throw new Error('Connection to the server failed.')
+      }
+    } catch (error) {
+      console.error('Error during form submission:', error)
+      alert('An error occurred during submission. Please try again later.')
+      setIsLoading(false)
     }
-    setTeam(valueArray)
-    const requestData = {
-      owner: data?.OWNER as `0x${string}`,
-      launchpadIndex:
-        data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
-      launchpadAddress: data?.LAUNCHPAD_ADDRESS,
-      launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
-      launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
-      launchpadTokenSymbol: data?.LAUNCHPAD_TOKEN_SYMBOL,
-      launchpadTotalSupply: data?.LAUNCHPAD_TOKEN_TOTAL_SUPPLY, // update
-      launchpadTokenDecimal: data?.LAUNCHPAD_TOKEN_DECIMAL,
-      launchpadTokenPrice: data?.LAUNCHPAD_TOKEN_PRICE,
-      launchpadTokenFDV: data?.LAUNCHPAD_TOKEN_FDV, // update
-      totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
-      saleStartTime: data?.SALE_START_TIME,
-      saleEndTime: data?.SALE_END_TIME,
-      minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
-      maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
-      softCap: data?.SOFT_CAP, // update
-      hardCap: data?.HARD_CAP, // update
-      initialMarketCap: data?.INITIAL_MARKET_CAP, // update
-      projectValuation: data?.PROJECT_VALUATION, // update
-      projectDetail: data?.PROJECT_DETAIL,
-      projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
-      projectImage: data?.PROJECT_IMAGE,
-      leadVCImage: data?.LEAD_VC_IMAGE,
-      marketMakerImage: data?.MARKET_MAKER_IMAGE,
-      github: data?.GITHUB || '',
-      projectDeck: data?.PROJECT_DECK || '',
-      medium: data?.MEDIUM || '',
-      raised: data?.RAISED || 0,
-      teamInfo: JSON.stringify(valueArray),
-      teamDescription: value.teamDescription || '',
-      // metrics: data?.METRICS,
-      saleRoundDetail: data?.SALE_ROUND_DETAIL || '',
-      websiteUrl: data?.WEBSITE_URL,
-      whitepaperUrl: data?.WHITEPAPER_URL,
-      twitter: data?.TWITTER,
-      telegram: data?.TELEGRAM,
-      discord: data?.DISCORD,
-      otherUrl: data?.OTHER_URL,
-      email: data?.EMAIL,
-      // investorDetail: JSON.stringify(
-      //   (
-      //     JSON.parse(data?.INVESTOR_DETAIL?.replace(/\n/g, '\\n') || '[]').join(
-      //       ', '
-      //     ) || ''
-      //   )
-      //     .split(',')
-      //     .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
-      // ),
-      chain: data?.CHAIN,
-      requestTransaction: data?.REQUEST_TRANSACTION,
-      approveTransaction: data?.APPROVE_TRANSACTION,
-      status: data?.STATUS,
-      leadVC: data?.LEAD_VC,
-      marketMaker: data?.MARKET_MAKER,
-      controlledCap: data?.CONTROLLED_CAP,
-      daoApprovedMetrics: data?.DAO_APPROVED_METRICS,
-      tokenType: data?.TOKEN_TYPE,
-      baseToken: data?.BASE_TOKEN,
-      isVesting: data?.IS_VESTING,
-      vest_start: data?.VEST_START,
-      vest_cliff: data?.VEST_CLIFF,
-      vest_duration: data?.VEST_DURATION,
-      vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS,
-      vest_initial_unlock: data?.VEST_INITIAL_UNLOCK,
-    }
-    await updateLaunchpadForDB(requestData, data?.ID + '')
-    if (refetchData) {
-      refetchData()
-    }
-    setIsLoading(false)
-    setOpen(false)
   }
   const handleAddInput = () => {
     const index = team.length
@@ -354,13 +299,6 @@ export default function TeamPartner({ data, refetchData }: Props) {
     form.reset(values)
     setTeam((teams) => [...teams.slice(0, -1)])
   }
-  function isUrl(value: string) {
-    // Regular expression to check if the value is a valid URL
-    const urlRegex = new RegExp('^(http|https)://[^ "]+$')
-
-    return value.trim() === '' || urlRegex.test(value)
-  }
-
   const isAdmin = pathname.includes('owner') || pathname.includes('admin')
 
   const tempContainer = document.getElementById('teamDescription')
@@ -631,7 +569,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
         </div>
 
         <div className="mt-8 gap-6 flex-wrap grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1">
-          {team.map((item, i) => (
+          {teamInfoArray.map((item: TeamObject, i: Key | null | undefined) => (
             <TeamCard key={i} data={item} />
           ))}
         </div>

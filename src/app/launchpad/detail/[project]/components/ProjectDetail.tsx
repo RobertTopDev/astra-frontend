@@ -668,97 +668,108 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       return
     }
     setIsLoading(true)
-    let baseTokenTemp = ''
-    if (value.baseToken === 'USDC')
-      baseTokenTemp = chainConfig.USDCContractAddress
-    if (value.baseToken === 'USDT')
-      baseTokenTemp = chainConfig.USDTContractAddress
 
-    const projectImageUrl = tempImageFile?.projectImage
-      ? await uploadToCloudinary(tempImageFile?.projectImage as File)
-      : value?.projectImage
-    const leadVCImageUrl = tempImageFile?.leadVCImage
-      ? await uploadToCloudinary(tempImageFile?.leadVCImage as File)
-      : value?.leadVCImage
-    const marketMakerImageUrl = tempImageFile?.marketMakerImage
-      ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
-      : value?.marketMakerImage
+    try {
+      let baseTokenTemp = ''
+      if (value.baseToken === 'USDC')
+        baseTokenTemp = chainConfig.USDCContractAddress
+      if (value.baseToken === 'USDT')
+        baseTokenTemp = chainConfig.USDTContractAddress
 
-    const tempInvestorDetail = JSON.stringify(
-      value.investorDetail
-        .split(',')
-        .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
-    )
+      const projectImageUrl = tempImageFile?.projectImage
+        ? await uploadToCloudinary(tempImageFile?.projectImage as File)
+        : value?.projectImage
+      const leadVCImageUrl = tempImageFile?.leadVCImage
+        ? await uploadToCloudinary(tempImageFile?.leadVCImage as File)
+        : value?.leadVCImage
+      const marketMakerImageUrl = tempImageFile?.marketMakerImage
+        ? await uploadToCloudinary(tempImageFile?.marketMakerImage as File)
+        : value?.marketMakerImage
 
-    const requestData = {
-      owner: data.OWNER as `0x${string}`,
-      launchpadIndex:
-        data.LAUNCHPAD_INDEX != null ? Number(data.LAUNCHPAD_INDEX) : null,
-      launchpadAddress: data.LAUNCHPAD_ADDRESS,
-      launchpadTokenAddress: value.tokenAddress,
-      launchpadTokenName: value.tokenName.trim(),
-      launchpadTokenSymbol: value.tokenSymbol.trim(),
-      launchpadTotalSupply: value.totalSupply, // update
-      raised: value.raised,
-      launchpadTokenDecimal: value.tokenDecimals,
-      launchpadTokenPrice: value.tokenPrice,
-      launchpadTokenFDV: value.totalToken, // update
-      totalSaleAmount: value.tokenAmount,
-      saleStartTime: new Date(value.saleStartDate).getTime(),
-      saleEndTime: new Date(value.saleEndDate).getTime(),
-      minPurchaseBaseAmount: value.minPurchaseAmount,
-      maxPurchaseBaseAmount: value.baseAmount,
-      softCap: value.softCap, // update
-      hardCap: value.hardCap, // update
-      initialMarketCap: value.initialMarketCap, // update
-      projectValuation: 0, // should remove
-      projectDetail: value.projectDescription,
-      projectDescriptionDetail: value.projectDescriptionDetail,
-      projectImage: projectImageUrl,
-      leadVCImage: leadVCImageUrl,
-      marketMakerImage: marketMakerImageUrl,
-      // teamInfo: data.TEAM_INFO,
-      teamDescription: data.TEAM_DESCRIPTION || '',
-      saleRoundDetail: data.SALE_ROUND_DETAIL || '',
-      // metrics: data.METRICS,
-      websiteUrl: value.website,
-      projectDeck: value.projectDeck,
-      whitepaperUrl: value.pitchdeck,
-      twitter: value.projectTwitter,
-      github: value.github,
-      telegram: value.contactTelegram,
-      discord: value.contactDiscord,
-      medium: value.contactMedium,
-      otherUrl: data.OTHER_URL,
-      email: value.email,
-      chain: data.CHAIN || (chain && idToChain[chain.id]) || 'Arbitrum',
-      requestTransaction: data.REQUEST_TRANSACTION,
-      approveTransaction: data.APPROVE_TRANSACTION,
-      status: data.STATUS,
-      leadVC: value.leadVC.trim(),
-      marketMaker: value.marketMaker.trim(),
-      investorDetail: tempInvestorDetail,
-      controlledCap: '',
-      daoApprovedMetrics: '',
-      tokenType: value.tokenType,
-      baseToken: baseTokenTemp,
-      isVesting: value.isVesting,
-      vest_start: value.vest_start
-        ? new Date(value.vest_start).getTime()
-        : new Date().getTime(),
-      vest_cliff: Number(value.vest_cliff) * 86400 || 0,
-      vest_duration: Number(value.vest_duration) * 86400 || 0,
-      vest_slice_period_seconds:
-        Number(value.vest_slice_period_seconds) * 86400 || 0,
-      vest_initial_unlock: value.vest_initial_unlock || 0,
+      const tempInvestorDetail = JSON.stringify(
+        value.investorDetail
+          .split(',')
+          .map((investor: string) => investor.trim().replace(/"/g, '\\"'))
+      )
+
+      const requestData = {
+        owner: data.OWNER as `0x${string}`,
+        launchpadIndex:
+          data.LAUNCHPAD_INDEX != null ? Number(data.LAUNCHPAD_INDEX) : null,
+        launchpadAddress: data.LAUNCHPAD_ADDRESS,
+        launchpadTokenAddress: value.tokenAddress,
+        launchpadTokenName: value.tokenName.trim(),
+        launchpadTokenSymbol: value.tokenSymbol.trim(),
+        launchpadTotalSupply: value.totalSupply, // update
+        raised: value.raised,
+        launchpadTokenDecimal: value.tokenDecimals,
+        launchpadTokenPrice: value.tokenPrice,
+        launchpadTokenFDV: value.totalToken, // update
+        totalSaleAmount: value.tokenAmount,
+        saleStartTime: new Date(value.saleStartDate).getTime(),
+        saleEndTime: new Date(value.saleEndDate).getTime(),
+        minPurchaseBaseAmount: value.minPurchaseAmount,
+        maxPurchaseBaseAmount: value.baseAmount,
+        softCap: value.softCap, // update
+        hardCap: value.hardCap, // update
+        initialMarketCap: value.initialMarketCap, // update
+        projectValuation: 0, // should remove
+        projectDetail: value.projectDescription,
+        projectDescriptionDetail: value.projectDescriptionDetail,
+        projectImage: projectImageUrl,
+        leadVCImage: leadVCImageUrl,
+        marketMakerImage: marketMakerImageUrl,
+        // teamInfo: data.TEAM_INFO,
+        teamDescription: data.TEAM_DESCRIPTION || '',
+        saleRoundDetail: data.SALE_ROUND_DETAIL || '',
+        // metrics: data.METRICS,
+        websiteUrl: value.website,
+        projectDeck: value.projectDeck,
+        whitepaperUrl: value.pitchdeck,
+        twitter: value.projectTwitter,
+        github: value.github,
+        telegram: value.contactTelegram,
+        discord: value.contactDiscord,
+        medium: value.contactMedium,
+        otherUrl: data.OTHER_URL,
+        email: value.email,
+        chain: data.CHAIN || (chain && idToChain[chain.id]) || 'Arbitrum',
+        requestTransaction: data.REQUEST_TRANSACTION,
+        approveTransaction: data.APPROVE_TRANSACTION,
+        status: data.STATUS,
+        leadVC: value.leadVC.trim(),
+        marketMaker: value.marketMaker.trim(),
+        investorDetail: tempInvestorDetail,
+        controlledCap: '',
+        daoApprovedMetrics: '',
+        tokenType: value.tokenType,
+        baseToken: baseTokenTemp,
+        isVesting: value.isVesting,
+        vest_start: value.vest_start
+          ? new Date(value.vest_start).getTime()
+          : new Date().getTime(),
+        vest_cliff: Number(value.vest_cliff) * 86400 || 0,
+        vest_duration: Number(value.vest_duration) * 86400 || 0,
+        vest_slice_period_seconds:
+          Number(value.vest_slice_period_seconds) * 86400 || 0,
+        vest_initial_unlock: value.vest_initial_unlock || 0,
+      }
+
+      const res = await updateLaunchpadForDB(requestData, data?.ID + '')
+      if (res.ok) {
+        if (refetchData) {
+          refetchData()
+        }
+        setIsLoading(false)
+        setOpen(false)
+      } else {
+        throw new Error('Connection to the server failed.')
+      }
+    } catch (error) {
+      console.error('Error during form submission:', error)
+      alert('An error occurred during submission. Please try again later.')
+      setIsLoading(false)
     }
-    await updateLaunchpadForDB(requestData, data?.ID + '')
-    if (refetchData) {
-      refetchData()
-    }
-    setIsLoading(false)
-    setOpen(false)
-    // window.location.reload()
   }
 
   const isAdmin = pathname.includes('owner') || pathname.includes('admin')

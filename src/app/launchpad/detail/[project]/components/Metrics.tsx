@@ -135,13 +135,6 @@ export default function Metrics({ data, refetchData }: Props) {
     setSaleRoundDetail(saleRoundDetailInfoArray)
   }, [data?.SALE_ROUND_DETAIL])
 
-  const convertMetricsObjectToString = (metrics: MetricsObject[]) => {
-    return metrics
-      .map((member: MetricsObject) => {
-        return `${member.label}:${member.value}`
-      })
-      .join(',')
-  }
   const convertSaleRoundDetailObjectToString = (
     saleRoundDetail: SaleRoundDetailObject[]
   ) => {
@@ -157,111 +150,122 @@ export default function Metrics({ data, refetchData }: Props) {
       alert('Loading')
       return
     }
-    let metricsSum = 0
-    for (let i = 0; i < metrics.length; i++) {
-      metricsSum += value[`value${i}`]
-    }
-    const temp_errors: Errors = {}
-    if (metricsSum !== 100) {
-      temp_errors.totalMetrics = `Total Metrics allocation is ${metricsSum}. Must be 100`
-      setErrors(temp_errors)
-      return
-    }
-    setIsLoading(true)
+    try {
+      let metricsSum = 0
+      for (let i = 0; i < metrics.length; i++) {
+        metricsSum += value[`value${i}`]
+      }
+      const temp_errors: Errors = {}
+      if (metricsSum !== 100) {
+        temp_errors.totalMetrics = `Total Metrics allocation is ${metricsSum}. Must be 100`
+        setErrors(temp_errors)
+        return
+      }
+      setIsLoading(true)
 
-    const valueArray: MetricsObject[] = []
-    const saleValueArray = []
-    for (let i = 0; i < metrics.length; i++) {
-      valueArray.push({
-        id: value[`label${i}`].replace(/"/g, '\\"').trim(),
-        value: value[`value${i}`],
-        label: value[`label${i}`].replace(/"/g, '\\"').trim(),
-      })
-      form.setValue(`label${i}`, value[`label${i}`].trim())
-    }
-    setMetrics(valueArray)
-    for (let i = 0; i < saleRoundDetail.length; i++) {
-      saleValueArray.push({
-        price: value[`price${i}`],
-        raised: value[`raised${i}`],
-        lockup: value[`lockup${i}`].replace(/"/g, '\\"').trim(),
-        saleType: value[`saleType${i}`].replace(/"/g, '\\"').trim(),
-      })
-      form.setValue(`price${i}`, value[`price${i}`])
-      form.setValue(`raised${i}`, value[`raised${i}`])
-      form.setValue(`lockup${i}`, value[`lockup${i}`])
-      form.setValue(`saleType${i}`, value[`saleType${i}`])
-    }
-    setSaleRoundDetail(saleValueArray)
+      const valueArray: MetricsObject[] = []
+      const saleValueArray = []
+      for (let i = 0; i < metrics.length; i++) {
+        valueArray.push({
+          id: value[`label${i}`].replace(/"/g, '\\"').trim(),
+          value: value[`value${i}`],
+          label: value[`label${i}`].replace(/"/g, '\\"').trim(),
+        })
+        form.setValue(`label${i}`, value[`label${i}`].trim())
+      }
+      setMetrics(valueArray)
+      for (let i = 0; i < saleRoundDetail.length; i++) {
+        saleValueArray.push({
+          price: value[`price${i}`],
+          raised: value[`raised${i}`],
+          lockup: value[`lockup${i}`].replace(/"/g, '\\"').trim(),
+          saleType: value[`saleType${i}`].replace(/"/g, '\\"').trim(),
+        })
+        form.setValue(`price${i}`, value[`price${i}`])
+        form.setValue(`raised${i}`, value[`raised${i}`])
+        form.setValue(`lockup${i}`, value[`lockup${i}`])
+        form.setValue(`saleType${i}`, value[`saleType${i}`])
+      }
+      setSaleRoundDetail(saleValueArray)
 
-    const requestData = {
-      owner: data?.OWNER as `0x${string}`,
-      launchpadIndex:
-        data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
-      launchpadAddress: data?.LAUNCHPAD_ADDRESS,
-      launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
-      launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
-      launchpadTokenSymbol: data?.LAUNCHPAD_TOKEN_SYMBOL,
-      launchpadTotalSupply: data?.LAUNCHPAD_TOKEN_TOTAL_SUPPLY, // update
-      launchpadTokenDecimal: data?.LAUNCHPAD_TOKEN_DECIMAL,
-      launchpadTokenPrice: data?.LAUNCHPAD_TOKEN_PRICE,
-      launchpadTokenFDV: data?.LAUNCHPAD_TOKEN_FDV, // update
-      totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
-      saleStartTime: data?.SALE_START_TIME,
-      saleEndTime: data?.SALE_END_TIME,
-      minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
-      maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
-      softCap: data?.SOFT_CAP, // update
-      hardCap: data?.HARD_CAP, // update
-      initialMarketCap: data?.INITIAL_MARKET_CAP, // update
-      projectValuation: data?.PROJECT_VALUATION, // update
-      projectDetail: data?.PROJECT_DETAIL,
-      projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
-      projectImage: data?.PROJECT_IMAGE,
-      leadVCImage: data?.LEAD_VC_IMAGE,
-      marketMakerImage: data?.MARKET_MAKER_IMAGE,
-      github: data?.GITHUB || '',
-      projectDeck: data?.PROJECT_DECK || '',
-      medium: data?.MEDIUM || '',
-      raised: data?.RAISED || 0,
-      // teamInfo: data?.TEAM_INFO,
-      teamDescription: data?.TEAM_DESCRIPTION || '',
-      metrics: JSON.stringify(valueArray),
-      saleRoundDetail:
-        saleValueArray.length > 0
-          ? convertSaleRoundDetailObjectToString(saleValueArray)
-          : '',
-      websiteUrl: data?.WEBSITE_URL,
-      whitepaperUrl: data?.WHITEPAPER_URL,
-      twitter: data?.TWITTER,
-      telegram: data?.TELEGRAM,
-      discord: data?.DISCORD,
-      otherUrl: data?.OTHER_URL,
-      email: data?.EMAIL,
-      // investorDetail: data?.INVESTOR_DETAIL || '',
-      chain: data?.CHAIN,
-      requestTransaction: data?.REQUEST_TRANSACTION,
-      approveTransaction: data?.APPROVE_TRANSACTION,
-      status: data?.STATUS,
-      leadVC: data?.LEAD_VC,
-      marketMaker: data?.MARKET_MAKER,
-      controlledCap: data?.CONTROLLED_CAP,
-      daoApprovedMetrics: data?.DAO_APPROVED_METRICS,
-      baseToken: data?.BASE_TOKEN,
-      tokenType: data?.TOKEN_TYPE,
-      isVesting: data?.IS_VESTING,
-      vest_start: data?.VEST_START,
-      vest_cliff: data?.VEST_CLIFF,
-      vest_duration: data?.VEST_DURATION,
-      vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS,
-      vest_initial_unlock: data?.VEST_INITIAL_UNLOCK,
+      const requestData = {
+        owner: data?.OWNER as `0x${string}`,
+        launchpadIndex:
+          data?.LAUNCHPAD_INDEX != null ? Number(data?.LAUNCHPAD_INDEX) : null,
+        launchpadAddress: data?.LAUNCHPAD_ADDRESS,
+        launchpadTokenAddress: data?.LAUNCHPAD_TOKEN_ADDRESS,
+        launchpadTokenName: data?.LAUNCHPAD_TOKEN_NAME,
+        launchpadTokenSymbol: data?.LAUNCHPAD_TOKEN_SYMBOL,
+        launchpadTotalSupply: data?.LAUNCHPAD_TOKEN_TOTAL_SUPPLY, // update
+        launchpadTokenDecimal: data?.LAUNCHPAD_TOKEN_DECIMAL,
+        launchpadTokenPrice: data?.LAUNCHPAD_TOKEN_PRICE,
+        launchpadTokenFDV: data?.LAUNCHPAD_TOKEN_FDV, // update
+        totalSaleAmount: data?.TOTAL_SALE_AMOUNT,
+        saleStartTime: data?.SALE_START_TIME,
+        saleEndTime: data?.SALE_END_TIME,
+        minPurchaseBaseAmount: data?.MIN_PURCHASE_BASE_AMOUNT || 0,
+        maxPurchaseBaseAmount: data?.MAX_PURCHASE_BASE_AMOUNT,
+        softCap: data?.SOFT_CAP, // update
+        hardCap: data?.HARD_CAP, // update
+        initialMarketCap: data?.INITIAL_MARKET_CAP, // update
+        projectValuation: data?.PROJECT_VALUATION, // update
+        projectDetail: data?.PROJECT_DETAIL,
+        projectDescriptionDetail: data?.PROJECT_DESCRIPTION_DETAIL,
+        projectImage: data?.PROJECT_IMAGE,
+        leadVCImage: data?.LEAD_VC_IMAGE,
+        marketMakerImage: data?.MARKET_MAKER_IMAGE,
+        github: data?.GITHUB || '',
+        projectDeck: data?.PROJECT_DECK || '',
+        medium: data?.MEDIUM || '',
+        raised: data?.RAISED || 0,
+        // teamInfo: data?.TEAM_INFO,
+        teamDescription: data?.TEAM_DESCRIPTION || '',
+        metrics: JSON.stringify(valueArray),
+        saleRoundDetail:
+          saleValueArray.length > 0
+            ? convertSaleRoundDetailObjectToString(saleValueArray)
+            : '',
+        websiteUrl: data?.WEBSITE_URL,
+        whitepaperUrl: data?.WHITEPAPER_URL,
+        twitter: data?.TWITTER,
+        telegram: data?.TELEGRAM,
+        discord: data?.DISCORD,
+        otherUrl: data?.OTHER_URL,
+        email: data?.EMAIL,
+        // investorDetail: data?.INVESTOR_DETAIL || '',
+        chain: data?.CHAIN,
+        requestTransaction: data?.REQUEST_TRANSACTION,
+        approveTransaction: data?.APPROVE_TRANSACTION,
+        status: data?.STATUS,
+        leadVC: data?.LEAD_VC,
+        marketMaker: data?.MARKET_MAKER,
+        controlledCap: data?.CONTROLLED_CAP,
+        daoApprovedMetrics: data?.DAO_APPROVED_METRICS,
+        baseToken: data?.BASE_TOKEN,
+        tokenType: data?.TOKEN_TYPE,
+        isVesting: data?.IS_VESTING,
+        vest_start: data?.VEST_START,
+        vest_cliff: data?.VEST_CLIFF,
+        vest_duration: data?.VEST_DURATION,
+        vest_slice_period_seconds: data?.VEST_SLICE_PERIOD_SECONDS,
+        vest_initial_unlock: data?.VEST_INITIAL_UNLOCK,
+      }
+      const res = await updateLaunchpadForDB(requestData, data?.ID + '')
+      if (res.ok) {
+        setMetrics(valueArray)
+        if (refetchData) {
+          refetchData()
+        }
+        setIsLoading(false)
+        setOpen(false)
+      } else {
+        throw new Error('Connection to the server failed.')
+      }
+    } catch (error) {
+      console.log('Error during form submission:', error)
+      alert('An error occurred during submission. Please try again later.')
+      setIsLoading(false)
     }
-    await updateLaunchpadForDB(requestData, data?.ID + '')
-    if (refetchData) {
-      refetchData()
-    }
-    setIsLoading(false)
-    setOpen(false)
   }
   const xSymbol = _.map(metrics, 'value')
   const ySymbol = _.map(metrics, 'label')
@@ -389,7 +393,8 @@ export default function Metrics({ data, refetchData }: Props) {
                                   const temp = e
                                   const str = temp.target.value
                                   if (str !== '0')
-                                    temp.target.value = str.replace(/^0+/, '') || '0'
+                                    temp.target.value =
+                                      str.replace(/^0+/, '') || '0'
                                   field.onChange(temp)
                                 }}
                               />
