@@ -17,7 +17,7 @@ export default function MoreStep() {
               <div className="text-[4rem]">1</div>
               <div className="text-2xl">Invest in an Index</div>
             </div>
-            <div className="font-normal text-lg text-justify">
+            <div className="font-normal text-lg">
               Find winning indices and buy, vesting, liquidity lock, and other
               token solutions.
             </div>
@@ -33,7 +33,7 @@ export default function MoreStep() {
               <div className="text-[4rem]">2</div>
               <div className="text-2xl">Stake Astra</div>
             </div>
-            <div className="font-normal text-lg text-justify">
+            <div className="font-normal text-lg">
               Maximize yield by staking $ASTRADAO.
             </div>
           </div>
@@ -48,7 +48,7 @@ export default function MoreStep() {
               <div className="text-[4rem]">3</div>
               <div className="text-2xl">Governance </div>
             </div>
-            <div className="font-normal text-lg text-justify whitespace-normal">
+            <div className="font-normal text-lg whitespace-normal">
               Join the Astra DAO and participate in ecosystem governance.
             </div>
           </div>
