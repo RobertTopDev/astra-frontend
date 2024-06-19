@@ -160,6 +160,8 @@ export default function Metrics({ data, refetchData }: Props) {
         temp_errors.totalMetrics = `Total Metrics allocation is ${metricsSum}. Must be 100`
         setErrors(temp_errors)
         return
+      } else {
+        setErrors({})
       }
       setIsLoading(true)
 
