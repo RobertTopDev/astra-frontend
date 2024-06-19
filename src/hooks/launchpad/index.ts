@@ -18,5 +18,7 @@ export * from './useGetContributorListForDB'
 export * from './useDeployVestingContract'
 export * from './useSetVestingToLaunchpad'
 export * from './useFollowCheck'
-export * from "./useLaunchpadClaimVestingRewards"
-export * from "./useVerifyMultiplierCrosschain"
+export * from './useLaunchpadClaimVestingRewards'
+export * from './useVerifyMultiplierCrosschain'
+export * from './useGetCrossChainStakingDetails'
+export * from './useGetNativeAmountAndMultiplier'

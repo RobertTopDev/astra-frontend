@@ -2871,6 +2871,17 @@ export default function Page({ params }: TPage) {
                     </Button>
                   </AstraLink>
                 )}
+
+                {(chain && idToChain[chain.id]) === launchpadDetail?.CHAIN ? (
+                  <></>
+                ) : (
+                  <>
+                    <Separator className="bg-gray-400"></Separator>
+                    <div className="text-red-500">
+                      {`Please switch your current chain to ${launchpadDetail?.CHAIN}`}
+                    </div>
+                  </>
+                )}
               </form>
             </Form>
           )}

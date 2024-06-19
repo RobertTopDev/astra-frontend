@@ -10,6 +10,8 @@ import {
   useAstraUserInfo,
   useAstraDecimal,
   useVerifyMultiplierCrosschain,
+  useGetCrossChainStakingDetails,
+  useGetNativeAmountAndMultiplier,
 } from '@/hooks'
 import {
   Card,
@@ -67,7 +69,27 @@ export default function Stake() {
     enabled: !!address && Number(gasFee) > 0 && !!selectedChain,
     args: [selectedChain, address as `0x${string}`],
     gasFee,
+    onSuccessTx: () => {
+      refetchCrossChainDetails()
+      refetchStakingInfo()
+    },
   })
+
+  // Get cross chain information (amount, multiplier)
+  const { data: crossChainDetails, refetch: refetchCrossChainDetails } =
+    useGetCrossChainStakingDetails({
+      args: [address as `0x${string}`, selectedChain],
+    })
+  console.log('cross chain staking info: ', crossChainDetails)
+
+  // Get native amount and multiplier on current chain
+  const { data: stakingInfo, refetch: refetchStakingInfo } =
+    useGetNativeAmountAndMultiplier({
+      args: [address as `0x${string}`],
+    })
+  console.log('current chain staking info: ', stakingInfo)
+
+  // compare the bsc and current chain multiplier
 
   const onSelectChain = (value: string) => setSelectedChain(value)
 
@@ -165,10 +187,12 @@ export default function Stake() {
                       onClick={() => verifyMultiplierCrosschain?.()}
                       isLoading={verifyMultiplierCrosschainLoading}
                       disabled={
-                        !!verifyMultiplierCrsschainError && !selectedChain
+                        !!verifyMultiplierCrsschainError || !selectedChain
                       }
                     >
-                      Transfer Staking Score
+                      {verifyMultiplierCrosschainLoading
+                        ? 'Loading...'
+                        : 'Transfer Staking Score'}
                     </Button>
                     {/* </Link> */}
                   </TableCell>
