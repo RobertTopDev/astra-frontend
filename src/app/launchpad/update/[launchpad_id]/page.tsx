@@ -854,8 +854,6 @@ export default function Page({ params }: TPage) {
       })
     }
     setTeam(teamValues)
-    console.log(teamValues)
-    return
 
     const metricsValues = []
     for (let i = 0; i < metrics.length; i++) {
