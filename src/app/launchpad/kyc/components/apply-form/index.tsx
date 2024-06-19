@@ -177,7 +177,7 @@ const ApplyForm = () => {
       <AstraHeader className="text-center w-full">KYC Apply Form</AstraHeader>
       <AstraCard className="w-full my-8">
         <div className="form w-full flex flex-col gap-4">
-          <div className="message flex">
+          {/* <div className="message flex">
             <span className="label w-1/5">Message</span>
             <div className="input-form w-4/5 border border-white p-2 rounded break-words relative">
               <pre>
@@ -195,7 +195,14 @@ const ApplyForm = () => {
               {signature}
               <BlurComponent />
             </div>
-          </div>
+          </div> */}
+
+          <iframe
+            src="https://stage.dashboard.purefi.io/"
+            height="800px"
+            loading="lazy"
+          />
+
           <div className="purefi-data flex">
             <span className="label w-1/5">PureFI Data</span>
             <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
