@@ -339,7 +339,7 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
                       <div>Proposal Summary</div>
                       <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger>
+                          <TooltipTrigger type="reset">
                             <InfoCircledIcon className="w-1rem h-[1rem]" />
                           </TooltipTrigger>
                           <TooltipContent>
@@ -456,7 +456,7 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
                   <div>Proposal Actions</div>
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger type="reset">
                         <InfoCircledIcon className="w-1rem h-[1rem]" />
                       </TooltipTrigger>
                       <TooltipContent>

@@ -862,7 +862,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Overview *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1031,7 +1031,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Telegram Handle *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1220,7 +1220,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Total Supply *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1292,7 +1292,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Token Decimals *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1367,7 +1367,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Token Address *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1429,7 +1429,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Token Sale Amount *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1500,7 +1500,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           </span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1552,7 +1552,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           </span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1643,7 +1643,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Sale Start Time *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1708,7 +1708,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Sale End Time *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1773,7 +1773,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Soft Cap *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1823,7 +1823,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Hard Cap *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1873,7 +1873,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Initial Market Cap *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -1953,7 +1953,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               <span className="mr-2">Vesting Start Time *</span>
                               <TooltipProvider>
                                 <Tooltip>
-                                  <TooltipTrigger asChild>
+                                  <TooltipTrigger asChild type="reset">
                                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -2024,7 +2024,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               <span className="mr-2">Vesting Cliff *</span>
                               <TooltipProvider>
                                 <Tooltip>
-                                  <TooltipTrigger asChild>
+                                  <TooltipTrigger asChild type="reset">
                                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -2069,7 +2069,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               <span className="mr-2">Vesting Duration *</span>
                               <TooltipProvider>
                                 <Tooltip>
-                                  <TooltipTrigger asChild>
+                                  <TooltipTrigger asChild type="reset">
                                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -2115,7 +2115,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               </span>
                               <TooltipProvider>
                                 <Tooltip>
-                                  <TooltipTrigger asChild>
+                                  <TooltipTrigger asChild type="reset">
                                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -2158,7 +2158,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                               </span>
                               <TooltipProvider>
                                 <Tooltip>
-                                  <TooltipTrigger asChild>
+                                  <TooltipTrigger asChild type="reset">
                                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -2255,7 +2255,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Investor List *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>
@@ -2292,7 +2292,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                           <span className="mr-2">Total Raised Amount *</span>
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger asChild>
+                              <TooltipTrigger asChild type="reset">
                                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                               </TooltipTrigger>
                               <TooltipContent>

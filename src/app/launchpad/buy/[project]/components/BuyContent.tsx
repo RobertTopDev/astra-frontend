@@ -371,7 +371,7 @@ export default function BuyContent({
                 <span className="text-[#7E7E7E]">Tier</span>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger type="reset">
                       <InfoCircledIcon />
                     </TooltipTrigger>
                     <TooltipContent>
@@ -394,7 +394,7 @@ export default function BuyContent({
                 <span className="text-[#7E7E7E]">Multiplier</span>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger type="reset">
                       <InfoCircledIcon />
                     </TooltipTrigger>
                     <TooltipContent>

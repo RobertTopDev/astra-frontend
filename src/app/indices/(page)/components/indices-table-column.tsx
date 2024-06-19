@@ -54,7 +54,7 @@ export const indicesColumns: ColumnDef<TIndex>[] = [
           </AstraTableToggleSortButton>
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger type="reset">
                 <InfoCircledIcon className="w-[1rem] h-[1rem]" />
               </TooltipTrigger>
               <TooltipContent>

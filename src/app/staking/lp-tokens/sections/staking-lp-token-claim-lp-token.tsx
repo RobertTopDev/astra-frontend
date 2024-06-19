@@ -241,7 +241,7 @@ const StakingLpTokenClaimLpToken = ({
               <div className="font-medium">LP TOKEN STAKED</div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
@@ -282,7 +282,7 @@ const StakingLpTokenClaimLpToken = ({
               <div className="font-medium">CLAIMABLE ASTRADAO</div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">

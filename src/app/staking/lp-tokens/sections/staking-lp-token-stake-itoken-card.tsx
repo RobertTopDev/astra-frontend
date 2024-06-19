@@ -252,7 +252,7 @@ const StakingLpTokenStakeLpTokenCard = ({
             <div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
@@ -277,7 +277,7 @@ const StakingLpTokenStakeLpTokenCard = ({
             <div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
@@ -302,7 +302,7 @@ const StakingLpTokenStakeLpTokenCard = ({
             <div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
