@@ -50,7 +50,7 @@ export default function Stake({ launchpadData }: Props) {
   const [gasFee, setGasFee] = useState<string>('')
   const [selectedChain, setSelectedChain] = useState<string>('')
   const [selectedChainMultiplier, setSelectedChainMultiplier] =
-    useState<Number>(0)
+    useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { data: astraDecimal } = useAstraDecimal()
