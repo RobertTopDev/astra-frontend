@@ -50,7 +50,6 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   }
 
   if (vestingRewards === undefined || vestingRewards.length === 0) {
-    console.log('No vesting rewards available')
     return <></>
   }
 
