@@ -74,7 +74,7 @@ export default function Progress({ data, launchpadLoading }: TProgress) {
         <></>
       )}
       <div className="mt-12">
-        <Stake />
+        <Stake launchpadData={launchpadInfoData} />
       </div>
       <div className="participated mt-12">
         <LiveUpcoming status="user" />

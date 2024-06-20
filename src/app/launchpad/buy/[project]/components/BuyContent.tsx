@@ -30,11 +30,12 @@ import {
   useLaunchpadCountdown,
   useFollowCheck,
 } from '@/hooks/'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { formatUnits, parseEther, parseUnits } from 'viem'
 import { TLaunchpadDetailInfo } from '@/types'
 import Countdown from './Countdown'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
+import { idToChain } from '@/config'
 
 type Props = {
   detail: TLaunchpadDetailInfo
@@ -56,6 +57,7 @@ export default function BuyContent({
   buyRuleStatus,
 }: Props) {
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const { chainConfig } = useChainConfig()
 
   const [buyAmount, setBuyAmount] = useState<string>('')
@@ -131,6 +133,11 @@ export default function BuyContent({
         : '',
     [balanceOf, baseTokenDecimals]
   )
+
+  const isRightChain = useMemo(() => {
+    if ((chain && idToChain[chain.id]) === detail?.CHAIN) return true
+    return false
+  }, [chain, detail])
 
   // APPROVE
   const {
@@ -350,6 +357,13 @@ export default function BuyContent({
             </div>
           ) : (
             <></>
+          )}
+          {isRightChain ? (
+            <></>
+          ) : (
+            <div className="mt-4 mb-4 border border-solid border-red-600 p-4 rounded-xl text-red-600">
+              {`You are on the wrong blockchain network. Please switch your chain to ${detail?.CHAIN}`}
+            </div>
           )}
         </div>
         <div className="rounded-3xl p-[1px] bg-gradient-to-b from-transparent to-gray-400 shadow-xl w-1/2">
