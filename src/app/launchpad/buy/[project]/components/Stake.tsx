@@ -10,8 +10,6 @@ import {
   useAstraUserInfo,
   useAstraDecimal,
   useVerifyMultiplierCrosschain,
-  useGetCrossChainStakingDetails,
-  useGetNativeAmountAndMultiplier,
 } from '@/hooks'
 import {
   Card,
