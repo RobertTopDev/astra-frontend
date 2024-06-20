@@ -11,11 +11,11 @@ import {
   AlertDialogTrigger,
   Checkbox,
 } from '@/components/shadcn'
-import { CheckedState } from '@radix-ui/react-checkbox'
+import * as CheckBoxReact from '@radix-ui/react-checkbox'
 import React from 'react'
 
 type TTermsCheckboxProps = {
-  termsAccepted: boolean | CheckedState
+  termsAccepted: boolean | CheckBoxReact.CheckedState
   setTermsAccepted: (value: boolean) => void
 }
 

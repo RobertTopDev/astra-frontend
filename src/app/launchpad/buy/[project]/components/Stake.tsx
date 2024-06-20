@@ -181,6 +181,7 @@ export default function Stake({ launchpadData }: Props) {
                   <TableHead>Challenges</TableHead>
                   <TableHead>Score Earned</TableHead>
                   <TableHead>About</TableHead>
+                  <TableHead>Multiplier</TableHead>
                   <TableHead>Chain</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
@@ -191,6 +192,11 @@ export default function Stake({ launchpadData }: Props) {
                   <TableCell>{numberFormatter(stakingScore)} points</TableCell>
                   <TableCell>
                     Staking $ASTRADAO tokens gives an additional bonus score
+                  </TableCell>
+                  <TableCell>
+                    <AstraLoading isLoading={isLoading}>
+                      {selectedChainMultiplier.toFixed(2)}
+                    </AstraLoading>
                   </TableCell>
                   <TableCell>
                     <Select

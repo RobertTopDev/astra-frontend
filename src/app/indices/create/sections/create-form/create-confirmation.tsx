@@ -20,7 +20,7 @@ import {
 import { indicesPaymentAbi } from '@/abis'
 import { numberFormatter } from '@/util'
 import { TermsCheckbox } from './terms-checkbox'
-import { CheckedState } from '@radix-ui/react-checkbox'
+import * as CheckBoxReact from '@radix-ui/react-checkbox'
 
 type TCreateConfirmationProps = {
   selectedTokens: TToken[]
@@ -47,7 +47,7 @@ const CreateConfirmation = ({
   addPublicPoolError,
   addPublicPool,
 }: TCreateConfirmationProps) => {
-  const [termsAccepted, setTermsAccepted] = useState<CheckedState | boolean>(
+  const [termsAccepted, setTermsAccepted] = useState<CheckBoxReact.CheckedState | boolean>(
     false
   )
   const formValues = form.getValues()
