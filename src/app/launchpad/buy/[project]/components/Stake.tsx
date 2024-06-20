@@ -34,6 +34,8 @@ import {
 import { AstraHeader, AstraLoading } from '@/components'
 import { numberFormatter } from '@/util'
 import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
+import { getCrossChainMultiplier } from '@/util/getCrossChainMultiplier'
+import { chainConfig, chainToId } from '@/config'
 
 const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
 
@@ -42,9 +44,13 @@ export default function Stake() {
 
   const [gasFee, setGasFee] = useState<string>('')
   const [selectedChain, setSelectedChain] = useState<string>('')
+  const [selectedChainMultiplier, setSelectedChainMultiplier] =
+    useState<Number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { data: astraDecimal } = useAstraDecimal()
   const { data: userInfo } = useAstraUserInfo({})
+
   const {
     data: stakingScoreAndMultiplier,
     isLoading: stakingScoreAndMultiplierLoading,
@@ -59,6 +65,10 @@ export default function Stake() {
       formatUnits(stakingScoreAndMultiplier[0], astraDecimal?.valueOf())
     )
   }, [stakingScoreAndMultiplier, astraDecimal])
+  const multiplier = useMemo(() => {
+    if (stakingScoreAndMultiplier === undefined) return 0
+    return Number(formatUnits(stakingScoreAndMultiplier[1], 13))
+  }, [stakingScoreAndMultiplier])
 
   // Verify Multiplier Cross Chain
   const {
@@ -70,24 +80,10 @@ export default function Stake() {
     args: [selectedChain, address as `0x${string}`],
     gasFee,
     onSuccessTx: () => {
-      refetchCrossChainDetails()
-      refetchStakingInfo()
+      // refetchCrossChainDetails()
+      // refetchStakingInfo()
     },
   })
-
-  // Get cross chain information (amount, multiplier)
-  const { data: crossChainDetails, refetch: refetchCrossChainDetails } =
-    useGetCrossChainStakingDetails({
-      args: [address as `0x${string}`, selectedChain],
-    })
-  console.log('cross chain staking info: ', crossChainDetails)
-
-  // Get native amount and multiplier on current chain
-  const { data: stakingInfo, refetch: refetchStakingInfo } =
-    useGetNativeAmountAndMultiplier({
-      args: [address as `0x${string}`],
-    })
-  console.log('current chain staking info: ', stakingInfo)
 
   // compare the bsc and current chain multiplier
 
@@ -96,6 +92,7 @@ export default function Stake() {
   useEffect(() => {
     async function init() {
       if (!selectedChain) return
+      setIsLoading(true)
       // get verify multiplier transaction fee from third party
       const axelarResult: any = await axelarSDK.estimateGasFee(
         'arbitrum-sepolia',
@@ -104,10 +101,27 @@ export default function Stake() {
         'auto'
       )
       setGasFee(axelarResult.toString())
+
+      if (!address) return setIsLoading(false)
+      const selectedChainId = chainToId[selectedChain]
+      const rpcUrl = chainConfig[selectedChainId].rpcURL
+      const contractAddress =
+        chainConfig[selectedChainId].CrosschainSaleManagerAddress
+      const userAddress = address
+      const otherChainMultiplier = await getCrossChainMultiplier(
+        rpcUrl,
+        contractAddress,
+        userAddress
+      )
+      const formatOtherChainMultiplier = Number(
+        formatUnits(otherChainMultiplier, 13)
+      )
+      setSelectedChainMultiplier(formatOtherChainMultiplier)
+      setIsLoading(false)
     }
 
     init()
-  }, [axelarSDK, selectedChain])
+  }, [axelarSDK, selectedChain, address])
 
   return (
     <>
@@ -131,8 +145,8 @@ export default function Stake() {
               <span className="text-white text-xl ml-4">Your total score</span>
             </div>
             <span className="text-[#00E7FF] text-xl">
-              <AstraLoading isLoading={stakingScoreAndMultiplierLoading}>
-                {numberFormatter(stakingScore)}
+              <AstraLoading isLoading={false}>
+                {/* {numberFormatter(stakingScore)} */}
               </AstraLoading>
             </span>
           </div>
@@ -185,12 +199,14 @@ export default function Stake() {
                       variant="astra-blue"
                       className="rounded-lg w-fit"
                       onClick={() => verifyMultiplierCrosschain?.()}
-                      isLoading={verifyMultiplierCrosschainLoading}
+                      isLoading={verifyMultiplierCrosschainLoading || isLoading}
                       disabled={
-                        !!verifyMultiplierCrsschainError || !selectedChain
+                        !!verifyMultiplierCrsschainError ||
+                        !selectedChain ||
+                        selectedChainMultiplier === multiplier
                       }
                     >
-                      {verifyMultiplierCrosschainLoading
+                      {verifyMultiplierCrosschainLoading || isLoading
                         ? 'Loading...'
                         : 'Transfer Staking Score'}
                     </Button>

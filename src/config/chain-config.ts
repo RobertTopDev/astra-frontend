@@ -1,4 +1,4 @@
-import { IDTOCHAIN, TChainConfig } from '@/types'
+import { CHAINTOID, IDTOCHAIN, TChainConfig } from '@/types'
 import {
   arbitrum,
   mainnet,
@@ -17,6 +17,13 @@ export const idToChain: IDTOCHAIN = {
   [polygonMumbai.id]: 'Polygon',
   [arbitrumSepolia.id]: 'Arbitrum',
   [bscTestnet.id]: 'Binance',
+}
+export const chainToId: CHAINTOID = {
+  arbitrum: arbitrum.id,
+  ethereum: mainnet.id,
+  polygon: polygonMumbai.id,
+  'arbitrum-sepolia': arbitrumSepolia.id,
+  binance: bscTestnet.id,
 }
 
 export const chainConfig: TChainConfig = {

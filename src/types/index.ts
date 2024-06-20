@@ -107,6 +107,7 @@ export type TToken = {
 }
 
 export type IDTOCHAIN = Record<number, string>
+export type CHAINTOID = Record<string, number>
 
 export type TChainConfig = Record<
   number,
