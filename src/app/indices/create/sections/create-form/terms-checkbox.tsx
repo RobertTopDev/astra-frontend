@@ -14,8 +14,10 @@ import {
 // import * as CheckBoxReact from '@radix-ui/react-checkbox'
 import React from 'react'
 
+type CheckedState = boolean | 'indeterminate'
+
 type TTermsCheckboxProps = {
-  termsAccepted: boolean | any
+  termsAccepted: boolean | CheckedState
   setTermsAccepted: (value: boolean) => void
 }
 

@@ -22,6 +22,8 @@ import { numberFormatter } from '@/util'
 import { TermsCheckbox } from './terms-checkbox'
 // import * as CheckBoxReact from '@radix-ui/react-checkbox'
 
+type CheckedState = boolean | 'indeterminate'
+
 type TCreateConfirmationProps = {
   selectedTokens: TToken[]
   allTokens: TToken[]
@@ -47,7 +49,9 @@ const CreateConfirmation = ({
   addPublicPoolError,
   addPublicPool,
 }: TCreateConfirmationProps) => {
-  const [termsAccepted, setTermsAccepted] = useState<any | boolean>(false)
+  const [termsAccepted, setTermsAccepted] = useState<CheckedState | boolean>(
+    false
+  )
   const formValues = form.getValues()
   const { chain = defaultChain } = useNetwork()
   const config = chainConfig[chain!.id]

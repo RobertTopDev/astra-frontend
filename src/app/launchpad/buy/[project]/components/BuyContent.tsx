@@ -279,7 +279,8 @@ export default function BuyContent({
           />
           <div className="pt-4">Public Sale Starts In</div>
         </>
-      ) : startRemainingTime <= 0 && endRemainingTime > 0 ? (
+      ) : (startRemainingTime <= 0 || Number.isNaN(startRemainingTime)) &&
+        endRemainingTime > 0 ? (
         <>
           <Countdown
             remainingTime={endRemainingTime}
@@ -298,6 +299,16 @@ export default function BuyContent({
       )}
     </div>
   )
+
+  const saleStatus = useMemo(() => {
+    if (startRemainingTime > 0) return 'Upcoming'
+    else if (
+      (startRemainingTime <= 0 || Number.isNaN(startRemainingTime)) &&
+      endRemainingTime > 0
+    )
+      return 'In Progress'
+    else return 'Ended'
+  }, [startRemainingTime, endRemainingTime])
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl p-10">
@@ -371,13 +382,7 @@ export default function BuyContent({
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center` rounded-lg">
               <span className="text-[#7E7E7E]">Status</span>
               <AstraLoading isLoading={isFetchLoading}>
-                <span className="text-[#EA8A1A]">
-                  {startRemainingTime > 0
-                    ? 'Upcoming'
-                    : startRemainingTime <= 0 && endRemainingTime > 0
-                      ? 'In Progress'
-                      : 'Ended'}
-                </span>
+                <span className="text-[#EA8A1A]">{saleStatus}</span>
               </AstraLoading>
             </div>
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">

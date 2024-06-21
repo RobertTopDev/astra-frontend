@@ -182,7 +182,7 @@ export default function Stake({ launchpadData }: Props) {
                   <TableHead>About</TableHead>
                   <TableHead>Multiplier</TableHead>
                   <TableHead>Chain</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="[&_tr]:border-0 text-left">
@@ -237,7 +237,9 @@ export default function Stake({ launchpadData }: Props) {
                     >
                       {verifyMultiplierCrosschainLoading || isLoading
                         ? 'Loading...'
-                        : 'Transfer Staking Score'}
+                        : isArbitrumChain
+                          ? 'Transfer Staking Score'
+                          : 'Switch Chain To Arbitrum'}
                     </Button>
                   </TableCell>
                 </TableRow>
