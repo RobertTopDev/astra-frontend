@@ -58,6 +58,7 @@
     "@tanstack/react-table": "^8.11.2",
     "@types/papaparse": "^5.3.14",
     "autoprefixer": "10.4.16",
+    "bufferutil": "^4.0.8",
     "chart.js": "^4.4.1",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-datalabels": "^2.2.0",
@@ -100,6 +101,7 @@
     "tailwindcss": "3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.0",
+    "utf-8-validate": "^6.0.4",
     "viem": "^1.20.3",
     "wagmi": "^1.4.12",
     "zod": "3.22.4"

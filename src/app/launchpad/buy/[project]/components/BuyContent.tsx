@@ -79,7 +79,7 @@ export default function BuyContent({
   ]
   const baseTokenSymbol = tokenArray
     .filter((token) => token.address === detail?.BASE_TOKEN)
-    .map((token) => token.symbol)
+    .map((token) => token.symbol)[0]
 
   const followingTemp = useFollowCheck(address)
   const followingData = followingTemp.data

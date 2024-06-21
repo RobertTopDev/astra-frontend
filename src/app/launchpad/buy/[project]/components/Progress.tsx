@@ -4,21 +4,26 @@ import BuyContent from './BuyContent'
 import FollowSection from './FollowSection'
 import Stake from './Stake'
 import Contributor from './Contributor'
-import {
-  useGetBuyRuleLaunchpad,
-  useLaunchpadFactoryInfo,
-  useLaunchpadInfo,
-} from '@/hooks'
+import { useGetBuyRuleLaunchpad, useLaunchpadFactoryInfo } from '@/hooks'
 import LiveUpcoming from '@/app/launchpad/(page)/components/LiveUpcoming'
 import { ClaimStatistics } from '@/app/launchpad/user/sections/claim-statistics'
 import { useAccount } from 'wagmi'
 
 type TProgress = {
   data: TLaunchpadDetailInfo
+  launchpadInfoData: any
+  launchpadInfoLoading: boolean
   launchpadLoading: boolean
+  refetchLaunchpadData: () => void
 }
 
-export default function Progress({ data, launchpadLoading }: TProgress) {
+export default function Progress({
+  data,
+  launchpadLoading,
+  launchpadInfoData,
+  launchpadInfoLoading,
+  refetchLaunchpadData,
+}: TProgress) {
   const { address } = useAccount()
 
   const { data: factoryData, isLoading: factoryLoading } =
@@ -29,11 +34,6 @@ export default function Progress({ data, launchpadLoading }: TProgress) {
   )
   const { data: buyRuleStatus, isLoading: buyRuleStatusLoading } =
     useGetBuyRuleLaunchpad()
-  const {
-    data: launchpadInfoData,
-    isLoading: launchpadInfoLoading,
-    refetch: refetchLaunchpadData,
-  } = useLaunchpadInfo({ launchpad: launchpadAddress as `0x${string}` })
 
   return (
     <>
