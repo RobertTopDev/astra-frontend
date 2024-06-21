@@ -2,7 +2,6 @@
 
 import React, { useMemo, useEffect, useState } from 'react'
 import Image from 'next/image'
-// import Link from 'next/link'
 import { useAccount, useNetwork } from 'wagmi'
 import { formatUnits } from 'viem'
 import {

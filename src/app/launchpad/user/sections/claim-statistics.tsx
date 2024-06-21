@@ -3,16 +3,14 @@
 import { AstraHeader } from '@/components'
 import { useLaunchpadVestingRewards } from '@/hooks'
 import { VestingRewardActions } from './vesting-reward-actions'
-import { numberFormatter, shorten } from '@/util'
+import { numberFormatter } from '@/util'
 import { TLaunchpadDetailInfo } from '@/types'
 import Loading from '@/app/loading'
 import { formatUnits } from 'viem'
-import { useChainConfig } from '@/hooks'
 import { useEffect, useState } from 'react'
 import {
   Button,
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -25,24 +23,25 @@ interface TPage {
 }
 
 const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
-  const { chainConfig } = useChainConfig()
-  const {
-    data: vestingRewards,
-    refetch: refetchVestingRewards,
-    isLoading: vestingRewardLoading,
-  } = useLaunchpadVestingRewards({ launchpads })
+  const { getLaunchpadVestingRewards } = useLaunchpadVestingRewards({
+    launchpads,
+  })
 
   const [open, setOpen] = useState<boolean>(false)
-
-  const refetchDatas = () => {
-    console.log('Refetching vesting rewards')
-    refetchVestingRewards?.()
-  }
+  const [vestingRewards, setVestingRewards] = useState<any[]>([])
+  const [vestingRewardLoading, setVestingRewardLoading] =
+    useState<boolean>(false)
 
   useEffect(() => {
-    console.log('Launchpads changed:', launchpads)
-    if (launchpads?.length === 0) return
-    refetchDatas()
+    async function init() {
+      if (launchpads?.length === 0) return
+      setVestingRewardLoading(true)
+      const rewardsResult = await getLaunchpadVestingRewards()
+      setVestingRewards(rewardsResult)
+      setVestingRewardLoading(false)
+    }
+
+    init()
   }, [launchpads])
 
   if (vestingRewardLoading || launchpadLoading) {
@@ -119,32 +118,6 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                           <DialogTitle>Vesting Token Detail</DialogTitle>
                         </DialogHeader>
                         <div className="content">
-                          {/* <div className="flex justify-between gap-4">
-                            <div>Launchpad Address:</div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                window.open(
-                                  `${chainConfig.networkURL}address/${vestingReward.launchpadAddress}`
-                                )
-                              }
-                            >
-                              {shorten(vestingReward.launchpadAddress ?? '')}
-                            </div>
-                          </div>
-                          <div className="flex justify-between gap-4">
-                            <div>Vesting Address:</div>
-                            <div
-                              className="cursor-pointer"
-                              onClick={() =>
-                                window.open(
-                                  `${chainConfig.networkURL}address/${vestingReward.vestingAddress}`
-                                )
-                              }
-                            >
-                              {shorten(vestingReward.vestingAddress ?? '')}
-                            </div>
-                          </div> */}
                           <div className="flex justify-between gap-4">
                             <div>Vesting Start:</div>
                             <div>{vestingReward.vestingStart.toString()}</div>
@@ -193,7 +166,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                   <td className="px-6 py-4">
                     <VestingRewardActions
                       vestingReward={vestingReward}
-                      refetchDatas={refetchDatas}
+                      refetchDatas={() => {}}
                     />
                   </td>
                 </tr>
