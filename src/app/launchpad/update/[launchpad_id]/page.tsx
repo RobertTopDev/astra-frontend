@@ -85,6 +85,19 @@ export default function Page({ params }: TPage) {
       ssr: true,
     })
   }, [])
+
+  // const SunEditor = useMemo(() => {
+  //   return dynamic(() => import('@/components/SunEditor'), {
+  //     loading: () => <p>loading...</p>,
+  //     ssr: true,
+  //   })
+  // }, [])
+  // const SunEditor = dynamic(() => import('suneditor-react'), {
+  //   ssr: false,
+  // })
+  // const [content, setContent] = useState('')
+
+  const EditorRef = useRef()
   const router = useRouter()
   const { chain } = useNetwork()
   const [fileError, setFileError] = useState<string>('')
@@ -1529,14 +1542,7 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Project Description</FormLabel>
                       <FormControl>
                         <div style={{ color: 'black' }}>
-                          {/* <ReactQuill
-                            ref={reactQuillRef}
-                            value={field.value}
-                            onChange={field.onChange}
-                            modules={quillModules}
-                            formats={quillFormats}
-                            className="w-full h-[70%] mt-10 bg-white"
-                          /> */}
+                        {/* <SunEditor ref={EditorRef} /> */}
                           <DynamicTextEditor
                             quillRef={reactQuillRef}
                             value={field.value}

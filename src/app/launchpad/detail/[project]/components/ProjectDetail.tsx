@@ -76,6 +76,15 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     })
   }, [])
 
+  const SunEditor = useMemo(() => {
+    return dynamic(() => import('@/components/SunEditor'), {
+      loading: () => <p>loading...</p>,
+      ssr: true,
+    })
+  }, [])
+
+  const EditorRef = useRef()
+
   const { chain } = useNetwork()
   const pathname = usePathname()
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
@@ -135,6 +144,25 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     return url
   }
 
+//   function onImageUploadBefore(files , info , core ,uploadHandler){
+
+//     // Upload image to Server
+
+//     const src = UploadToServer(files[0]);
+
+//     // result
+//     const response = {
+//         // The response must have a "result" array.
+//         "result": [
+//             {
+//                 "url": src,
+//                 "name": files[0].name,
+//                 "size": files[0].size
+//             },
+//     ]}
+    
+//     uploadHandler(response);
+// }
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [vesting, setVesting] = useState<boolean>(data?.IS_VESTING || false)
   const temp: Record<string, any> = {
@@ -1193,12 +1221,25 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                       <FormItem>
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
-                          <div style={{ color: 'black' }}>
-                            <DynamicTextEditor
+                          <div
+                            style={{
+                              color: 'black',
+                              display: 'block',
+                              position: 'relative',
+                            }}
+                          >
+                            {/* <DynamicTextEditor
                               quillRef={reactQuillRef}
                               value={field.value}
                               onChange={field.onChange}
-                            ></DynamicTextEditor>
+                            ></DynamicTextEditor> */}
+
+                            <SunEditor
+                              ref={EditorRef}
+                              contents={field.value}
+                              onSave={field.onChange}
+                              // onImageUploadBefore={onImageUploadBefore()}
+                            />
                           </div>
                         </FormControl>
                         <FormMessage />
