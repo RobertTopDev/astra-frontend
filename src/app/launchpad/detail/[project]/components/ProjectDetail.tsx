@@ -59,9 +59,6 @@ import { useNetwork } from 'wagmi'
 import { idToChain } from '@/config'
 import 'suneditor/dist/css/suneditor.min.css'
 import './projectDetail.scss'
-const SunEditor = dynamic(() => import('suneditor-react'), {
-  ssr: false,
-})
 
 interface Props {
   data: TLaunchpadDetailInfo
@@ -160,7 +157,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         for (const file of files) {
           //Do something with image
           const url = await uploadToCloudinary(file)
-          console.log(url)
   
           const image = {
             url: url,
@@ -170,11 +166,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   
           images.push(image)
         }
-        console.log('')
         const response = {
           result: images,
         }
-        console.log(response)
         uploadHandler(response)
       } catch (error) {
         console.error('Error uploading image to Cloudinary', error)
@@ -185,15 +179,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   }
 }
 
-  // function handleImageUpload1(
-  //   targetImgElement,
-  //   index,
-  //   state,
-  //   imageInfo,
-  //   remainingFilesCount
-  // ) {
-  //   console.log(targetImgElement, index, state, imageInfo, remainingFilesCount)
-  // }
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [vesting, setVesting] = useState<boolean>(data?.IS_VESTING || false)
   const temp: Record<string, any> = {
@@ -1292,7 +1277,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     'list',
                                     'lineHeight',
                                   ],
-                                  ['table', 'link', 'image', 'video'],
+                                  // ['table', 'link', 'image', 'video'],
+                                  ['table', 'link', 'image'],
                                   ['showBlocks', 'codeView'],
                                   ['preview'],
                                   // responsive
@@ -1337,7 +1323,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        'video',
+                                        // 'video',
                                       ],
                                     ],
                                   ],
@@ -1387,7 +1373,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        'video',
+                                        // 'video',
                                       ],
                                     ],
                                   ],
@@ -1427,7 +1413,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        'video',
+                                        // 'video',
                                       ],
                                       [
                                         '-right',
@@ -1475,7 +1461,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        'video',
+                                        // 'video',
                                       ],
                                       [
                                         '-right',
@@ -1524,7 +1510,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        'video',
+                                        // 'video',
                                       ],
                                       [
                                         '-right',

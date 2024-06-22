@@ -34,6 +34,8 @@ import { updateLaunchpadForDB } from '@/util/updateLaunchpadForDB'
 // import 'react-quill/dist/quill.snow.css'
 import ReactQuill from 'react-quill'
 import Image from 'next/image'
+import 'suneditor/dist/css/suneditor.min.css'
+import './projectDetail.scss'
 
 interface Props {
   data: TLaunchpadDetailInfo | undefined
@@ -44,8 +46,15 @@ export default function TeamPartner({ data, refetchData }: Props) {
   const pathname = usePathname()
   const urlRegex = new RegExp('^(ftp|http|https)://[^ "]+$')
 
-  const DynamicTextEditor = useMemo(() => {
-    return dynamic(() => import('@/components/Editor'), {
+  // const DynamicTextEditor = useMemo(() => {
+  //   return dynamic(() => import('@/components/Editor'), {
+  //     loading: () => <p>loading...</p>,
+  //     ssr: true,
+  //   })
+  // }, [])
+
+  const SunEditor = useMemo(() => {
+    return dynamic(() => import('suneditor-react'), {
       loading: () => <p>loading...</p>,
       ssr: true,
     })
@@ -94,6 +103,36 @@ export default function TeamPartner({ data, refetchData }: Props) {
       }
     }
   }, [])
+
+  const onImageUploadBefore = () => {
+    return (files: File[], info: any, uploadHandler: any) => {
+      ;(async () => {
+        try {
+          const images = []
+          for (const file of files) {
+            //Do something with image
+            const url = await uploadToCloudinary(file)
+
+            const image = {
+              url: url,
+              name: file.name,
+              size: file.size,
+            }
+
+            images.push(image)
+          }
+          const response = {
+            result: images,
+          }
+          uploadHandler(response)
+        } catch (error) {
+          console.error('Error uploading image to Cloudinary', error)
+        }
+      })()
+
+      uploadHandler()
+    }
+  }
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [open, setOpen] = useState(false)
@@ -521,19 +560,282 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         <FormLabel>Team Description</FormLabel>
                         <FormControl>
                           <div style={{ color: 'black' }}>
-                            {/* <ReactQuill
-                              ref={reactQuillRef}
-                              value={field.value}
+                            <SunEditor
+                              defaultValue={field.value}
+                              height="400px"
+                              placeholder="Please insert project description."
                               onChange={field.onChange}
-                              modules={quillModules}
-                              formats={quillFormats}
-                              className="w-full h-[70%] mt-10 bg-white"
-                            /> */}
-                            <DynamicTextEditor
-                              quillRef={reactQuillRef}
-                              value={field.value}
-                              onChange={field.onChange}
-                            ></DynamicTextEditor>
+                              setOptions={{
+                                buttonList: [
+                                  // default
+                                  ['font', 'fontSize', 'formatBlock'],
+                                  ['blockquote'],
+                                  [
+                                    'bold',
+                                    'underline',
+                                    'italic',
+                                    'strike',
+                                    'subscript',
+                                    'superscript',
+                                  ],
+                                  ['undo', 'redo'],
+                                  ['fontColor', 'hiliteColor', 'textStyle'],
+                                  ['removeFormat'],
+                                  ['outdent', 'indent'],
+                                  [
+                                    'align',
+                                    'horizontalRule',
+                                    'list',
+                                    'lineHeight',
+                                  ],
+                                  // ['table', 'link', 'image', 'video'],
+                                  ['table', 'link', 'image'],
+                                  ['showBlocks', 'codeView'],
+                                  ['preview'],
+                                  // responsive
+                                  [
+                                    '%1161',
+                                    [
+                                      [
+                                        'font',
+                                        'fontSize',
+                                        'formatBlock',
+                                        'blockquote',
+                                      ],
+                                      [
+                                        ':p-Formats-default.more_paragraph',
+                                        'bold',
+                                        'underline',
+                                        'italic',
+                                        'strike',
+                                        'subscript',
+                                        'superscript',
+                                      ],
+                                      ['undo', 'redo'],
+                                      ['fontColor', 'hiliteColor', 'textStyle'],
+                                      ['removeFormat'],
+                                      ['outdent', 'indent'],
+                                      [
+                                        'align',
+                                        'horizontalRule',
+                                        'list',
+                                        'lineHeight',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':i-Etc-default.more_vertical',
+                                        'showBlocks',
+                                        'codeView',
+                                        'preview',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':r-Table&Media-default.more_plus',
+                                        'table',
+                                        'link',
+                                        'image',
+                                        // 'video',
+                                      ],
+                                    ],
+                                  ],
+                                  [
+                                    '%893',
+                                    [
+                                      [
+                                        'font',
+                                        'fontSize',
+                                        'formatBlock',
+                                        'blockquote',
+                                      ],
+                                      [
+                                        ':p-Formats-default.more_paragraph',
+                                        'bold',
+                                        'underline',
+                                        'italic',
+                                        'strike',
+                                      ],
+                                      [
+                                        ':t-Fonts-default.more_text',
+                                        'subscript',
+                                        'superscript',
+                                        'fontColor',
+                                        'hiliteColor',
+                                        'textStyle',
+                                      ],
+                                      ['undo', 'redo'],
+                                      ['removeFormat'],
+                                      ['outdent', 'indent'],
+                                      [
+                                        'align',
+                                        'horizontalRule',
+                                        'list',
+                                        'lineHeight',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':i-Etc-default.more_vertical',
+                                        'showBlocks',
+                                        'codeView',
+                                        'preview',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':r-Table&Media-default.more_plus',
+                                        'table',
+                                        'link',
+                                        'image',
+                                        // 'video',
+                                      ],
+                                    ],
+                                  ],
+                                  [
+                                    '%855',
+                                    [
+                                      [
+                                        ':t-Fonts-default.more_text',
+                                        'font',
+                                        'fontSize',
+                                        'formatBlock',
+                                        'blockquote',
+                                      ],
+                                      [
+                                        ':p-Formats-default.more_paragraph',
+                                        'bold',
+                                        'underline',
+                                        'italic',
+                                        'strike',
+                                        'subscript',
+                                        'superscript',
+                                        'fontColor',
+                                        'hiliteColor',
+                                        'textStyle',
+                                      ],
+                                      ['undo', 'redo'],
+                                      ['removeFormat'],
+                                      ['outdent', 'indent'],
+                                      [
+                                        'align',
+                                        'horizontalRule',
+                                        'list',
+                                        'lineHeight',
+                                      ],
+                                      [
+                                        ':r-Table&Media-default.more_plus',
+                                        'table',
+                                        'link',
+                                        'image',
+                                        // 'video',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':i-Etc-default.more_vertical',
+                                        'showBlocks',
+                                        'codeView',
+                                        'preview',
+                                      ],
+                                    ],
+                                  ],
+                                  [
+                                    '%563',
+                                    [
+                                      [
+                                        ':t-Fonts-default.more_text',
+                                        'font',
+                                        'fontSize',
+                                        'formatBlock',
+                                        'blockquote',
+                                      ],
+                                      [
+                                        ':p-Formats-default.more_paragraph',
+                                        'bold',
+                                        'underline',
+                                        'italic',
+                                        'strike',
+                                        'subscript',
+                                        'superscript',
+                                        'fontColor',
+                                        'hiliteColor',
+                                        'textStyle',
+                                      ],
+                                      ['undo', 'redo'],
+                                      ['removeFormat'],
+                                      ['outdent', 'indent'],
+                                      [
+                                        ':e-List&Line-default.more_horizontal',
+                                        'align',
+                                        'horizontalRule',
+                                        'list',
+                                        'lineHeight',
+                                      ],
+                                      [
+                                        ':r-Table&Media-default.more_plus',
+                                        'table',
+                                        'link',
+                                        'image',
+                                        // 'video',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':i-Etc-default.more_vertical',
+                                        'showBlocks',
+                                        'codeView',
+                                        'preview',
+                                      ],
+                                    ],
+                                  ],
+                                  [
+                                    '%458',
+                                    [
+                                      [
+                                        ':t-Fonts-default.more_text',
+                                        'font',
+                                        'fontSize',
+                                        'formatBlock',
+                                        'blockquote',
+                                      ],
+                                      [
+                                        ':p-Formats-default.more_paragraph',
+                                        'bold',
+                                        'underline',
+                                        'italic',
+                                        'strike',
+                                        'subscript',
+                                        'superscript',
+                                        'fontColor',
+                                        'hiliteColor',
+                                        'textStyle',
+                                        'removeFormat',
+                                      ],
+                                      ['undo', 'redo'],
+                                      [
+                                        ':e-List&Line-default.more_horizontal',
+                                        'outdent',
+                                        'indent',
+                                        'align',
+                                        'horizontalRule',
+                                        'list',
+                                        'lineHeight',
+                                      ],
+                                      [
+                                        ':r-Table&Media-default.more_plus',
+                                        'table',
+                                        'link',
+                                        'image',
+                                        // 'video',
+                                      ],
+                                      [
+                                        '-right',
+                                        ':i-Etc-default.more_vertical',
+                                        'showBlocks',
+                                        'codeView',
+                                        'preview',
+                                      ],
+                                    ],
+                                  ],
+                                ],
+                              }}
+                              onImageUploadBefore={onImageUploadBefore()}
+                            />
                           </div>
                         </FormControl>
                         <FormMessage />
