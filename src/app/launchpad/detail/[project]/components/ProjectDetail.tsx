@@ -150,7 +150,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     files: File[],
     info: any,
     uploadHandler: any
-  ) => {
+  ): any => {
     (async () => {
       try {
         const images = []

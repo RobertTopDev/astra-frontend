@@ -105,7 +105,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
   }, [])
 
   const onImageUploadBefore = () => {
-    return (files: File[], info: any, uploadHandler: any) => {
+    return (files: File[], info: any, uploadHandler: any): any => {
       ;(async () => {
         try {
           const images = []

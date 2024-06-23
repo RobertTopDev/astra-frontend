@@ -113,7 +113,7 @@ export default function Page({ params }: TPage) {
   if (isError) redirect('/launchpad')
 
   const onImageUploadBefore = () => {
-    return (files: File[], info: any, uploadHandler: any) => {
+    return (files: File[], info: any, uploadHandler: any): any => {
       ;(async () => {
         try {
           const images = []
