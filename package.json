@@ -65,7 +65,6 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "codemirror": "^5.61.0",
     "d3": "^7.9.0",
     "date-fns": "^3.0.6",
     "date-fns-tz": "^2.0.0",
@@ -74,7 +73,6 @@
     "fuse.js": "^7.0.0",
     "html-react-parser": "^5.0.11",
     "install": "^0.13.0",
-    "katex": "^0.16.10",
     "lightweight-charts": "^4.1.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.363.0",
@@ -111,9 +109,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@types/codemirror": "^5.60.15",
     "@types/js-cookie": "^3.0.6",
-    "@types/katex": "^0.16.7",
     "@types/lodash": "^4.14.202",
     "@types/node": "20.10.5",
     "@types/react": "18.2.45",
