@@ -7,6 +7,7 @@ import { useGetBuyRuleLaunchpad, useGetParticipatedLaunchpad } from '@/hooks'
 import Image from 'next/image'
 import { useMemo } from 'react'
 import { AstraLink } from '@/components'
+import CrosschainStatus from './components/CrosschainStatus'
 
 export default function ClaimPage() {
   const { address } = useAccount()
@@ -66,6 +67,10 @@ export default function ClaimPage() {
         </div>
       </header>
       <div className="border white w-full"></div>
+
+      <div className="crosschain-status">
+        <CrosschainStatus />
+      </div>
 
       <div className="participated">
         <LiveUpcoming status="user" />

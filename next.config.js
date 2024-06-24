@@ -10,9 +10,12 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
-  webpack: (config) => {
+  webpack: (config, options) => {
     config.resolve.fallback = { fs: false, net: false, tls: false }
     config.externals.push('pino-pretty', 'lokijs', 'encoding')
+    if (options.dev) {
+      config.devtool = 'source-map'
+    }
     return config
   },
   sassOptions: {

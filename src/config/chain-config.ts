@@ -186,7 +186,8 @@ export const chainConfig: TChainConfig = {
       'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
     chainStackWS:
       'wss://arbitrum-sepolia.core.chainstack.com/ws/25d78e54fa768b868fee699a675ad8f3',
-    rpcURL: 'https://endpoints.omniatech.io/v1/arbitrum/sepolia/public',
+    // rpcURL: 'https://endpoints.omniatech.io/v1/arbitrum/sepolia/public',
+    rpcURL: 'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
