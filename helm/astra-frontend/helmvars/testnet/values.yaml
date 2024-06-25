@@ -42,14 +42,14 @@ resources:
     memory: "300Mi"
     cpu: "250m"
 
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+# livenessProbe:
+#   httpGet:
+#     path: /
+#     port: http
+# readinessProbe:
+#   httpGet:
+#     path: /
+#     port: http
 
 autoscaling:
   enabled: true
@@ -73,7 +73,7 @@ pvc:
   size: 10Gi
   storageClassName: standard-rwo
 
-backendConfig:
-  namespace: astra-testnet
-  securityPolicy:
-    name: "ddos-policy-alpha-us-central1"
+# backendConfig:
+#   namespace: astra-testnet
+#   securityPolicy:
+#     name: "ddos-policy-alpha-us-central1"
