@@ -32,12 +32,16 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
   const [vestingRewardLoading, setVestingRewardLoading] =
     useState<boolean>(false)
 
+  const fetchLaunchpadVestingRewards = async () => {
+    const rewardsResult = await getLaunchpadVestingRewards()
+    setVestingRewards(rewardsResult)
+  }
+
   useEffect(() => {
     async function init() {
       if (launchpads?.length === 0) return
       setVestingRewardLoading(true)
-      const rewardsResult = await getLaunchpadVestingRewards()
-      setVestingRewards(rewardsResult)
+      await fetchLaunchpadVestingRewards()
       setVestingRewardLoading(false)
     }
 
@@ -166,7 +170,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                   <td className="px-6 py-4">
                     <VestingRewardActions
                       vestingReward={vestingReward}
-                      refetchDatas={() => {}}
+                      refetchDatas={() => fetchLaunchpadVestingRewards()}
                     />
                   </td>
                 </tr>
