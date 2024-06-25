@@ -73,7 +73,7 @@ pvc:
   size: 10Gi
   storageClassName: standard-rwo
 
-# backendConfig:
-#   namespace: astra-testnet
-#   securityPolicy:
-#     name: "ddos-policy-alpha-us-central1"
+backendConfig:
+  namespace: astra-testnet
+  securityPolicy:
+    name: "ddos-policy-alpha-us-central1"
