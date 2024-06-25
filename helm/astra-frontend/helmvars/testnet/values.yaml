@@ -11,7 +11,7 @@ serviceAccount:
   name: "astra-frontend"
 
 service:
-  type: NodePort
+  type: LoadBalancer
   port: 8080
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
