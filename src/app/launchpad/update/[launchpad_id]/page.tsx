@@ -1185,7 +1185,7 @@ export default function Page({ params }: TPage) {
 
   return (
     <main className="min-h-screen  ">
-      <div className="container flex flex-col items-center gap-6 justify-center w-full h-full pb-20 xl:w-1/2">
+      <div className="container flex flex-col items-center gap-6 justify-center w-full h-full pb-20 xl:w-9/12">
         <AstraHeader className="text-center w-full">
           Token Sale Update Form
         </AstraHeader>
