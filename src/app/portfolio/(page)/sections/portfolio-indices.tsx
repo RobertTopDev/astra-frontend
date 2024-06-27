@@ -22,6 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/shadcn'
+import ProgressBar from '@/components/progressbar'
 import { TIndex } from '@/types'
 import { millifyText, getRiskScoreColor } from '@/util'
 import { InfoCircledIcon, CheckCircledIcon } from '@radix-ui/react-icons'
@@ -113,10 +114,10 @@ const PortfolioIndices = ({
           return (
             <div className="flex flex-col">
               <div className="flex items-center gap-4">
-                {/* <Progress
+                <ProgressBar
                   value={index.TVL_REQUIRED_TO_START_INDEX_PER}
                   className="flex-grow"
-                /> */}
+                />
 
                 {index.TVL_REQUIRED_TO_START_INDEX_PER < 100 ? (
                   <div>{index.TVL_REQUIRED_TO_START_INDEX_PER}%</div>

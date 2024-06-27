@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/shadcn'
+import ProgressBar from '@/components/progressbar'
 import {
   ClockIcon,
   HeartIcon,
@@ -460,9 +461,7 @@ export default function LiveUpcomingCard({
             Progress ({percentageRaised}
             %)
           </div>
-
-          {/* <Progress value={percentageRaised} className="mt-2" /> */}
-
+          <ProgressBar className="mt-2.5" value={percentageRaised} />
           <div
             className="flex items-stretch justify-between mt-2.5"
             style={{
