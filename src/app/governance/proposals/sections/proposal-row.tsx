@@ -1,7 +1,7 @@
 'use client'
 import { TProposal } from '@/types'
 import React, { useMemo } from 'react'
-import { Button, Progress } from '@/components/shadcn'
+import { Button } from '@/components/shadcn'
 import { formatUnits } from 'viem'
 import { useRouter } from 'next/navigation'
 import { ProposalStatusEnum } from '@/constants'
@@ -122,14 +122,14 @@ const ProposalRow = ({ proposal }: TProposalRowProps) => {
         </div>
         <div className="col-span-9 flex flex-col gap-1 ">
           <div className="h-full flex items-center">
-            <Progress className="flex-grow" value={forPercentage}></Progress>
+            {/* <Progress className="flex-grow" value={forPercentage}></Progress> */}
           </div>
           <div className="h-full flex items-center">
-            <Progress
+            {/* <Progress
               indicatorClassName="bg-red-500"
               className="flex-grow"
               value={againstPercentage}
-            ></Progress>
+            ></Progress> */}
           </div>
         </div>
       </div>

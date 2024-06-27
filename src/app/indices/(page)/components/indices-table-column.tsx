@@ -2,7 +2,6 @@
 
 import { AstraTableToggleSortButton, UserAvatar } from '@/components'
 import {
-  Progress,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -74,10 +73,10 @@ export const indicesColumns: ColumnDef<TIndex>[] = [
       return (
         <div className="flex flex-col">
           <div className="flex items-center gap-4">
-            <Progress
+            {/* <Progress
               value={index.TVL_REQUIRED_TO_START_INDEX_PER}
               className="flex-grow"
-            />
+            /> */}
 
             {index.TVL_REQUIRED_TO_START_INDEX_PER < 100 ? (
               <div>{index.TVL_REQUIRED_TO_START_INDEX_PER}%</div>

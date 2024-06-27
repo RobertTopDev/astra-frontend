@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { differenceInSeconds } from 'date-fns'
 import {
-  Progress,
   Card,
   CardHeader,
   Button,
@@ -462,7 +461,7 @@ export default function LiveUpcomingCard({
             %)
           </div>
 
-          <Progress value={percentageRaised} className="mt-2" />
+          {/* <Progress value={percentageRaised} className="mt-2" /> */}
 
           <div
             className="flex items-stretch justify-between mt-2.5"

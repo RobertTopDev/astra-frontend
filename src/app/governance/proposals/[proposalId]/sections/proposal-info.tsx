@@ -13,7 +13,6 @@ import {
   TableCell,
   Button,
   Separator,
-  Progress,
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -646,21 +645,21 @@ const ProposalInfo = ({ proposal, signatures }: TProposalInfoProps) => {
                   <div>For</div>
                   <div>{forPercentage}%</div>
                 </div>
-                <Progress
+                {/* <Progress
                   className="flex-grow"
                   value={forPercentage}
-                ></Progress>
+                ></Progress> */}
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between">
                   <div>Against</div>
                   <div>{againstPercentage}%</div>
                 </div>
-                <Progress
+                {/* <Progress
                   className="flex-grow"
                   indicatorClassName="bg-red-500"
                   value={againstPercentage}
-                ></Progress>
+                ></Progress> */}
               </div>
             </div>
           </div>
