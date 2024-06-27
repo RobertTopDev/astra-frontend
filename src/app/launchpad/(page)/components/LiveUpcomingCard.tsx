@@ -19,7 +19,6 @@ import {
 import {
   ClockIcon,
   HeartIcon,
-  BellIcon,
   LockClosedIcon,
   DotFilledIcon,
 } from '@radix-ui/react-icons'
@@ -79,7 +78,7 @@ export default function LiveUpcomingCard({
   ]
   const baseTokenSymbol = tokenArray
     .filter((token) => token.address === launchpadData?.BASE_TOKEN)
-    .map((token) => token.symbol)
+    .map((token) => token.symbol)[0]
 
   // base token decimals
   const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
@@ -130,17 +129,14 @@ export default function LiveUpcomingCard({
   ])
 
   // approve the requested launchpad for admin
-  const {
-    approveLaunchpad,
-    error: approveLaunchpadError,
-    isLoading: approveLaunchpadLoading,
-  } = useApproveLaunchpad({
-    enabled: isTokenApproved && launchpadData?.LAUNCHPAD_INDEX != null,
-    args: [BigInt(launchpadData?.LAUNCHPAD_INDEX ?? 0)],
-    onSuccessTx: () => {
-      window.location.reload()
-    },
-  })
+  const { approveLaunchpad, isLoading: approveLaunchpadLoading } =
+    useApproveLaunchpad({
+      enabled: isTokenApproved && launchpadData?.LAUNCHPAD_INDEX != null,
+      args: [BigInt(launchpadData?.LAUNCHPAD_INDEX ?? 0)],
+      onSuccessTx: () => {
+        window.location.reload()
+      },
+    })
 
   // set vesting address to launchpad contract hook for creator
   const { configureVestAddress, isLoading: setVestAddressLoading } =
@@ -205,7 +201,7 @@ export default function LiveUpcomingCard({
     }
     const percentage = (Number(curRaisedAmount) / totalSaleAmount) * 100
 
-    return percentage
+    return Number(percentage.toFixed(3))
   }, [curRaisedAmount, launchpadData?.TOTAL_SALE_AMOUNT])
   const launchpadStatus = useMemo(() => {
     if (!launchpadData) return 'upcoming'
@@ -438,13 +434,16 @@ export default function LiveUpcomingCard({
               </div>
               <div className="text-white text-sm mt-3.5">
                 {1 + ' ' + launchpadData?.LAUNCHPAD_TOKEN_SYMBOL} ={' '}
-                {launchpadData?.LAUNCHPAD_TOKEN_PRICE + ` ${baseTokenSymbol}`}
+                {launchpadData?.LAUNCHPAD_TOKEN_PRICE +
+                  ` ${baseTokenSymbol || 'USD'}`}
               </div>
             </div>
           </div>
         </CardHeader>
         <div className="relative flex w-full flex-col items-stretch p-6">
-          <div className="text-white text-sm font-black">Soft Cap - Hard Cap</div>
+          <div className="text-white text-sm font-black">
+            Soft Cap - Hard Cap
+          </div>
           <div
             className="text-astra-blue text-xl tracking-[2px] mt-2"
             style={{
@@ -475,11 +474,11 @@ export default function LiveUpcomingCard({
           >
             <div className="text-white text-sm font-black">
               {Number(curRaisedAmount).toLocaleString('en-US')}{' '}
-              {baseTokenSymbol}
+              {baseTokenSymbol || 'USD'}
             </div>
             <div className="text-white text-right text-sm font-black">
               {Number(launchpadData?.HARD_CAP).toLocaleString('en-US') ?? 0}{' '}
-              {baseTokenSymbol}
+              {baseTokenSymbol || 'USD'}
             </div>
           </div>
 

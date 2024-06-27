@@ -1,17 +1,25 @@
 'use client'
 
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import LiveUpcoming from '../(page)/components/LiveUpcoming'
 import { ClaimStatistics } from './sections/claim-statistics'
 import { useGetBuyRuleLaunchpad, useGetParticipatedLaunchpad } from '@/hooks'
 import Image from 'next/image'
 import { useMemo } from 'react'
 import { AstraLink } from '@/components'
+import CrosschainStatus from './components/CrosschainStatus'
 
 export default function ClaimPage() {
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const { data: launchpads, isLoading: launchpadLoading } =
     useGetParticipatedLaunchpad(address)
+
+  const vestingLaunchpads = useMemo(() => {
+    return launchpads?.filter(
+      (launchpad) => launchpad.VEST_ADDRESS && launchpad.LAUNCHPAD_ADDRESS
+    )
+  }, [launchpads, chain])
 
   const { data: buyRuleStatus } = useGetBuyRuleLaunchpad()
 
@@ -21,7 +29,10 @@ export default function ClaimPage() {
 
   return (
     <main className="container py-16 max-w-full xl:max-w-[1200px] 2xl:max-w-[1400px] relative">
-      <div className="kyc-status text-center py-2 px-8 bg-white rounded-sm w-fit my-0 mx-auto absolute " style={{top:"-30px", right:"50px"}}>
+      <div
+        className="kyc-status text-center py-2 px-8 bg-white rounded-sm w-fit my-0 mx-auto absolute "
+        style={{ top: '-30px', right: '50px' }}
+      >
         {isKycVerified ? (
           <span className="text-black">KYC Verified</span>
         ) : (
@@ -57,12 +68,16 @@ export default function ClaimPage() {
       </header>
       <div className="border white w-full"></div>
 
+      <div className="crosschain-status">
+        <CrosschainStatus />
+      </div>
+
       <div className="participated">
         <LiveUpcoming status="user" />
       </div>
       <div className="participated">
         <ClaimStatistics
-          launchpads={launchpads}
+          launchpads={vestingLaunchpads}
           launchpadLoading={launchpadLoading}
         />
       </div>

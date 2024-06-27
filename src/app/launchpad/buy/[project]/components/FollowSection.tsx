@@ -1,15 +1,16 @@
 'use client'
 
-import React from 'react'
+import React, {useState} from 'react'
 import Image from 'next/image'
 import { Card, CardContent, Button } from '@/components/shadcn'
 import { AstraLink, AstraLoading } from '@/components'
 import { MiniIdenticon } from '@/components/mini-identicon'
-import { CheckIcon, ResetIcon } from '@radix-ui/react-icons'
+import { CheckIcon, ResetIcon, PersonIcon } from '@radix-ui/react-icons'
 import { TLaunchpadDetailInfo } from '@/types'
 import { formatUnits } from 'viem'
 import { useDecimals, useFollowCheck } from '@/hooks'
 import { useAccount } from 'wagmi'
+import { followTwitter } from '@/util/followTwitter'
 
 type Props = {
   detail: TLaunchpadDetailInfo
@@ -27,13 +28,14 @@ export default function FollowSection({
   launchpadLoading,
 }: Props) {
   const { address } = useAccount()
+  const [twitterFollowInprogress, setTwitterFollowInprogress] = useState(false)
   const followingTemp = useFollowCheck(address)
   const followingData = followingTemp.data
   const follwingDataLoading = followingTemp.isLoading
   const telegramfollowing: boolean =
     followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
   const twitterfollowing: boolean =
-    followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
+    followingData?.[0]?.IS_TWITTER_FOLLOWING || false
 
   const isLoading =
     buyRuleStatusLoading || launchpadLoading || follwingDataLoading
@@ -43,6 +45,27 @@ export default function FollowSection({
       address: detail?.BASE_TOKEN as `0x${string}`,
       enabled: !!detail,
     })
+    const handlerfollowTwitter = async () => {
+      if (!!address && /^0x[a-fA-F0-9]{40}$/.test(address)) {
+        setTwitterFollowInprogress(true)
+        try {
+          const res = await followTwitter(address)
+          if (res.ok) {
+            // Handle successful response
+            followingTemp.refetchData()
+          } else {
+            // Handle unsuccessful response
+            console.error('Failed to follow Twitter account:', res.statusText)
+          }
+        } catch (error) {
+          // Handle any errors that occurred during the fetch
+          console.error('Error following Twitter account:', error)
+        } finally {
+          // Always set the in-progress state to false when done
+          setTwitterFollowInprogress(false)
+        }
+      }
+    }
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xl bg-[#363653] shadow-xl p-10">
@@ -117,11 +140,49 @@ export default function FollowSection({
           </div>
 
           <div className="flex flex-col gap-4 mt-8">
-            <AstraLink link="https://twitter.com/astradao_org">
+          {twitterfollowing ? (
+              <AstraLink link="https://twitter.com/astradao_org">
+                <div
+                  className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
+                    twitterfollowing ? '' : 'border border-white'
+                  } justify-between`}
+                >
+                  <div className="flex items-center">
+                    <div className="h-8 w-8 mr-4">
+                      <Image
+                        alt="twitter"
+                        className="!relative"
+                        src="/svgs/twitter_blue.svg"
+                        style={{ fill: '#56A8EA' }}
+                        fill={true}
+                      />
+                    </div>
+                    User needs to follow Astra DAO on Twitter.
+                  </div>
+                  <div>
+                    {address ? (
+                      <AstraLoading
+                        isLoading={follwingDataLoading}
+                        className="w-6 h-6"
+                      >
+                        {twitterfollowing ? (
+                          <CheckIcon className="w-8 h-8 text-astra-blue" />
+                        ) : (
+                          <ResetIcon className="w-8 h-8" />
+                        )}
+                      </AstraLoading>
+                    ) : (
+                      <ResetIcon className="w-8 h-8" />
+                    )}
+                  </div>
+                </div>
+              </AstraLink>
+            ) : (
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
-                  twitterfollowing ? '' : 'border border-white'
+                  twitterfollowing ? '' : 'border border-white cursor-pointer'
                 } justify-between`}
+                onClick={handlerfollowTwitter}
               >
                 <div className="flex items-center">
                   <div className="h-8 w-8 mr-4">
@@ -138,13 +199,13 @@ export default function FollowSection({
                 <div>
                   {address ? (
                     <AstraLoading
-                      isLoading={follwingDataLoading}
+                      isLoading={twitterFollowInprogress}
                       className="w-6 h-6"
                     >
                       {twitterfollowing ? (
                         <CheckIcon className="w-8 h-8 text-astra-blue" />
                       ) : (
-                        <ResetIcon className="w-8 h-8" />
+                        <PersonIcon className="w-8 h-8" />
                       )}
                     </AstraLoading>
                   ) : (
@@ -152,7 +213,7 @@ export default function FollowSection({
                   )}
                 </div>
               </div>
-            </AstraLink>
+            )}
             <AstraLink link="https://t.me/testAstraDaoGroup">
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${

@@ -68,6 +68,7 @@ import { useDropzone } from 'react-dropzone'
 import { IoCloudUploadOutline } from 'react-icons/io5'
 import dynamic from 'next/dynamic'
 import { idToChain } from '@/config'
+import 'suneditor/dist/css/suneditor.min.css'
 
 interface Errors {
   totalMetrics?: string
@@ -79,16 +80,28 @@ type TPage = {
 }
 
 export default function Page({ params }: TPage) {
-  const DynamicTextEditor = useMemo(() => {
-    return dynamic(() => import('@/components/Editor'), {
+  // const DynamicTextEditor = useMemo(() => {
+  //   return dynamic(() => import('@/components/Editor'), {
+  //     loading: () => <p>loading...</p>,
+  //     ssr: true,
+  //   })
+  // }, [])
+
+  const SunEditor = useMemo(() => {
+    return dynamic(() => import('suneditor-react'), {
       loading: () => <p>loading...</p>,
       ssr: true,
     })
   }, [])
+
+  const EditorRef = useRef()
   const router = useRouter()
   const { chain } = useNetwork()
   const [fileError, setFileError] = useState<string>('')
   const [tempImageFile, setTempImageFile] = useState<File>()
+  const [imageFile, setImageFile] = useState<Record<`avatar${number}`, string>>(
+    {}
+  )
 
   const { launchpad_id } = params
   const {
@@ -98,6 +111,36 @@ export default function Page({ params }: TPage) {
     refetchData: refetchLaunchpadDetail,
   } = useGetLaunchpadDetailById(launchpad_id)
   if (isError) redirect('/launchpad')
+
+  const onImageUploadBefore = () => {
+    return (files: File[], info: any, uploadHandler: any): any => {
+      ;(async () => {
+        try {
+          const images = []
+          for (const file of files) {
+            //Do something with image
+            const url = await uploadToCloudinary(file)
+
+            const image = {
+              url: url,
+              name: file.name,
+              size: file.size,
+            }
+
+            images.push(image)
+          }
+          const response = {
+            result: images,
+          }
+          uploadHandler(response)
+        } catch (error) {
+          console.error('Error uploading image to Cloudinary', error)
+        }
+      })()
+
+      uploadHandler()
+    }
+  }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files?.length) {
@@ -140,7 +183,7 @@ export default function Page({ params }: TPage) {
 
     return url
   }
-  const imageHandler = useCallback(() => {
+  const uploadImage = useCallback((index: number) => {
     const input = document.createElement('input')
     input.setAttribute('type', 'file')
     input.setAttribute('accept', 'image/*')
@@ -148,12 +191,16 @@ export default function Page({ params }: TPage) {
     input.onchange = async () => {
       if (input !== null && input.files !== null) {
         const file = input.files[0]
-        const url = await uploadToCloudinary(file)
-        const quill = reactQuillRef.current
-        if (quill) {
-          const range = quill.getEditorSelection()
-          range && quill.getEditor().insertEmbed(range.index, 'image', url)
+        form.setValue(`avatar${index}`, file)
+        // Create a data URL from the uploaded file
+        const reader = new FileReader()
+        reader.onload = () => {
+          setImageFile((prevImageFile) => ({
+            ...prevImageFile,
+            [`avatar${index}`]: reader.result as string,
+          }))
         }
+        reader.readAsDataURL(file)
       }
     }
   }, [])
@@ -229,7 +276,14 @@ export default function Page({ params }: TPage) {
   const [databaseData, setDatabaseData] =
     useState<RequestLaunchpadResultValues>()
   const [team, setTeam] = useState<TeamObject[]>([
-    { name: '', position: '', description: '' },
+    {
+      name: '',
+      position: '',
+      description: '',
+      linkedin: '',
+      twitter: '',
+      avatar: '',
+    },
   ])
   const [metrics, setMetrics] = useState<MetricsObject[]>([
     { id: '', label: '', value: 0 },
@@ -633,6 +687,13 @@ export default function Page({ params }: TPage) {
     temp[`description${i}`] = z.string().min(1, {
       message: 'Member description is required.',
     })
+    temp[`linkedin${i}`] = z.string().regex(/^[^'"]*$/, {
+      message: 'Linkedin url cannot contain single or double quotes.',
+    })
+    temp[`twitter${i}`] = z.string().regex(/^[^'"]*$/, {
+      message: 'Twitter url cannot contain single or double quotes.',
+    })
+    temp[`avatar${i}`] = z.any()
   }
   const createIndexFormSchema = z
     .object(temp)
@@ -667,6 +728,9 @@ export default function Page({ params }: TPage) {
     tempDefaultValues[`name${key}`] = item.name
     tempDefaultValues[`position${key}`] = item.position
     tempDefaultValues[`description${key}`] = item.description
+    tempDefaultValues[`linkedin${key}`] = item?.linkedin?.trim() || ''
+    tempDefaultValues[`twitter${key}`] = item?.twitter?.trim() || ''
+    tempDefaultValues[`avatar${key}`] = item?.avatar?.trim() || ''
   })
   metricsInfoArray.map((item: MetricsObject, key: number) => {
     tempDefaultValues[`id${key}`] = item.id
@@ -819,10 +883,14 @@ export default function Page({ params }: TPage) {
 
     const teamValues = []
     for (let i = 0; i < team.length; i++) {
+      const url = await uploadToCloudinary(value[`avatar${i}`])
       teamValues.push({
         name: value[`name${i}`].replace(/"/g, '\\"').trim(),
         position: value[`position${i}`].replace(/"/g, '\\"').trim(),
         description: value[`description${i}`].replace(/"/g, '\\"').trim(),
+        linkedin: value[`linkedin${i}`].replace(/"/g, '\\"').trim(),
+        twitter: value[`twitter${i}`].replace(/"/g, '\\"').trim(),
+        avatar: url,
       })
     }
     setTeam(teamValues)
@@ -912,6 +980,9 @@ export default function Page({ params }: TPage) {
       values[`name${index}`] = ''
       values[`position${index}`] = ''
       values[`description${index}`] = ''
+      values[`linkedin${index}`] = ''
+      values[`twitter${index}`] = ''
+      values[`avatar${index}`] = ''
       form.reset(values)
       setTeam([...team, { name: '', position: '', description: '' }])
     } else {
@@ -931,6 +1002,9 @@ export default function Page({ params }: TPage) {
       delete values[`name${index - 1}`]
       delete values[`position${index - 1}`]
       delete values[`description${index - 1}`]
+      delete values[`linkedin${index - 1}`]
+      delete values[`twitter${index - 1}`]
+      delete values[`avatar${index - 1}`]
       form.reset(values)
       setTeam((teams) => [...teams.slice(0, -1)])
     } else {
@@ -953,8 +1027,19 @@ export default function Page({ params }: TPage) {
       form.setValue(`name${key}`, item.name)
       form.setValue(`position${key}`, item.position)
       form.setValue(`description${key}`, item.description)
+      form.setValue(`linkedin${key}`, (item.linkedin || '').trim())
+      form.setValue(`twitter${key}`, (item.twitter || '').trim())
     })
     setTeam(teamInfoArray)
+    let tempAvatar: Record<`avatar${number}`, string> = {}
+    for (let i = 0; i < teamInfoArray.length; i++) {
+      tempAvatar = Object.assign({}, tempAvatar, {
+        [`avatar${i}`]: urlRegex.test(teamInfoArray[i]?.avatar)
+          ? teamInfoArray[i]?.avatar
+          : '',
+      })
+    }
+    setImageFile(tempAvatar)
   }, [launchpadDetail?.TEAM_INFO])
   useEffect(() => {
     metricsInfoArray.map((item: MetricsObject, key: number) => {
@@ -1484,19 +1569,287 @@ export default function Page({ params }: TPage) {
                       <FormLabel>Project Description</FormLabel>
                       <FormControl>
                         <div style={{ color: 'black' }}>
-                          {/* <ReactQuill
-                            ref={reactQuillRef}
-                            value={field.value}
+                          <SunEditor
+                            defaultValue={field.value}
+                            height="400px"
+                            placeholder="Please insert project description."
                             onChange={field.onChange}
-                            modules={quillModules}
-                            formats={quillFormats}
-                            className="w-full h-[70%] mt-10 bg-white"
-                          /> */}
-                          <DynamicTextEditor
+                            setOptions={{
+                              buttonList: [
+                                // default
+                                ['font', 'fontSize', 'formatBlock'],
+                                ['blockquote'],
+                                [
+                                  'bold',
+                                  'underline',
+                                  'italic',
+                                  'strike',
+                                  'subscript',
+                                  'superscript',
+                                ],
+                                ['undo', 'redo'],
+                                ['fontColor', 'hiliteColor', 'textStyle'],
+                                ['removeFormat'],
+                                ['outdent', 'indent'],
+                                [
+                                  'align',
+                                  'horizontalRule',
+                                  'list',
+                                  'lineHeight',
+                                ],
+                                // ['table', 'link', 'image', 'video'],
+                                ['table', 'link', 'image'],
+                                ['showBlocks', 'codeView'],
+                                ['preview'],
+                                // responsive
+                                [
+                                  '%1161',
+                                  [
+                                    [
+                                      'font',
+                                      'fontSize',
+                                      'formatBlock',
+                                      'blockquote',
+                                    ],
+                                    [
+                                      ':p-Formats-default.more_paragraph',
+                                      'bold',
+                                      'underline',
+                                      'italic',
+                                      'strike',
+                                      'subscript',
+                                      'superscript',
+                                    ],
+                                    ['undo', 'redo'],
+                                    ['fontColor', 'hiliteColor', 'textStyle'],
+                                    ['removeFormat'],
+                                    ['outdent', 'indent'],
+                                    [
+                                      'align',
+                                      'horizontalRule',
+                                      'list',
+                                      'lineHeight',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':i-Etc-default.more_vertical',
+                                      'showBlocks',
+                                      'codeView',
+                                      'preview',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':r-Table&Media-default.more_plus',
+                                      'table',
+                                      'link',
+                                      'image',
+                                      // 'video',
+                                    ],
+                                  ],
+                                ],
+                                [
+                                  '%893',
+                                  [
+                                    [
+                                      'font',
+                                      'fontSize',
+                                      'formatBlock',
+                                      'blockquote',
+                                    ],
+                                    [
+                                      ':p-Formats-default.more_paragraph',
+                                      'bold',
+                                      'underline',
+                                      'italic',
+                                      'strike',
+                                    ],
+                                    [
+                                      ':t-Fonts-default.more_text',
+                                      'subscript',
+                                      'superscript',
+                                      'fontColor',
+                                      'hiliteColor',
+                                      'textStyle',
+                                    ],
+                                    ['undo', 'redo'],
+                                    ['removeFormat'],
+                                    ['outdent', 'indent'],
+                                    [
+                                      'align',
+                                      'horizontalRule',
+                                      'list',
+                                      'lineHeight',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':i-Etc-default.more_vertical',
+                                      'showBlocks',
+                                      'codeView',
+                                      'preview',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':r-Table&Media-default.more_plus',
+                                      'table',
+                                      'link',
+                                      'image',
+                                      // 'video',
+                                    ],
+                                  ],
+                                ],
+                                [
+                                  '%855',
+                                  [
+                                    [
+                                      ':t-Fonts-default.more_text',
+                                      'font',
+                                      'fontSize',
+                                      'formatBlock',
+                                      'blockquote',
+                                    ],
+                                    [
+                                      ':p-Formats-default.more_paragraph',
+                                      'bold',
+                                      'underline',
+                                      'italic',
+                                      'strike',
+                                      'subscript',
+                                      'superscript',
+                                      'fontColor',
+                                      'hiliteColor',
+                                      'textStyle',
+                                    ],
+                                    ['undo', 'redo'],
+                                    ['removeFormat'],
+                                    ['outdent', 'indent'],
+                                    [
+                                      'align',
+                                      'horizontalRule',
+                                      'list',
+                                      'lineHeight',
+                                    ],
+                                    [
+                                      ':r-Table&Media-default.more_plus',
+                                      'table',
+                                      'link',
+                                      'image',
+                                      // 'video',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':i-Etc-default.more_vertical',
+                                      'showBlocks',
+                                      'codeView',
+                                      'preview',
+                                    ],
+                                  ],
+                                ],
+                                [
+                                  '%563',
+                                  [
+                                    [
+                                      ':t-Fonts-default.more_text',
+                                      'font',
+                                      'fontSize',
+                                      'formatBlock',
+                                      'blockquote',
+                                    ],
+                                    [
+                                      ':p-Formats-default.more_paragraph',
+                                      'bold',
+                                      'underline',
+                                      'italic',
+                                      'strike',
+                                      'subscript',
+                                      'superscript',
+                                      'fontColor',
+                                      'hiliteColor',
+                                      'textStyle',
+                                    ],
+                                    ['undo', 'redo'],
+                                    ['removeFormat'],
+                                    ['outdent', 'indent'],
+                                    [
+                                      ':e-List&Line-default.more_horizontal',
+                                      'align',
+                                      'horizontalRule',
+                                      'list',
+                                      'lineHeight',
+                                    ],
+                                    [
+                                      ':r-Table&Media-default.more_plus',
+                                      'table',
+                                      'link',
+                                      'image',
+                                      // 'video',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':i-Etc-default.more_vertical',
+                                      'showBlocks',
+                                      'codeView',
+                                      'preview',
+                                    ],
+                                  ],
+                                ],
+                                [
+                                  '%458',
+                                  [
+                                    [
+                                      ':t-Fonts-default.more_text',
+                                      'font',
+                                      'fontSize',
+                                      'formatBlock',
+                                      'blockquote',
+                                    ],
+                                    [
+                                      ':p-Formats-default.more_paragraph',
+                                      'bold',
+                                      'underline',
+                                      'italic',
+                                      'strike',
+                                      'subscript',
+                                      'superscript',
+                                      'fontColor',
+                                      'hiliteColor',
+                                      'textStyle',
+                                      'removeFormat',
+                                    ],
+                                    ['undo', 'redo'],
+                                    [
+                                      ':e-List&Line-default.more_horizontal',
+                                      'outdent',
+                                      'indent',
+                                      'align',
+                                      'horizontalRule',
+                                      'list',
+                                      'lineHeight',
+                                    ],
+                                    [
+                                      ':r-Table&Media-default.more_plus',
+                                      'table',
+                                      'link',
+                                      'image',
+                                      // 'video',
+                                    ],
+                                    [
+                                      '-right',
+                                      ':i-Etc-default.more_vertical',
+                                      'showBlocks',
+                                      'codeView',
+                                      'preview',
+                                    ],
+                                  ],
+                                ],
+                              ],
+                            }}
+                            onImageUploadBefore={onImageUploadBefore()}
+                          />
+                          {/* <DynamicTextEditor
                             quillRef={reactQuillRef}
                             value={field.value}
                             onChange={field.onChange}
-                          ></DynamicTextEditor>
+                          ></DynamicTextEditor> */}
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -2715,6 +3068,85 @@ export default function Page({ params }: TPage) {
                               }}
                             />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`linkedin${index}`}
+                      render={({ field }) => (
+                        <FormItem className="my-8">
+                          <FormLabel>Team Member Linkedin</FormLabel>
+                          <FormControl>
+                            <Input
+                              autoComplete="off"
+                              placeholder="Team member linkedin profile url"
+                              {...field}
+                              onChange={(e) => {
+                                const temp = e
+                                temp.target.value =
+                                  temp.target.value.trimStart()
+                                field.onChange(temp)
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`twitter${index}`}
+                      render={({ field }) => (
+                        <FormItem className="my-8">
+                          <FormLabel>Team Member Twitter Handle</FormLabel>
+                          <FormControl>
+                            <Input
+                              autoComplete="off"
+                              placeholder="Team member twitter address"
+                              {...field}
+                              onChange={(e) => {
+                                const temp = e
+                                temp.target.value =
+                                  temp.target.value.trimStart()
+                                field.onChange(temp)
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`avatar${index}`}
+                      render={({ field }) => (
+                        <FormItem className="my-8">
+                          <FormLabel>Team Member Avatar</FormLabel>
+                          <div className="text-center">
+                            <div className="flex justify-center mb-3">
+                              <div style={{ width: '150px' }}>
+                                {!_.isEmpty(imageFile[`avatar${index}`]) && (
+                                  <Image
+                                    src={imageFile[`avatar${index}`]}
+                                    alt="Astra Logo"
+                                    width={140}
+                                    height={140}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                            <FormControl>
+                              <Button
+                                variant="astra-blue"
+                                onClick={(e) => uploadImage(index)}
+                              >
+                                Upload Avatar
+                              </Button>
+                            </FormControl>
+                          </div>
+
                           <FormMessage />
                         </FormItem>
                       )}

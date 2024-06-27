@@ -30,11 +30,12 @@ import {
   useLaunchpadCountdown,
   useFollowCheck,
 } from '@/hooks/'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { formatUnits, parseEther, parseUnits } from 'viem'
 import { TLaunchpadDetailInfo } from '@/types'
 import Countdown from './Countdown'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
+import { idToChain } from '@/config'
 
 type Props = {
   detail: TLaunchpadDetailInfo
@@ -56,6 +57,7 @@ export default function BuyContent({
   buyRuleStatus,
 }: Props) {
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const { chainConfig } = useChainConfig()
 
   const [buyAmount, setBuyAmount] = useState<string>('')
@@ -77,7 +79,7 @@ export default function BuyContent({
   ]
   const baseTokenSymbol = tokenArray
     .filter((token) => token.address === detail?.BASE_TOKEN)
-    .map((token) => token.symbol)
+    .map((token) => token.symbol)[0]
 
   const followingTemp = useFollowCheck(address)
   const followingData = followingTemp.data
@@ -131,6 +133,11 @@ export default function BuyContent({
         : '',
     [balanceOf, baseTokenDecimals]
   )
+
+  const isRightChain = useMemo(() => {
+    if ((chain && idToChain[chain.id]) === detail?.CHAIN) return true
+    return false
+  }, [chain, detail])
 
   // APPROVE
   const {
@@ -272,7 +279,8 @@ export default function BuyContent({
           />
           <div className="pt-4">Public Sale Starts In</div>
         </>
-      ) : startRemainingTime <= 0 && endRemainingTime > 0 ? (
+      ) : (startRemainingTime <= 0 || Number.isNaN(startRemainingTime)) &&
+        endRemainingTime > 0 ? (
         <>
           <Countdown
             remainingTime={endRemainingTime}
@@ -291,6 +299,16 @@ export default function BuyContent({
       )}
     </div>
   )
+
+  const saleStatus = useMemo(() => {
+    if (startRemainingTime > 0) return 'Upcoming'
+    else if (
+      (startRemainingTime <= 0 || Number.isNaN(startRemainingTime)) &&
+      endRemainingTime > 0
+    )
+      return 'In Progress'
+    else return 'Ended'
+  }, [startRemainingTime, endRemainingTime])
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl p-10">
@@ -351,19 +369,20 @@ export default function BuyContent({
           ) : (
             <></>
           )}
+          {isRightChain ? (
+            <></>
+          ) : (
+            <div className="mt-4 mb-4 border border-solid border-red-600 p-4 rounded-xl text-red-600">
+              {`You are on the wrong blockchain network. Please switch your chain to ${detail?.CHAIN}`}
+            </div>
+          )}
         </div>
         <div className="rounded-3xl p-[1px] bg-gradient-to-b from-transparent to-gray-400 shadow-xl w-1/2">
           <div className="p-12 bg-gradient-to-r from-[#51547590] to-[#51547599] rounded-[calc(1.5rem-1px)] flex flex-col gap-4">
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center` rounded-lg">
               <span className="text-[#7E7E7E]">Status</span>
               <AstraLoading isLoading={isFetchLoading}>
-                <span className="text-[#EA8A1A]">
-                  {startRemainingTime > 0
-                    ? 'Upcoming'
-                    : startRemainingTime <= 0 && endRemainingTime > 0
-                      ? 'In Progress'
-                      : 'Ended'}
-                </span>
+                <span className="text-[#EA8A1A]">{saleStatus}</span>
               </AstraLoading>
             </div>
             <div className="bg-[#292944] px-6 py-4 flex justify-between items-center rounded-lg">

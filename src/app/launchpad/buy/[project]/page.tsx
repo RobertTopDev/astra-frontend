@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import Finished from './components/Finished'
 import Progress from './components/Progress'
-import { useGetLaunchpadDetailById } from '@/hooks'
+import { useGetLaunchpadDetailById, useLaunchpadInfo } from '@/hooks'
 import { TLaunchpadDetailInfo } from '@/types'
 import Loading from '@/app/loading'
 import NotFound from '@/app/not-found'
@@ -37,6 +37,16 @@ export default function Page({ params }: TPage) {
     else return 'finished'
   }, [launchpadDetail])
 
+  const launchpadAddress = useMemo(() => {
+    if (launchpadDetail) return launchpadDetail.LAUNCHPAD_ADDRESS
+  }, [launchpadDetail])
+
+  const {
+    data: launchpadInfoData,
+    isLoading: launchpadInfoLoading,
+    refetch: refetchLaunchpadData,
+  } = useLaunchpadInfo({ launchpad: launchpadAddress as `0x${string}` })
+
   return (
     <div className="container py-16 max-w-full xl:max-w-[1200px] 2xl:max-w-[1400px]">
       {isLoading && <Loading />}
@@ -45,6 +55,7 @@ export default function Page({ params }: TPage) {
           launchpadDetail?.STATUS === 'finished') && (
           <Finished
             data={launchpadDetail as TLaunchpadDetailInfo}
+            launchpadData={launchpadInfoData}
             launchpadLoading={isLoading}
           />
         )}
@@ -53,6 +64,9 @@ export default function Page({ params }: TPage) {
           <Progress
             data={launchpadDetail as TLaunchpadDetailInfo}
             launchpadLoading={isLoading}
+            launchpadInfoData={launchpadInfoData}
+            launchpadInfoLoading={launchpadInfoLoading}
+            refetchLaunchpadData={refetchLaunchpadData}
           />
         )}
       {launchpadStatus === 'upcoming' &&

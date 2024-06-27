@@ -31,10 +31,15 @@ import { MiniIdenticon } from '@/components/mini-identicon'
 
 type TProgress = {
   data: TLaunchpadDetailInfo
+  launchpadData: any
   launchpadLoading: boolean
 }
 
-export default function Finished({ data, launchpadLoading }: TProgress) {
+export default function Finished({
+  data,
+  launchpadData,
+  launchpadLoading,
+}: TProgress) {
   const { address } = useAccount()
   const [open, setOpen] = useState<boolean>(false)
   const { chainConfig } = useChainConfig()
@@ -55,7 +60,7 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
   ]
   const baseTokenSymbol = tokenArray
     .filter((token) => token.address === data?.BASE_TOKEN)
-    .map((token) => token.symbol)
+    .map((token) => token.symbol)[0]
 
   const socialLinks: TLogoLink[] = [
     {
@@ -139,6 +144,24 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
   const isOwner = useMemo(() => {
     return data.OWNER === address
   }, [address, data])
+
+  // invested, purchased amount
+  const investedAmount = useMemo(() => {
+    return Number(
+      formatUnits(
+        launchpadData?.[10].result ?? BigInt(0),
+        baseTokenDecimals ?? 18
+      )
+    )
+  }, [launchpadData, baseTokenDecimals])
+  const purchasedAmount = useMemo(() => {
+    return Number(
+      formatUnits(
+        launchpadData?.[0].result ?? BigInt(0),
+        data.LAUNCHPAD_TOKEN_DECIMAL ?? 18
+      )
+    )
+  }, [launchpadData, data])
 
   return (
     <>
@@ -358,6 +381,21 @@ export default function Finished({ data, launchpadLoading }: TProgress) {
               <p>
                 {Number(withdrawAmount).toLocaleString('en-US')}{' '}
                 {baseTokenSymbol}
+              </p>
+            </div>
+            <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
+            <div className="md:text-left text-center">
+              <p>Your Invested Amount</p>
+              <p>
+                {investedAmount.toLocaleString('en-US')} {baseTokenSymbol}
+              </p>
+            </div>
+            <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
+            <div className="md:text-left text-center">
+              <p>Your Purchased Amount</p>
+              <p>
+                {purchasedAmount.toLocaleString('en-US')}{' '}
+                {data.LAUNCHPAD_TOKEN_SYMBOL}
               </p>
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>

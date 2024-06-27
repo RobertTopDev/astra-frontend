@@ -6,8 +6,9 @@ import { differenceInSeconds } from 'date-fns'
 import { ClockIcon } from '@radix-ui/react-icons'
 import { AstraLink, AstraLoading } from '@/components'
 import Image from 'next/image'
-import { CheckIcon, ResetIcon } from '@radix-ui/react-icons'
+import { CheckIcon, ResetIcon, PersonIcon } from '@radix-ui/react-icons'
 import { useFollowCheck, useGetBuyRuleLaunchpad } from '@/hooks'
+import { followTwitter } from '@/util/followTwitter'
 import { useAccount } from 'wagmi'
 
 type TComponent = {
@@ -25,6 +26,8 @@ export default function Offering({ launchpadData }: TComponent) {
   const [remainingTime, setRemainingTime] = useState('00:00:00')
   const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
 
+  const [twitterFollowInprogress, setTwitterFollowInprogress] = useState(false)
+
   const pad = (num: number) => {
     return num.toString().padStart(2, '0')
   }
@@ -35,11 +38,33 @@ export default function Offering({ launchpadData }: TComponent) {
   const telegramfollowing: boolean =
     followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
   const twitterfollowing: boolean =
-    followingData?.[0]?.IS_TELEGRAM_FOLLOWING || false
+    followingData?.[0]?.IS_TWITTER_FOLLOWING || false
 
   const { data: buyRuleStatus, isLoading: buyRuleStatusLoading } =
     useGetBuyRuleLaunchpad()
   const isLoading = buyRuleStatusLoading || follwingDataLoading
+
+  const handlerfollowTwitter = async () => {
+    if (!!address && /^0x[a-fA-F0-9]{40}$/.test(address)) {
+      setTwitterFollowInprogress(true)
+      try {
+        const res = await followTwitter(address)
+        if (res.ok) {
+          // Handle successful response
+          followingTemp.refetchData()
+        } else {
+          // Handle unsuccessful response
+          console.error('Failed to follow Twitter account:', res.statusText)
+        }
+      } catch (error) {
+        // Handle any errors that occurred during the fetch
+        console.error('Error following Twitter account:', error)
+      } finally {
+        // Always set the in-progress state to false when done
+        setTwitterFollowInprogress(false)
+      }
+    }
+  }
 
   useEffect(() => {
     let intervalEndId: NodeJS.Timeout
@@ -132,11 +157,49 @@ export default function Offering({ launchpadData }: TComponent) {
             In order to Participate in this public sale you need to
           </div>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            <AstraLink link="https://twitter.com/astradao_org">
+            {twitterfollowing ? (
+              <AstraLink link="https://twitter.com/astradao_org">
+                <div
+                  className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
+                    twitterfollowing ? '' : 'border border-white'
+                  } justify-between`}
+                >
+                  <div className="flex items-center">
+                    <div className="h-8 w-8 mr-4">
+                      <Image
+                        alt="twitter"
+                        className="!relative"
+                        src="/svgs/twitter_blue.svg"
+                        style={{ fill: '#56A8EA' }}
+                        fill={true}
+                      />
+                    </div>
+                    User needs to follow Astra DAO on Twitter.
+                  </div>
+                  <div>
+                    {address ? (
+                      <AstraLoading
+                        isLoading={follwingDataLoading}
+                        className="w-6 h-6"
+                      >
+                        {twitterfollowing ? (
+                          <CheckIcon className="w-8 h-8 text-astra-blue" />
+                        ) : (
+                          <ResetIcon className="w-8 h-8" />
+                        )}
+                      </AstraLoading>
+                    ) : (
+                      <ResetIcon className="w-8 h-8" />
+                    )}
+                  </div>
+                </div>
+              </AstraLink>
+            ) : (
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
-                  twitterfollowing ? '' : 'border border-white'
+                  twitterfollowing ? '' : 'border border-white cursor-pointer'
                 } justify-between`}
+                onClick={handlerfollowTwitter}
               >
                 <div className="flex items-center">
                   <div className="h-8 w-8 mr-4">
@@ -153,13 +216,13 @@ export default function Offering({ launchpadData }: TComponent) {
                 <div>
                   {address ? (
                     <AstraLoading
-                      isLoading={follwingDataLoading}
+                      isLoading={twitterFollowInprogress}
                       className="w-6 h-6"
                     >
                       {twitterfollowing ? (
                         <CheckIcon className="w-8 h-8 text-astra-blue" />
                       ) : (
-                        <ResetIcon className="w-8 h-8" />
+                        <PersonIcon className="w-8 h-8" />
                       )}
                     </AstraLoading>
                   ) : (
@@ -167,7 +230,7 @@ export default function Offering({ launchpadData }: TComponent) {
                   )}
                 </div>
               </div>
-            </AstraLink>
+            )}
             <AstraLink link="https://t.me/testAstraDaoGroup">
               <div
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${

@@ -90,7 +90,7 @@ const LiveUpcoming: React.FC<TLiveUpcoming> = ({ status }) => {
       setLaunchpadTotal(newLaunchpadTotal)
     }
     setIsReloading(false)
-  },[launchpads,getOption])
+  }, [launchpads, getOption])
 
   useEffect(() => {
     if (launchpads) {
