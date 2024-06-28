@@ -2,7 +2,7 @@
 import { TProposal } from '@/types'
 import React, { useMemo } from 'react'
 import { Button } from '@/components/shadcn'
-import ProgressBar from '@/components/progressbar'
+import ProgressBar from '@/components/ProgressBar'
 import { formatUnits } from 'viem'
 import { useRouter } from 'next/navigation'
 import { ProposalStatusEnum } from '@/constants'
@@ -130,7 +130,7 @@ const ProposalRow = ({ proposal }: TProposalRowProps) => {
           </div>
           <div className="h-full flex items-center">
             <ProgressBar
-              BarColor="bg-red-500"
+              barColor="bg-red-500"
               className="flex-grow"
               value={againstPercentage}
             ></ProgressBar>

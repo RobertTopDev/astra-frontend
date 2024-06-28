@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/shadcn'
-import ProgressBar from '@/components/progressbar'
+import ProgressBar from '@/components/ProgressBar'
 import {
   decodeAbiParameters,
   formatUnits,

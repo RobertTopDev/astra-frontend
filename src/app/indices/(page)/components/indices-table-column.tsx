@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/shadcn'
-import ProgressBar from '@/components/progressbar'
+import ProgressBar from '@/components/ProgressBar'
 import { TIndex } from '@/types'
 import { millifyText } from '@/util'
 import { CheckCircledIcon, InfoCircledIcon } from '@radix-ui/react-icons'
