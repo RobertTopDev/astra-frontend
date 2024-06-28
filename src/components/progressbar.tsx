@@ -14,7 +14,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 }) => {
   return (
     <div
-      className={clsx('w-full rounded-xl h-2 bg-white' + className)}
+      className={clsx('w-full rounded-xl h-2 bg-white', className)}
       {...props}
     >
       <div
