@@ -19,7 +19,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     >
       <div
         className={clsx('h-full rounded-xl bg-astra-blue', barColor)}
-        style={{ width: `${value}%` }}
+        style={{ width: `${value > 100 ? 100 : value}%` }}
       />
     </div>
   )
