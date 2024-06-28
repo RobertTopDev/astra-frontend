@@ -2,7 +2,7 @@
 import { TProposal } from '@/types'
 import React, { useMemo } from 'react'
 import { Button } from '@/components/shadcn'
-import ProgressBar from '@/components/ProgressBar'
+import ProgressBar from '@/components/progressbar'
 import { formatUnits } from 'viem'
 import { useRouter } from 'next/navigation'
 import { ProposalStatusEnum } from '@/constants'

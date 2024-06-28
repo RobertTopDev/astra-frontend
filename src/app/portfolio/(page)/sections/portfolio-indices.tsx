@@ -22,7 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/shadcn'
-import ProgressBar from '@/components/ProgressBar'
+import ProgressBar from '@/components/progressbar'
 import { TIndex } from '@/types'
 import { millifyText, getRiskScoreColor } from '@/util'
 import { InfoCircledIcon, CheckCircledIcon } from '@radix-ui/react-icons'
