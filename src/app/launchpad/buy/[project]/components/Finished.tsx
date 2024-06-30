@@ -218,7 +218,7 @@ export default function Finished({
                   </Button>
                   <DialogClose>
                     <Button
-                      asChild
+                      // asChild
                       variant="astra-blue"
                       className="!px-6 !py-3"
                     >
