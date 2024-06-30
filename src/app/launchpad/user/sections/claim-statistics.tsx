@@ -117,7 +117,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                           Detail
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-w-sm sm:max-w-md  bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto ">
                         <DialogHeader>
                           <DialogTitle>Vesting Token Detail</DialogTitle>
                         </DialogHeader>

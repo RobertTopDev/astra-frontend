@@ -176,7 +176,7 @@ export default function Finished({
                     : 'Finish (Withdraw Base Token)'}
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="max-w-sm sm:max-w-md  bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto ">
                 <DialogHeader>
                   <DialogTitle>Withdraw Base Token</DialogTitle>
                 </DialogHeader>
