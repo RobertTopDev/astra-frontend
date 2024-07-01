@@ -8,7 +8,6 @@ import './globals.css'
 import { Providers } from './providers'
 import Loading from './loading'
 import localFont from 'next/font/local'
-import ClientIPFetcher from '@/components/ClientIPFetcher'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -58,7 +57,6 @@ export default function RootLayout({
           <Providers>
             <Navbar />
             <Suspense fallback={<Loading />}>
-              <ClientIPFetcher />
               <div className="bg-gradient mt-32 relative">
                 <AstraRouterBack></AstraRouterBack>
                 {children}

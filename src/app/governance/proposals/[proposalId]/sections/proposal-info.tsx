@@ -13,7 +13,6 @@ import {
   TableCell,
   Button,
   Separator,
-  Progress,
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -24,6 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/shadcn'
+import ProgressBar from '@/components/progressbar'
 import {
   decodeAbiParameters,
   formatUnits,
@@ -646,21 +646,21 @@ const ProposalInfo = ({ proposal, signatures }: TProposalInfoProps) => {
                   <div>For</div>
                   <div>{forPercentage}%</div>
                 </div>
-                <Progress
+                <ProgressBar
                   className="flex-grow"
                   value={forPercentage}
-                ></Progress>
+                ></ProgressBar>
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between">
                   <div>Against</div>
                   <div>{againstPercentage}%</div>
                 </div>
-                <Progress
-                  className="flex-grow"
-                  indicatorClassName="bg-red-500"
+                <ProgressBar
+                  className="flex-grow "
+                  barColor="bg-red-500"
                   value={againstPercentage}
-                ></Progress>
+                ></ProgressBar>
               </div>
             </div>
           </div>

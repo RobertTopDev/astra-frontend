@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { differenceInSeconds } from 'date-fns'
-import { Progress, Card, CardHeader } from '@/components/shadcn'
+import { Card, CardHeader } from '@/components/shadcn'
+import ProgressBar from '@/components/progressbar'
 import { ClockIcon, HeartIcon, BellIcon } from '@radix-ui/react-icons'
 import { MiniIdenticon } from '@/components/mini-identicon'
 import { TLaunchpadDetailInfo } from '@/types'
@@ -177,7 +178,8 @@ export default function LiveUpcomingCard({ status, launchpadData }: Props) {
             %)
           </div>
 
-          <Progress
+          <ProgressBar
+            className="mt-2"
             value={
               (launchpadData?.TOTAL_SALE_AMOUNT &&
               launchpadData?.TOTAL_SALE_AMOUNT
@@ -185,7 +187,6 @@ export default function LiveUpcomingCard({ status, launchpadData }: Props) {
                   launchpadData?.TOTAL_SALE_AMOUNT
                 : 0) * 100
             }
-            className="mt-2"
           />
 
           <div className="flex items-stretch justify-between mt-2.5">

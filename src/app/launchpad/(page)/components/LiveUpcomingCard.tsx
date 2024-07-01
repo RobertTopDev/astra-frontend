@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { differenceInSeconds } from 'date-fns'
-import { Progress, Card, CardHeader } from '@/components/shadcn'
+import { Card, CardHeader } from '@/components/shadcn'
+import ProgressBar from '@/components/progressbar'
 import { ClockIcon, HeartIcon, BellIcon } from '@radix-ui/react-icons'
 import { MiniIdenticon } from '@/components/mini-identicon'
 import { TLaunchpadDetailInfo } from '@/types'
@@ -135,7 +136,7 @@ export default function LiveUpcomingCard({ status, launchpadData }: Props) {
             %)
           </div>
 
-          <Progress
+          <ProgressBar
             value={
               (launchpadData?.TOTAL_SALE_AMOUNT &&
               launchpadData?.TOTAL_SALE_AMOUNT
