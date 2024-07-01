@@ -8,9 +8,6 @@ async function getAllStakers() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stakers/pools/top`,
       {
-        // next: {
-        //   revalidate: 0,
-        // },
         next: { revalidate: 3600 * 3 },
       }
     )
@@ -29,6 +26,8 @@ async function getAllStakers() {
 
 const ProposalsUsers = async () => {
   const { data } = (await getAllStakers()) as { data: Array<TStakers> | null }
+
+  console.log(data)
 
   return (
     <div className="container w-full flex flex-col gap-6">
