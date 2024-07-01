@@ -46,10 +46,11 @@ const BuyPendingBalModal = ({
     >
       <DialogContent className="sm:max-w-xl max-h-[90vh] bg-white text-black rounded-xl overflow-y-auto overflow-x-auto">
         <DialogHeader className="text-xl text-center">
-          Buy Pool Pending Balance
+          Buy Pending Amount
         </DialogHeader>
         <div className="text-justify py-4">
-          <span className="font-bold">Pool Pending Balance:</span> {poolPendingBalance} USDC
+          <span className="font-bold">Pending Amount:</span>{' '}
+          {poolPendingBalance} USDC
         </div>
         <div className="flex justify-center gap-4">
           <Button

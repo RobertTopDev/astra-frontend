@@ -232,15 +232,17 @@ const PortfolioOverview = ({
                 </span>
                 &nbsp; {poolPendingBalance} USDC
               </p>
-              <div>
+              {selectedIndex?.OWNER === address ? (
                 <Button
                   variant="astra-blue"
                   size="sm"
                   onClick={() => setPendingModalOpen(true)}
                 >
-                  Buy Pending Pool Balance
+                  Buy Pending Balance
                 </Button>
-              </div>
+              ) : (
+                <></>
+              )}
             </div>
             <Separator className="w-[1px]" orientation="vertical"></Separator>
             <div className="flex flex-col gap-4">
