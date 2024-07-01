@@ -85,7 +85,6 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     })
   }, [])
 
-
   const { chain } = useNetwork()
   const pathname = usePathname()
   const urlRegex = new RegExp('^(http|https|blob:http|blob:https)://[^ "]+$')
@@ -146,38 +145,34 @@ export default function ProjectDetail({ data, refetchData }: Props) {
   }
 
   const onImageUploadBefore = () => {
-    return (
-    files: File[],
-    info: any,
-    uploadHandler: any
-  ): any => {
-    (async () => {
-      try {
-        const images = []
-        for (const file of files) {
-          //Do something with image
-          const url = await uploadToCloudinary(file)
-  
-          const image = {
-            url: url,
-            name: file.name,
-            size: file.size,
+    return (files: File[], info: any, uploadHandler: any): any => {
+      ;(async () => {
+        try {
+          const images = []
+          for (const file of files) {
+            //Do something with image
+            const url = await uploadToCloudinary(file)
+
+            const image = {
+              url: url,
+              name: file.name,
+              size: file.size,
+            }
+
+            images.push(image)
           }
-  
-          images.push(image)
+          const response = {
+            result: images,
+          }
+          uploadHandler(response)
+        } catch (error) {
+          console.error('Error uploading image to Cloudinary', error)
         }
-        const response = {
-          result: images,
-        }
-        uploadHandler(response)
-      } catch (error) {
-        console.error('Error uploading image to Cloudinary', error)
-      }
-    })();
-    
-    uploadHandler();
+      })()
+
+      uploadHandler()
+    }
   }
-}
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [vesting, setVesting] = useState<boolean>(data?.IS_VESTING || false)
