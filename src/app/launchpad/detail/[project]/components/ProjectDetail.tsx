@@ -852,7 +852,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto">
+            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto">
               <DialogHeader>
                 <DialogTitle>Project Details Edit</DialogTitle>
               </DialogHeader>

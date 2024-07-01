@@ -142,6 +142,7 @@ const BuyIndex = ({ index, investmentTokens }: TBuyIndexProps) => {
       args: [accountAddress!, chainConfig.DAAContractAddress],
     }
   )
+
   const {
     data: selectedTokenBalance,
     isLoading: isLoadingSelectedTokenBalance,
@@ -302,7 +303,6 @@ const BuyIndex = ({ index, investmentTokens }: TBuyIndexProps) => {
         ? [[], [], BigInt(index.ITOKEN_INDEX)]
         : [
             [selectedTokenObject!.TOKEN_ADDRESS as `0x${string}`],
-            // ['0x17F40bb578C91E4A0C69968487A269f55C75A65D' as `0x${string}`],
             [tokenInputParsed],
             BigInt(index.ITOKEN_INDEX),
           ]
