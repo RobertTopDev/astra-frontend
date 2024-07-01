@@ -31,6 +31,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useRouter } from 'next/navigation'
+import { ProposalTitleCell } from './sections/proposal-title-cell'
 
 const FILTER_OPTIONS = [
   'All',
@@ -44,12 +45,11 @@ const FILTER_OPTIONS = [
 ]
 
 const AllProposalsPage = () => {
-  const router = useRouter()
-
   const [filter, setFilter] = useState(FILTER_OPTIONS[0])
   const { data: proposals = [], isLoading: proposalsLoading } = useAllProposals(
     { limit: 1000 }
   )
+  const router = useRouter()
 
   const filteredProposals = useMemo(
     () =>
@@ -147,6 +147,14 @@ const AllProposalsPage = () => {
                         }
                       >
                         {row.getVisibleCells().map((cell) => {
+                          const proposal = cell.row.original
+                          if (cell.column.id === 'title') {
+                            return (
+                              <TableCell key={cell.id}>
+                                <ProposalTitleCell proposal={proposal} />
+                              </TableCell>
+                            )
+                          }
                           return (
                             <TableCell key={cell.id}>
                               {flexRender(
