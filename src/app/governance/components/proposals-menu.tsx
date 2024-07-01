@@ -38,7 +38,6 @@ const ProposalsMenu = ({ className }: TProposalsMenuProps) => {
     if (
       astraDecimal === undefined ||
       astraStakingScoreAndMultiplier === undefined
-      // astraStakingScoreAndMultiplier[0] === 0
     ) {
       return 0
     }

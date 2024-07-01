@@ -46,7 +46,7 @@ export const proposalsColumns: ColumnDef<TProposal>[] = [
     // },
   },
   {
-    accessorKey: 'description',
+    accessorKey: 'DESCRIPTION',
     header: ({ column }) => {
       return (
         <AstraTableToggleSortButton column={column}>

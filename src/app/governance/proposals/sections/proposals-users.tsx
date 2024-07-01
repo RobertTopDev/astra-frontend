@@ -8,9 +8,6 @@ async function getAllStakers() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/stakers/pools/top`,
       {
-        // next: {
-        //   revalidate: 0,
-        // },
         next: { revalidate: 3600 * 3 },
       }
     )
