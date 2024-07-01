@@ -27,8 +27,6 @@ async function getAllStakers() {
 const ProposalsUsers = async () => {
   const { data } = (await getAllStakers()) as { data: Array<TStakers> | null }
 
-  console.log(data)
-
   return (
     <div className="container w-full flex flex-col gap-6">
       <div>TOP ADDRESSES</div>

@@ -5,9 +5,6 @@ async function getProposal({ proposalId }: { proposalId: string }) {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/proposals/${proposalId}`,
     {
-      // next: {
-      //   revalidate: 0,
-      // },
       next: { revalidate: 0 },
     }
   )
