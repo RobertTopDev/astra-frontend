@@ -34,6 +34,7 @@ import { numberFormatter } from '@/util'
 import { TIndex } from '@/types'
 import Link from 'next/link'
 import { formatUnits } from 'viem'
+import { BuyPendingBalModal } from './buy-pendingbal-modal'
 
 type TPortfolioOverviewProps = {
   userIndices: TIndex[] | undefined
@@ -55,6 +56,7 @@ const PortfolioOverview = ({
 }: TPortfolioOverviewProps) => {
   const { address } = useAccount()
   const [rebalanceModal, setRebalanceModal] = useState<boolean>(false)
+  const [pendingModalOpen, setPendingModalOpen] = useState<boolean>(false)
 
   const {
     data: poolInfo,
@@ -90,6 +92,14 @@ const PortfolioOverview = ({
   })
 
   const { data: pendingBalance } = usePendingBalance(selectedIndex?.ITOKEN_ADDR)
+  const poolPendingBalance = useMemo(() => {
+    return pendingBalance
+      ? Number(
+          formatUnits(BigInt(pendingBalance?.POOLPENDINGBALANCE), 6)
+        ).toFixed(2)
+      : '0'
+  }, [pendingBalance])
+
   const diffHoursBetweenLastAndCurrentRebalance = useMemo(() => {
     if (
       !selectedIndex ||
@@ -220,14 +230,17 @@ const PortfolioOverview = ({
                 <span className="font-bold italic">
                   Pending amount to rebalance
                 </span>
-                &nbsp;{' '}
-                {pendingBalance
-                  ? Number(
-                      formatUnits(BigInt(pendingBalance?.POOLPENDINGBALANCE), 6)
-                    ).toFixed(2)
-                  : 0}{' '}
-                USDC
+                &nbsp; {poolPendingBalance} USDC
               </p>
+              <div>
+                <Button
+                  variant="astra-blue"
+                  size="sm"
+                  onClick={() => setPendingModalOpen(true)}
+                >
+                  Buy Pending Pool Balance
+                </Button>
+              </div>
             </div>
             <Separator className="w-[1px]" orientation="vertical"></Separator>
             <div className="flex flex-col gap-4">
@@ -360,6 +373,12 @@ const PortfolioOverview = ({
         isLoading={assetsDataLoading}
         refetchDatas={refetchDatas}
       ></RebalanceModal>
+      <BuyPendingBalModal
+        pendingModalOpen={pendingModalOpen}
+        setPendingModalOpen={setPendingModalOpen}
+        itokenIndex={selectedIndex?.ITOKEN_INDEX}
+        poolPendingBalance={poolPendingBalance}
+      />
     </div>
   )
 }

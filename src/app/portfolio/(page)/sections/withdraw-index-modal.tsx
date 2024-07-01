@@ -125,20 +125,23 @@ const WithdrawIndexModal = ({
     ids: 'usd-coin',
     enabled: selectedIndex !== undefined,
   })
-  console.log('selected token currency: ', selectedTokenCurrency)
 
   const selectedTokenAmountUSD = useMemo(() => {
     if (selectedTokenCurrency === undefined || !formValues.tokenInput) return 0
     return selectedTokenCurrency * Number(formValues.tokenInput)
   }, [selectedTokenCurrency, formValues])
   const depositValue = useMemo(() => {
-    if (selectedTokenCurrency === undefined || stableCoin === undefined)
+    if (
+      selectedTokenCurrency === undefined ||
+      stableCoin === undefined ||
+      !selectedTokenAmountUSD
+    )
       return BigInt(0)
     const receivableAmountUSD = selectedTokenAmountUSD / selectedTokenCurrency
     // stableCoinUSD to stableCoinValue
     return parseUnits(receivableAmountUSD + '', stableCoin?.decimals)
   }, [selectedTokenCurrency, stableCoin])
-  console.log(depositValue)
+  console.log(depositValue);
 
   const [payoutChoice, setPayoutChoice] = useState('standard')
 
