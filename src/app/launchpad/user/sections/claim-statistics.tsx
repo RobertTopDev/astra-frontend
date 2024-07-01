@@ -27,7 +27,7 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
     launchpads,
   })
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<number>()
   const [vestingRewards, setVestingRewards] = useState<any[]>([])
   const [vestingRewardLoading, setVestingRewardLoading] =
     useState<boolean>(false)
@@ -111,7 +111,16 @@ const ClaimStatistics = ({ launchpads, launchpadLoading }: TPage) => {
                     )}
                   </td>
                   <td className="px-6 py-4">
-                    <Dialog open={open} onOpenChange={setOpen}>
+                    <Dialog
+                      open={open === index}
+                      onOpenChange={(e) => {
+                        if (e) {
+                          setOpen(index)
+                        } else {
+                          setOpen(undefined)
+                        }
+                      }}
+                    >
                       <DialogTrigger asChild>
                         <Button className="px-16" variant="astra-blue">
                           Detail
