@@ -6,6 +6,7 @@ type TMiniIdenticon = {
   seed: string
   saturation?: number | string
   lightness?: number | string
+  image?: string
   hashFn?: (str: string) => number
 }
 
@@ -13,6 +14,7 @@ export const MiniIdenticon = ({
   seed,
   saturation,
   lightness,
+  image = undefined,
   ...props
 }: TMiniIdenticon) => {
   const svgURI = useMemo(
@@ -21,9 +23,12 @@ export const MiniIdenticon = ({
       encodeURIComponent(minidenticon(seed, saturation, lightness)),
     [seed, saturation, lightness]
   )
+  const urlRegex = new RegExp('^(http|https)://[^ "]+$')
+  let outputImage = svgURI
+  if (urlRegex.test(image || '')) outputImage = image as string
   return (
     <Image
-      src={svgURI}
+      src={outputImage}
       alt="Identicon"
       className="object-cover bg-white rounded-full"
       fill

@@ -28,7 +28,7 @@ export default function Page() {
         </div>
       </header>
       <div className="border white w-full"></div>
-      <LiveUpcoming status="requested" />
+      <LiveUpcoming status="admin" />
     </div>
   )
 }

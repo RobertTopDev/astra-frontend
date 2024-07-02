@@ -21,7 +21,7 @@ export const useGetUpcomingLaunchpad = ({ ...props }: TUseLaunchpadsProps) => {
         `${process.env.NEXT_PUBLIC_API_URL}/launchpads/upcomingList`
       )
       if (!res.ok) {
-        console.error('error', res)
+        console.error('Error on fetching upcoming launchpad: ', res)
         return { data: [] }
       }
 

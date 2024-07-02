@@ -29,6 +29,8 @@ const buttonVariants = cva(
           'lg:px-16 md:px-12 px-4 rounded-full text-xs tracking-widest border border-astra-blue dark:text-white dark:hover:bg-white/90 dark:hover:text-neutral-900',
         'astra-white':
           'lg:px-16 md:px-12 px-4 rounded-full text-xs tracking-widest border border-astra-blue dark:text-neutral-900 dark:bg-neutral-50 dark:hover:bg-astra-blue/80 dark:hover:text-white',
+        'astra-red':
+          'lg:px-16 md:px-12 px-4 rounded-full text-xs tracking-widest border border-red-700 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900',
       },
       size: {
         default: 'h-9 px-4 py-2',

@@ -1,7 +1,11 @@
 'use client'
 
 import { useAccount, useContractReads } from 'wagmi'
-import { launchpadAbi, crosschainSaleManagerAbi } from '@/abis'
+import {
+  launchpadAbi,
+  crosschainSaleManagerAbi,
+  launchpadConfigurationAbi,
+} from '@/abis'
 import { useChainConfig } from '..'
 
 type Props = {
@@ -20,12 +24,16 @@ export const useLaunchpadInfo = ({ ...props }: Props) => {
     address: chainConfig.CrosschainSaleManagerAddress,
     abi: crosschainSaleManagerAbi,
   }
+  const launchpadConfigurationContract = {
+    address: chainConfig.LaunchpadConfigurationAddress,
+    abi: launchpadConfigurationAbi,
+  }
 
   return useContractReads({
     contracts: [
       {
         ...launchpadContract,
-        functionName: 'claimedAmount',
+        functionName: 'claimedTokens',
         args: [address as `0x${string}`],
       },
       {
@@ -56,19 +64,30 @@ export const useLaunchpadInfo = ({ ...props }: Props) => {
       },
       {
         ...launchpadContract,
-        functionName: 'totalTokensSold',
-      },
-      {
-        ...launchpadContract,
-        functionName: 'claimedAmount',
-        args: [address as `0x${string}`],
+        functionName: 'totalAmountRaised',
       },
       {
         ...crosschainSaleManagerContract,
         functionName: 'getWeightedAverageMultiplier',
         args: [address as `0x${string}`],
       },
+      {
+        ...launchpadContract,
+        functionName: 'vesting',
+      },
+      {
+        ...launchpadContract,
+        functionName: 'investedAmounts',
+        args: [address as `0x${string}`],
+      },
+      {
+        ...launchpadConfigurationContract,
+        functionName: 'COMPLETION_FEE',
+      },
+      {
+        ...launchpadContract,
+        functionName: 'minAmount',
+      },
     ],
-    enabled: !!props.launchpad,
   })
 }

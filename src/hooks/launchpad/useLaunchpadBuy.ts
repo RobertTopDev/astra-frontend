@@ -16,25 +16,38 @@ type Props = {
   onSuccessTx?: (data: TransactionReceipt) => void
   onRevert?: (data: TransactionReceipt) => void
   databaseData: any
+  value: any
 } & UsePrepareContractWriteConfig<typeof launchpadAbi, 'purchaseTokens'>
 
 export const useLaunchpadBuy = ({
   onSuccessTx,
   onRevert,
   databaseData,
+  value,
   ...props
 }: Props) => {
   const { setTransactionObj, transactionObj } = useTransactionIndicator()
+
+  const prepareContractWriteProps = value
+    ? {
+        ...props,
+        abi: launchpadAbi,
+        value: value,
+      }
+    : {
+        ...props,
+        abi: launchpadAbi,
+      }
 
   const {
     config,
     error: prepareError,
     isLoading: prepareLoading,
   } = usePrepareContractWrite({
-    ...props,
-    abi: launchpadAbi,
+    ...prepareContractWriteProps,
     functionName: 'purchaseTokens',
   })
+
   const {
     data: writeData,
     write,

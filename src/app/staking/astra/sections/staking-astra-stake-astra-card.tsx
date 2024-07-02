@@ -78,7 +78,9 @@ const StakingAstraStakeAstraCard = ({
   refetchDatas,
 }: TStakingAstraStakeAstraCardProps) => {
   const { chainConfig } = useChainConfig()
-  const [stakedAmount, setStakedAmount] = useState('')
+
+  const [stakedAmount, setStakedAmount] = useState<string>('')
+
   // FORM
   const form = useForm<StakeAstraFormValues>({
     resolver: zodResolver(stakeAstraFormSchema),
@@ -137,6 +139,8 @@ const StakingAstraStakeAstraCard = ({
     onSuccessTx: () => {
       refetchDatas()
       setStakedAmount('')
+      // call cross chain verify multiplier function (check eth value)
+      // verifyMultiplierCrosschain?.()
     },
   })
 
@@ -187,13 +191,13 @@ const StakingAstraStakeAstraCard = ({
             <h3>Staking Score</h3>
             <p>
               <AstraLoading isLoading={isLoading}>
-                {Number(stakingScore).toFixed(2)}
+                {Number(stakingScore).toLocaleString('en-US')}
               </AstraLoading>
             </p>
             <div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
@@ -218,7 +222,7 @@ const StakingAstraStakeAstraCard = ({
             <div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">
@@ -237,13 +241,13 @@ const StakingAstraStakeAstraCard = ({
             <h3>Accrued Rewards</h3>
             <p>
               <AstraLoading isLoading={isLoading}>
-                {(accruedRewards / rewardMultiplier).toLocaleString()}
+                {(accruedRewards / rewardMultiplier).toLocaleString('en-US')}
               </AstraLoading>
             </p>
             <div>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent className="max-w-sm">

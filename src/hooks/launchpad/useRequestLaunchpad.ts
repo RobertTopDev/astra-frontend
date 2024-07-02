@@ -12,8 +12,12 @@ import {
   useWaitForTransaction,
 } from 'wagmi'
 import { TransactionReceipt, decodeEventLog } from 'viem'
-import { requestLuanchpadForDB } from '@/util/requestLaunchpadForDB'
-import { RequestLaunchpadResultValues, TeamObject } from '@/types'
+import { updateLaunchpadForDB } from '@/util/updateLaunchpadForDB'
+import {
+  MetricsObject,
+  RequestLaunchpadResultValues,
+  TeamObject,
+} from '@/types'
 
 type Props = {
   onSuccessTx?: (data: TransactionReceipt) => void
@@ -33,29 +37,13 @@ const convertTeamInfoToString = (team: TeamObject[]) => {
     })
     .join(',')
 }
-const convertMetricsToType = (metrics: any) => {
-  const orderAndNaming = [
-    { key: 'marketing', name: 'Marketing' },
-    { key: 'privateSale', name: 'Private Sale' },
-    { key: 'ido', name: 'IDO' },
-    { key: 'liquidity', name: 'Liquidity' },
-    { key: 'community', name: 'Community' },
-    { key: 'advisors', name: 'Advisors' },
-    { key: 'ecosystem_metrics', name: 'Ecosystem' },
-    { key: 'kosRound', name: 'KOS Round' },
-    { key: 'team', name: 'Team' },
-    { key: 'promo', name: 'Promo' },
-  ]
 
-  // Map the input metrics to the desired format
-  const mappedMetrics = orderAndNaming.map(({ key, name }) => {
-    const value = metrics[key] || '0' // Default to '0' if the key doesn't exist
-    return `${name}:${value}`
-  })
-
-  // Join the mapped metrics into a string
-  const resultString = mappedMetrics.join(',')
-  return resultString
+const convertMetricsToType = (metrics: MetricsObject[]) => {
+  return metrics
+    .map((member: MetricsObject) => {
+      return `${member.label}:${member.value}`
+    })
+    .join(',')
 }
 
 export const useRequestLaunchpad = ({
@@ -121,7 +109,11 @@ export const useRequestLaunchpad = ({
 
   useEffect(() => {
     async function init() {
-      if (txReceipt?.status === 'success' && databaseData) {
+      if (
+        txReceipt?.status === 'success' &&
+        databaseData &&
+        databaseData.launchpadId
+      ) {
         const decodedEvent = decodeEventLog({
           abi: launchpadFactoryAbi,
           data: txReceipt.logs[0].data,
@@ -135,36 +127,72 @@ export const useRequestLaunchpad = ({
           launchpadIndex: Number(launchpadIndex),
           launchpadAddress: '',
           launchpadTokenAddress: databaseData.data.tokenAddress,
-          launchpadTokenName: `Test Launchpad Token - ${launchpadIndex}`,
-          launchpadTokenSymbol: `TLT-${launchpadIndex}`,
-          launchpadTotalSupply: 10000, // update
+          launchpadTokenName: databaseData.data.tokenName,
+          launchpadTokenSymbol: databaseData.data.tokenSymbol,
+          launchpadTotalSupply: Number(databaseData.data.totalSupply), // update
           launchpadTokenDecimal: Number(databaseData.data.tokenDecimals),
           launchpadTokenPrice: Number(databaseData.data.tokenPrice),
-          launchpadTokenFDV: 0, // update
+          launchpadTokenFDV: Number(databaseData.data.totalToken), // update
           totalSaleAmount: Number(databaseData.data.tokenAmount),
-          saleStartTime: databaseData.data.start,
-          saleEndTime: databaseData.data.end,
+          saleStartTime: new Date(databaseData.data.saleStartDate).getTime(),
+          saleEndTime: new Date(databaseData.data.saleEndDate).getTime(),
+          minPurchaseBaseAmount: Number(databaseData.data.minPurchaseAmount),
           maxPurchaseBaseAmount: Number(databaseData.data.baseAmount),
-          softCap: 100, // update
-          hardCap: 10000, // update
-          initialMarketCap: 10000000, // update
-          projectValuation: 20000000, // update
+          softCap: Number(databaseData.data.softCap), // update
+          hardCap: Number(databaseData.data.hardCap), // update
+          initialMarketCap: Number(databaseData.data.initialMarketCap), // update
+          projectValuation: Number(databaseData.data.projectValuation), // update
           projectDetail: databaseData.data.projectDescription,
-          teamInfo: convertTeamInfoToString(databaseData.team),
-          metrics: convertMetricsToType(databaseData.metrics),
+          projectDescriptionDetail: databaseData.data.projectDescriptionDetail,
+          projectImage: databaseData.data.projectImage,
+          saleRoundDetail: databaseData.data.saleRoundDetail,
+          teamInfo: JSON.stringify(databaseData.team),
+          teamDescription: databaseData.data.teamDescription,
+          metrics: JSON.stringify(databaseData.metrics),
           websiteUrl: databaseData.data.website,
           whitepaperUrl: databaseData.data.pitchdeck,
+          projectDeck: databaseData.data.projectDeck,
+          github: databaseData.data.github,
           twitter: databaseData.data.projectTwitter,
           telegram: databaseData.data.contactTelegram,
-          discord: 'https://discord.com',
+          discord: databaseData.data.contactDiscord,
+          medium: databaseData.data.contactMedium,
+          leadVCImage: databaseData.data.leadVCImage,
+          marketMakerImage: databaseData.data.marketMakerImage,
           otherUrl: '',
           email: databaseData.data.email,
-          investorDetail: '',
-          chain: 'Arbitrum',
+          investorDetail: databaseData.data.investorDetail,
+          raised: databaseData.data.raised,
+          chain: databaseData.data.chain,
           requestTransaction: txReceipt.transactionHash,
           approveTransaction: '',
+          leadVC: databaseData.data.leadVC,
+          marketMaker: databaseData.data.marketMaker,
+          controlledCap: databaseData.data.controlledCap,
+          daoApprovedMetrics: databaseData.data.daoApprovedMetrics,
+          tokenType: databaseData.data.tokenType,
+          isVesting: databaseData.data.isVesting,
+          baseToken: databaseData.data.baseToken,
+          vest_start: databaseData.data.vest_start
+            ? new Date(databaseData.data.vest_start).getTime()
+            : 0,
+          vest_cliff: databaseData.data.vest_cliff
+            ? Number(databaseData.data.vest_cliff)
+            : 0,
+          vest_duration: databaseData.data.vest_duration
+            ? Number(databaseData.data.vest_duration)
+            : 0,
+          vest_slice_period_seconds: databaseData.data.vest_slice_period_seconds
+            ? Number(databaseData.data.vest_slice_period_seconds)
+            : 0,
+          vest_initial_unlock: databaseData.data.vest_initial_unlock
+            ? Number(databaseData.data.vest_initial_unlock)
+            : 0,
         }
-        const responseFromDB = await requestLuanchpadForDB(requestData)
+        const responseFromDB = await updateLaunchpadForDB(
+          requestData,
+          databaseData.launchpadId
+        )
         if (responseFromDB.ok) {
           setTransactionObj({
             ...transactionObj,
@@ -178,7 +206,7 @@ export const useRequestLaunchpad = ({
             ...transactionObj,
             status: 'failed',
             transactionHash: txReceipt?.transactionHash,
-            transactionAction: 'Request Launchpad Failed',
+            transactionAction: 'Requesting Launchpad Failed',
           })
           onRevert?.(txReceipt)
         }
@@ -187,7 +215,7 @@ export const useRequestLaunchpad = ({
           ...transactionObj,
           status: 'failed',
           transactionHash: txReceipt?.transactionHash,
-          transactionAction: 'Request Launchpad Failed',
+          transactionAction: 'Requesting Launchpad Failed',
         })
         onRevert?.(txReceipt)
       }

@@ -1,13 +1,14 @@
 'use client'
 
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { formatUnits } from 'viem'
 import {
   useAstraStakingScoreAndMultiplier,
   useAstraUserInfo,
   useAstraDecimal,
+  useVerifyMultiplierCrosschain,
 } from '@/hooks'
 import {
   Card,
@@ -19,14 +20,39 @@ import {
   TableHead,
   TableBody,
   TableCell,
+  Select,
+  SelectTrigger,
+  SelectLabel,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
 } from '@/components/shadcn'
 import { AstraHeader, AstraLoading } from '@/components'
+import { numberFormatter } from '@/util'
+import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
+import { getCrossChainMultiplier } from '@/util/getCrossChainMultiplier'
+import { chainConfig, chainToId, idToChain } from '@/config'
 
-export default function Stake() {
+const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
+
+type Props = {
+  launchpadData: any
+}
+
+export default function Stake({ launchpadData }: Props) {
   const { address } = useAccount()
+  const { chain } = useNetwork()
+
+  const [gasFee, setGasFee] = useState<string>('')
+  const [selectedChain, setSelectedChain] = useState<string>('')
+  const [selectedChainMultiplier, setSelectedChainMultiplier] =
+    useState<number>(0)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { data: astraDecimal } = useAstraDecimal()
   const { data: userInfo } = useAstraUserInfo({})
+
   const {
     data: stakingScoreAndMultiplier,
     isLoading: stakingScoreAndMultiplierLoading,
@@ -41,6 +67,70 @@ export default function Stake() {
       formatUnits(stakingScoreAndMultiplier[0], astraDecimal?.valueOf())
     )
   }, [stakingScoreAndMultiplier, astraDecimal])
+  const multiplier = useMemo(() => {
+    if (stakingScoreAndMultiplier === undefined) return 0
+    return Number(formatUnits(stakingScoreAndMultiplier[1], 13))
+  }, [stakingScoreAndMultiplier])
+
+  // Verify Multiplier Cross Chain
+  const {
+    verifyMultiplierCrosschain,
+    error: verifyMultiplierCrsschainError,
+    isLoading: verifyMultiplierCrosschainLoading,
+  } = useVerifyMultiplierCrosschain({
+    enabled: !!address && Number(gasFee) > 0 && !!selectedChain,
+    args: [selectedChain, address as `0x${string}`],
+    gasFee,
+    onSuccessTx: async () => {
+      if (address) await fetchCrossChainMultiplier(address)
+    },
+  })
+
+  const fetchCrossChainMultiplier = async (userAddress: string) => {
+    const selectedChainId = chainToId[selectedChain]
+    const rpcUrl = chainConfig[selectedChainId].rpcURL
+    const contractAddress =
+      chainConfig[selectedChainId].CrosschainSaleManagerAddress
+    const otherChainMultiplier = await getCrossChainMultiplier(
+      rpcUrl,
+      contractAddress,
+      userAddress
+    )
+    const formatOtherChainMultiplier = Number(
+      formatUnits(otherChainMultiplier, 13)
+    )
+    setSelectedChainMultiplier(formatOtherChainMultiplier)
+  }
+
+  const isArbitrumChain = useMemo(() => {
+    if (!chain) return false
+    const chainName = idToChain[chain.id]
+    if (chainName === 'Arbitrum') return true
+  }, [chain])
+
+  const onSelectChain = (value: string) => setSelectedChain(value)
+
+  useEffect(() => {
+    async function init() {
+      if (!selectedChain) return
+      setIsLoading(true)
+      // get verify multiplier transaction fee from third party
+      const axelarResult: any = await axelarSDK.estimateGasFee(
+        'arbitrum-sepolia',
+        selectedChain,
+        BigInt(21000),
+        'auto'
+      )
+      setGasFee(axelarResult.toString())
+
+      // fetch cross chain multiplier from backend
+      if (!address) return setIsLoading(false)
+      await fetchCrossChainMultiplier(address)
+      setIsLoading(false)
+    }
+
+    init()
+  }, [axelarSDK, selectedChain, address])
 
   return (
     <>
@@ -50,24 +140,38 @@ export default function Stake() {
       </div>
       <Card className="w-full relative mt-8 border-0 col-span-1 rounded-3xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl p-16">
         <CardContent className="p-0 items-stretch gap-8">
-          <div className="bg-[#B2C4E833] w-full px-6 py-4 flex justify-between rounded-lg items-center">
-            <div className="flex items-center">
-              <div className="h-16 w-16">
-                <Image
-                  alt="prize"
-                  className="!relative fill-[#56A8EA]"
-                  src="/svgs/prize.svg"
-                  style={{ fill: '#56A8EA' }}
-                  fill={true}
-                />
+          <div className="bg-[#B2C4E833] w-full px-6 py-4 flex rounded-lg items-center justify-start">
+            <div className="w-1/2 flex items-center gap-2">
+              <div className="flex items-center">
+                <div className="h-16 w-16">
+                  <Image
+                    alt="prize"
+                    className="!relative fill-[#56A8EA]"
+                    src="/svgs/prize.svg"
+                    style={{ fill: '#56A8EA' }}
+                    fill={true}
+                  />
+                </div>
+                <span className="text-white text-xl ml-4">
+                  Your total score:
+                </span>
               </div>
-              <span className="text-white text-xl ml-4">Your total score</span>
+              <span className="text-[#00E7FF] text-xl">
+                <AstraLoading isLoading={false}>
+                  {numberFormatter(stakingScore)}
+                </AstraLoading>
+              </span>
             </div>
-            <span className="text-[#00E7FF] text-xl">
-              <AstraLoading isLoading={stakingScoreAndMultiplierLoading}>
-                {stakingScore.toFixed(2)}
-              </AstraLoading>
-            </span>
+            <div className="w-1/2 flex gap-2">
+              <span className="text-white text-xl ml-4">Your multiplier:</span>
+              <span className="text-[#00E7FF] text-xl">
+                <AstraLoading isLoading={false}>
+                  {Number(
+                    formatUnits(launchpadData?.[8].result ?? BigInt(0), 13)
+                  ).toFixed(2)}
+                </AstraLoading>
+              </span>
+            </div>
           </div>
           <div>
             <Table>
@@ -76,19 +180,66 @@ export default function Stake() {
                   <TableHead>Challenges</TableHead>
                   <TableHead>Score Earned</TableHead>
                   <TableHead>About</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead>Multiplier</TableHead>
+                  <TableHead>Chain</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody className="[&_tr]:border-0 text-left">
                 <TableRow className="h-24">
                   <TableCell>Staking Score</TableCell>
-                  <TableCell>0.00 points</TableCell>
+                  <TableCell>{numberFormatter(stakingScore)} points</TableCell>
                   <TableCell>
                     Staking $ASTRADAO tokens gives an additional bonus score
                   </TableCell>
+                  <TableCell>
+                    <AstraLoading isLoading={isLoading}>
+                      {selectedChainMultiplier.toFixed(2)}
+                    </AstraLoading>
+                  </TableCell>
+                  <TableCell>
+                    <Select
+                      disabled={verifyMultiplierCrosschainLoading}
+                      onValueChange={onSelectChain}
+                    >
+                      <SelectTrigger className="bg-[#FBF8F8] rounded-lg p-4 flex w-full gap-2 h-[36px]">
+                        <SelectValue placeholder="Select Chain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Chain</SelectLabel>
+                          <SelectItem value="binance">Binance</SelectItem>
+                          {/* <SelectItem value="ethereum">
+                            Ethereum
+                          </SelectItem>
+                          <SelectItem value="polygon">
+                            Polygon
+                          </SelectItem>
+                          <SelectItem value="base">
+                            Base
+                          </SelectItem> */}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="astra-blue" className="rounded-lg w-fit">
-                      Stake AstraDAO
+                    <Button
+                      variant="astra-blue"
+                      className="rounded-lg w-fit"
+                      onClick={() => verifyMultiplierCrosschain?.()}
+                      isLoading={verifyMultiplierCrosschainLoading || isLoading}
+                      disabled={
+                        !!verifyMultiplierCrsschainError ||
+                        !selectedChain ||
+                        selectedChainMultiplier === multiplier ||
+                        !isArbitrumChain
+                      }
+                    >
+                      {verifyMultiplierCrosschainLoading || isLoading
+                        ? 'Loading...'
+                        : isArbitrumChain
+                          ? 'Transfer Staking Score'
+                          : 'Switch Chain To Arbitrum'}
                     </Button>
                   </TableCell>
                 </TableRow>

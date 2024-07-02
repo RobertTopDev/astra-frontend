@@ -73,7 +73,6 @@ const AstraTransactionIndicatorProvider = ({
         <Dialog open={!!transactionObj} onOpenChange={onOpenChange}>
           <DialogContent
             className="w-80 md:w-80 py-16 rounded full bg-white text-black text-center justify-center items-center flex"
-            // noClose={transactionObj?.status === 'pending'}
             noClose
           >
             {transactionObj?.status === 'loading' && (
@@ -86,7 +85,9 @@ const AstraTransactionIndicatorProvider = ({
                     <p className="text-sm">Waiting For Confirmation</p>
                   )}
                   {transactionObj?.transactionAction ? (
-                    <h2 className="font-medium break-all">{getMessage()}</h2>
+                    <p className="font-medium break-all text-base">
+                      {getMessage()}
+                    </p>
                   ) : null}
                   <p className="text-sm">
                     {transactionObj.isApiCall
@@ -104,7 +105,7 @@ const AstraTransactionIndicatorProvider = ({
                 <div className="flex flex-col gap-2">
                   <p className="text-sm">Waiting for Transaction to be mined</p>
                   {transactionObj?.transactionAction ? (
-                    <h2 className="font-medium">{getMessage()}</h2>
+                    <p className="font-medium text-base">{getMessage()}</p>
                   ) : null}
                   <p className="text-sm">Please Wait</p>
                 </div>
@@ -116,11 +117,11 @@ const AstraTransactionIndicatorProvider = ({
                   <InfoCircledIcon className="w-20 h-20 text-destructive" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h2 className="font-bold">Transaction Failed</h2>
+                  <p className="font-bold text-base">Transaction Failed</p>
                   {transactionObj?.transactionAction ? (
-                    <h2 className="font-medium break-words text-wrap">
+                    <p className="font-medium break-words text-wrap text-base">
                       {getMessage() || 'Something went wrong'}
-                    </h2>
+                    </p>
                   ) : null}
                   {transactionObj?.transactionHash ? (
                     <AstraLink
@@ -142,7 +143,7 @@ const AstraTransactionIndicatorProvider = ({
                   <div className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2" />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h2 className="font-bold">Transaction Submitted</h2>
+                  <p className="font-bold text-base">Transaction Submitted</p>
                   {transactionObj?.transactionHash && (
                     <AstraLink
                       link={`${chain?.blockExplorers?.default.url}/tx/${transactionObj?.transactionHash}`}
@@ -151,7 +152,7 @@ const AstraTransactionIndicatorProvider = ({
                     </AstraLink>
                   )}
                   {transactionObj?.transactionAction ? (
-                    <h2 className="font-medium">{getMessage()}</h2>
+                    <p className="font-medium text-base">{getMessage()}</p>
                   ) : null}
                   {transactionObj.status === 'success' &&
                   !!transactionObj.transactionLink ? (

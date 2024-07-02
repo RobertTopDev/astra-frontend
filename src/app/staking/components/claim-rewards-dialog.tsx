@@ -119,8 +119,8 @@ const ClaimRewardsDialog = ({
                   <div className="flex justify-between">
                     <div className="font-bold">Rewards</div>
                     <div className="font-bold text-green-400">
-                      {numberFormatter(accruedRewards).toLocaleString()}&nbsp;
-                      ASTRADAO
+                      {numberFormatter(accruedRewards).toLocaleString('en-US')}
+                      &nbsp; ASTRADAO
                     </div>
                   </div>
                   <div className="flex justify-between">

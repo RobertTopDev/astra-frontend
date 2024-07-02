@@ -4,7 +4,6 @@ import { PortfolioIndices } from './portfolio-indices'
 import { PortfolioOverview } from './portfolio-overview'
 import { WithdrawIndexModal } from './withdraw-index-modal'
 import { useGetUserIndices } from '@/hooks'
-import { AstraLoading } from '@/components'
 import { Button } from '@/components/shadcn'
 import Link from 'next/link'
 

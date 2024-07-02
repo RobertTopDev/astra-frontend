@@ -12,5 +12,8 @@ export const approveLaunchpadForDB = async (approveData: any) => {
     }
   )
 
+  if (!response.ok)
+    throw new Error(`Error while approveLaunchpadForDB: ${response.status}`)
+
   return response
 }

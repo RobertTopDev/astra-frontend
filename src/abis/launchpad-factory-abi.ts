@@ -16,13 +16,13 @@ export const launchpadFactoryAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'requestId',
         type: 'uint256',
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: 'address',
         name: 'launchpadAddress',
         type: 'address',
@@ -35,7 +35,7 @@ export const launchpadFactoryAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'requestId',
         type: 'uint256',
@@ -48,7 +48,7 @@ export const launchpadFactoryAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
         name: 'requestId',
         type: 'uint256',
@@ -60,7 +60,7 @@ export const launchpadFactoryAbi = [
         type: 'address',
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: 'address',
         name: 'tokenAddress',
         type: 'address',
@@ -92,6 +92,11 @@ export const launchpadFactoryAbi = [
     inputs: [
       {
         internalType: 'address',
+        name: '_admin',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
         name: '_tokenAddress',
         type: 'address',
       },
@@ -111,6 +116,11 @@ export const launchpadFactoryAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'address',
+        name: '_baseToken',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_tokenAmount',
         type: 'uint256',
@@ -119,6 +129,16 @@ export const launchpadFactoryAbi = [
         internalType: 'uint256',
         name: '_baseAmount',
         type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '_isVestingEnabled',
+        type: 'bool',
       },
     ],
     name: 'addLaunchpad',
@@ -137,6 +157,25 @@ export const launchpadFactoryAbi = [
     name: 'approveLaunchpadRequest',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'approvedLaunchpads',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -166,13 +205,86 @@ export const launchpadFactoryAbi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'crossChainSaleManager',
-    outputs: [
+    inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: '_launchpadAddress',
         type: 'address',
+      },
+    ],
+    name: 'getLaunchpadDetails',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'admin',
+            type: 'address',
+          },
+          {
+            internalType: 'address',
+            name: 'tokenAddress',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'saleStartTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'saleEndTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'tokenPrice',
+            type: 'uint256',
+          },
+          {
+            internalType: 'address',
+            name: 'baseToken',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'tokenAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'baseAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'minAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'approved',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'canceled',
+            type: 'bool',
+          },
+          {
+            internalType: 'address',
+            name: 'launchpadAddress',
+            type: 'address',
+          },
+          {
+            internalType: 'bool',
+            name: 'isVestingEnabled',
+            type: 'bool',
+          },
+        ],
+        internalType: 'struct ILaunchpadFactory.LaunchpadRequest',
+        name: '',
+        type: 'tuple',
       },
     ],
     stateMutability: 'view',
@@ -266,6 +378,11 @@ export const launchpadFactoryAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'address',
+        name: '_baseToken',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_tokenAmount',
         type: 'uint256',
@@ -274,6 +391,16 @@ export const launchpadFactoryAbi = [
         internalType: 'uint256',
         name: '_baseAmount',
         type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '_isVestingEnabled',
+        type: 'bool',
       },
     ],
     name: 'requestLaunchpad',
@@ -317,6 +444,11 @@ export const launchpadFactoryAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'address',
+        name: 'baseToken',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: 'tokenAmount',
         type: 'uint256',
@@ -324,6 +456,11 @@ export const launchpadFactoryAbi = [
       {
         internalType: 'uint256',
         name: 'baseAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'minAmount',
         type: 'uint256',
       },
       {
@@ -341,8 +478,31 @@ export const launchpadFactoryAbi = [
         name: 'launchpadAddress',
         type: 'address',
       },
+      {
+        internalType: 'bool',
+        name: 'isVestingEnabled',
+        type: 'bool',
+      },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_launchpadAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_vestingContract',
+        type: 'address',
+      },
+    ],
+    name: 'setVestingContract',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

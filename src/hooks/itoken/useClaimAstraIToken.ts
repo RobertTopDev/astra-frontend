@@ -101,5 +101,3 @@ export const useClaimAstraItoken = ({
     isLoading: prepareLoading || writeLoading || txLoading,
   }
 }
-
-// const test = useApprove({ address: '0x123', args: ['0x123', '0x123'] })

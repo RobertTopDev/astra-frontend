@@ -52,6 +52,7 @@ function NavLink({ navLink }: { navLink: TLink }) {
   const { data: vestingRewards } = useVestingRewards({})
 
   if (!!navLink.menu) {
+    if (navLink.name === 'LAUNCHPAD' && !isConnected) return null
     return (
       <NavigationMenuItem
         className={clsx(
@@ -91,6 +92,7 @@ function NavLink({ navLink }: { navLink: TLink }) {
     return null
   } else {
     if (navLink.name === 'CLAIM' && vestingRewards?.length === 0) return null
+    if(navLink.name === "LAUNCHPAD" && isConnected) return null;
     return (
       <NavigationMenuItem
         className={clsx(

@@ -9,7 +9,7 @@ export const useApproveLaunchpadForDB = (launchpadIndex: string) => {
         `${process.env.NEXT_PUBLIC_API_URL}/launchpads/approve/${launchpadIndex}`
       )
       if (!res.ok) {
-        console.error('error', res)
+        console.error('Error on useApproveLaunchpadForDB: ', res)
         return []
       }
 

@@ -9,7 +9,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi'
-import { TransactionReceipt } from 'viem'
+import { TransactionReceipt, decodeEventLog } from 'viem'
 import { useEffect } from 'react'
 import { approveLaunchpadForDB } from '@/util/approveLaunchpadForDB'
 
@@ -83,9 +83,25 @@ export const useApproveLaunchpad = ({
   useEffect(() => {
     async function init() {
       if (txReceipt?.status === 'success' && props.args) {
+        let data, topics
+        if (txReceipt.logs.length > 6) {
+          data = txReceipt.logs[6].data
+          topics = txReceipt.logs[6].topics
+        } else {
+          data = txReceipt.logs[4].data
+          topics = txReceipt.logs[4].topics
+        }
+        const decodedEvent = decodeEventLog({
+          abi: launchpadFactoryAbi,
+          data,
+          topics,
+          eventName: 'LaunchpadRequestApproved',
+        })
+        const launchpadAddress = decodedEvent.args?.launchpadAddress
         const approveData = {
           approveTx: txReceipt.transactionHash,
           launchpadIndex: Number(props.args[0]),
+          launchpadAddress: launchpadAddress,
         }
         const responseFromDB = await approveLaunchpadForDB(approveData)
         if (responseFromDB.ok) {

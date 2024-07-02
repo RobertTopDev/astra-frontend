@@ -1,22 +1,52 @@
-export default function Unlocks() {
+import { days } from '@/app/governance/proposals/create/constants'
+import { TLaunchpadDetailInfo } from '@/types'
+
+type TComponent = {
+  launchpadDetail: TLaunchpadDetailInfo
+}
+
+export default function Unlocks({ launchpadDetail }: TComponent) {
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="p-8 h-32 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
         <div className="flex flex-col justify-center h-full text-white">
-          <div className="text-md ">Private Sale</div>
+          <div className="text-md ">Public Sale</div>
           <div className="md:text-xl text-md font-medium">
-            7% at TGE, 1 month cliff and 2 years vesting with daily unlocks
+            {launchpadDetail?.VEST_INITIAL_UNLOCK || 100}% at TGE,{' '}
+            {launchpadDetail?.VEST_CLIFF / 86400}{' '}
+            {launchpadDetail?.VEST_CLIFF / 86400 === 1 ? 'day' : 'days'} cliff
+            and {launchpadDetail?.VEST_DURATION / 86400}{' '}
+            {launchpadDetail?.VEST_DURATION / 86400 === 1 ? 'day' : 'days'}{' '}
+            vesting with {launchpadDetail?.VEST_SLICE_PERIOD_SECONDS / 86400}{' '}
+            {launchpadDetail?.VEST_SLICE_PERIOD_SECONDS / 86400 === 1
+              ? 'day'
+              : 'days'}{' '}
+            unlocks
           </div>
         </div>
       </div>
-      <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        <div className="flex flex-col justify-center h-full text-white">
-          <div className="text-md">KOL’s Round</div>
-          <div className="md:text-xl text-md font-medium">
-            15% at TGE, 1 month cliff and 1.5 years vesting with daily unlocks
+      {launchpadDetail.SALE_ROUND_DETAIL ? (
+        launchpadDetail.SALE_ROUND_DETAIL?.split('<>').map((item, idx) => (
+          <div
+            className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl"
+            key={idx}
+          >
+            <div className="flex flex-col justify-center text-white">
+              <div className="text-md">{item.split(':')[3]}</div>
+              <div className="md:text-xl text-md font-medium">
+                {item.split(':')[2]}
+              </div>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
+          <div className="flex flex-col justify-center text-white">
+            <div className="text-md"></div>
+            <div className="md:text-xl text-md font-medium">N/A</div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

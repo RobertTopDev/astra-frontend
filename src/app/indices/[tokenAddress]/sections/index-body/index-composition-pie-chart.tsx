@@ -90,13 +90,15 @@ const IndexCompositionPieChart = ({
     }
   }, [currentIndexAllocation])
 
-  function copyTextFunction(e?: { data?: { name: string } }) {
-    navigator.clipboard.writeText(e?.data?.name ?? '').then(() => {
-      toast({
-        title: 'Copied to clipboard',
-        description: 'Token address copied to clipboard',
+  function copyTextFunction(e?: { data?: { TOKEN_CONTRACT_ADDR: string } }) {
+    navigator.clipboard
+      .writeText(e?.data?.TOKEN_CONTRACT_ADDR ?? '')
+      .then(() => {
+        toast({
+          title: 'Copied to clipboard',
+          description: 'Token address copied to clipboard',
+        })
       })
-    })
   }
 
   const EChartsCurrentIndex = useMemo(() => {

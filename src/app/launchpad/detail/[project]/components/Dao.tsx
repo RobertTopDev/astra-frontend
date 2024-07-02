@@ -1,44 +1,57 @@
-export default function Dao() {
+import { TLaunchpadDetailInfo } from '@/types'
+import Image from 'next/image'
+import { MiniIdenticon } from '@/components/mini-identicon'
+
+
+type TComponent = {
+  launchpadDetail: TLaunchpadDetailInfo
+}
+
+export default function Dao({ launchpadDetail }: TComponent) {
   return (
     <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
       <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        <div className="flex md:flex-row flex-col items-center gap-4">
-          <div className="w-[60px] h-[60px] bg-white rounded-full flex items-center justify-center">
-            <img
-              className="w-10 h-10"
-              src="/images/launchpad/lead-vc.png"
-              alt="img"
-            />
+        <div className="flex md:flex-row flex-col h-full items-center gap-4">
+          <div className="rounded-full flex items-center justify-center">
+            <div className="relative w-[60px] h-[60px]">
+              <MiniIdenticon seed="ddd" image={
+                launchpadDetail?.LEAD_VC_IMAGE ||
+                '/images/launchpad/lead-vc.png'
+              } />
+            </div>
           </div>
           <div className="md:text-left text-center">
             <div className="text-md text-white">Lead VC</div>
-            <div className="lg:text-2xl text-lg text-white font-bold">
-              Acura Capital
+            <div className="lg:text-2xl truncate text-lg text-white font-bold whitespace-break-spaces">
+              {launchpadDetail?.LEAD_VC}
             </div>
           </div>
         </div>
       </div>
       <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-        <div className="flex md:flex-row flex-col items-center gap-4">
-          <div className="w-[60px] h-[60px] bg-[#1cdca0] rounded-full flex items-center justify-center">
-            <img
-              className="w-10 h-10"
-              src="/images/launchpad/market-maker.png"
-              alt="img"
-            />
+        <div className="flex md:flex-row flex-col h-full items-center gap-4">
+          <div className="rounded-full flex items-center justify-center">
+            <div className="relative w-[60px] h-[60px]">
+              <MiniIdenticon seed="ddd" image={
+                launchpadDetail?.MARKET_MAKER_IMAGE ||
+                '/images/launchpad/market-maker.png'
+              } />
+            </div>
           </div>
           <div className="md:text-left text-center">
             <div className="text-md text-white">Market Maker</div>
-            <div className="lg:text-2xl text-lg text-white font-bold">
-              Kairon Labs
+            <div className="lg:text-2xl truncate text-lg text-white font-bold  whitespace-break-spaces">
+              {launchpadDetail?.MARKET_MAKER}
             </div>
           </div>
         </div>
       </div>
-      <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
+      {/* <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
         <div className="flex md:flex-row flex-col items-center gap-4">
           <div className="w-[60px] h-[60px] bg-white rounded-full flex items-center justify-center">
-            <img
+            <Image
+              width={500}
+              height={300}
               className="w-10 h-10"
               src="/images/launchpad/controlled-cap.svg"
               alt="img"
@@ -46,14 +59,18 @@ export default function Dao() {
           </div>
           <div className="md:text-left text-center">
             <div className="text-md text-white">Controlled Cap</div>
-            <div className="lg:text-2xl text-lg text-white font-bold">NA</div>
+            <div className="lg:text-2xl truncate text-lg text-white font-bold">
+              {launchpadDetail?.CONTROLLED_CAP}
+            </div>
           </div>
         </div>
       </div>
       <div className="md:p-8 p-4 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
         <div className="flex md:flex-row flex-col items-center gap-4">
           <div className="w-[60px] h-[60px] bg-white rounded-full flex items-center justify-center">
-            <img
+            <Image
+              width={500}
+              height={300}
               className="w-10 h-10"
               src="/images/launchpad/dao-approved.svg"
               alt="img"
@@ -61,10 +78,12 @@ export default function Dao() {
           </div>
           <div className="md:text-left text-center">
             <div className="text-md text-white">DAO Approved Metrics</div>
-            <div className="lg:text-2xl text-lg text-white font-bold">NA</div>
+            <div className="lg:text-2xl truncate text-lg text-white font-bold">
+              {launchpadDetail?.DAO_APPROVED_METRICS}
+            </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

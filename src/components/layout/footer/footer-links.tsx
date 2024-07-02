@@ -69,7 +69,7 @@ const FooterLinks = () => {
       </div>
       <div className="col-span-2">
         <h2 className="text-astra-blue mb-4 font-medium text-base">
-          Our Social
+          Our Socials
         </h2>
         <ul className="gap-6 flex flex-wrap">
           {socialLinks.map((link) => (
@@ -106,8 +106,8 @@ export const FooterLogoLink = ({ link }: TLogoFooterLink) => {
     )
   }
   return (
-    <li className={clsx('font-bold')}>
-      <div className="rounded-full bg-astra-blue p-2">{linkNode}</div>
+    <li className={clsx('font-bold')} style={{width:"40px", height:"40px"}} >
+      <div className="bg-astra-blue p-1 justify-center flex items-center" style={{width:"40px", height:"40px", borderRadius:"50%"}} >{linkNode}</div>
     </li>
   )
 }

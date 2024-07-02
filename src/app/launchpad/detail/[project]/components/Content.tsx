@@ -1,33 +1,47 @@
 'use client'
 
 import { ReactNode, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import ProjectDetail from './ProjectDetail'
 import TeamPartner from './TeamPartner'
 import Metrics from './Metrics'
 import LiveUpcoming from '@/app/launchpad/(page)/components/LiveUpcoming'
 import Loading from '@/app/loading'
-import { useGetLaunchpadDetail } from '@/hooks/launchpad/useGetLaunchpadDetail'
 import { TLaunchpadDetailInfo } from '@/types'
+import './content.scss'
 
 type TComponent = {
-  index: string
+  launchpadDetail: TLaunchpadDetailInfo
+  isLoading: boolean
+  refetchData?: () => Promise<void>
 }
 
-export default function Content({ index }: TComponent) {
-  const { data: launchpadDetail, isLoading } = useGetLaunchpadDetail(index)
+export default function Content({
+  launchpadDetail,
+  isLoading,
+  refetchData,
+}: TComponent) {
+  const pathname = usePathname()
 
   const [selectedTab, setSelectedTab] = useState<number>(0)
   const tabContent: ReactNode[] = [
     <ProjectDetail
       key="projectDetail"
       data={launchpadDetail as TLaunchpadDetailInfo}
+      refetchData={refetchData}
     />,
     <TeamPartner
       key="teamPartner"
       data={launchpadDetail as TLaunchpadDetailInfo}
+      refetchData={refetchData}
     />,
-    <Metrics key="metrics" data={launchpadDetail as TLaunchpadDetailInfo} />,
+    <Metrics
+      key="metrics"
+      data={launchpadDetail as TLaunchpadDetailInfo}
+      refetchData={refetchData}
+    />,
   ]
+  const isAdmin = pathname.includes('owner') || pathname.includes('admin')
 
   return (
     <div className="">
@@ -68,9 +82,13 @@ export default function Content({ index }: TComponent) {
       <div className="mt-12">
         {isLoading ? <Loading /> : tabContent[selectedTab]}
       </div>
-      <div className="mt-12">
-        <LiveUpcoming status="requested" />
-      </div>
+      {isAdmin ? (
+        <></>
+      ) : (
+        <div className="mt-12">
+          <LiveUpcoming status="coming-soon" />
+        </div>
+      )}
     </div>
   )
 }

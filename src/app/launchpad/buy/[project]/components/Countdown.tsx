@@ -3,7 +3,7 @@ import React from 'react'
 type Props = {
   remainingTime: number
   timeValues: {
-    days: string
+    // days: string
     hours: string
     minutes: string
     seconds: string
@@ -11,15 +11,15 @@ type Props = {
 }
 
 const Countdown = ({ remainingTime, timeValues }: Props) => {
-  const { days, hours, minutes, seconds } = timeValues
+  const { hours, minutes, seconds } = timeValues
 
   if (remainingTime > 0) {
     return (
       <div className="flex gap-3 justify-center items-center">
-        <div className="p-2 text-3xl rounded-xl bg-[#00E7FF26] text-[#00E7FF]">
+        {/* <div className="p-2 text-3xl rounded-xl bg-[#00E7FF26] text-[#00E7FF]">
           {days}
         </div>
-        <span className="text-3xl">:</span>
+        <span className="text-3xl">:</span> */}
         <div className="p-2 text-3xl rounded-xl bg-[#00E7FF26] text-[#00E7FF]">
           {hours}
         </div>
@@ -38,7 +38,7 @@ const Countdown = ({ remainingTime, timeValues }: Props) => {
   // Render zeros when remainingTime is 0 or negative
   return (
     <div className="flex gap-3 justify-center items-center">
-      {Array.from({ length: 4 }).map((_, index) => (
+      {Array.from({ length: 3 }).map((_, index) => (
         <React.Fragment key={index}>
           {index > 0 && <span className="text-3xl">:</span>}
           <div className="p-2 text-3xl rounded-xl bg-[#00E7FF26] text-[#00E7FF]">

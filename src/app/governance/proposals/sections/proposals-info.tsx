@@ -5,11 +5,11 @@ import { AstraCard, AstraHeader, AstraLoading } from '@/components'
 import {
   Button,
   Separator,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  // Select,
+  // SelectContent,
+  // SelectItem,
+  // SelectTrigger,
+  // SelectValue,
 } from '@/components/shadcn'
 import { useAllProposals } from '@/hooks'
 import { ArrowDownIcon } from '@radix-ui/react-icons'
@@ -17,22 +17,22 @@ import Link from 'next/link'
 import { ProposalRow } from './proposal-row'
 
 const ProposalsInfo = () => {
-  const [filter, setFilter] = React.useState('all')
+  // const [filter, setFilter] = React.useState('all')
   const { data: proposals, isLoading: proposalsLoading } = useAllProposals({
     limit: 5,
   })
 
-  const proposalOptions = [
-    { value: 'all', label: 'All' },
-    { value: '0', label: 'Pending' },
-    { value: '1', label: 'Active' },
-    { value: '2', label: 'Canceled' },
-    { value: '3', label: 'Defeated' },
-    { value: '4', label: 'Succeeded' },
-    { value: '5', label: 'Queued' },
-    { value: '6', label: 'Expired' },
-    { value: '7', label: 'Executed' },
-  ]
+  // const proposalOptions = [
+  //   { value: 'all', label: 'All' },
+  //   { value: '0', label: 'Pending' },
+  //   { value: '1', label: 'Active' },
+  //   { value: '2', label: 'Canceled' },
+  //   { value: '3', label: 'Defeated' },
+  //   { value: '4', label: 'Succeeded' },
+  //   { value: '5', label: 'Queued' },
+  //   { value: '6', label: 'Expired' },
+  //   { value: '7', label: 'Executed' },
+  // ]
 
   return (
     <div className="w-full container pb-20">
@@ -45,7 +45,7 @@ const ProposalsInfo = () => {
               <div className="text-xl font-bold tracking-wide">
                 RECENT PROPOSALS
               </div>
-              <div className="absolute right-0 transform top-1/2 -translate-y-1/2">
+              {/* <div className="absolute right-0 transform top-1/2 -translate-y-1/2">
                 <Select onValueChange={setFilter} defaultValue={filter}>
                   <SelectTrigger className="w-auto min-w-[10rem]">
                     <SelectValue placeholder="Select an Action" />
@@ -61,7 +61,7 @@ const ProposalsInfo = () => {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
             </div>
             <Separator />
             {!!proposals && proposals.length > 0 ? (

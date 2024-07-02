@@ -64,11 +64,15 @@ const ProposalInfo = ({ proposal, signatures }: TProposalInfoProps) => {
     proposalId: BigInt(proposal.ID),
   })
 
+  console.log(proposal.ID)
+
   const { data: proposalState, refetch: refetchProposalState } =
     useProposalState({
       args: [BigInt(proposal.ID)],
       enabled: !!proposal.ID,
     })
+
+  console.log(proposalState);
 
   const { data: proposalVoters } = useGetProposalVoters({
     proposalId: proposal.ID,

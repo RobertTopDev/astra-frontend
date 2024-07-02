@@ -13,11 +13,6 @@ export const launchpadAbi = [
       },
       {
         internalType: 'address',
-        name: '_crossChainSaleManager',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
         name: '_tokenAddress',
         type: 'address',
       },
@@ -37,6 +32,11 @@ export const launchpadAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'address',
+        name: '_baseToken',
+        type: 'address',
+      },
+      {
         internalType: 'uint256',
         name: '_totalTokensForSale',
         type: 'uint256',
@@ -46,9 +46,45 @@ export const launchpadAbi = [
         name: '_baseAmount',
         type: 'uint256',
       },
+      {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '_isVestingEnabled',
+        type: 'bool',
+      },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'BaseAmountUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MinimumAmountUpdated',
+    type: 'event',
   },
   {
     anonymous: false,
@@ -81,7 +117,13 @@ export const launchpadAbi = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'amount',
+        name: 'baseAmount',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'tokenAmount',
         type: 'uint256',
       },
     ],
@@ -153,6 +195,19 @@ export const launchpadAbi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'baseToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -179,7 +234,7 @@ export const launchpadAbi = [
         type: 'address',
       },
     ],
-    name: 'claimedAmount',
+    name: 'claimedTokens',
     outputs: [
       {
         internalType: 'uint256',
@@ -193,19 +248,6 @@ export const launchpadAbi = [
   {
     inputs: [],
     name: 'config',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'crossChainSaleManager',
     outputs: [
       {
         internalType: 'address',
@@ -252,6 +294,38 @@ export const launchpadAbi = [
     inputs: [
       {
         internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'investedAmounts',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isVestingEnabled',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: 'user',
         type: 'address',
       },
@@ -262,6 +336,19 @@ export const launchpadAbi = [
         internalType: 'bool',
         name: '',
         type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'minAmount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -288,14 +375,14 @@ export const launchpadAbi = [
         type: 'address',
       },
       {
-        internalType: 'address[]',
-        name: '_tokens',
-        type: 'address[]',
+        internalType: 'address',
+        name: '_token',
+        type: 'address',
       },
       {
-        internalType: 'uint256[]',
-        name: '_values',
-        type: 'uint256[]',
+        internalType: 'uint256',
+        name: '_value',
+        type: 'uint256',
       },
     ],
     name: 'purchaseTokens',
@@ -337,8 +424,34 @@ export const launchpadAbi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_vesting',
+        type: 'address',
+      },
+    ],
+    name: 'setVestingContract',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'tokenPrice',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'totalAmountRaised',
     outputs: [
       {
         internalType: 'uint256',
@@ -405,10 +518,43 @@ export const launchpadAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_amount',
+        name: '_baseAmount',
         type: 'uint256',
       },
     ],
+    name: 'updateBaseAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_minAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateMinAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'vesting',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'withdrawBaseTokens',
     outputs: [],
     stateMutability: 'nonpayable',

@@ -1,6 +1,6 @@
 'use client'
 
-import { launchpadFactoryAbi } from '@/abis/launchpad-factory-abi'
+import { launchpadFactoryAbi } from '@/abis'
 import { useChainConfig } from '..'
 import { useContractRead } from 'wagmi'
 

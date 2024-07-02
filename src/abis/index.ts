@@ -7,6 +7,9 @@ export * from './batch-vote-abi'
 export * from './timelock-abi'
 export * from './daa-config-abi'
 export * from './vesting-abi'
-export * from "./launchpad-abi"
-export * from "./launchpad-factory-abi"
-export * from "./crosschain-salemanager-abi"
+export * from './launchpad-abi'
+export * from './launchpad-factory-abi'
+export * from './launchpad-vesting'
+export * from './crosschain-salemanager-abi'
+export * from './astradao-whitelist-abi'
+export * from './launchpad-configuration-abi';

@@ -4,7 +4,7 @@ import { AstraCard, AstraHeader } from '@/components'
 export const InvestStep = () => {
   return (
     <div className="relative container mx-auto w-full py-20">
-      <div className="relative w-full h-[50vh] flex flex-col justify-center items-center gap-[10rem]">
+      <div className="relative w-full flex flex-col justify-center items-center gap-[10rem]">
         <AstraHeader>INVESTING IN CRYPTO MADE EASY</AstraHeader>
         <div className="w-full grid grid-cols-3 lg:gap-16 gap-32">
           {invest_steps.map((invest_step, index) => (

@@ -25,7 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/shadcn'
-import { chainConfig, defaultChain } from '@/config'
+import { defaultChain } from '@/config'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InfoCircledIcon, TrashIcon } from '@radix-ui/react-icons'
 import clsx from 'clsx'
@@ -46,6 +46,7 @@ import {
   useAstraAllowance,
   useAstraDecimal,
   usePropose,
+  useChainConfig,
 } from '@/hooks'
 
 const createProposalFormSchema = z.object({
@@ -99,10 +100,11 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
     name: 'proposalLinks', // unique name for your Field Array
   })
   const { chain = defaultChain, chains } = useNetwork()
-  const config = chainConfig[chain!.id]
+  const { chainConfig } = useChainConfig()
+
   const { data: proposalTokens, isLoading: loadingProposalTokens } =
     useContractRead({
-      address: chainConfig[chain!.id].DAOContractAddress,
+      address: chainConfig.DAOContractAddress,
       abi: DAOAbi,
       functionName: 'proposalTokens',
     })
@@ -111,7 +113,7 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
   const { data: astraDecimal } = useAstraDecimal()
   const { data: astraAllowance, refetch: refetchAstraAllowance } =
     useAstraAllowance({
-      args: [address!, config.DAOContractAddress],
+      args: [address!, chainConfig.DAOContractAddress],
       enabled: !!address,
     })
   const {
@@ -120,8 +122,11 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
     error: approveError,
   } = useApprove({
     minAmount: proposalTokens?.valueOf() || 0,
-    address: config.AstraContractAddress,
-    args: [config.DAOContractAddress, proposalTokens?.valueOf() || BigInt(0)],
+    address: chainConfig.AstraContractAddress,
+    args: [
+      chainConfig.DAOContractAddress,
+      proposalTokens?.valueOf() || BigInt(0),
+    ],
     enabled:
       form.formState.isValid &&
       proposalActions.length > 0 &&
@@ -180,7 +185,7 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
     isLoading: proposeLoading,
     error: proposeError,
   } = usePropose({
-    address: config.DAOContractAddress,
+    address: chainConfig.DAOContractAddress,
     enabled:
       form.formState.isValid &&
       proposalActions.length > 0 &&
@@ -306,6 +311,10 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
           &nbsp; ASTRADAO tokens will be automatically staked for No lockup
           vault to complete the submission.&nbsp;
         </div>
+        <div className="text-center">
+          You can't create a proposal if you already have the pending or active
+          one.&nbsp;
+        </div>
         <div className="w-full mt-4">
           <Form {...form}>
             <form
@@ -339,7 +348,7 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
                       <div>Proposal Summary</div>
                       <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger>
+                          <TooltipTrigger type="reset">
                             <InfoCircledIcon className="w-1rem h-[1rem]" />
                           </TooltipTrigger>
                           <TooltipContent>
@@ -456,7 +465,7 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
                   <div>Proposal Actions</div>
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger type="reset">
                         <InfoCircledIcon className="w-1rem h-[1rem]" />
                       </TooltipTrigger>
                       <TooltipContent>

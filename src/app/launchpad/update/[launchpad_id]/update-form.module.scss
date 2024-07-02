@@ -1,0 +1,14 @@
+.index-form {
+  input,
+  textarea {
+    @apply pl-4 font-medium border-astra-blue bg-white placeholder:text-muted-foreground text-black focus-visible:outline-none file:bg-transparent focus-visible:ring-astra-blue;
+  }
+
+  input {
+    @apply rounded-full;
+  }
+
+  textarea {
+    @apply rounded-lg;
+  }
+}

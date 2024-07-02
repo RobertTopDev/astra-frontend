@@ -52,7 +52,7 @@ export const useWhitelistWithKYCPurefi = ({
       setTransactionObj({
         status: 'loading',
         reset,
-        transactionAction: 'Requesting Launchpad',
+        transactionAction: 'Completing KYC',
       })
     },
     onError: (error) => {
@@ -85,6 +85,7 @@ export const useWhitelistWithKYCPurefi = ({
         ...transactionObj,
         status: 'success',
         transactionHash: txReceipt.transactionHash,
+        transactionAction: 'Completed KYC Successfully',
       })
       onSuccessTx?.(txReceipt)
     } else if (txReceipt?.status === 'reverted') {
@@ -92,6 +93,7 @@ export const useWhitelistWithKYCPurefi = ({
         ...transactionObj,
         status: 'failed',
         transactionHash: txReceipt?.transactionHash,
+        transactionAction: 'Completing KYC Failed',
       })
       onRevert?.(txReceipt)
     }

@@ -5,23 +5,64 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Card, CardHeader, CardContent } from '@/components/shadcn'
 import { MiniIdenticon } from '@/components/mini-identicon'
-import { socialLinks } from '@/constants'
-import { TLogoLink } from '@/types'
+import { TLaunchpadDetailInfo, TLogoLink } from '@/types'
 
 import Offering from './Offerings'
 import Dao from './Dao'
 import KeyMetrics from './KeyMetrics'
 import Unlocks from './Unlocks'
 
-export default function Overview() {
-  const [selectedTab, setSelectedTab] = useState<number>(0)
+type TComponent = {
+  launchpadDetail: TLaunchpadDetailInfo
+}
 
+export default function Overview({ launchpadDetail }: TComponent) {
+  const [selectedTab, setSelectedTab] = useState<number>(0)
   const tabContent: ReactNode[] = [
-    <Offering key="offering" />,
-    <Dao key="dao" />,
-    <KeyMetrics key="keymetrics" />,
-    <Unlocks key="unlocks" />,
+    <Offering key="offering" launchpadData={launchpadDetail} />,
+    <Dao key="dao" launchpadDetail={launchpadDetail!} />,
+    <KeyMetrics key="keymetrics" launchpadDetail={launchpadDetail} />,
+    <Unlocks key="unlocks" launchpadDetail={launchpadDetail} />,
   ]
+
+  const socialLinks: TLogoLink[] = [
+    {
+      alt: 'Twitter Logo',
+      logoUrl: '/svgs/twitter.svg',
+      redirectUrl: launchpadDetail?.TWITTER || '#',
+      background: 'bg-[#56a8ea]',
+    },
+    {
+      alt: 'Git Logo',
+      logoUrl: '/svgs/github.svg',
+      redirectUrl: launchpadDetail?.GITHUB || '#',
+      background: 'bg-[#d9d9d9]',
+    },
+    {
+      alt: 'Telegram Logo',
+      logoUrl: '/svgs/telegram.svg',
+      redirectUrl: launchpadDetail?.TELEGRAM.startsWith('@')
+        ? launchpadDetail?.TELEGRAM.replace('@', 'https://t.me/')
+        : launchpadDetail?.TELEGRAM || '#',
+      background: 'bg-[#56a8ea]',
+    },
+  ]
+  if (launchpadDetail?.DISCORD) {
+    socialLinks.push({
+      alt: 'Discord Logo',
+      logoUrl: '/svgs/discord.svg',
+      redirectUrl: launchpadDetail?.DISCORD || '#',
+      background: 'bg-astra-orange',
+    })
+  }
+  if (launchpadDetail?.MEDIUM) {
+    socialLinks.push({
+      alt: 'Medium Logo',
+      logoUrl: '/images/medium-logo.png',
+      redirectUrl: launchpadDetail?.MEDIUM || '#',
+      background: 'bg-[#f6832e]',
+    })
+  }
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xlshadow-xl p-[1px] bg-gradient-to-b from-transparent to-gray-200">
@@ -29,14 +70,17 @@ export default function Overview() {
         <CardHeader className="p-0 flex flex-row items-center gap-8">
           <div className="relative self-stretch w-3/4 flex items-stretch justify-between gap-8 mt-6">
             <div className="relative h-32 w-32">
-              <MiniIdenticon seed="ddd" />
+              <MiniIdenticon
+                seed="ddd"
+                image={launchpadDetail?.PROJECT_IMAGE}
+              />
             </div>
             <div className="self-center flex grow basis-[0%] flex-col items-stretch my-auto">
-              <div className="text-white text-xl tracking-[2px]">Polygon</div>
+              <div className="text-white text-xl tracking-[2px]">
+                {launchpadDetail?.LAUNCHPAD_TOKEN_NAME}
+              </div>
               <div className="text-white text-sm mt-3.5">
-                Pucca Family is the industry’s first and largest blockchain
-                ecosystem in Latin America that captures a region with 670M+
-                people and a $5.5 trillion GDP.
+                {launchpadDetail?.PROJECT_DETAIL}
               </div>
             </div>
           </div>
@@ -71,7 +115,7 @@ export default function Overview() {
                   }`}
                   onClick={() => setSelectedTab(1)}
                 >
-                  DAO Screening
+                  Screening
                 </div>
                 <div
                   className={`flex-1 text-center rounded-xl cursor-pointer p-3 ${
@@ -141,7 +185,14 @@ export const LogoLink = ({ link }: LINKProps) => {
   }
   return (
     <li className="font-bold">
-      <div className="rounded-full bg-astra-blue p-2">{linkNode}</div>
+      <div
+        className={`p-2 flex items-center justify-center ${
+          link?.background || 'bg-astra-blue'
+        }`}
+        style={{ borderRadius: '50%', height: '40px', width: '40px' }}
+      >
+        {linkNode}
+      </div>
     </li>
   )
 }

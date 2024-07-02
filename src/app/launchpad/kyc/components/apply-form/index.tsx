@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAccount, useSignMessage } from 'wagmi'
 import { PureFI, PureFIErrorCodes } from '@purefi/verifier-sdk'
-import { AstraCard, AstraHeader } from '@/components'
+import { AstraCard, AstraHeader, AstraLink } from '@/components'
 import { Button, useToast } from '@/components/shadcn'
 import { kycConfig } from '@/config'
 import {
@@ -34,6 +34,7 @@ const ApplyForm = () => {
   const [dataPack, setDataPack] = useState<any>({})
   const [signature, setSignature] = useState<string>('')
   const [purefiData, setPurefiData] = useState<any>('')
+  const [kycRequired, setKycRequired] = useState<string>('')
 
   const {
     data: buyRuleStatus,
@@ -55,6 +56,7 @@ const ApplyForm = () => {
   const verifyHandler = async () => {
     try {
       if (isLoading || !signature) return
+      setKycRequired('')
       setIsLoading(true)
       const payload = {
         message: JSON.stringify(dataPack),
@@ -66,6 +68,7 @@ const ApplyForm = () => {
     } catch (err: any) {
       if (err.code === PureFIErrorCodes.FORBIDDEN) {
         const url = purefiUrl.dashboard
+        setKycRequired(url)
         toast({
           variant: 'destructive',
           title: 'Verify KYC Error',
@@ -120,7 +123,7 @@ const ApplyForm = () => {
       return (
         <Button
           variant="astra-blue"
-          disabled={isLoading}
+          disabled={isLoading || !!kycRequired}
           onClick={verifyHandler}
         >
           {isLoading ? 'Verifying' : 'Verify'}
@@ -174,30 +177,49 @@ const ApplyForm = () => {
       <AstraHeader className="text-center w-full">KYC Apply Form</AstraHeader>
       <AstraCard className="w-full my-8">
         <div className="form w-full flex flex-col gap-4">
-          <div className="message flex">
+          {/* <div className="message flex">
             <span className="label w-1/5">Message</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words">
+            <div className="input-form w-4/5 border border-white p-2 rounded break-words relative">
               <pre>
                 {JSON.stringify(dataPack, undefined, 2).replace(
                   /,\s*(?=\w+:)/g,
                   ',\n'
                 )}
               </pre>
+              <BlurComponent />
             </div>
           </div>
           <div className="signature flex">
             <span className="label w-1/5">Signature</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20">
+            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
               {signature}
+              <BlurComponent />
             </div>
-          </div>
+          </div> */}
+
+          <iframe
+            src="https://stage.dashboard.purefi.io/"
+            height="800px"
+            loading="lazy"
+          />
+
           <div className="purefi-data flex">
             <span className="label w-1/5">PureFI Data</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20">
+            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
               {purefiData}
+              <BlurComponent />
             </div>
           </div>
-          <div className="action-btn w-full text-center">{actionButton()}</div>
+          <div className="flex items-center justify-center gap-4">
+            <div className="action-btn text-center">{actionButton()}</div>
+            {kycRequired ? (
+              <AstraLink link={kycRequired}>
+                <Button variant="astra-blue">Verify KYC</Button>
+              </AstraLink>
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </AstraCard>
     </>
@@ -205,3 +227,9 @@ const ApplyForm = () => {
 }
 
 export default ApplyForm
+
+export const BlurComponent = () => {
+  return (
+    <div className="absolute left-0 top-0 w-full h-full bg-gray backdrop-blur-md"></div>
+  )
+}

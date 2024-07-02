@@ -54,7 +54,7 @@ export default function CompletedTable({ data, children }: DataTableProps) {
         <div className="rounded-md flex flex-col gap-6 relative">
           {children}
           <Table>
-            <TableHeader className="[&_th]:text-center [&_tr]:border-white">
+            <TableHeader className=" [&_tr]:border-white">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
@@ -80,7 +80,7 @@ export default function CompletedTable({ data, children }: DataTableProps) {
                     data-state={row.getIsSelected() && 'selected'}
                     onClick={() => {
                       router.push(
-                        `/launchpad/detail/${row.original.LAUNCHPAD_INDEX}`
+                        `/launchpad/buy/${row.original.ID}`
                       )
                     }}
                     className="cursor-pointer [&_td]:p-4"

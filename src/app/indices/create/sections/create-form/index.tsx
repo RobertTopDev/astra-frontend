@@ -308,7 +308,7 @@ const CreateForm = ({ allTokens }: TCreateFormProps) => {
                       <div>Minimum TVL to Start Index: </div>
                       <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger>
+                          <TooltipTrigger type="reset">
                             <InfoCircledIcon className="w-1rem h-[1rem]" />
                           </TooltipTrigger>
                           <TooltipContent>

@@ -15,6 +15,7 @@ export type TLogoLink = {
   logoUrl: string
   redirectUrl: string
   external?: boolean
+  background?: string
 }
 
 export type TIndex = {
@@ -24,7 +25,6 @@ export type TIndex = {
   ROI: string
   ROI_NEW: string
   RISK_SCORE: number
-  RISK_SCORE_NEW: number
   TVL: number
   MAX_DROP_DOWN: number
   CREATED_AT: string
@@ -106,6 +106,9 @@ export type TToken = {
   _totalValueLockedUSD?: string
 }
 
+export type IDTOCHAIN = Record<number, string>
+export type CHAINTOID = Record<string, number>
+
 export type TChainConfig = Record<
   number,
   {
@@ -126,6 +129,7 @@ export type TChainConfig = Record<
     DAIContractAddress: `0x${string}`
     USDTContractAddress: `0x${string}`
     USDCContractAddress: `0x${string}`
+    WETHContractAddress: `0x${string}`
     AstraContractAddress: `0x${string}`
     factoryContractAddress: `0x${string}`
     routerContractAddress: `0x${string}`
@@ -443,6 +447,29 @@ export type TVestingReward = {
   totalTokenAmount: number
 }
 
+export type TLaunchpadVestingReward = {
+  vestingScheduleID?: `0x${string}`
+  vestingIndexDetails?: {
+    initialized: boolean
+    beneficiary: `0x${string}`
+    amountTotal: bigint
+    released: bigint
+    revoked: boolean
+  }
+  releaseAmount: number
+  revoked: boolean
+  totalTokenAmount: number
+  launchpadAddress?: `0x${string}`
+  launchpadTokenName?: string
+  launchpadTokenDecimals?: number
+  vestingAddress?: `0x${string}`
+  vestingStart: Date
+  vestingCliff: number
+  vestingDuration: number
+  vestingSlicePeriodSeconds: number
+  vestingInitialUnlock: number
+}
+
 export type TClaimTransaction = {
   DATE: string
   BLOCKNUMBER: string
@@ -488,11 +515,10 @@ export type TLaunchpadListInfo = {
 }
 
 export type TLaunchpadDetailInfo = {
-  ID: number
+  ID: string
   OWNER: string
   APPROVE_TRANSACTION: string
   CHAIN: string
-  DISCORD: string
   EMAIL: string
   HARD_CAP: number
   INITIAL_MARKET_CAP: number
@@ -505,6 +531,7 @@ export type TLaunchpadDetailInfo = {
   LAUNCHPAD_TOKEN_PRICE: number
   LAUNCHPAD_TOKEN_SYMBOL: string
   LAUNCHPAD_TOKEN_TOTAL_SUPPLY: number
+  MIN_PURCHASE_BASE_AMOUNT: number
   MAX_PURCHASE_BASE_AMOUNT: number
   METRICS: string
   OTHER_URL: string
@@ -517,12 +544,40 @@ export type TLaunchpadDetailInfo = {
   STATUS: string
   TEAM_INFO: string
   TELEGRAM: string
+  DISCORD: string
+  MEDIUM: string
   TOTAL_SALE_AMOUNT: number
   TWITTER: string
   WEBSITE_URL: string
   WHITEPAPER_URL: string
   CREATED_AT: string
   UPDATED_AT: string
+  INVESTOR_DETAIL?: string
+  TOKEN_TYPE: string
+  LEAD_VC: string
+  MARKET_MAKER: string
+  CONTROLLED_CAP: string
+  DAO_APPROVED_METRICS: string
+  IS_VESTING: boolean
+  BASE_TOKEN: string
+  VEST_START: Date
+  VEST_CLIFF: number
+  VEST_DURATION: number
+  VEST_SLICE_PERIOD_SECONDS: number
+  VEST_INITIAL_UNLOCK: number
+  VESTING_DEPLOYED: boolean
+  VEST_ADDRESS: string
+
+  PROJECT_DESCRIPTION_DETAIL: string
+  TEAM_DESCRIPTION: string
+  SALE_ROUND_DETAIL: string
+  PROJECT_IMAGE: string
+  LEAD_VC_IMAGE: string
+  MARKET_MAKER_IMAGE: string
+  PROJECT_DECK: string
+  RAISED: number
+  GITHUB: string
+  TOTAL?: number
 }
 
 export type TRequestLaunchpadContractInfo = {
@@ -530,15 +585,21 @@ export type TRequestLaunchpadContractInfo = {
   saleStartTime: number
   saleEndTime: number
   tokenPrice: string
+  baseToken: `0x${string}`
   tokenAmount: string
+  minPurchaseAmount: string
   baseAmount: string
   tokenDecimals: string
+  isVesting: boolean
 }
 
 export interface TeamObject {
   name: string
   position: string
   description: string
+  linkedin?: string
+  twitter?: string
+  avatar?: string
 }
 export interface DateObject {
   year: number
@@ -552,5 +613,77 @@ export interface DateObject {
 export interface RequestLaunchpadResultValues {
   data: { [key: string]: any }
   team: TeamObject[]
-  metrics: { [key: string]: any }
+  metrics: MetricsObject[]
+  launchpadId?: string
+}
+
+export interface MetricsObject {
+  id: string
+  label: string
+  value: number
+}
+export interface SaleRoundDetailObject {
+  price: number
+  raised: number
+  lockup: string
+  saleType: string
+}
+
+export interface ProjectObject {
+  saleStartDate: Date
+  saleEndDate: Date
+  tokenAddress: string
+  tokenAmount: number | string
+  tokenPrice: number | string
+  minPurchaseAmount: number | string
+  baseAmount: number | string
+  tokenDecimals: number | string
+  tokenSymbol: string
+  totalSupply: number | string
+  softCap: number | string
+  hardCap: number | string
+  initialMarketCap: number | string
+  projectValuation: number | string
+  tokenName: string
+  website: string
+  pitchdeck: string
+  email: string
+  projectTwitter: string
+  contactTelegram: string
+  contactDiscord: string
+  contactMedium: string
+  projectDescription: string
+  totalToken: number | string
+  projectDescriptionDetail?: string
+  projectImage?: string
+  teamDescription?: string
+  saleRoundDetail?: string
+  projectDeck: string
+  github: string
+
+  leadVC: string
+  marketMaker: string
+  raised: number | string
+  investorDetail: string
+
+  leadVCImage: string
+  marketMakerImage: string
+  controlledCap: string
+  daoApprovedMetrics: string
+
+  tokenType: string
+  isVesting: boolean
+  baseToken: string
+
+  vest_start: Date | undefined
+  vest_cliff: number | string
+  vest_duration: number | string
+  vest_slice_period_seconds: number | string
+  vest_initial_unlock: number | string
+}
+
+export interface TFollowingStatus {
+  USER: string
+  IS_TELEGRAM_FOLLOWING: boolean
+  IS_TWITTER_FOLLOWING: boolean
 }

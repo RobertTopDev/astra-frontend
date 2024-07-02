@@ -94,7 +94,7 @@ const PortfolioIndices = ({
               </AstraTableToggleSortButton>
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger>
+                  <TooltipTrigger type="reset">
                     <InfoCircledIcon className="w-[1rem] h-[1rem]" />
                   </TooltipTrigger>
                   <TooltipContent>
@@ -178,10 +178,10 @@ const PortfolioIndices = ({
           return (
             <div
               className={`${getRiskScoreColor(
-                !!index ? index?.RISK_SCORE_NEW : 0
+                !!index ? index?.RISK_SCORE : 0
               )} text-center`}
             >
-              {index?.RISK_SCORE_NEW ? index?.RISK_SCORE_NEW + '/5' : 'N/A'}&nbsp;
+              {index?.RISK_SCORE ? index?.RISK_SCORE + '/5' : 'N/A'}&nbsp;
             </div>
           )
         },

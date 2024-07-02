@@ -20,6 +20,7 @@ type TUserAvatar = {
   isForTable?: boolean
   isToken?: boolean
   nameLink?: string
+  image?: string
   onClick?: () => void
 }
 
@@ -30,6 +31,7 @@ const UserAvatar = ({
   isForTable = false,
   isToken = false,
   nameLink,
+  image,
   onClick,
 }: TUserAvatar) => {
   const { chain } = useNetwork()
@@ -41,7 +43,7 @@ const UserAvatar = ({
       <div className={cn('relative h-14 w-14', isForTable && 'h-10 w-10')}>
         {nameLink ? (
           <Link href={nameLink}>
-            <MiniIdenticon seed={address + nameLink} />
+            <MiniIdenticon seed={address + nameLink} image={image} />
           </Link>
         ) : (
           <MiniIdenticon seed={address + name} />

@@ -26,6 +26,7 @@ import {
 } from '@/components/shadcn'
 
 import {
+  useCoingeckoPrice,
   useEarlyExitFees,
   usePoolInfo,
   usePoolUserInfo,
@@ -119,6 +120,28 @@ const WithdrawIndexModal = ({
         : undefined,
     enabled: selectedIndex !== undefined && address !== undefined,
   })
+
+  const { data: selectedTokenCurrency } = useCoingeckoPrice({
+    ids: 'usd-coin',
+    enabled: selectedIndex !== undefined,
+  })
+
+  const selectedTokenAmountUSD = useMemo(() => {
+    if (selectedTokenCurrency === undefined || !formValues.tokenInput) return 0
+    return selectedTokenCurrency * Number(formValues.tokenInput)
+  }, [selectedTokenCurrency, formValues])
+  const depositValue = useMemo(() => {
+    if (
+      selectedTokenCurrency === undefined ||
+      stableCoin === undefined ||
+      !selectedTokenAmountUSD
+    )
+      return BigInt(0)
+    const receivableAmountUSD = selectedTokenAmountUSD / selectedTokenCurrency
+    // stableCoinUSD to stableCoinValue
+    return parseUnits(receivableAmountUSD + '', stableCoin?.decimals)
+  }, [selectedTokenCurrency, stableCoin])
+  console.log(depositValue);
 
   const [payoutChoice, setPayoutChoice] = useState('standard')
 
@@ -361,7 +384,7 @@ const WithdrawIndexModal = ({
                       <Label htmlFor="r1">Premium Payout</Label>
                       <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger>
+                          <TooltipTrigger type="reset">
                             <InfoCircledIcon className="w-1rem h-[1rem]" />
                           </TooltipTrigger>
                           <TooltipContent>

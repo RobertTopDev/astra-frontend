@@ -14,12 +14,12 @@ export const Hero = () => {
         <Animations />
         <div className="relative z-30 sm:mt-0 mt-10 w-full h-[90vh] flex justify-center lg:items-center">
           <div className="grid grid-cols-2 gap-8 w-full">
-            <div className="lg:col-span-1 col-span-full flex flex-col items-center justify-center gap-8 whitespace-nowrap">
+            <div className="lg:pt-0 pt-16 lg:col-span-1 col-span-full flex flex-col items-center justify-center gap-8 whitespace-nowrap">
               <div className={clsx(styles['hero-heading'])}>
                 The Only Platform <br /> You Need To Build <br /> Wealth With
                 Crypto
               </div>
-              <div className="grid grid-cols-2 w-full gap-4">
+              <div className="grid md:grid-cols-2 md:cols-1 w-full gap-4">
                 <Link href="/#indices">
                   <Button
                     className="sm:col-span-1 col-span-full w-full rounded-full text-xs tracking-widest border border-astra-blue dark:text-neutral-900 dark:bg-neutral-50 dark:hover:bg-astra-blue/80 dark:hover:text-white"

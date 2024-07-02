@@ -20,7 +20,9 @@ import {
 import { indicesPaymentAbi } from '@/abis'
 import { numberFormatter } from '@/util'
 import { TermsCheckbox } from './terms-checkbox'
-import { CheckedState } from '@radix-ui/react-checkbox'
+// import * as CheckBoxReact from '@radix-ui/react-checkbox'
+
+type CheckedState = boolean | 'indeterminate'
 
 type TCreateConfirmationProps = {
   selectedTokens: TToken[]

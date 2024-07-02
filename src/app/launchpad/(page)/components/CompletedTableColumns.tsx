@@ -20,6 +20,7 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
             isToken
             name={index.LAUNCHPAD_TOKEN_NAME}
             address={index.LAUNCHPAD_TOKEN_ADDRESS}
+            image={index.PROJECT_IMAGE}
           />
         </div>
       )
@@ -34,13 +35,14 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
 
       return (
         <div className="w-fit">
-          <UserAvatar
+          {index.LEAD_VC}
+          {/* <UserAvatar
             nameLink={`/launchpad/detail/${index.LAUNCHPAD_INDEX}`}
             isForTable
             isToken
             // name={index.PROJECT_NAME}
             address=""
-          />
+          /> */}
         </div>
       )
     },
@@ -51,7 +53,7 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
     cell: ({ row }) => {
       const index = row.original
 
-      return <div>${numberFormatter(index?.HARD_CAP)}</div>
+      return <div className="w-fit">${numberFormatter(index?.HARD_CAP)}</div>
     },
   },
   {
@@ -65,23 +67,11 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
     },
   },
   {
-    id: 'cex',
-    header: 'CEXs',
+    id: 'chain',
+    header: 'Chain',
     cell: ({ row }) => {
       const index = row.original
-      return (
-        <div className="flex gap-2">
-          {/* {index.cex &&
-            index.cex.map((item, index) => (
-              <div
-                key={index}
-                className="text-xs bg-astra-blue rounded-xl text-astra-blue bg-opacity-15 px-3 py-1"
-              >
-                {item}
-              </div>
-            ))} */}
-        </div>
-      )
+      return <div className="w-fit">{index?.CHAIN}</div>
     },
   },
 ]

@@ -64,11 +64,11 @@ const IndexBody = ({
               <div className="text-sm">Risk Score</div>
               <div
                 className={clsx(
-                  getRiskScoreColor(index.RISK_SCORE_NEW ? index.RISK_SCORE_NEW : 1),
+                  getRiskScoreColor(index.RISK_SCORE ? index.RISK_SCORE : 1),
                   'text-xl'
                 )}
               >
-                {index?.RISK_SCORE_NEW ? index?.RISK_SCORE_NEW + '/5' : 'N/A'}
+                {index?.RISK_SCORE ? index?.RISK_SCORE + '/5' : 'N/A'}
               </div>
             </div>
             <div className="col-span-3 flex flex-col">

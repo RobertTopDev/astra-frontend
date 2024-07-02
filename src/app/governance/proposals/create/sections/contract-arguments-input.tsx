@@ -128,7 +128,7 @@ const ContractArgumentsInput = ({
               {!!input.tooltipText ? (
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
+                    <TooltipTrigger type="reset">
                       <InfoCircledIcon className="w-1rem h-[1rem]" />
                     </TooltipTrigger>
                     <TooltipContent>

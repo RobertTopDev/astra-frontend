@@ -4,9 +4,6 @@ import { CreateForm } from './sections/create-form'
 
 async function getTokensList() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tokens/all`, {
-    // next: {
-    //   revalidate: 0,
-    // },
     next: { revalidate: 0 },
   })
 
