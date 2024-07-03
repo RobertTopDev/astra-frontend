@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: us-central1-docker.pkg.dev/tmgalaxy/tokenmetrics-prod/astra-frontend
+  repository: us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend
   pullPolicy: IfNotPresent
   tag: "1234567"
 
@@ -13,36 +13,33 @@ serviceAccount:
 service:
   type: LoadBalancer
   port: 8080
+  sessionAffinity: ClientIP
+  externalTrafficPolicy: Local
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/backend-config: '{"default": "astra-backendconfig"}'
 
 ingress:
   enabled: true
-  className: "nginx"
   annotations: 
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    ingress.gcp.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.allow-http: "true"
   hosts:
     - host: astradao.org
       paths:
-        - path: /
+        - path: /*
           pathType: ImplementationSpecific
   tls:
-  - secretName: astra-mainnet-tls
+  - secretName: astra-frontend-tls
     hosts:
       - astradao.org
-
+      
 resources:
   requests:
     memory: "500Mi"
     cpu: "400m"
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
 
 autoscaling:
   enabled: true

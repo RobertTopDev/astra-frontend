@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 8080",
-    "prebuild": "pnpm run eslint-fix",
+    "prebuild": "yarn run eslint-fix",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
