@@ -65,3 +65,5 @@ pvc:
 
 backendConfig:
   namespace: astra-staging
+  securityPolicy:
+    name: "ddos-policy-alpha-us-central1"
