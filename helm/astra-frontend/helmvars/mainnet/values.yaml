@@ -65,3 +65,5 @@ pvc:
 
 backendConfig:
   namespace: astra-mainnet
+  securityPolicy:
+    name: "ddos-policy-alpha-us-central1"
