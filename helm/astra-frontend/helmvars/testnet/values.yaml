@@ -42,15 +42,6 @@ resources:
     memory: "300Mi"
     cpu: "250m"
 
-# livenessProbe:
-#   httpGet:
-#     path: /
-#     port: http
-# readinessProbe:
-#   httpGet:
-#     path: /
-#     port: http
-
 autoscaling:
   enabled: true
   minReplicas: 2
