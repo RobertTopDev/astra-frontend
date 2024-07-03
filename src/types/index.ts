@@ -118,6 +118,7 @@ export type TChainConfig = Record<
     PURFI_CONFIGURE_URL: {
       dashboard: string
       issuer: string
+      ruleId: string
     }
     LaunchpadFactoryContractAddress: `0x${string}`
     LaunchpadConfigurationAddress: `0x${string}`

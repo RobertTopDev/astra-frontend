@@ -5,6 +5,7 @@ import {
   polygonMumbai,
   arbitrumSepolia,
   bscTestnet,
+  base,
 } from 'wagmi/chains'
 
 export const defaultChainId =
@@ -17,6 +18,7 @@ export const idToChain: IDTOCHAIN = {
   [polygonMumbai.id]: 'Polygon',
   [arbitrumSepolia.id]: 'Arbitrum',
   [bscTestnet.id]: 'Binance',
+  [base.id]: 'Base',
 }
 export const chainToId: CHAINTOID = {
   arbitrum: arbitrum.id,
@@ -24,6 +26,7 @@ export const chainToId: CHAINTOID = {
   polygon: polygonMumbai.id,
   'arbitrum-sepolia': arbitrumSepolia.id,
   binance: bscTestnet.id,
+  base: base.id,
 }
 
 export const chainConfig: TChainConfig = {
@@ -35,15 +38,17 @@ export const chainConfig: TChainConfig = {
       'wss://ws-nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://dashboard.purefi.io',
-      issuer: 'https://issuer.app.purefi.io',
+      issuer: 'https://issuer.app.purefi.io/v4/rule',
+      ruleId: '82',
     },
-    ethAddressForpaywithCrypto: '0x0',
-    factoryContractAddress: '0x0',
-    routerContractAddress: '0x0',
-    LaunchpadFactoryContractAddress: '0x',
-    LaunchpadConfigurationAddress: '0x',
-    AstraDAOWhitelistAddress: '0x',
-    CrosschainSaleManagerAddress: '0x',
+    ethAddressForpaywithCrypto: '0x52ED59772BB1005e196E6baE3C25F6c25167feD4', // itoken deployer address for now
+    factoryContractAddress: '0x52ED59772BB1005e196E6baE3C25F6c25167feD4',
+    routerContractAddress: '0x2C11E8b0251486aEc6E7Cd72A39efaF8c38BD613',
+    LaunchpadFactoryContractAddress:
+      '0xf0A04AD6C96d07B862fFb9aB0809c1F0b08FFCCA',
+    LaunchpadConfigurationAddress: '0x5749b642b9787872E0DF6E8B186868706B1E8496',
+    AstraDAOWhitelistAddress: '0x5dAD9473109907a7eCd2620A19626540344727e3',
+    CrosschainSaleManagerAddress: '0x0Af159a8E0B1282509663D8AceA2Bd59fcb1CCc8',
     VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
     USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     DAIContractAddress: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
@@ -87,6 +92,7 @@ export const chainConfig: TChainConfig = {
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://dashboard.purefi.io',
       issuer: 'https://issuer.app.purefi.io',
+      ruleId: '82',
     },
     LaunchpadFactoryContractAddress: '0x',
     LaunchpadConfigurationAddress: '0x',
@@ -127,6 +133,58 @@ export const chainConfig: TChainConfig = {
     },
     iTokenHoursMultiplier: 2592000,
   },
+  [base.id]: {
+    networkURL: 'https://basescan.org/',
+    chainStackHTTPS:
+      'https://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5',
+    chainStackWS:
+      'wss://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5',
+    PURFI_CONFIGURE_URL: {
+      dashboard: 'https://dashboard.purefi.io',
+      issuer: 'https://issuer.app.purefi.io/v4/rule',
+      ruleId: '82',
+    },
+    ethAddressForpaywithCrypto: '0x0',
+    factoryContractAddress: '0x0',
+    routerContractAddress: '0x0',
+    LaunchpadFactoryContractAddress:
+      '0xCb85E2dFE64Cc98430e4ddc0F44F566Adc4AaeEF',
+    LaunchpadConfigurationAddress: '0xe3C29bBe74740a6Cd8d3E55eD9D7C919b2323142',
+    AstraDAOWhitelistAddress: '0xd3188e0df68559c0B63361f6160c57Ad88B239D8',
+    CrosschainSaleManagerAddress: '0x5b15FbE7aB98ad8000Cd50DA5A8906994f57e8F1',
+    VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
+    USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+    DAIContractAddress: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
+    USDCContractAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+    WETHContractAddress: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+    rpcURL: `https://production.infura.io/v3/bf18b01d017c4dbf8e15a1e633e3c68a`,
+    ChefContractAddress: '0x6fE79b531b2b1d5378631B3Ab33B0994E297355E',
+    DAAContractAddress: '0xFa3e6EC87941d4e29b1738F8F7f5C27B23Eb3f94',
+    DAOContractAddress: '0x8D9cbe442C664872A526cE65cfE0c4a4CfF89A7d',
+    AstraContractAddress: '0xd3188e0df68559c0B63361f6160c57Ad88B239D8',
+    IndicesPaymentContractAddress: '0xec67485B3D4DfD4BCA8c3DD3049e3A9c46E15bEE',
+    PoolConfigurationContractAddress:
+      '0xEE435FFB3c1f0bAf5C9B62cA3e1D8285C3a2a642',
+    iTokenStakingContractAddress: '0xB38b6827757b40c08BB83cfe7D9fB2e69D12CD3D',
+    BatchVoteContractAddress: '0xeBC2624085f4710e9E7A25332df8108ECDa86670',
+    uniswapNFTAddress: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
+    ZeroAddress: '0x0000000000000000000000000000000000000000',
+    uniswapFeeTierValue: '3000',
+    astraSlashingFeeUnit: 'days',
+    astraSlashingFeeValue: 90,
+    cooldownDetails: {
+      ASTRAStakingCooldownDays: 1,
+      ASTRAStakingCoolDownMaxTimestampDays: 2,
+      ASTRAStakingCooldownDaysUnit: 'days',
+      iTokenStakingCooldownDays: 1,
+      iTokenStakingCoolDownMaxTimestampDays: 2,
+      iTokenStakingCooldownDaysUnit: 'days',
+      lmStakingCooldownDays: 1,
+      lmStakingCoolDownMaxTimestampDays: 2,
+      lmStakingCooldownDaysUnit: 'days',
+    },
+    iTokenHoursMultiplier: 2592000,
+  },
   [polygonMumbai.id]: {
     networkURL: 'https://mumbai.polygonscan.com/',
     chainStackHTTPS:
@@ -137,6 +195,7 @@ export const chainConfig: TChainConfig = {
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
+      ruleId: '777',
     },
     LaunchpadFactoryContractAddress:
       '0x87070066587A32438f9f32915DAdc44f705450f2',
@@ -187,10 +246,12 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://arbitrum-sepolia.core.chainstack.com/ws/25d78e54fa768b868fee699a675ad8f3',
     // rpcURL: 'https://endpoints.omniatech.io/v1/arbitrum/sepolia/public',
-    rpcURL: 'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
+    rpcURL:
+      'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
+      ruleId: '777',
     },
     LaunchpadFactoryContractAddress:
       '0x09f0Af249AF686C2DD9fF9140EE9e94E32A72C85',
@@ -219,8 +280,6 @@ export const chainConfig: TChainConfig = {
     uniswapFeeTierValue: '3000',
     astraSlashingFeeUnit: 'days',
     astraSlashingFeeValue: 90,
-    // astraSlashingFeeUnit: 'minutes',
-    // astraSlashingFeeValue: 450,
     iTokenHoursMultiplier: 3600,
     cooldownDetails: {
       ASTRAStakingCooldownDays: 5,
@@ -245,6 +304,7 @@ export const chainConfig: TChainConfig = {
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
+      ruleId: '777',
     },
     LaunchpadFactoryContractAddress:
       '0xb4B1e63F0c4bc0714d0716E1434285AE2EEB9809',
@@ -273,8 +333,6 @@ export const chainConfig: TChainConfig = {
     uniswapFeeTierValue: '3000',
     astraSlashingFeeUnit: 'days',
     astraSlashingFeeValue: 90,
-    // astraSlashingFeeUnit: 'minutes',
-    // astraSlashingFeeValue: 450,
     iTokenHoursMultiplier: 3600,
     cooldownDetails: {
       ASTRAStakingCooldownDays: 5,
