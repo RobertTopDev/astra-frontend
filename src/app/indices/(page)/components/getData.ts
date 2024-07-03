@@ -28,28 +28,28 @@ export async function getIndices() {
   )
 
   // Remove the highestEarner from the indices array before calculating mostInvested
-  // const indicesWithoutHighestEarner = highestEarner
-  //   ? filter(
-  //       indices,
-  //       (index) => index.ITOKEN_ADDR !== highestEarner.ITOKEN_ADDR
-  //     )
-  //   : indices
+  const indicesWithoutHighestEarner = highestEarner
+    ? filter(
+        indices,
+        (index) => index.ITOKEN_ADDR !== highestEarner.ITOKEN_ADDR
+      )
+    : indices
   // const mostInvested = maxBy(
   //   filter(indicesWithoutHighestEarner, (index) => !!index.TVL),
   //   'TVL'
   // )
   const mostInvested = maxBy(
-    filter(indices, (index) => !!index.ROI),
-    'ROI'
+    filter(indicesWithoutHighestEarner, (index) => !!index.ROI_NEW),
+    'ROI_NEW'
   )
 
   // Remove the highestEarner and mostInvested from the indices array before calculating lowestRisk
-  // const indicesWithoutHighestEarnerAndMostInvested = mostInvested
-  //   ? filter(
-  //       indicesWithoutHighestEarner,
-  //       (index) => index.ITOKEN_ADDR !== mostInvested.ITOKEN_ADDR
-  //     )
-  //   : indicesWithoutHighestEarner
+  const indicesWithoutHighestEarnerAndMostInvested = mostInvested
+    ? filter(
+        indicesWithoutHighestEarner,
+        (index) => index.ITOKEN_ADDR !== mostInvested.ITOKEN_ADDR
+      )
+    : indicesWithoutHighestEarner
   // const lowestRisk = minBy(
   //   filter(
   //     indicesWithoutHighestEarnerAndMostInvested,
@@ -58,8 +58,11 @@ export async function getIndices() {
   //   'RISK_SCORE'
   // )
   const lowestRisk = minBy(
-    filter(indices, (index) => !!index.RISK_SCORE),
-    'RISK_SCORE'
+    filter(
+      indicesWithoutHighestEarnerAndMostInvested,
+      (index) => !!index.RISK_SCORE_NEW
+    ),
+    'RISK_SCORE_NEW'
   )
 
   const emptyCount = [highestEarner, mostInvested, lowestRisk].filter(
