@@ -31,7 +31,6 @@ import { formatUnits } from 'viem'
 import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
 import { chainConfig, chainToId, idToChain } from '@/config'
 import { getCrossChainMultiplier } from '@/util/getCrossChainMultiplier'
-import { numberFormatter } from '@/util'
 
 const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
 
@@ -47,15 +46,13 @@ export default function CrosschainStatus() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { data: userInfo } = useAstraUserInfo({})
-  const { data: astraDecimal } = useAstraDecimal()
 
-  const {
-    data: stakingScoreAndMultiplier,
-    isLoading: stakingScoreAndMultiplierLoading,
-  } = useAstraStakingScoreAndMultiplier({
-    args: !!address && !!userInfo ? [address, userInfo[0]] : undefined,
-    enabled: !!address && !!userInfo,
-  })
+  const { data: stakingScoreAndMultiplier } = useAstraStakingScoreAndMultiplier(
+    {
+      args: !!address && !!userInfo ? [address, userInfo[0]] : undefined,
+      enabled: !!address && !!userInfo,
+    }
+  )
 
   const multiplier = useMemo(() => {
     if (stakingScoreAndMultiplier === undefined) return 0
@@ -148,7 +145,7 @@ export default function CrosschainStatus() {
         // fetch arbitrum info
         const arbiResult = await fetchCrossChainMultiplier(
           address,
-          'arbitrum-sepolia'
+          chain.id === 421614 ? 'arbitrum-sepolia' : 'arbitrum'
         )
         setArbitrumMultiplier(arbiResult)
 
@@ -207,15 +204,7 @@ export default function CrosschainStatus() {
                         <SelectGroup>
                           <SelectLabel>Select Chain</SelectLabel>
                           <SelectItem value="binance">Binance</SelectItem>
-                          {/* <SelectItem value="ethereum">
-                            Ethereum
-                          </SelectItem>
-                          <SelectItem value="polygon">
-                            Polygon
-                          </SelectItem>
-                          <SelectItem value="base">
-                            Base
-                          </SelectItem> */}
+                          <SelectItem value="base">Base</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
