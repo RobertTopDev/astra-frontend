@@ -8,9 +8,6 @@ import clone from 'lodash/clone'
 
 export async function getIndices() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/indices`, {
-    // next: {
-    //   revalidate: 0,
-    // },
     next: { revalidate: 0, tags: ['indices'] },
   })
 
@@ -42,9 +39,9 @@ export async function getIndices() {
   //   'TVL'
   // )
   const mostInvested = maxBy(
-      filter(indices, (index) => !!index.ROI),
-      'ROI'
-    )
+    filter(indices, (index) => !!index.ROI),
+    'ROI'
+  )
 
   // Remove the highestEarner and mostInvested from the indices array before calculating lowestRisk
   // const indicesWithoutHighestEarnerAndMostInvested = mostInvested
@@ -61,10 +58,7 @@ export async function getIndices() {
   //   'RISK_SCORE'
   // )
   const lowestRisk = minBy(
-    filter(
-      indices,
-      (index) => !!index.RISK_SCORE
-    ),
+    filter(indices, (index) => !!index.RISK_SCORE),
     'RISK_SCORE'
   )
 

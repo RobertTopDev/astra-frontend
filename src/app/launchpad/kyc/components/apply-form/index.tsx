@@ -27,7 +27,7 @@ const ApplyForm = () => {
 
   const purefiUrl = chainConfig.PURFI_CONFIGURE_URL
   const receiver = chainConfig.AstraDAOWhitelistAddress
-  const ruleId = kycConfig.DEFAULT_RULE_TYPE_VALUES[kycConfig.DEFAULT_RULE_TYPE]
+  const ruleId = purefiUrl.ruleId
   const signType = kycConfig.DEFAULT_SIGN_TYPE
 
   const [isLoading, setIsLoading] = useState<boolean>(false)

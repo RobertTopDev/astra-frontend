@@ -6,16 +6,13 @@ import {
   polygonMumbai,
   arbitrumSepolia,
   bscTestnet,
+  base,
 } from 'wagmi/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  // [
-  //   ...(process.env.NODE_ENV === 'development' ? [polygonMumbai] : []),
-  //   arbitrum,
-  // ],
-  [arbitrumSepolia, bscTestnet, polygonMumbai, arbitrum],
+  [arbitrumSepolia, bscTestnet, polygonMumbai, arbitrum, base],
   [
     jsonRpcProvider({
       rpc: (chain) => ({

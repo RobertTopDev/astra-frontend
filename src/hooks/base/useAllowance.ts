@@ -8,7 +8,5 @@ export const useAllowance = ({ ...props }: TUseAllowanceProps) => {
     ...props,
     abi: erc20ABI,
     functionName: 'allowance',
-    // enabled: !!chain && !!chain.id && !!address && !!spender,
-    // args: !!spender ? [address!, spender] : undefined,
   })
 }
