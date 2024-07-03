@@ -32,7 +32,7 @@ ingress:
         - path: /*
           pathType: ImplementationSpecific
   tls:
-  - secretName: astra-frontend-tls
+  - secretName: astra-staging-tls
     hosts:
       - staging.astradao.org
 
