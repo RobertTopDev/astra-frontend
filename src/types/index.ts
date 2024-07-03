@@ -25,6 +25,7 @@ export type TIndex = {
   ROI: string
   ROI_NEW: string
   RISK_SCORE: number
+  RISK_SCORE_NEW: number
   TVL: number
   MAX_DROP_DOWN: number
   CREATED_AT: string

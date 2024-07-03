@@ -115,7 +115,12 @@ export const indicesColumns: ColumnDef<TIndex>[] = [
 
       return (
         <div className="text-center">
-          {index?.ROI ? parseFloat(index?.ROI).toFixed(2) + '%' : 'N/A'}
+          {/* {index?.ROI ? parseFloat(index?.ROI).toFixed(2) + '%' : 'N/A'} */}
+          {typeof index?.ROI_NEW === 'number'
+            ? index?.ROI_NEW
+              ? parseFloat(index?.ROI_NEW).toFixed(2) + '%'
+              : 0
+            : 'N/A'}
         </div>
       )
     },

@@ -25,7 +25,7 @@ export const MiniIdenticon = ({
   )
   const urlRegex = new RegExp('^(http|https)://[^ "]+$')
   let outputImage = svgURI
-  if (urlRegex.test(image || '')) outputImage = image as string
+  if (image) outputImage = image as string
   return (
     <Image
       src={outputImage}
