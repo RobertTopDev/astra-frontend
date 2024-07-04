@@ -2,12 +2,13 @@ import { useMemo } from 'react'
 import { TLaunchpadDetailInfo } from '@/types'
 import BuyContent from './BuyContent'
 import FollowSection from './FollowSection'
-import Stake from './Stake'
+// import Stake from './Stake'
 import Contributor from './Contributor'
 import { useGetBuyRuleLaunchpad, useLaunchpadFactoryInfo } from '@/hooks'
 import LiveUpcoming from '@/app/launchpad/(page)/components/LiveUpcoming'
 import { ClaimStatistics } from '@/app/launchpad/user/sections/claim-statistics'
 import { useAccount } from 'wagmi'
+import CrosschainStatus from '@/app/launchpad/user/components/CrosschainStatus'
 
 type TProgress = {
   data: TLaunchpadDetailInfo
@@ -74,7 +75,8 @@ export default function Progress({
         <></>
       )}
       <div className="mt-12">
-        <Stake launchpadData={launchpadInfoData} />
+        {/* <Stake launchpadData={launchpadInfoData} /> */}
+        <CrosschainStatus />
       </div>
       <div className="participated mt-12">
         <LiveUpcoming status="user" />
