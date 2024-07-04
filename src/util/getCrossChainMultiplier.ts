@@ -13,12 +13,7 @@ export async function getCrossChainMultiplier(
         },
         body: JSON.stringify({ rpcUrl, contractAddress, userAddress }),
       }
-      // {
-      //   next: { revalidate: 3600 * 3 },
-      // }
     )
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
 
     if (!res.ok) {
       // This will activate the closest `error.js` Error Boundary

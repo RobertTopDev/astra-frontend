@@ -22,21 +22,22 @@ import {
 } from '@/components/shadcn'
 import { useAccount, useNetwork } from 'wagmi'
 import {
-  useAstraDecimal,
   useAstraStakingScoreAndMultiplier,
   useAstraUserInfo,
   useVerifyMultiplierCrosschain,
 } from '@/hooks'
 import { formatUnits } from 'viem'
 import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
-import { chainConfig, chainToId, idToChain } from '@/config'
+import { chainConfig, chainToId, idToChain, mainChainToId } from '@/config'
 import { getCrossChainMultiplier } from '@/util/getCrossChainMultiplier'
-
-const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
 
 export default function CrosschainStatus() {
   const { address } = useAccount()
   const { chain } = useNetwork()
+
+  const axelarSDK = new AxelarQueryAPI({
+    environment: chain?.testnet ? Environment.TESTNET : Environment.MAINNET,
+  })
 
   const [gasFee, setGasFee] = useState<string>('')
   const [selectedChain, setSelectedChain] = useState<string>('')
@@ -63,7 +64,9 @@ export default function CrosschainStatus() {
     userAddress: string,
     chainName: string
   ) => {
-    const selectedChainId = chainToId[chainName]
+    const selectedChainId = chain?.testnet
+      ? chainToId[chainName]
+      : mainChainToId[chainName]
     const rpcUrl = chainConfig[selectedChainId].rpcURL
     const contractAddress =
       chainConfig[selectedChainId].CrosschainSaleManagerAddress
@@ -104,13 +107,15 @@ export default function CrosschainStatus() {
 
   const onSelectChain = (value: string) => setSelectedChain(value)
 
+  // get the selected chain's multiplier when chain is arbitrum
   useEffect(() => {
     async function init() {
       if (!selectedChain) return
+
       setIsLoading(true)
       // get verify multiplier transaction fee from third party
       const axelarResult: any = await axelarSDK.estimateGasFee(
-        'arbitrum-sepolia',
+        chain?.testnet ? 'arbitrum-sepolia' : 'arbitrum',
         selectedChain,
         BigInt(21000),
         'auto'
@@ -125,15 +130,16 @@ export default function CrosschainStatus() {
     }
 
     init()
-  }, [axelarSDK, selectedChain, address])
+  }, [selectedChain, address, chain])
 
+  // get multiplier data when chain is not the arbitrum
   useEffect(() => {
     async function init() {
-      setIsLoading(true)
-
-      if (!address || isArbitrumChain || !chain) return setIsLoading(false)
+      if (!address || isArbitrumChain || !chain) return
 
       try {
+        setIsLoading(true)
+
         // fetch current chain info
         const curChain = idToChain[chain.id]
         const result = await fetchCrossChainMultiplier(
@@ -145,7 +151,7 @@ export default function CrosschainStatus() {
         // fetch arbitrum info
         const arbiResult = await fetchCrossChainMultiplier(
           address,
-          chain.id === 421614 ? 'arbitrum-sepolia' : 'arbitrum'
+          chain.testnet ? 'arbitrum-sepolia' : 'arbitrum'
         )
         setArbitrumMultiplier(arbiResult)
 
@@ -203,8 +209,11 @@ export default function CrosschainStatus() {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Select Chain</SelectLabel>
-                          <SelectItem value="binance">Binance</SelectItem>
-                          <SelectItem value="base">Base</SelectItem>
+                          {chain?.testnet ? (
+                            <SelectItem value="binance">Binance</SelectItem>
+                          ) : (
+                            <SelectItem value="base">Base</SelectItem>
+                          )}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
