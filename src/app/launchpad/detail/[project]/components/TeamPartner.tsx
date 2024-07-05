@@ -255,7 +255,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
         // metrics: data?.METRICS,
         saleRoundDetail: data?.SALE_ROUND_DETAIL || '',
         websiteUrl: data?.WEBSITE_URL,
-        whitepaperUrl: data?.WHITEPAPER_URL,
+        whitepaperUrl: data?.WHITEPAPER_URL || '',
         twitter: data?.TWITTER,
         telegram: data?.TELEGRAM,
         discord: data?.DISCORD,

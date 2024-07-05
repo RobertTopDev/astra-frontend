@@ -399,18 +399,16 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url.' }),
-    projectDeck: z
+      projectDeck: z
       .string()
-      .min(1, {
-        message: 'Project deck url is required.',
-      })
-      .url({ message: 'Invalid url.' }),
-    pitchdeck: z
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
+      pitchdeck: z
       .string()
-      .min(1, {
-        message: 'Whitepaper URL is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     email: z
       .string()
       .min(1, {
@@ -423,12 +421,11 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' }),
-    github: z
+      github: z
       .string()
-      .min(1, {
-        message: 'Github link is required',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -763,10 +760,10 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         saleRoundDetail: data.SALE_ROUND_DETAIL || '',
         // metrics: data.METRICS,
         websiteUrl: value.website,
-        projectDeck: value.projectDeck,
-        whitepaperUrl: value.pitchdeck,
+        projectDeck: value.projectDeck || '',
+        whitepaperUrl: value.pitchdeck || '',
         twitter: value.projectTwitter,
-        github: value.github,
+        github: value.github || '',
         telegram: value.contactTelegram,
         discord: value.contactDiscord,
         medium: value.contactMedium,
@@ -956,7 +953,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="pitchdeck"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Whitepaper Link *</FormLabel>
+                        <FormLabel>Whitepaper Link</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -978,7 +975,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="projectDeck"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Deck *</FormLabel>
+                        <FormLabel>Project Deck</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://docsend.com/view/..."
@@ -1044,7 +1041,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="github"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Github Link *</FormLabel>
+                        <FormLabel>Github Link</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://github.com/JohnDoe"

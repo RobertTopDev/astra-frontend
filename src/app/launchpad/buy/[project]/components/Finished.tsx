@@ -62,44 +62,46 @@ export default function Finished({
     .filter((token) => token.address === data?.BASE_TOKEN)
     .map((token) => token.symbol)[0]
 
-  const socialLinks: TLogoLink[] = [
-    {
-      alt: 'Twitter Logo',
-      logoUrl: '/svgs/twitter.svg',
-      redirectUrl: data?.TWITTER || '#',
-      background: 'bg-[#56a8ea]',
-    },
-    {
-      alt: 'Git Logo',
-      logoUrl: '/svgs/github.svg',
-      redirectUrl: data?.GITHUB || '#',
-      background: 'bg-[#d9d9d9]',
-    },
-    {
+    const socialLinks: TLogoLink[] = [
+      {
+        alt: 'Twitter Logo',
+        logoUrl: '/svgs/twitter.svg',
+        redirectUrl: data?.TWITTER || '#',
+        background: 'bg-[#56a8ea]',
+      },
+    ]
+    if (data?.GITHUB) {
+      socialLinks.push({
+        alt: 'Git Logo',
+        logoUrl: '/svgs/github.svg',
+        redirectUrl: data?.GITHUB || '#',
+        background: 'bg-[#d9d9d9]',
+      })
+    }
+    if (data?.DISCORD) {
+      socialLinks.push({
+        alt: 'Discord Logo',
+        logoUrl: '/svgs/discord.svg',
+        redirectUrl: data?.DISCORD || '#',
+        background: 'bg-astra-orange',
+      })
+    }
+    if (data?.MEDIUM) {
+      socialLinks.push({
+        alt: 'Medium Logo',
+        logoUrl: '/images/medium-logo.png',
+        redirectUrl: data?.MEDIUM || '#',
+        background: 'bg-[#f6832e]',
+      })
+    }
+    socialLinks.push({
       alt: 'Telegram Logo',
       logoUrl: '/svgs/telegram.svg',
       redirectUrl: data?.TELEGRAM.startsWith('@')
         ? data?.TELEGRAM.replace('@', 'https://t.me/')
         : data?.TELEGRAM || '#',
       background: 'bg-[#56a8ea]',
-    },
-  ]
-  if (data?.DISCORD) {
-    socialLinks.push({
-      alt: 'Discord Logo',
-      logoUrl: '/svgs/discord.svg',
-      redirectUrl: data?.DISCORD || '#',
-      background: 'bg-astra-orange',
     })
-  }
-  if (data?.MEDIUM) {
-    socialLinks.push({
-      alt: 'Medium Logo',
-      logoUrl: '/images/medium-logo.png',
-      redirectUrl: data?.MEDIUM || '#',
-      background: 'bg-[#f6832e]',
-    })
-  }
 
   const isLaunchpadFinished = useMemo(() => {
     const endTime = data.SALE_END_TIME

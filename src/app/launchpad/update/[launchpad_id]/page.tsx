@@ -493,18 +493,16 @@ export default function Page({ params }: TPage) {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url.' }),
-    projectDeck: z
+      projectDeck: z
       .string()
-      .min(1, {
-        message: 'Project deck url is required.',
-      })
-      .url({ message: 'Invalid url.' }),
-    pitchdeck: z
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
+      pitchdeck: z
       .string()
-      .min(1, {
-        message: 'Whitepaper URL is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     email: z
       .string()
       .min(1, {
@@ -517,12 +515,11 @@ export default function Page({ params }: TPage) {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' }),
-    github: z
+      github: z
       .string()
-      .min(1, {
-        message: 'Github link is required',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -1117,10 +1114,10 @@ export default function Page({ params }: TPage) {
         : '',
       website: launchpadDetail ? launchpadDetail.WEBSITE_URL?.toString() : '',
       projectDeck: launchpadDetail
-        ? launchpadDetail.PROJECT_DECK?.toString()
+        ? launchpadDetail?.PROJECT_DECK?.toString()
         : '',
       pitchdeck: launchpadDetail
-        ? launchpadDetail.WHITEPAPER_URL?.toString()
+        ? launchpadDetail?.WHITEPAPER_URL?.toString()
         : '',
       projectDescription: launchpadDetail
         ? launchpadDetail?.PROJECT_DETAIL?.toString()
@@ -1137,7 +1134,7 @@ export default function Page({ params }: TPage) {
       projectTwitter: launchpadDetail
         ? launchpadDetail.TWITTER?.toString()
         : '',
-      github: launchpadDetail ? launchpadDetail.GITHUB?.toString() : '',
+      github: launchpadDetail ? launchpadDetail?.GITHUB?.toString() : '',
       contactTelegram: launchpadDetail
         ? launchpadDetail.TELEGRAM?.toString()
         : '',
@@ -1294,7 +1291,7 @@ export default function Page({ params }: TPage) {
                   name="projectDeck"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Deck *</FormLabel>
+                      <FormLabel>Project Deck</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://docsend.com/view/..."
@@ -1316,7 +1313,7 @@ export default function Page({ params }: TPage) {
                   name="pitchdeck"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Whitepaper Link *</FormLabel>
+                      <FormLabel>Whitepaper Link</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
@@ -1382,7 +1379,7 @@ export default function Page({ params }: TPage) {
                   name="github"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Github Link *</FormLabel>
+                      <FormLabel>Github Link</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://github.com/JohnDoe"

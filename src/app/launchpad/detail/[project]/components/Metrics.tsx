@@ -228,7 +228,7 @@ export default function Metrics({ data, refetchData }: Props) {
             ? convertSaleRoundDetailObjectToString(saleValueArray)
             : '',
         websiteUrl: data?.WEBSITE_URL,
-        whitepaperUrl: data?.WHITEPAPER_URL,
+        whitepaperUrl: data?.WHITEPAPER_URL || '',
         twitter: data?.TWITTER,
         telegram: data?.TELEGRAM,
         discord: data?.DISCORD,

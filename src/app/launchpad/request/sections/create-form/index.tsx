@@ -336,17 +336,15 @@ const CreateForm = () => {
       })
       .url({ message: 'Invalid url.' }),
     projectDeck: z
-      .string()
-      .min(1, {
-        message: 'Project deck url is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+    .string()
+    .refine((value) => value.trim() === '' || isUrl(value), {
+      message: 'Invalid URL.',
+    }),
     pitchdeck: z
-      .string()
-      .min(1, {
-        message: 'Whitepaper URL is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+    .string()
+    .refine((value) => value.trim() === '' || isUrl(value), {
+      message: 'Invalid URL.',
+    }),
     email: z
       .string()
       .min(1, {
@@ -360,11 +358,10 @@ const CreateForm = () => {
       })
       .url({ message: 'Invalid url.' }),
     github: z
-      .string()
-      .min(1, {
-        message: 'Github link is required',
-      })
-      .url({ message: 'Invalid url.' }),
+    .string()
+    .refine((value) => value.trim() === '' || isUrl(value), {
+      message: 'Invalid URL.',
+    }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -391,7 +388,6 @@ const CreateForm = () => {
       ),
     contactDiscord: z
       .string()
-
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
@@ -705,9 +701,9 @@ const CreateForm = () => {
       teamDescription: '',
       metrics: JSON.stringify(result_values.metrics),
       websiteUrl: result_values.data.website,
-      github: result_values.data.github,
-      projectDeck: result_values.data.projectDeck,
-      whitepaperUrl: result_values.data.pitchdeck,
+      github: result_values.data?.github || '',
+      projectDeck: result_values.data.projectDeck || '',
+      whitepaperUrl: result_values.data.pitchdeck || '',
       twitter: result_values.data.projectTwitter,
       telegram: result_values.data.contactTelegram,
       discord: result_values.data.contactDiscord,
@@ -896,7 +892,7 @@ const CreateForm = () => {
               name="projectDeck"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Deck *</FormLabel>
+                  <FormLabel>Project Deck</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://docsend.com/view/..."
@@ -918,7 +914,7 @@ const CreateForm = () => {
               name="pitchdeck"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Whitepaper Link *</FormLabel>
+                  <FormLabel>Whitepaper Link</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://drive.google.com/drive/..."
@@ -984,7 +980,7 @@ const CreateForm = () => {
               name="github"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Github Link *</FormLabel>
+                  <FormLabel>Github Link</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://github.com/JohnDoe"
