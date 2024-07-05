@@ -588,30 +588,24 @@ export default function Page({ params }: TPage) {
     marketMaker: z.string().min(1, {
       message: 'Market maker information is required.',
     }),
-    investorDetail: z.string().min(1, {
-      message: 'Investor list is required.',
-    }),
+    investorDetail: z.string(),
     raised: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
+      .string()
+      .refine((value) => value === '' || /^[0-9,]+$/.test(value), {
         message: 'Total raised amount must be a valid number.',
       })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Total raised amount is required.',
-      })
       .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
+        (value) => value === '' || !isNaN(Number(value.replace(/,/g, ''))),
         {
-          message: 'Total raised amount must be a positive integer.',
+          message: 'Total raised amount must be a valid number.',
         }
       )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+      .refine((value) => value === '' || Number(value.replace(/,/g, '')) >= 0, {
+        message: 'Total raised amount must be a positive integer.',
+      })
+      .transform((value) =>
+        value === '' ? value : parseInt(value.replace(/,/g, ''), 10)
+      ),
 
     tokenType: z.string().min(1, {
       message: 'Please select token category.',
@@ -2864,7 +2858,7 @@ export default function Page({ params }: TPage) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex">
-                        <span className="mr-2">Investor List *</span>
+                        <span className="mr-2">Investor List</span>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild type="reset">
@@ -2901,7 +2895,7 @@ export default function Page({ params }: TPage) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex">
-                        <span className="mr-2">Total Raised Amount *</span>
+                        <span className="mr-2">Total Raised Amount</span>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild type="reset">
