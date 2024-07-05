@@ -5,44 +5,40 @@ export const navLinks: TLink[] = [
     name: 'BUY ASTRADAO',
     link: '/how-to-buy',
   },
-  // ...(process.env.NODE_ENV === 'development'
-  //   ? [
-  //       {
-  //         name: 'LAUNCHPAD',
-  //         link: '/launchpad',
-  //       },
-  //     ]
-  //   : []),
-  {
-    name: 'LAUNCHPAD',
-    link: '/launchpad',
-  },
-  {
-    name: 'LAUNCHPAD',
-    link: '',
-    menu: [
-      {
-        name: 'Dashboard',
-        link: '/launchpad',
-        description: 'Live And Upcoming Token Sales',
-      },
-      {
-        name: 'Launchpad Portfolio',
-        link: '/launchpad/user',
-        description: 'Check Your Token Sales Portfolio',
-      },
-      {
-        name: 'Launchpad Request',
-        link: '/launchpad/request',
-        description: 'Create Your Token Sale',
-      },
-      {
-        name: 'Launchpad Admin',
-        link: '/launchpad/admin',
-        description: 'Manage The Requested Token Sale',
-      },
-    ],
-  },
+  ...(process.env.NEXT_PUBLIC_NETWORK === 'mainnet'
+    ? []
+    : [
+        {
+          name: 'LAUNCHPAD',
+          link: '/launchpad',
+        },
+        {
+          name: 'LAUNCHPAD',
+          link: '',
+          menu: [
+            {
+              name: 'Dashboard',
+              link: '/launchpad',
+              description: 'Live And Upcoming Token Sales',
+            },
+            {
+              name: 'Launchpad Portfolio',
+              link: '/launchpad/user',
+              description: 'Check Your Token Sales Portfolio',
+            },
+            {
+              name: 'Launchpad Request',
+              link: '/launchpad/request',
+              description: 'Create Your Token Sale',
+            },
+            {
+              name: 'Launchpad Admin',
+              link: '/launchpad/admin',
+              description: 'Manage The Requested Token Sale',
+            },
+          ],
+        },
+      ]),
   {
     name: 'INDICES',
     link: '',
