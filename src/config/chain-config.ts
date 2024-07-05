@@ -6,6 +6,7 @@ import {
   arbitrumSepolia,
   bscTestnet,
   base,
+  bsc,
 } from 'wagmi/chains'
 
 export const defaultChainId =
@@ -28,6 +29,12 @@ export const chainToId: CHAINTOID = {
   binance: bscTestnet.id,
   base: base.id,
 }
+export const mainChainToId: CHAINTOID = {
+  arbitrum: arbitrum.id,
+  ethereum: mainnet.id,
+  binance: bsc.id,
+  base: base.id,
+}
 
 export const chainConfig: TChainConfig = {
   [arbitrum.id]: {
@@ -41,6 +48,7 @@ export const chainConfig: TChainConfig = {
       issuer: 'https://issuer.app.purefi.io/v4/rule',
       ruleId: '82',
     },
+    rpcURL: `https://nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302`,
     ethAddressForpaywithCrypto: '0x52ED59772BB1005e196E6baE3C25F6c25167feD4', // itoken deployer address for now
     factoryContractAddress: '0x52ED59772BB1005e196E6baE3C25F6c25167feD4',
     routerContractAddress: '0x2C11E8b0251486aEc6E7Cd72A39efaF8c38BD613',
@@ -54,7 +62,6 @@ export const chainConfig: TChainConfig = {
     DAIContractAddress: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
     USDCContractAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
     WETHContractAddress: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
-    rpcURL: `https://production.infura.io/v3/bf18b01d017c4dbf8e15a1e633e3c68a`,
     ChefContractAddress: '0x6fE79b531b2b1d5378631B3Ab33B0994E297355E',
     DAAContractAddress: '0xFa3e6EC87941d4e29b1738F8F7f5C27B23Eb3f94',
     DAOContractAddress: '0x8D9cbe442C664872A526cE65cfE0c4a4CfF89A7d',
@@ -88,12 +95,12 @@ export const chainConfig: TChainConfig = {
       'https://nd-069-375-190.p2pify.com/c0963d7b6845a9b601d2569f65f4e178',
     chainStackWS:
       'wss://ws-nd-069-375-190.p2pify.com/c0963d7b6845a9b601d2569f65f4e178',
-    rpcURL: `https://production.infura.io/v3/bf18b01d017c4dbf8e15a1e633e3c68a`,
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://dashboard.purefi.io',
       issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
+    rpcURL: `https://nd-069-375-190.p2pify.com/c0963d7b6845a9b601d2569f65f4e178`,
     LaunchpadFactoryContractAddress: '0x',
     LaunchpadConfigurationAddress: '0x',
     AstraDAOWhitelistAddress: '0x',
@@ -144,6 +151,7 @@ export const chainConfig: TChainConfig = {
       issuer: 'https://issuer.app.purefi.io/v4/rule',
       ruleId: '82',
     },
+    rpcURL: `https://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5`,
     ethAddressForpaywithCrypto: '0x0',
     factoryContractAddress: '0x0',
     routerContractAddress: '0x0',
@@ -157,7 +165,6 @@ export const chainConfig: TChainConfig = {
     DAIContractAddress: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
     USDCContractAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
     WETHContractAddress: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
-    rpcURL: `https://production.infura.io/v3/bf18b01d017c4dbf8e15a1e633e3c68a`,
     ChefContractAddress: '0x6fE79b531b2b1d5378631B3Ab33B0994E297355E',
     DAAContractAddress: '0xFa3e6EC87941d4e29b1738F8F7f5C27B23Eb3f94',
     DAOContractAddress: '0x8D9cbe442C664872A526cE65cfE0c4a4CfF89A7d',
@@ -191,12 +198,13 @@ export const chainConfig: TChainConfig = {
       'https://nd-228-957-154.p2pify.com/a67c91c9db4e0cb9c5c0a3c41e08790c',
     chainStackWS:
       'wss://ws-nd-228-957-154.p2pify.com/a67c91c9db4e0cb9c5c0a3c41e08790c',
-    rpcURL: 'https://rpc-mumbai.maticvigil.com/',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
+    rpcURL:
+      'https://nd-228-957-154.p2pify.com/a67c91c9db4e0cb9c5c0a3c41e08790c',
     LaunchpadFactoryContractAddress:
       '0x87070066587A32438f9f32915DAdc44f705450f2',
     LaunchpadConfigurationAddress: '0x66bCF9f7B8607952F0e29C1F007D22A390F9b693',
@@ -245,14 +253,13 @@ export const chainConfig: TChainConfig = {
       'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
     chainStackWS:
       'wss://arbitrum-sepolia.core.chainstack.com/ws/25d78e54fa768b868fee699a675ad8f3',
-    // rpcURL: 'https://endpoints.omniatech.io/v1/arbitrum/sepolia/public',
-    rpcURL:
-      'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
+    rpcURL:
+      'https://arbitrum-sepolia.core.chainstack.com/25d78e54fa768b868fee699a675ad8f3',
     LaunchpadFactoryContractAddress:
       '0x09f0Af249AF686C2DD9fF9140EE9e94E32A72C85',
     LaunchpadConfigurationAddress: '0xAfA5FD37D8F3DCaa17E73Cd3834ED98181746Fe3',
@@ -299,13 +306,13 @@ export const chainConfig: TChainConfig = {
       'https://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
     chainStackWS:
       'wss://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
-    rpcURL:
-      'https://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://stage.dashboard.purefi.io',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
+    rpcURL:
+      'https://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
     LaunchpadFactoryContractAddress:
       '0xb4B1e63F0c4bc0714d0716E1434285AE2EEB9809',
     LaunchpadConfigurationAddress: '0x24569F3D1a7e510FCA13282df183Cbe9833dd785',

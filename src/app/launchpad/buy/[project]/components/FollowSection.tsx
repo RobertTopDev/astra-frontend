@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Card, CardContent, Button } from '@/components/shadcn'
 import { AstraLink, AstraLoading } from '@/components'
@@ -11,6 +11,7 @@ import { formatUnits } from 'viem'
 import { useDecimals, useFollowCheck } from '@/hooks'
 import { useAccount } from 'wagmi'
 import { followTwitter } from '@/util/followTwitter'
+import { serialize } from 'cookie-es'
 
 type Props = {
   detail: TLaunchpadDetailInfo
@@ -29,6 +30,8 @@ export default function FollowSection({
 }: Props) {
   const { address } = useAccount()
   const [twitterFollowInprogress, setTwitterFollowInprogress] = useState(false)
+  const [twitterCheckStarted, setTwitterCheckStarted] = useState(false);
+
   const followingTemp = useFollowCheck(address)
   const followingData = followingTemp.data
   const follwingDataLoading = followingTemp.isLoading
@@ -45,10 +48,29 @@ export default function FollowSection({
       address: detail?.BASE_TOKEN as `0x${string}`,
       enabled: !!detail,
     })
-    const handlerfollowTwitter = async () => {
-      if (!!address && /^0x[a-fA-F0-9]{40}$/.test(address)) {
-        setTwitterFollowInprogress(true)
-        try {
+  const handleFollowTwitter = async (confirm: boolean = false) => {
+    if (
+      !!address &&
+      /^0x[a-fA-F0-9]{40}$/.test(address) &&
+      !twitterFollowInprogress
+    ) {
+      setTwitterFollowInprogress(true)
+      try {
+        if (!confirm) {
+          const twitterApi = await (
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/twitter/login`, {
+              method: 'POST',
+            })
+          ).json()
+          console.log('TwitterAPI----->', twitterApi)
+          document.cookie = serialize('comebackAt', window.location.href, {
+            sameSite: 'none',
+            path: '/apicallback_',
+            secure: true,
+          })
+          //localStorage.setItem("comebackAt",window.location.href)
+          location.href = twitterApi.url
+        } else {
           const res = await followTwitter(address)
           if (res.ok) {
             // Handle successful response
@@ -57,15 +79,25 @@ export default function FollowSection({
             // Handle unsuccessful response
             console.error('Failed to follow Twitter account:', res.statusText)
           }
-        } catch (error) {
-          // Handle any errors that occurred during the fetch
-          console.error('Error following Twitter account:', error)
-        } finally {
-          // Always set the in-progress state to false when done
-          setTwitterFollowInprogress(false)
+        }
+      } catch (error) {
+        // Handle any errors that occurred during the fetch
+        console.error('Error following Twitter account:', error)
+      } finally {
+        // Always set the in-progress state to false when done
+        setTwitterFollowInprogress(false)
+        if (confirm) {
+          location.href = location.pathname
         }
       }
     }
+  }
+  useEffect(() => {
+    if (location.href.includes('?twitter_confirm') && !twitterCheckStarted) {
+      setTwitterCheckStarted(true)
+      handleFollowTwitter(true)
+    }
+  }, [twitterCheckStarted])
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xl bg-[#363653] shadow-xl p-10">
@@ -140,7 +172,7 @@ export default function FollowSection({
           </div>
 
           <div className="flex flex-col gap-4 mt-8">
-          {twitterfollowing ? (
+            {twitterfollowing ? (
               <AstraLink link="https://twitter.com/astradao_org">
                 <div
                   className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
@@ -182,7 +214,7 @@ export default function FollowSection({
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white cursor-pointer'
                 } justify-between`}
-                onClick={handlerfollowTwitter}
+                onClick={()=>handleFollowTwitter(false)}
               >
                 <div className="flex items-center">
                   <div className="h-8 w-8 mr-4">

@@ -89,7 +89,8 @@ export const useVerifyMultiplierCrosschain = ({
         ...transactionObj,
         status: 'success',
         transactionHash: txReceipt.transactionHash,
-        transactionAction: 'Verified Multiplier CrossChain Successfully',
+        transactionAction:
+          'Verified Multiplier CrossChain Successfully (Should wait a little more until multiplier is applied via crosschain)',
       })
       onSuccessTx?.(txReceipt)
     } else if (txReceipt?.status === 'reverted') {

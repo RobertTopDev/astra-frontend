@@ -10,6 +10,7 @@ import { CheckIcon, ResetIcon, PersonIcon } from '@radix-ui/react-icons'
 import { useFollowCheck, useGetBuyRuleLaunchpad } from '@/hooks'
 import { followTwitter } from '@/util/followTwitter'
 import { useAccount } from 'wagmi'
+import { serialize } from 'cookie-es'
 
 type TComponent = {
   launchpadData: TLaunchpadDetailInfo
@@ -27,6 +28,7 @@ export default function Offering({ launchpadData }: TComponent) {
   const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
 
   const [twitterFollowInprogress, setTwitterFollowInprogress] = useState(false)
+  const [twitterCheckStarted, setTwitterCheckStarted] = useState(false)
 
   const pad = (num: number) => {
     return num.toString().padStart(2, '0')
@@ -44,17 +46,37 @@ export default function Offering({ launchpadData }: TComponent) {
     useGetBuyRuleLaunchpad()
   const isLoading = buyRuleStatusLoading || follwingDataLoading
 
-  const handlerfollowTwitter = async () => {
-    if (!!address && /^0x[a-fA-F0-9]{40}$/.test(address)) {
+  const handleFollowTwitter = async (confirm: boolean = false) => {
+    if (
+      !!address &&
+      /^0x[a-fA-F0-9]{40}$/.test(address) &&
+      !twitterFollowInprogress
+    ) {
       setTwitterFollowInprogress(true)
       try {
-        const res = await followTwitter(address)
-        if (res.ok) {
-          // Handle successful response
-          followingTemp.refetchData()
+        if (!confirm) {
+          const twitterApi = await (
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/twitter/login`, {
+              method: 'POST',
+            })
+          ).json()
+          console.log('TwitterAPI----->',twitterApi)
+          document.cookie = serialize('comebackAt', window.location.href, {
+            sameSite: 'none',
+            path: '/apicallback_',
+            secure: true,
+          })
+          //localStorage.setItem("comebackAt",window.location.href)
+          location.href = twitterApi.url
         } else {
-          // Handle unsuccessful response
-          console.error('Failed to follow Twitter account:', res.statusText)
+          const res = await followTwitter(address)
+          if (res.ok) {
+            // Handle successful response
+            followingTemp.refetchData()
+          } else {
+            // Handle unsuccessful response
+            console.error('Failed to follow Twitter account:', res.statusText)
+          }
         }
       } catch (error) {
         // Handle any errors that occurred during the fetch
@@ -62,9 +84,18 @@ export default function Offering({ launchpadData }: TComponent) {
       } finally {
         // Always set the in-progress state to false when done
         setTwitterFollowInprogress(false)
+        if (confirm) {
+          location.href = location.pathname
+        }
       }
     }
   }
+  useEffect(() => {
+    if (location.href.includes('?twitter_confirm') && !twitterCheckStarted) {
+      setTwitterCheckStarted(true)
+      handleFollowTwitter(true)
+    }
+  }, [twitterCheckStarted])
 
   useEffect(() => {
     let intervalEndId: NodeJS.Timeout
@@ -199,7 +230,7 @@ export default function Offering({ launchpadData }: TComponent) {
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white cursor-pointer'
                 } justify-between`}
-                onClick={handlerfollowTwitter}
+                onClick={()=>handleFollowTwitter(false)}
               >
                 <div className="flex items-center">
                   <div className="h-8 w-8 mr-4">

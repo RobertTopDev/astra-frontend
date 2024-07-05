@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 8080",
-    "prebuild": "pnpm run eslint-fix",
+    "prebuild": "yarn run eslint-fix",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -65,6 +65,7 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "cookie-es": "^1.1.0",
     "d3": "^7.9.0",
     "date-fns": "^3.0.6",
     "date-fns-tz": "^2.0.0",
