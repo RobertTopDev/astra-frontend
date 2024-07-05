@@ -137,6 +137,6 @@ jobs:
         if: (github.ref == 'refs/heads/testnet' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/mainnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
         run: |
             helm upgrade --install astra-frontend ./helm/astra-frontend \
-            --namespace astra-${{ steps.branch-names.outputs.ref_branch }} \
+            --namespace astra-${{ steps.branch-names.outputs.ref_branch }} --create-namespace \
             --values ./helm/astra-frontend/helmvars/${{ steps.branch-names.outputs.ref_branch }}/values.yaml \
             --set image.tag=${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7} \
