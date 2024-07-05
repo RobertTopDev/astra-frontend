@@ -69,6 +69,7 @@ import { IoCloudUploadOutline } from 'react-icons/io5'
 import dynamic from 'next/dynamic'
 import { idToChain } from '@/config'
 import 'suneditor/dist/css/suneditor.min.css'
+import "./RTE-bg.scss"
 
 interface Errors {
   totalMetrics?: string
@@ -1568,7 +1569,7 @@ export default function Page({ params }: TPage) {
                     <FormItem>
                       <FormLabel>Project Description</FormLabel>
                       <FormControl>
-                        <div style={{ color: 'black' }}>
+                        <div className='sun-editor-black-background' style={{ color: 'black' }}>
                           <SunEditor
                             defaultValue={field.value}
                             height="400px"
@@ -1600,7 +1601,7 @@ export default function Page({ params }: TPage) {
                                 // ['table', 'link', 'image', 'video'],
                                 ['table', 'link', 'image'],
                                 ['showBlocks', 'codeView'],
-                                ['preview'],
+                                // ['preview'],
                                 // responsive
                                 [
                                   '%1161',
@@ -1635,7 +1636,7 @@ export default function Page({ params }: TPage) {
                                       ':i-Etc-default.more_vertical',
                                       'showBlocks',
                                       'codeView',
-                                      'preview',
+                                      // 'preview',
                                     ],
                                     [
                                       '-right',
@@ -1685,7 +1686,7 @@ export default function Page({ params }: TPage) {
                                       ':i-Etc-default.more_vertical',
                                       'showBlocks',
                                       'codeView',
-                                      'preview',
+                                      // 'preview',
                                     ],
                                     [
                                       '-right',
@@ -1740,7 +1741,7 @@ export default function Page({ params }: TPage) {
                                       ':i-Etc-default.more_vertical',
                                       'showBlocks',
                                       'codeView',
-                                      'preview',
+                                      // 'preview',
                                     ],
                                   ],
                                 ],
@@ -1788,7 +1789,7 @@ export default function Page({ params }: TPage) {
                                       ':i-Etc-default.more_vertical',
                                       'showBlocks',
                                       'codeView',
-                                      'preview',
+                                      // 'preview',
                                     ],
                                   ],
                                 ],
@@ -1837,7 +1838,7 @@ export default function Page({ params }: TPage) {
                                       ':i-Etc-default.more_vertical',
                                       'showBlocks',
                                       'codeView',
-                                      'preview',
+                                      // 'preview',
                                     ],
                                   ],
                                 ],
