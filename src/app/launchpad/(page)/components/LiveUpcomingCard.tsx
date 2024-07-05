@@ -29,10 +29,8 @@ import {
   useApproveLaunchpad,
   useChainConfig,
   useLaunchpadFactoryInfo,
-  useLaunchpadInfo,
   useDeployVestingContract,
   useSetVestingToLaunchpad,
-  useDecimals,
 } from '@/hooks'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount } from 'wagmi'
@@ -42,6 +40,14 @@ import { convertToCSV } from '@/util/convertToCSV'
 import { convertToInternationalCurrencySystem } from '@/util'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/shadcn/ui/button'
+import {
+  chainToId,
+  mainChainToId,
+  chainConfig as defaultChainConfig,
+  tokenDecimal,
+  tokenSymbol,
+} from '@/config'
+import { getCrossChainTotalRaisedAmount } from '@/util/getCrossChainTotalRaisedAmount'
 
 type Props = {
   status: string
@@ -55,37 +61,21 @@ export default function LiveUpcomingCard({
   handle,
   deleteInUI = () => {},
 }: Props) {
+  const { chainConfig } = useChainConfig()
+  const { address } = useAccount()
+
   const [loading, setLoading] = useState(false)
   const [remainingTime, setRemainingTime] = useState('00:00:00')
   const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
   const [vestAddress, setVestAddress] = useState<string>('')
-  const { chainConfig } = useChainConfig()
-  const { address } = useAccount()
+  const [raisedAmount, setRaisedAmount] = useState<string>('0')
 
-  const tokenArray = [
-    {
-      symbol: 'USDT',
-      address: chainConfig.USDTContractAddress,
-    },
-    {
-      symbol: 'USDC',
-      address: chainConfig.USDCContractAddress,
-    },
-    {
-      symbol: 'ETH',
-      address: chainConfig.WETHContractAddress,
-    },
-  ]
-  const baseTokenSymbol = tokenArray
-    .filter((token) => token.address === launchpadData?.BASE_TOKEN)
-    .map((token) => token.symbol)[0]
-
-  // base token decimals
-  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
-    useDecimals({
-      address: launchpadData?.BASE_TOKEN as `0x${string}`,
-      enabled: !!launchpadData,
-    })
+  const baseTokenSymbol = useMemo(() => {
+    return tokenSymbol[launchpadData?.BASE_TOKEN as string]
+  }, [launchpadData])
+  const baseTokenDecimals = useMemo(() => {
+    return tokenDecimal[launchpadData?.BASE_TOKEN as string]
+  }, [launchpadData])
 
   const launchpadIndexString = launchpadData?.LAUNCHPAD_INDEX
     ? launchpadData.LAUNCHPAD_INDEX.toString()
@@ -97,10 +87,6 @@ export default function LiveUpcomingCard({
     () => factoryData?.[11] ?? launchpadData?.LAUNCHPAD_ADDRESS,
     [factoryData]
   )
-
-  const { data: launchpadContractData } = useLaunchpadInfo({
-    launchpad: launchpadAddress as `0x${string}`,
-  })
 
   // get launchpad token allowance to launchpad address
   const { data: tokenAllowance } = useAllowance({
@@ -189,11 +175,12 @@ export default function LiveUpcomingCard({
   })
 
   const curRaisedAmount = useMemo(() => {
-    const tokenAmount = launchpadContractData?.[7]?.result
-      ? formatUnits(launchpadContractData[7].result, baseTokenDecimals ?? 18)
-      : 0
+    const tokenAmount = formatUnits(
+      BigInt(raisedAmount || '0'),
+      baseTokenDecimals ?? 18
+    )
     return Number(tokenAmount).toFixed(2)
-  }, [launchpadContractData])
+  }, [raisedAmount, baseTokenDecimals])
   const percentageRaised = useMemo(() => {
     const totalSaleAmount = launchpadData?.HARD_CAP
     if (!totalSaleAmount) {
@@ -312,6 +299,25 @@ export default function LiveUpcomingCard({
     return num.toString().padStart(2, '0')
   }
 
+  // fetch total raised amount from backend
+  const fetchTotalRaisedAmount = async (
+    chainName: string,
+    launchAddr: string
+  ) => {
+    const convertChainName =
+      process.env.NEXT_PUBLIC_NETWORK === 'testnet' && chainName === 'Arbitrum'
+        ? 'arbitrum-sepolia'
+        : chainName.toLowerCase()
+    const selectedChainId =
+      process.env.NEXT_PUBLIC_NETWORK === 'testnet'
+        ? chainToId[convertChainName]
+        : mainChainToId[convertChainName]
+    const rpcUrl = defaultChainConfig[selectedChainId].rpcURL
+    const res = await getCrossChainTotalRaisedAmount(rpcUrl, launchAddr)
+
+    return res
+  }
+
   useEffect(() => {
     let intervalEndId: NodeJS.Timeout
     let intervalStartId: NodeJS.Timeout
@@ -362,6 +368,25 @@ export default function LiveUpcomingCard({
   useEffect(() => {
     if (vestAddress && configureVestAddress) configureVestAddress()
   }, [vestAddress, configureVestAddress])
+  useEffect(() => {
+    async function init() {
+      if (
+        !launchpadData ||
+        launchpadData.LAUNCHPAD_ADDRESS ===
+          '0x0000000000000000000000000000000000000000'
+      )
+        return
+
+      const amount = await fetchTotalRaisedAmount(
+        launchpadData.CHAIN,
+        launchpadData.LAUNCHPAD_ADDRESS
+      )
+      console.log(launchpadData.LAUNCHPAD_ADDRESS + ' ==== ' + amount)
+      setRaisedAmount(amount)
+    }
+
+    init()
+  }, [launchpadData])
 
   return (
     <div className="stroke-[1px] stroke-white stroke-opacity-0 overflow-hidden relative flex max-w-[400px] md:max-w-[500px] items-stretch w-full m-auto">
