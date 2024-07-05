@@ -337,16 +337,14 @@ const CreateForm = () => {
       .url({ message: 'Invalid url.' }),
     projectDeck: z
       .string()
-      .min(1, {
-        message: 'Project deck url is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     pitchdeck: z
       .string()
-      .min(1, {
-        message: 'Whitepaper URL is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     email: z
       .string()
       .min(1, {
@@ -359,12 +357,9 @@ const CreateForm = () => {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' }),
-    github: z
-      .string()
-      .min(1, {
-        message: 'Github link is required',
-      })
-      .url({ message: 'Invalid url.' }),
+    github: z.string().refine((value) => value.trim() === '' || isUrl(value), {
+      message: 'Invalid URL.',
+    }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -391,7 +386,6 @@ const CreateForm = () => {
       ),
     contactDiscord: z
       .string()
-
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
@@ -430,36 +424,26 @@ const CreateForm = () => {
       .transform((value) => parseFloat(value.replace(/,/g, ''))), // Transform the string to an integer without commas
 
     //Dao Screening
-    leadVC: z.string().min(1, {
-      message: 'Lead VC information is required.',
-    }),
-    marketMaker: z.string().min(1, {
-      message: 'Market maker information is required.',
-    }),
-    investorDetail: z.string().min(1, {
-      message: 'Investor list is required.',
-    }),
+    leadVC: z.string(),
+    marketMaker: z.string(),
+    investorDetail: z.string(),
     raised: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
+      .string()
+      .refine((value) => value === '' || /^[0-9,]+$/.test(value), {
         message: 'Total raised amount must be a valid number.',
       })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Total raised amount is required.',
-      })
       .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
+        (value) => value === '' || !isNaN(Number(value.replace(/,/g, ''))),
         {
-          message: 'Total raised amount must be a positive integer.',
+          message: 'Total raised amount must be a valid number.',
         }
       )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+      .refine((value) => value === '' || Number(value.replace(/,/g, '')) >= 0, {
+        message: 'Total raised amount must be a positive integer.',
+      })
+      .transform((value) =>
+        value === '' ? value : parseInt(value.replace(/,/g, ''), 10)
+      ),
 
     tokenType: z.string().min(1, {
       message: 'Please select token category.',
@@ -705,9 +689,9 @@ const CreateForm = () => {
       teamDescription: '',
       metrics: JSON.stringify(result_values.metrics),
       websiteUrl: result_values.data.website,
-      github: result_values.data.github,
-      projectDeck: result_values.data.projectDeck,
-      whitepaperUrl: result_values.data.pitchdeck,
+      github: result_values.data?.github || '',
+      projectDeck: result_values.data.projectDeck || '',
+      whitepaperUrl: result_values.data.pitchdeck || '',
       twitter: result_values.data.projectTwitter,
       telegram: result_values.data.contactTelegram,
       discord: result_values.data.contactDiscord,
@@ -717,10 +701,10 @@ const CreateForm = () => {
       chain: (chain && idToChain[chain.id]) || 'Arbitrum',
       requestTransaction: '',
       approveTransaction: '',
-      leadVC: result_values.data.leadVC.trim(),
+      leadVC: result_values.data.leadVC.trim() || '',
       marketMaker: result_values.data.marketMaker.trim(),
       investorDetail: tempInvestorDetail,
-      raised: result_values.data.raised,
+      raised: result_values.data.raised || '',
       controlledCap: '',
       daoApprovedMetrics: '',
       tokenType: result_values.data.tokenType,
@@ -896,7 +880,7 @@ const CreateForm = () => {
               name="projectDeck"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Deck *</FormLabel>
+                  <FormLabel>Project Deck</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://docsend.com/view/..."
@@ -918,7 +902,7 @@ const CreateForm = () => {
               name="pitchdeck"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Whitepaper Link *</FormLabel>
+                  <FormLabel>Whitepaper Link</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://drive.google.com/drive/..."
@@ -984,7 +968,7 @@ const CreateForm = () => {
               name="github"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Github Link *</FormLabel>
+                  <FormLabel>Github Link</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://github.com/JohnDoe"
@@ -2119,7 +2103,7 @@ const CreateForm = () => {
               name="leadVC"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Lead VC *</FormLabel>
+                  <FormLabel>Lead VC</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. Acura Capital"
@@ -2141,7 +2125,7 @@ const CreateForm = () => {
               name="marketMaker"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Market Maker *</FormLabel>
+                  <FormLabel>Market Maker</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. Kairon Labs"
@@ -2164,7 +2148,7 @@ const CreateForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex">
-                    <span className="mr-2">Investor List *</span>
+                    <span className="mr-2">Investor List</span>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild type="reset">
@@ -2200,7 +2184,7 @@ const CreateForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex">
-                    <span className="mr-2">Total Raised Amount *</span>
+                    <span className="mr-2">Total Raised Amount</span>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild type="reset">

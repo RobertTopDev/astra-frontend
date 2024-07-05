@@ -1,6 +1,12 @@
 .sun-editor .se-dialog {
   position: absolute !important;
 }
+.ql-editor .se-video-container {
+  position: relative !important;
+}
+.ql-editor .se-video-container figure iframe {
+  position: absolute !important;
+}
 .sun-editor-black-background .se-container {
   background-color: #222222 !important;
   // color: white; /* Change text color to white for better visibility */
@@ -12,5 +18,5 @@
   background-color: #222222 !important;
 }
 .sun-editor-editable {
-  color: #fafafa;
+  color: #fafafa !important;
 }

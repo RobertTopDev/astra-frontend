@@ -29,10 +29,9 @@ import {
   useApproveLaunchpad,
   useChainConfig,
   useLaunchpadFactoryInfo,
-  useLaunchpadInfo,
   useDeployVestingContract,
   useSetVestingToLaunchpad,
-  useDecimals,
+  useGetTotalRaisedAmount,
 } from '@/hooks'
 import { formatUnits, parseUnits } from 'viem'
 import { useAccount } from 'wagmi'
@@ -42,6 +41,14 @@ import { convertToCSV } from '@/util/convertToCSV'
 import { convertToInternationalCurrencySystem } from '@/util'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/shadcn/ui/button'
+import {
+  chainToId,
+  mainChainToId,
+  chainConfig as defaultChainConfig,
+  tokenSymbol,
+  tokenDecimal,
+} from '@/config'
+import { AstraLoading } from '@/components'
 
 type Props = {
   status: string
@@ -55,37 +62,20 @@ export default function LiveUpcomingCard({
   handle,
   deleteInUI = () => {},
 }: Props) {
+  const { chainConfig } = useChainConfig()
+  const { address } = useAccount()
+
   const [loading, setLoading] = useState(false)
   const [remainingTime, setRemainingTime] = useState('00:00:00')
   const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
   const [vestAddress, setVestAddress] = useState<string>('')
-  const { chainConfig } = useChainConfig()
-  const { address } = useAccount()
 
-  const tokenArray = [
-    {
-      symbol: 'USDT',
-      address: chainConfig.USDTContractAddress,
-    },
-    {
-      symbol: 'USDC',
-      address: chainConfig.USDCContractAddress,
-    },
-    {
-      symbol: 'ETH',
-      address: chainConfig.WETHContractAddress,
-    },
-  ]
-  const baseTokenSymbol = tokenArray
-    .filter((token) => token.address === launchpadData?.BASE_TOKEN)
-    .map((token) => token.symbol)[0]
-
-  // base token decimals
-  const { data: baseTokenDecimals, isLoading: baseTokenDecimalsLoading } =
-    useDecimals({
-      address: launchpadData?.BASE_TOKEN as `0x${string}`,
-      enabled: !!launchpadData,
-    })
+  const baseTokenSymbol = useMemo(() => {
+    return tokenSymbol[launchpadData?.BASE_TOKEN as string]
+  }, [launchpadData])
+  const baseTokenDecimals = useMemo(() => {
+    return tokenDecimal[launchpadData?.BASE_TOKEN as string]
+  }, [launchpadData])
 
   const launchpadIndexString = launchpadData?.LAUNCHPAD_INDEX
     ? launchpadData.LAUNCHPAD_INDEX.toString()
@@ -94,13 +84,9 @@ export default function LiveUpcomingCard({
     lIndex: launchpadIndexString,
   })
   const launchpadAddress = useMemo(
-    () => factoryData?.[11] ?? launchpadData?.LAUNCHPAD_ADDRESS,
+    () => launchpadData?.LAUNCHPAD_ADDRESS || factoryData?.[11],
     [factoryData]
   )
-
-  const { data: launchpadContractData } = useLaunchpadInfo({
-    launchpad: launchpadAddress as `0x${string}`,
-  })
 
   // get launchpad token allowance to launchpad address
   const { data: tokenAllowance } = useAllowance({
@@ -188,12 +174,36 @@ export default function LiveUpcomingCard({
     },
   })
 
+  const convertChainName = useMemo(() => {
+    return process.env.NEXT_PUBLIC_NETWORK === 'testnet' &&
+      launchpadData?.CHAIN === 'Arbitrum'
+      ? 'arbitrum-sepolia'
+      : launchpadData?.CHAIN?.toLowerCase() ?? 'binance'
+  }, [launchpadData])
+  const selectedChainId = useMemo(() => {
+    return process.env.NEXT_PUBLIC_NETWORK === 'testnet'
+      ? chainToId[convertChainName]
+      : mainChainToId[convertChainName]
+  }, [convertChainName])
+  const rpcUrl = defaultChainConfig[selectedChainId].rpcURL
+
+  const { data: raisedAmount, isLoading: raisedAmountLoading } =
+    useGetTotalRaisedAmount({
+      rpcUrl,
+      launchpadAddress:
+        launchpadAddress &&
+        launchpadAddress !== '0x0000000000000000000000000000000000000000'
+          ? launchpadAddress
+          : '',
+    })
+
   const curRaisedAmount = useMemo(() => {
-    const tokenAmount = launchpadContractData?.[7]?.result
-      ? formatUnits(launchpadContractData[7].result, baseTokenDecimals ?? 18)
-      : 0
+    const tokenAmount = formatUnits(
+      BigInt(raisedAmount || '0'),
+      baseTokenDecimals ?? 18
+    )
     return Number(tokenAmount).toFixed(2)
-  }, [launchpadContractData])
+  }, [raisedAmount])
   const percentageRaised = useMemo(() => {
     const totalSaleAmount = launchpadData?.HARD_CAP
     if (!totalSaleAmount) {
@@ -470,10 +480,12 @@ export default function LiveUpcomingCard({
               overflow: 'hidden',
             }}
           >
-            <div className="text-white text-sm font-black">
-              {Number(curRaisedAmount).toLocaleString('en-US')}{' '}
-              {baseTokenSymbol || 'USD'}
-            </div>
+            <AstraLoading isLoading={raisedAmountLoading}>
+              <div className="text-white text-sm font-black">
+                {Number(curRaisedAmount).toLocaleString('en-US')}{' '}
+                {baseTokenSymbol || 'USD'}
+              </div>
+            </AstraLoading>
             <div className="text-white text-right text-sm font-black">
               {Number(launchpadData?.HARD_CAP).toLocaleString('en-US') ?? 0}{' '}
               {baseTokenSymbol || 'USD'}
