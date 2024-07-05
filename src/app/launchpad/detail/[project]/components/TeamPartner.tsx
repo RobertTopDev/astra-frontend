@@ -350,7 +350,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto ">
+            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-visible">
               <DialogHeader>
                 <DialogTitle>Team Members Edit</DialogTitle>
               </DialogHeader>
@@ -361,6 +361,13 @@ export default function TeamPartner({ data, refetchData }: Props) {
                     styles['index-form'],
                     'w-full flex flex-col gap-8'
                   )}
+                  style={{
+                    maxHeight: '70vh',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'thin',
+                    overflowX: 'clip',
+                    padding: '0 10px',
+                  }}
                 >
                   {team.map((input, index) => (
                     <div key={index}>
@@ -549,7 +556,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                       <FormItem>
                         <FormLabel>Team Description</FormLabel>
                         <FormControl>
-                          <div className='sun-editor-black-background'>
+                          <div className="sun-editor-black-background">
                             <SunEditor
                               defaultValue={field.value}
                               height="400px"

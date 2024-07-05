@@ -399,12 +399,12 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url.' }),
-      projectDeck: z
+    projectDeck: z
       .string()
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
       }),
-      pitchdeck: z
+    pitchdeck: z
       .string()
       .refine((value) => value.trim() === '' || isUrl(value), {
         message: 'Invalid URL.',
@@ -421,11 +421,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' }),
-      github: z
-      .string()
-      .refine((value) => value.trim() === '' || isUrl(value), {
-        message: 'Invalid URL.',
-      }),
+    github: z.string().refine((value) => value.trim() === '' || isUrl(value), {
+      message: 'Invalid URL.',
+    }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -843,7 +841,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto">
+            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-visible">
               <DialogHeader>
                 <DialogTitle>Project Details Edit</DialogTitle>
               </DialogHeader>
@@ -854,6 +852,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     styles['index-form'],
                     'w-full flex flex-col gap-8'
                   )}
+                  style={{
+                    maxHeight: '70vh',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'thin',
+                    overflowX: 'clip',
+                    padding: '0 10px',
+                  }}
                 >
                   <Separator className="bg-gray-400"></Separator>
                   <div className="text-center w-full mt-6">
@@ -1224,7 +1229,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
                           <div
-                            className='sun-editor-black-background'
+                            className="sun-editor-black-background"
                             style={{
                               // color: 'black',
                               display: 'block',
