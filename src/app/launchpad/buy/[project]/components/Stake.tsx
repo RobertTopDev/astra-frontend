@@ -34,8 +34,6 @@ import { AxelarQueryAPI, Environment } from '@axelar-network/axelarjs-sdk'
 import { getCrossChainMultiplier } from '@/util/getCrossChainMultiplier'
 import { chainConfig, chainToId, idToChain } from '@/config'
 
-const axelarSDK = new AxelarQueryAPI({ environment: Environment.TESTNET })
-
 type Props = {
   launchpadData: any
 }
@@ -43,6 +41,10 @@ type Props = {
 export default function Stake({ launchpadData }: Props) {
   const { address } = useAccount()
   const { chain } = useNetwork()
+
+  const axelarSDK = new AxelarQueryAPI({
+    environment: chain?.testnet ? Environment.TESTNET : Environment.MAINNET,
+  })
 
   const [gasFee, setGasFee] = useState<string>('')
   const [selectedChain, setSelectedChain] = useState<string>('')
@@ -116,7 +118,7 @@ export default function Stake({ launchpadData }: Props) {
       setIsLoading(true)
       // get verify multiplier transaction fee from third party
       const axelarResult: any = await axelarSDK.estimateGasFee(
-        'arbitrum-sepolia',
+        chain?.testnet ? 'arbitrum-sepolia' : 'arbitrum',
         selectedChain,
         BigInt(21000),
         'auto'
@@ -130,7 +132,7 @@ export default function Stake({ launchpadData }: Props) {
     }
 
     init()
-  }, [axelarSDK, selectedChain, address])
+  }, [selectedChain, address])
 
   return (
     <>
