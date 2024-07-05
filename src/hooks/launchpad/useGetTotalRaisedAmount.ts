@@ -33,7 +33,7 @@ export const useGetTotalRaisedAmount = ({
       return (await res.json()) as { data: string }
     },
     {
-      enabled: !!launchpadAddress,
+      enabled: launchpadAddress !== '' && rpcUrl !== '',
       select: (data) => data.data,
     }
   )
