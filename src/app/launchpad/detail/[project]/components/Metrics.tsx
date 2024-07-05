@@ -228,7 +228,7 @@ export default function Metrics({ data, refetchData }: Props) {
             ? convertSaleRoundDetailObjectToString(saleValueArray)
             : '',
         websiteUrl: data?.WEBSITE_URL,
-        whitepaperUrl: data?.WHITEPAPER_URL,
+        whitepaperUrl: data?.WHITEPAPER_URL || '',
         twitter: data?.TWITTER,
         telegram: data?.TELEGRAM,
         discord: data?.DISCORD,
@@ -330,7 +330,7 @@ export default function Metrics({ data, refetchData }: Props) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto ">
+            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-visible">
               <DialogHeader>
                 <DialogTitle>Metrics Data Edit</DialogTitle>
               </DialogHeader>
@@ -341,6 +341,13 @@ export default function Metrics({ data, refetchData }: Props) {
                     styles['index-form'],
                     'w-full flex flex-col gap-8'
                   )}
+                  style={{
+                    maxHeight: '70vh',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'thin',
+                    overflowX: 'clip',
+                    padding: '0 10px',
+                  }}
                 >
                   {metrics.map((input, index) => (
                     <div key={index}>
