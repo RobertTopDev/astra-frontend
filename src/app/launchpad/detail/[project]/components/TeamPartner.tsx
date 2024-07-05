@@ -549,7 +549,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                       <FormItem>
                         <FormLabel>Team Description</FormLabel>
                         <FormControl>
-                          <div style={{ color: 'black' }}>
+                          <div className='sun-editor-black-background'>
                             <SunEditor
                               defaultValue={field.value}
                               height="400px"
@@ -581,7 +581,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                   // ['table', 'link', 'image', 'video'],
                                   ['table', 'link', 'image'],
                                   ['showBlocks', 'codeView'],
-                                  ['preview'],
+                                  // ['preview'],
                                   // responsive
                                   [
                                     '%1161',
@@ -616,7 +616,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                       [
                                         '-right',
@@ -666,7 +666,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                       [
                                         '-right',
@@ -721,7 +721,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                     ],
                                   ],
@@ -769,7 +769,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                     ],
                                   ],
@@ -818,7 +818,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                     ],
                                   ],

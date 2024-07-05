@@ -1233,17 +1233,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
                           <div
+                            className='sun-editor-black-background'
                             style={{
-                              color: 'black',
+                              // color: 'black',
                               display: 'block',
                               position: 'relative',
                             }}
                           >
-                            {/* <DynamicTextEditor
-                              quillRef={reactQuillRef}
-                              value={field.value}
-                              onChange={field.onChange}
-                            ></DynamicTextEditor> */}
                             <SunEditor
                               defaultValue={field.value}
                               height="400px"
@@ -1275,7 +1271,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                   // ['table', 'link', 'image', 'video'],
                                   ['table', 'link', 'image'],
                                   ['showBlocks', 'codeView'],
-                                  ['preview'],
+                                  // ['preview'],
                                   // responsive
                                   [
                                     '%1161',
@@ -1310,7 +1306,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                       [
                                         '-right',
@@ -1360,7 +1356,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                       [
                                         '-right',
@@ -1415,7 +1411,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                     ],
                                   ],
@@ -1463,7 +1459,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                     ],
                                   ],
@@ -1512,7 +1508,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         ':i-Etc-default.more_vertical',
                                         'showBlocks',
                                         'codeView',
-                                        'preview',
+                                        // 'preview',
                                       ],
                                     ],
                                   ],
