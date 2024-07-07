@@ -401,16 +401,14 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       .url({ message: 'Invalid url.' }),
     projectDeck: z
       .string()
-      .min(1, {
-        message: 'Project deck url is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     pitchdeck: z
       .string()
-      .min(1, {
-        message: 'Whitepaper URL is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     email: z
       .string()
       .min(1, {
@@ -423,12 +421,9 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' }),
-    github: z
-      .string()
-      .min(1, {
-        message: 'Github link is required',
-      })
-      .url({ message: 'Invalid url.' }),
+    github: z.string().refine((value) => value.trim() === '' || isUrl(value), {
+      message: 'Invalid URL.',
+    }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -501,30 +496,24 @@ export default function ProjectDetail({ data, refetchData }: Props) {
     marketMaker: z.string().min(1, {
       message: 'Market maker information is required.',
     }),
-    investorDetail: z.string().min(1, {
-      message: 'Investor list is required.',
-    }),
+    investorDetail: z.string(),
     raised: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
+      .string()
+      .refine((value) => value === '' || /^[0-9,]+$/.test(value), {
         message: 'Total raised amount must be a valid number.',
       })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Total raised amount is required.',
-      })
       .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
+        (value) => value === '' || !isNaN(Number(value.replace(/,/g, ''))),
         {
-          message: 'Total raised amount must be a positive integer.',
+          message: 'Total raised amount must be a valid number.',
         }
       )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+      .refine((value) => value === '' || Number(value.replace(/,/g, '')) >= 0, {
+        message: 'Total raised amount must be a positive integer.',
+      })
+      .transform((value) =>
+        value === '' ? value : parseInt(value.replace(/,/g, ''), 10)
+      ),
 
     tokenType: z.string().min(1, {
       message: 'Please select token category.',
@@ -648,7 +637,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
       totalSupply: data
         ? data.LAUNCHPAD_TOKEN_TOTAL_SUPPLY?.toLocaleString('en-US')
         : '',
-      raised: data ? data.RAISED?.toLocaleString('en-US') : '',
+      raised: data ? data?.RAISED?.toLocaleString('en-US') : '',
       softCap: data ? data.SOFT_CAP?.toLocaleString('en-US') : '',
       hardCap: data ? data.HARD_CAP?.toLocaleString('en-US') : '',
       initialMarketCap: data
@@ -740,7 +729,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         launchpadTokenName: value.tokenName.trim(),
         launchpadTokenSymbol: value.tokenSymbol.trim(),
         launchpadTotalSupply: value.totalSupply, // update
-        raised: value.raised,
+        raised: value?.raised || 0,
         launchpadTokenDecimal: value.tokenDecimals,
         launchpadTokenPrice: value.tokenPrice,
         launchpadTokenFDV: value.totalToken, // update
@@ -763,10 +752,10 @@ export default function ProjectDetail({ data, refetchData }: Props) {
         saleRoundDetail: data.SALE_ROUND_DETAIL || '',
         // metrics: data.METRICS,
         websiteUrl: value.website,
-        projectDeck: value.projectDeck,
-        whitepaperUrl: value.pitchdeck,
+        projectDeck: value.projectDeck || '',
+        whitepaperUrl: value.pitchdeck || '',
         twitter: value.projectTwitter,
-        github: value.github,
+        github: value.github || '',
         telegram: value.contactTelegram,
         discord: value.contactDiscord,
         medium: value.contactMedium,
@@ -852,7 +841,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto">
+            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-visible">
               <DialogHeader>
                 <DialogTitle>Project Details Edit</DialogTitle>
               </DialogHeader>
@@ -863,6 +852,13 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     styles['index-form'],
                     'w-full flex flex-col gap-8'
                   )}
+                  style={{
+                    maxHeight: '70vh',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'thin',
+                    overflowX: 'clip',
+                    padding: '0 10px',
+                  }}
                 >
                   <Separator className="bg-gray-400"></Separator>
                   <div className="text-center w-full mt-6">
@@ -956,7 +952,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="pitchdeck"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Whitepaper Link *</FormLabel>
+                        <FormLabel>Whitepaper Link</FormLabel>
                         <FormControl>
                           <Input
                             autoComplete="off"
@@ -978,7 +974,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="projectDeck"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Project Deck *</FormLabel>
+                        <FormLabel>Project Deck</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://docsend.com/view/..."
@@ -1044,7 +1040,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     name="github"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Github Link *</FormLabel>
+                        <FormLabel>Github Link</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://github.com/JohnDoe"
@@ -1233,7 +1229,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                         <FormLabel>Project Description</FormLabel>
                         <FormControl>
                           <div
-                            className='sun-editor-black-background'
+                            className="sun-editor-black-background"
                             style={{
                               // color: 'black',
                               display: 'block',
@@ -1268,8 +1264,8 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                     'list',
                                     'lineHeight',
                                   ],
-                                  // ['table', 'link', 'image', 'video'],
-                                  ['table', 'link', 'image'],
+                                  ['table', 'link', 'image', 'video'],
+                                  // ['table', 'link', 'image'],
                                   ['showBlocks', 'codeView'],
                                   // ['preview'],
                                   // responsive
@@ -1314,7 +1310,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                     ],
                                   ],
@@ -1364,7 +1360,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                     ],
                                   ],
@@ -1404,7 +1400,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                       [
                                         '-right',
@@ -1452,7 +1448,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                       [
                                         '-right',
@@ -1501,7 +1497,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                       [
                                         '-right',
@@ -2569,7 +2565,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex">
-                          <span className="mr-2">Investor List *</span>
+                          <span className="mr-2">Investor List</span>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild type="reset">
@@ -2606,7 +2602,7 @@ export default function ProjectDetail({ data, refetchData }: Props) {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="flex">
-                          <span className="mr-2">Total Raised Amount *</span>
+                          <span className="mr-2">Total Raised Amount</span>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild type="reset">

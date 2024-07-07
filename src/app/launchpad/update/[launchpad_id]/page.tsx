@@ -493,18 +493,16 @@ export default function Page({ params }: TPage) {
         message: 'Website url is required',
       })
       .url({ message: 'Invalid url.' }),
-    projectDeck: z
+      projectDeck: z
       .string()
-      .min(1, {
-        message: 'Project deck url is required.',
-      })
-      .url({ message: 'Invalid url.' }),
-    pitchdeck: z
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
+      pitchdeck: z
       .string()
-      .min(1, {
-        message: 'Whitepaper URL is required.',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     email: z
       .string()
       .min(1, {
@@ -517,12 +515,11 @@ export default function Page({ params }: TPage) {
         message: 'Project twitter is required.',
       })
       .url({ message: 'Invalid url.' }),
-    github: z
+      github: z
       .string()
-      .min(1, {
-        message: 'Github link is required',
-      })
-      .url({ message: 'Invalid url.' }),
+      .refine((value) => value.trim() === '' || isUrl(value), {
+        message: 'Invalid URL.',
+      }),
     contactTelegram: z
       .string()
       .min(1, { message: 'Contact telegram is required.' })
@@ -591,30 +588,24 @@ export default function Page({ params }: TPage) {
     marketMaker: z.string().min(1, {
       message: 'Market maker information is required.',
     }),
-    investorDetail: z.string().min(1, {
-      message: 'Investor list is required.',
-    }),
+    investorDetail: z.string(),
     raised: z
-      .string() // Accept input as string
-      .refine((value) => /^[0-9,]+$/.test(value), {
-        // Ensure input contains only numbers and commas
+      .string()
+      .refine((value) => value === '' || /^[0-9,]+$/.test(value), {
         message: 'Total raised amount must be a valid number.',
       })
-      .refine((value) => value !== '', {
-        // Ensure input is not empty
-        message: 'Total raised amount is required.',
-      })
       .refine(
-        (value) => {
-          // Remove commas and check if the resulting string represents a valid number
-          const numValue = Number(value.replace(/,/g, ''))
-          return !isNaN(numValue) && numValue > 0
-        },
+        (value) => value === '' || !isNaN(Number(value.replace(/,/g, ''))),
         {
-          message: 'Total raised amount must be a positive integer.',
+          message: 'Total raised amount must be a valid number.',
         }
       )
-      .transform((value) => parseInt(value.replace(/,/g, ''), 10)), // Transform the string to an integer without commas
+      .refine((value) => value === '' || Number(value.replace(/,/g, '')) >= 0, {
+        message: 'Total raised amount must be a positive integer.',
+      })
+      .transform((value) =>
+        value === '' ? value : parseInt(value.replace(/,/g, ''), 10)
+      ),
 
     tokenType: z.string().min(1, {
       message: 'Please select token category.',
@@ -1117,10 +1108,10 @@ export default function Page({ params }: TPage) {
         : '',
       website: launchpadDetail ? launchpadDetail.WEBSITE_URL?.toString() : '',
       projectDeck: launchpadDetail
-        ? launchpadDetail.PROJECT_DECK?.toString()
+        ? launchpadDetail?.PROJECT_DECK?.toString()
         : '',
       pitchdeck: launchpadDetail
-        ? launchpadDetail.WHITEPAPER_URL?.toString()
+        ? launchpadDetail?.WHITEPAPER_URL?.toString()
         : '',
       projectDescription: launchpadDetail
         ? launchpadDetail?.PROJECT_DETAIL?.toString()
@@ -1137,7 +1128,7 @@ export default function Page({ params }: TPage) {
       projectTwitter: launchpadDetail
         ? launchpadDetail.TWITTER?.toString()
         : '',
-      github: launchpadDetail ? launchpadDetail.GITHUB?.toString() : '',
+      github: launchpadDetail ? launchpadDetail?.GITHUB?.toString() : '',
       contactTelegram: launchpadDetail
         ? launchpadDetail.TELEGRAM?.toString()
         : '',
@@ -1294,7 +1285,7 @@ export default function Page({ params }: TPage) {
                   name="projectDeck"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Project Deck *</FormLabel>
+                      <FormLabel>Project Deck</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://docsend.com/view/..."
@@ -1316,7 +1307,7 @@ export default function Page({ params }: TPage) {
                   name="pitchdeck"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Whitepaper Link *</FormLabel>
+                      <FormLabel>Whitepaper Link</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete="off"
@@ -1382,7 +1373,7 @@ export default function Page({ params }: TPage) {
                   name="github"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Github Link *</FormLabel>
+                      <FormLabel>Github Link</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="https://github.com/JohnDoe"
@@ -1598,8 +1589,8 @@ export default function Page({ params }: TPage) {
                                   'list',
                                   'lineHeight',
                                 ],
-                                // ['table', 'link', 'image', 'video'],
-                                ['table', 'link', 'image'],
+                                ['table', 'link', 'image', 'video'],
+                                // ['table', 'link', 'image'],
                                 ['showBlocks', 'codeView'],
                                 // ['preview'],
                                 // responsive
@@ -1644,7 +1635,7 @@ export default function Page({ params }: TPage) {
                                       'table',
                                       'link',
                                       'image',
-                                      // 'video',
+                                      'video',
                                     ],
                                   ],
                                 ],
@@ -1694,7 +1685,7 @@ export default function Page({ params }: TPage) {
                                       'table',
                                       'link',
                                       'image',
-                                      // 'video',
+                                      'video',
                                     ],
                                   ],
                                 ],
@@ -1734,7 +1725,7 @@ export default function Page({ params }: TPage) {
                                       'table',
                                       'link',
                                       'image',
-                                      // 'video',
+                                      'video',
                                     ],
                                     [
                                       '-right',
@@ -1782,7 +1773,7 @@ export default function Page({ params }: TPage) {
                                       'table',
                                       'link',
                                       'image',
-                                      // 'video',
+                                      'video',
                                     ],
                                     [
                                       '-right',
@@ -1831,7 +1822,7 @@ export default function Page({ params }: TPage) {
                                       'table',
                                       'link',
                                       'image',
-                                      // 'video',
+                                      'video',
                                     ],
                                     [
                                       '-right',
@@ -2867,7 +2858,7 @@ export default function Page({ params }: TPage) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex">
-                        <span className="mr-2">Investor List *</span>
+                        <span className="mr-2">Investor List</span>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild type="reset">
@@ -2904,7 +2895,7 @@ export default function Page({ params }: TPage) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="flex">
-                        <span className="mr-2">Total Raised Amount *</span>
+                        <span className="mr-2">Total Raised Amount</span>
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild type="reset">
