@@ -509,15 +509,9 @@ const CreateForm = () => {
     })
   }
   for (let i = 0; i < team.length; i++) {
-    temp[`name${i}`] = z.string().min(1, {
-      message: 'Member name is required.',
-    })
-    temp[`position${i}`] = z.string().min(1, {
-      message: 'Member position is required.',
-    })
-    temp[`description${i}`] = z.string().min(1, {
-      message: 'Member description is required.',
-    })
+    temp[`name${i}`] = z.string()
+    temp[`position${i}`] = z.string()
+    temp[`description${i}`] = z.string()
   }
   const createIndexFormSchema = z
     .object(temp)
@@ -2282,7 +2276,7 @@ const CreateForm = () => {
                   name={`name${index}`}
                   render={({ field }) => (
                     <FormItem className="my-8">
-                      <FormLabel>Team Member Name *</FormLabel>
+                      <FormLabel>Team Member Name</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Ayush"
@@ -2305,7 +2299,7 @@ const CreateForm = () => {
                   name={`position${index}`}
                   render={({ field }) => (
                     <FormItem className="my-8">
-                      <FormLabel>Team Member Position *</FormLabel>
+                      <FormLabel>Team Member Position</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Full stack developer"
@@ -2327,7 +2321,7 @@ const CreateForm = () => {
                   name={`description${index}`}
                   render={({ field }) => (
                     <FormItem className="my-8">
-                      <FormLabel>Team Member Description *</FormLabel>
+                      <FormLabel>Team Member Description</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="He is a smart contract developer."
