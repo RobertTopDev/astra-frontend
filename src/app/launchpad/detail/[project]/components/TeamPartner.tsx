@@ -143,15 +143,9 @@ export default function TeamPartner({ data, refetchData }: Props) {
     teamDescription: z.coerce.string(),
   }
   for (let i = 0; i < team.length; i++) {
-    temp[`name${i}`] = z.string().min(1, {
-      message: 'Member name is required.',
-    })
-    temp[`position${i}`] = z.string().min(1, {
-      message: 'Member position is required.',
-    })
-    temp[`description${i}`] = z.string().min(1, {
-      message: 'Member description is required.',
-    })
+    temp[`name${i}`] = z.string()
+    temp[`position${i}`] = z.string()
+    temp[`description${i}`] = z.string()
     temp[`linkedin${i}`] = z.string().regex(/^[^'"]*$/, {
       message: 'Linkedin url cannot contain single or double quotes.',
     })
@@ -387,7 +381,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`name${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Name *</FormLabel>
+                            <FormLabel>Team Member Name</FormLabel>
                             <FormControl>
                               <Input
                                 autoComplete="off"
@@ -410,7 +404,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`position${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Position *</FormLabel>
+                            <FormLabel>Team Member Position</FormLabel>
                             <FormControl>
                               <Input
                                 autoComplete="off"
@@ -436,7 +430,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`description${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Description *</FormLabel>
+                            <FormLabel>Team Member Description</FormLabel>
                             <FormControl>
                               <Textarea
                                 placeholder="He is a smart contract developer."
