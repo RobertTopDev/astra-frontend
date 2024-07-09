@@ -35,6 +35,24 @@ export const mainChainToId: CHAINTOID = {
   binance: bsc.id,
   base: base.id,
 }
+export const tokenDecimal: { [key: string]: number } = {
+  '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9': 6, // arbi usdt
+  '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8': 6, // arbi usdc
+  '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': 6, // base usdc
+  '0x0660E38Ac08F1997136A317D1291E3b8C1B316D5': 18, // arbi sepolia usdt
+  '0xDEBC254Eb31c8a54DA05e586cbC7CF2e30ebb616': 6, // arbi sepolia usdc
+  '0x9b52f9739F6eb7EB1548979d66d0E085D0De05ED': 18, // bsc testnet usdt
+  '0x76fa6bab73779164738B1b1C8E3d1ecf0865D152': 6, // bsc testnet usdc
+}
+export const tokenSymbol: { [key: string]: string } = {
+  '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9': 'USDT', // arbi usdt
+  '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8': 'USDC', // arbi usdc
+  '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913': 'USDC', // base usdc
+  '0x0660E38Ac08F1997136A317D1291E3b8C1B316D5': 'USDT', // arbi sepolia usdt
+  '0xDEBC254Eb31c8a54DA05e586cbC7CF2e30ebb616': 'USDC', // arbi sepolia usdc
+  '0x9b52f9739F6eb7EB1548979d66d0E085D0De05ED': 'USDT', // bsc testnet usdt
+  '0x76fa6bab73779164738B1b1C8E3d1ecf0865D152': 'USDC', // bsc testnet usdc
+}
 
 export const chainConfig: TChainConfig = {
   [arbitrum.id]: {

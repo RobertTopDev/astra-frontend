@@ -32,21 +32,15 @@ export default function Overview({ launchpadDetail }: TComponent) {
       redirectUrl: launchpadDetail?.TWITTER || '#',
       background: 'bg-[#56a8ea]',
     },
-    {
+  ]
+  if (launchpadDetail?.GITHUB) {
+    socialLinks.push({
       alt: 'Git Logo',
       logoUrl: '/svgs/github.svg',
       redirectUrl: launchpadDetail?.GITHUB || '#',
       background: 'bg-[#d9d9d9]',
-    },
-    {
-      alt: 'Telegram Logo',
-      logoUrl: '/svgs/telegram.svg',
-      redirectUrl: launchpadDetail?.TELEGRAM.startsWith('@')
-        ? launchpadDetail?.TELEGRAM.replace('@', 'https://t.me/')
-        : launchpadDetail?.TELEGRAM || '#',
-      background: 'bg-[#56a8ea]',
-    },
-  ]
+    })
+  }
   if (launchpadDetail?.DISCORD) {
     socialLinks.push({
       alt: 'Discord Logo',
@@ -63,6 +57,14 @@ export default function Overview({ launchpadDetail }: TComponent) {
       background: 'bg-[#f6832e]',
     })
   }
+  socialLinks.push({
+    alt: 'Telegram Logo',
+    logoUrl: '/svgs/telegram.svg',
+    redirectUrl: launchpadDetail?.TELEGRAM.startsWith('@')
+      ? launchpadDetail?.TELEGRAM.replace('@', 'https://t.me/')
+      : launchpadDetail?.TELEGRAM || '#',
+    background: 'bg-[#56a8ea]',
+  })
 
   return (
     <Card className="w-full relative border-0 col-span-1 rounded-3xlshadow-xl p-[1px] bg-gradient-to-b from-transparent to-gray-200">

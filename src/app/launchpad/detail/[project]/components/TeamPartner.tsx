@@ -143,15 +143,9 @@ export default function TeamPartner({ data, refetchData }: Props) {
     teamDescription: z.coerce.string(),
   }
   for (let i = 0; i < team.length; i++) {
-    temp[`name${i}`] = z.string().min(1, {
-      message: 'Member name is required.',
-    })
-    temp[`position${i}`] = z.string().min(1, {
-      message: 'Member position is required.',
-    })
-    temp[`description${i}`] = z.string().min(1, {
-      message: 'Member description is required.',
-    })
+    temp[`name${i}`] = z.string()
+    temp[`position${i}`] = z.string()
+    temp[`description${i}`] = z.string()
     temp[`linkedin${i}`] = z.string().regex(/^[^'"]*$/, {
       message: 'Linkedin url cannot contain single or double quotes.',
     })
@@ -255,7 +249,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
         // metrics: data?.METRICS,
         saleRoundDetail: data?.SALE_ROUND_DETAIL || '',
         websiteUrl: data?.WEBSITE_URL,
-        whitepaperUrl: data?.WHITEPAPER_URL,
+        whitepaperUrl: data?.WHITEPAPER_URL || '',
         twitter: data?.TWITTER,
         telegram: data?.TELEGRAM,
         discord: data?.DISCORD,
@@ -350,7 +344,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                 Edit
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-y-auto overflow-x-auto ">
+            <DialogContent className="sm:max-w-3xl max-h-[80vh] bg-whiterounded-3xl shadow  bg-[#15192b] text-white  overflow-visible">
               <DialogHeader>
                 <DialogTitle>Team Members Edit</DialogTitle>
               </DialogHeader>
@@ -361,6 +355,13 @@ export default function TeamPartner({ data, refetchData }: Props) {
                     styles['index-form'],
                     'w-full flex flex-col gap-8'
                   )}
+                  style={{
+                    maxHeight: '70vh',
+                    overflowY: 'auto',
+                    scrollbarWidth: 'thin',
+                    overflowX: 'clip',
+                    padding: '0 10px',
+                  }}
                 >
                   {team.map((input, index) => (
                     <div key={index}>
@@ -380,7 +381,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`name${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Name *</FormLabel>
+                            <FormLabel>Team Member Name</FormLabel>
                             <FormControl>
                               <Input
                                 autoComplete="off"
@@ -403,7 +404,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`position${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Position *</FormLabel>
+                            <FormLabel>Team Member Position</FormLabel>
                             <FormControl>
                               <Input
                                 autoComplete="off"
@@ -429,7 +430,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                         name={`description${index}`}
                         render={({ field }) => (
                           <FormItem className="my-8">
-                            <FormLabel>Team Member Description *</FormLabel>
+                            <FormLabel>Team Member Description</FormLabel>
                             <FormControl>
                               <Textarea
                                 placeholder="He is a smart contract developer."
@@ -549,7 +550,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                       <FormItem>
                         <FormLabel>Team Description</FormLabel>
                         <FormControl>
-                          <div className='sun-editor-black-background'>
+                          <div className="sun-editor-black-background">
                             <SunEditor
                               defaultValue={field.value}
                               height="400px"
@@ -578,8 +579,8 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                     'list',
                                     'lineHeight',
                                   ],
-                                  // ['table', 'link', 'image', 'video'],
-                                  ['table', 'link', 'image'],
+                                  ['table', 'link', 'image', 'video'],
+                                  // ['table', 'link', 'image'],
                                   ['showBlocks', 'codeView'],
                                   // ['preview'],
                                   // responsive
@@ -624,7 +625,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                     ],
                                   ],
@@ -674,7 +675,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                     ],
                                   ],
@@ -714,7 +715,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                       [
                                         '-right',
@@ -762,7 +763,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                       [
                                         '-right',
@@ -811,7 +812,7 @@ export default function TeamPartner({ data, refetchData }: Props) {
                                         'table',
                                         'link',
                                         'image',
-                                        // 'video',
+                                        'video',
                                       ],
                                       [
                                         '-right',
