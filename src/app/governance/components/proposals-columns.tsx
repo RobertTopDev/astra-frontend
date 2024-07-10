@@ -8,7 +8,7 @@ import parse from 'html-react-parser'
 export const proposalsColumns: ColumnDef<TProposal>[] = [
   {
     id: 'title',
-    accessorKey: 'title',
+    accessorKey: 'DESCRIPTION',
     header: ({ column }) => {
       return (
         <AstraTableToggleSortButton column={column}>
@@ -47,11 +47,13 @@ export const proposalsColumns: ColumnDef<TProposal>[] = [
   },
   {
     accessorKey: 'DESCRIPTION',
+    enableSorting: false,
     header: ({ column }) => {
       return (
-        <AstraTableToggleSortButton column={column}>
-          Description
-        </AstraTableToggleSortButton>
+        // <AstraTableToggleSortButton column={column}>
+        //   Description
+        // </AstraTableToggleSortButton>
+        <div className='font-medium'>Description</div>
       )
     },
     cell: ({ row }) => {
