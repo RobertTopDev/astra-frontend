@@ -7,13 +7,13 @@ on:
       - staging 
       - testnet # alpha
       - feature/**
-  # pull_request:
-  #   types: [opened, edited, reopened, synchronize]
-  #   branches:
-  #     - mainnet
-  #     - staging
-  #     - testnet
-  #     - feature/**
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+    branches:
+      - mainnet
+      - staging
+      - testnet
+      - feature/**
 
 jobs:
   sonar-scan:
@@ -102,12 +102,16 @@ jobs:
       - name: Build docker image
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker build -t us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7} .
+          BRANCH_NAME=${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7}
+          SAFE_BRANCH_NAME=${BRANCH_NAME//\//-} # Replace slashes with dashes
+          docker build -t us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:$SAFE_BRANCH_NAME .
 
       - name: Push image to artifact repository
         if: (github.ref == 'refs/heads/testnet' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/mainnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
         run: |
-          docker push us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7}
+          BRANCH_NAME=${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7}
+          SAFE_BRANCH_NAME=${BRANCH_NAME//\//-} # Replace slashes with dashes
+          docker push us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend:$SAFE_BRANCH_NAME
 
   release-to-k8s:
     name: "Release to k8s"
@@ -136,7 +140,9 @@ jobs:
       - name: Deploy to cluster
         if: (github.ref == 'refs/heads/testnet' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/mainnet') && (github.event.pull_request.merged == true || github.event_name == 'push')
         run: |
+            BRANCH_NAME=${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7}
+            SAFE_BRANCH_NAME=${BRANCH_NAME//\//-}
             helm upgrade --install astra-frontend ./helm/astra-frontend \
             --namespace astra-${{ steps.branch-names.outputs.ref_branch }} --create-namespace \
             --values ./helm/astra-frontend/helmvars/${{ steps.branch-names.outputs.ref_branch }}/values.yaml \
-            --set image.tag=${{ steps.branch-names.outputs.ref_branch }}-${GITHUB_SHA::7} \
+            --set image.tag=$SAFE_BRANCH_NAME \
