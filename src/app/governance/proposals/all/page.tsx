@@ -66,8 +66,7 @@ const AllProposalsPage = () => {
     [filter, proposals]
   )
 
-  const [sorting, setSorting] = useState<SortingState>([])
-
+  const [sorting, setSorting] = useState<SortingState>([{id: 'title', desc: false}])
   const table = useReactTable({
     data: filteredProposals,
     columns: proposalsColumns,

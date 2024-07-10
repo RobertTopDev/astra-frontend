@@ -100,7 +100,7 @@ export const indicesColumns: ColumnDef<TIndex>[] = [
     },
   },
   {
-    accessorKey: 'ROI',
+    accessorKey: 'ROI_NEW',
     // header: 'ROI',
 
     header: ({ column }) => {
