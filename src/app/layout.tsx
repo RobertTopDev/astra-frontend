@@ -8,6 +8,8 @@ import './globals.css'
 import { Providers } from './providers'
 import Loading from './loading'
 import localFont from 'next/font/local'
+import { headers } from 'next/headers'
+import NotFound from './not-found'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -48,24 +50,52 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body
-        className={clsx(inter.className, novaFont.className, 'font-primary')}
-      >
-        <Suspense>
-          <Providers>
-            <Navbar />
-            <Suspense fallback={<Loading />}>
-              <div className="bg-gradient mt-32 relative">
-                <AstraRouterBack></AstraRouterBack>
-                {children}
-              </div>
-            </Suspense>
-            <Footer />
-          </Providers>
-        </Suspense>
-      </body>
-    </html>
-  )
+  const headersList = headers()
+  const fullUrl = `${headersList.get('x-invoke-path') || ''}`
+
+  if (
+    process.env.NEXT_PUBLIC_NETWORK !== 'mainnet' ||
+    !headersList.get('x-invoke-path')?.startsWith('/launchpad')
+  ) {
+    return (
+      <html lang="en">
+        <body
+          className={clsx(inter.className, novaFont.className, 'font-primary')}
+        >
+          <Suspense>
+            <Providers>
+              <Navbar />
+              <Suspense fallback={<Loading />}>
+                <div className="bg-gradient mt-32 relative">
+                  <AstraRouterBack></AstraRouterBack>
+                  {children}
+                </div>
+              </Suspense>
+              <Footer />
+            </Providers>
+          </Suspense>
+        </body>
+      </html>
+    )
+  } else {
+    return (
+      <html lang="en">
+        <body
+          className={clsx(inter.className, novaFont.className, 'font-primary')}
+        >
+          <Suspense>
+            <Providers>
+              <Navbar />
+              <Suspense fallback={<Loading />}>
+                <div className="bg-gradient mt-32 relative">
+                  <NotFound></NotFound>
+                </div>
+              </Suspense>
+              <Footer />
+            </Providers>
+          </Suspense>
+        </body>
+      </html>
+    )
+  }
 }
