@@ -197,28 +197,28 @@ const CompositionRow = ({
 
   const [tokenDetail, setTokenDetail] = useState<any>({})
 
-  if (cell.column.id === 'tokenPrice') {
-    return (
-      <TableCell key={cell.id}>
-        <AstraLoading isLoading={false}>
-          {tokenDetail?.lastPriceUSD
-            ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
-            : '-'}
-        </AstraLoading>
-      </TableCell>
-    )
-  }
-  if (cell.column.id === 'TVL') {
-    return (
-      <TableCell key={cell.id}>
-        <AstraLoading isLoading={false}>
-          {tokenDetail?._totalValueLockedUSD
-            ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
-            : '-'}
-        </AstraLoading>
-      </TableCell>
-    )
-  }
+  // if (cell.column.id === 'tokenPrice') {
+  //   return (
+  //     <TableCell key={cell.id}>
+  //       <AstraLoading isLoading={false}>
+  //         {tokenDetail?.lastPriceUSD
+  //           ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
+  //           : '-'}
+  //       </AstraLoading>
+  //     </TableCell>
+  //   )
+  // }
+  // if (cell.column.id === 'TVL') {
+  //   return (
+  //     <TableCell key={cell.id}>
+  //       <AstraLoading isLoading={false}>
+  //         {tokenDetail?._totalValueLockedUSD
+  //           ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
+  //           : '-'}
+  //       </AstraLoading>
+  //     </TableCell>
+  //   )
+  // }
 
   useEffect(() => {
     async function init() {
@@ -235,7 +235,13 @@ const CompositionRow = ({
 
   return (
     <TableCell key={cell.id}>
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      <AstraLoading isLoading={false}>
+        {cell.column.id === 'tokenPrice'
+          ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
+          : cell.column.id === 'TVL'
+            ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
+            : flexRender(cell.column.columnDef.cell, cell.getContext())}
+      </AstraLoading>
     </TableCell>
   )
 }
