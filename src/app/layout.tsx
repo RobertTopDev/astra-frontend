@@ -54,7 +54,7 @@ export default function RootLayout({
   const fullUrl = `${headersList.get('x-invoke-path') || ''}`
 
   if (
-    process.env.NEXT_PUBLIC_NETWORK !== 'mainnet' &&
+    process.env.NEXT_PUBLIC_NETWORK !== 'mainnet' ||
     !headersList.get('x-invoke-path')?.startsWith('/launchpad')
   ) {
     return (
