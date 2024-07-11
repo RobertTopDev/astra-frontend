@@ -11,7 +11,7 @@ import {
   Button,
 } from '@/components/shadcn'
 import { useTokenDetail } from '@/hooks'
-import { TIndexComposition, TIndexCompositionWithAsset } from '@/types'
+import { TIndexComposition, TIndexCompositionWithAsset, TToken } from '@/types'
 import { numberFormatter } from '@/util'
 import {
   Cell,
@@ -23,7 +23,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type TIndexCompositionAssetsProps = {
   tokensIndices: TIndexComposition[]
@@ -169,19 +169,38 @@ const assetsColumns: ColumnDef<TIndexComposition>[] = [
   // },
 ]
 
+async function getTokenDetail(tokenAddr: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/tokens/tokenDetail?tokenAddress=${tokenAddr}`,
+    {
+      next: { revalidate: 0 },
+    }
+  )
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    console.error('error', res)
+    throw new Error('Failed to fetch data')
+  }
+
+  return res.json()
+}
+
 const CompositionRow = ({
   cell,
 }: {
   cell: Cell<TIndexComposition, unknown>
 }) => {
-  const { data: tokenDetail, isLoading: tokenDetailLoading } = useTokenDetail({
-    contractAddress: cell.row.original.TOKEN_CONTRACT_ADDR,
-  })
+  // const { data: tokenDetail, isLoading: tokenDetailLoading } = useTokenDetail({
+  //   contractAddress: cell.row.original.TOKEN_CONTRACT_ADDR,
+  // })
+
+  const [tokenDetail, setTokenDetail] = useState<any>({})
 
   if (cell.column.id === 'tokenPrice') {
     return (
       <TableCell key={cell.id}>
-        <AstraLoading isLoading={tokenDetailLoading}>
+        <AstraLoading isLoading={false}>
           {tokenDetail?.lastPriceUSD
             ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
             : '-'}
@@ -192,7 +211,7 @@ const CompositionRow = ({
   if (cell.column.id === 'TVL') {
     return (
       <TableCell key={cell.id}>
-        <AstraLoading isLoading={tokenDetailLoading}>
+        <AstraLoading isLoading={false}>
           {tokenDetail?._totalValueLockedUSD
             ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
             : '-'}
@@ -200,6 +219,20 @@ const CompositionRow = ({
       </TableCell>
     )
   }
+
+  useEffect(() => {
+    async function init() {
+      const { data: result } = (await getTokenDetail(
+        cell.row.original.TOKEN_CONTRACT_ADDR
+      )) as {
+        data: TToken
+      }
+      setTokenDetail(result)
+    }
+
+    init()
+  }, [])
+
   return (
     <TableCell key={cell.id}>
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
