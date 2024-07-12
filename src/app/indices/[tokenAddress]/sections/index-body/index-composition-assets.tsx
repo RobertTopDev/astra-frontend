@@ -10,7 +10,6 @@ import {
   TableCell,
   Button,
 } from '@/components/shadcn'
-import { useTokenDetail } from '@/hooks'
 import { TIndexComposition, TIndexCompositionWithAsset, TToken } from '@/types'
 import { numberFormatter } from '@/util'
 import {
@@ -132,17 +131,6 @@ const assetsColumns: ColumnDef<TIndexComposition>[] = [
         </AstraTableToggleSortButton>
       )
     },
-    // cell: ({ row }) => {
-    //   const index = row.original
-
-    //   return (
-    //     <div className="w-96">
-    //       <div className="text-center [&>*]:overflow-hidden [&>*]:overflow-ellipsis [&>*]:whitespace-nowrap ">
-    //         {parse(index.description ? index.description : index.DESCRIPTION)}
-    //       </div>
-    //     </div>
-    //   )
-    // },
   },
   {
     id: 'tokenPrice',
@@ -164,9 +152,6 @@ const assetsColumns: ColumnDef<TIndexComposition>[] = [
       )
     },
   },
-  // {
-  //   id: 'holdings',
-  // },
 ]
 
 async function getTokenDetail(tokenAddr: string) {
@@ -191,34 +176,7 @@ const CompositionRow = ({
 }: {
   cell: Cell<TIndexComposition, unknown>
 }) => {
-  // const { data: tokenDetail, isLoading: tokenDetailLoading } = useTokenDetail({
-  //   contractAddress: cell.row.original.TOKEN_CONTRACT_ADDR,
-  // })
-
   const [tokenDetail, setTokenDetail] = useState<any>({})
-
-  // if (cell.column.id === 'tokenPrice') {
-  //   return (
-  //     <TableCell key={cell.id}>
-  //       <AstraLoading isLoading={false}>
-  //         {tokenDetail?.lastPriceUSD
-  //           ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
-  //           : '-'}
-  //       </AstraLoading>
-  //     </TableCell>
-  //   )
-  // }
-  // if (cell.column.id === 'TVL') {
-  //   return (
-  //     <TableCell key={cell.id}>
-  //       <AstraLoading isLoading={false}>
-  //         {tokenDetail?._totalValueLockedUSD
-  //           ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
-  //           : '-'}
-  //       </AstraLoading>
-  //     </TableCell>
-  //   )
-  // }
 
   useEffect(() => {
     async function init() {
