@@ -163,7 +163,7 @@ const PortfolioIndices = ({
         },
       },
       {
-        accessorKey: 'RISK_SCORE',
+        accessorKey: 'RISK_SCORE_NEW',
         // header: 'Risk Score',
         header: ({ column }) => {
           return (
