@@ -28,9 +28,8 @@ export const useAllProposals = ({
 
       const result = (await res.json()) as { data: TProposal[] }
       const proposals = result.data
-      // return result.data
 
-      const test = await Promise.all(
+      await Promise.all(
         proposals.map(async (proposal) => {
           try {
             const status = await readContract({
