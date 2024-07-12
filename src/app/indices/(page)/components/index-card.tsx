@@ -56,10 +56,10 @@ const IndexCard = async ({ index, id }: IndexCard) => {
             </span>
             <span
               className={`${getRiskScoreColor(
-                !!index ? index?.RISK_SCORE : 0
+                !!index ? index?.RISK_SCORE_NEW : 0
               )} text-left text-[31px] font-normal`}
             >
-              {index?.RISK_SCORE ? index?.RISK_SCORE + '/5' : 'N/A'}&nbsp;
+              {index?.RISK_SCORE_NEW ? index?.RISK_SCORE_NEW + '/5' : 'N/A'}&nbsp;
             </span>
           </div>
           <div className="flex my-1 text-white">
