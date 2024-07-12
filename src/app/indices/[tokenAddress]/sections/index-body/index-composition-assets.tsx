@@ -10,6 +10,7 @@ import {
   TableCell,
   Button,
 } from '@/components/shadcn'
+import { useAssetsTokenDetail } from '@/hooks'
 import { TIndexComposition, TIndexCompositionWithAsset, TToken } from '@/types'
 import { numberFormatter } from '@/util'
 import {
@@ -176,28 +177,17 @@ const CompositionRow = ({
 }: {
   cell: Cell<TIndexComposition, unknown>
 }) => {
-  const [tokenDetail, setTokenDetail] = useState<any>({})
-
-  useEffect(() => {
-    async function init() {
-      const { data: result } = (await getTokenDetail(
-        cell.row.original.TOKEN_CONTRACT_ADDR
-      )) as {
-        data: TToken
-      }
-      setTokenDetail(result)
-    }
-
-    init()
-  }, [])
+  const { data: tokenDetail, isLoading } = useAssetsTokenDetail(
+    cell.row.original.TOKEN_CONTRACT_ADDR
+  )
 
   return (
     <TableCell key={cell.id}>
-      <AstraLoading isLoading={false}>
+      <AstraLoading isLoading={isLoading}>
         {cell.column.id === 'tokenPrice'
-          ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
+          ? `$${numberFormatter(tokenDetail?.lastPriceUSD || 0)}`
           : cell.column.id === 'TVL'
-            ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
+            ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD ?? 0)}`
             : flexRender(cell.column.columnDef.cell, cell.getContext())}
       </AstraLoading>
     </TableCell>
