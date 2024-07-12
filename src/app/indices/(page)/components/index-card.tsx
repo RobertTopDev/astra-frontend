@@ -47,7 +47,7 @@ const IndexCard = async ({ index, id }: IndexCard) => {
               ROI
             </span>
             <span className="text-left text-[#00c938] text-[31px] font-normal">
-              {!!index.ROI_NEW ? parseFloat(index.ROI_NEW).toFixed(2) : '0'}%
+              {!!index.ROI ? parseFloat(index.ROI).toFixed(2) : '0'}%
             </span>
           </div>
           <div className="flex my-1 text-white">

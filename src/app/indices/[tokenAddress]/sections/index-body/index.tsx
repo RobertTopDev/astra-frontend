@@ -57,7 +57,7 @@ const IndexBody = ({
             <div className="col-span-3 flex flex-col">
               <div className="text-sm">Return on Investment</div>
               <div className="text-green-400 text-xl">
-                {index?.ROI_NEW ? parseFloat(index.ROI_NEW).toFixed(2) + '%' : 'N/A'}
+                {index?.ROI ? parseFloat(index.ROI).toFixed(2) + '%' : 'N/A'}
               </div>
             </div>
             <div className="col-span-3 flex flex-col">

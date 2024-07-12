@@ -39,8 +39,8 @@ export async function getIndices() {
   //   'TVL'
   // )
   const mostInvested = maxBy(
-    filter(indicesWithoutHighestEarner, (index) => !!index.ROI_NEW),
-    'ROI_NEW'
+    filter(indicesWithoutHighestEarner, (index) => !!index.ROI),
+    'ROI'
   )
 
   // Remove the highestEarner and mostInvested from the indices array before calculating lowestRisk
