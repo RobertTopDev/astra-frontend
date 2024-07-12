@@ -2,7 +2,12 @@ export const DAOAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'uint8', name: 'version', type: 'uint8' },
+      {
+        indexed: false,
+        internalType: 'uint8',
+        name: 'version',
+        type: 'uint8',
+      },
     ],
     name: 'Initialized',
     type: 'event',
@@ -10,7 +15,12 @@ export const DAOAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'uint256', name: 'id', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
     ],
     name: 'ProposalCanceled',
     type: 'event',
@@ -18,14 +28,24 @@ export const DAOAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'uint256', name: 'id', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
       {
         indexed: false,
         internalType: 'address',
         name: 'proposer',
         type: 'address',
       },
-      { indexed: false, internalType: 'string', name: 'chain', type: 'string' },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'chain',
+        type: 'string',
+      },
       {
         indexed: false,
         internalType: 'address[]',
@@ -75,7 +95,12 @@ export const DAOAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'uint256', name: 'id', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
     ],
     name: 'ProposalExecuted',
     type: 'event',
@@ -83,8 +108,18 @@ export const DAOAbi = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'uint256', name: 'id', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'eta', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'eta',
+        type: 'uint256',
+      },
     ],
     name: 'ProposalQueued',
     type: 'event',
@@ -104,7 +139,12 @@ export const DAOAbi = [
         name: 'proposalId',
         type: 'uint256',
       },
-      { indexed: false, internalType: 'bool', name: 'support', type: 'bool' },
+      {
+        indexed: false,
+        internalType: 'bool',
+        name: 'support',
+        type: 'bool',
+      },
       {
         indexed: false,
         internalType: 'uint256',
@@ -118,35 +158,65 @@ export const DAOAbi = [
   {
     inputs: [],
     name: 'ARBSYS_ADDRESS',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'ASTR',
-    outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
+    outputs: [
+      {
+        internalType: 'contract IERC20',
+        name: '',
+        type: 'address',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'BALLOT_TYPEHASH',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'DOMAIN_TYPEHASH',
-    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'MULTIPLIER_DECIMAL',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
@@ -158,7 +228,13 @@ export const DAOAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'proposalId', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
     name: 'cancel',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -166,8 +242,16 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'proposalId', type: 'uint256' },
-      { internalType: 'bool', name: 'support', type: 'bool' },
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: 'support',
+        type: 'bool',
+      },
     ],
     name: 'castVote',
     outputs: [],
@@ -176,11 +260,31 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'proposalId', type: 'uint256' },
-      { internalType: 'bool', name: 'support', type: 'bool' },
-      { internalType: 'uint8', name: 'v', type: 'uint8' },
-      { internalType: 'bytes32', name: 'r', type: 'bytes32' },
-      { internalType: 'bytes32', name: 's', type: 'bytes32' },
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: 'support',
+        type: 'bool',
+      },
+      {
+        internalType: 'uint8',
+        name: 'v',
+        type: 'uint8',
+      },
+      {
+        internalType: 'bytes32',
+        name: 'r',
+        type: 'bytes32',
+      },
+      {
+        internalType: 'bytes32',
+        name: 's',
+        type: 'bytes32',
+      },
     ],
     name: 'castVoteBySig',
     outputs: [],
@@ -188,53 +292,123 @@ export const DAOAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'proposalId', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
     name: 'checkfastvote',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'chefAddress',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: 'proposalId', type: 'uint256' }],
-    name: 'execute',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: 'proposalId', type: 'uint256' }],
-    name: 'getActions',
     outputs: [
-      { internalType: 'string', name: 'chain', type: 'string' },
-      { internalType: 'address[]', name: 'targets', type: 'address[]' },
-      { internalType: 'uint256[]', name: 'values', type: 'uint256[]' },
-      { internalType: 'string[]', name: 'signatures', type: 'string[]' },
-      { internalType: 'bytes[]', name: 'calldatas', type: 'bytes[]' },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'uint256', name: 'proposalId', type: 'uint256' },
-      { internalType: 'address', name: 'voter', type: 'address' },
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
+    name: 'execute',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getActions',
+    outputs: [
+      {
+        internalType: 'string',
+        name: 'chain',
+        type: 'string',
+      },
+      {
+        internalType: 'address[]',
+        name: 'targets',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'values',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'signatures',
+        type: 'string[]',
+      },
+      {
+        internalType: 'bytes[]',
+        name: 'calldatas',
+        type: 'bytes[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'voter',
+        type: 'address',
+      },
     ],
     name: 'getReceipt',
     outputs: [
       {
         components: [
-          { internalType: 'bool', name: 'hasVoted', type: 'bool' },
-          { internalType: 'bool', name: 'support', type: 'bool' },
-          { internalType: 'uint256', name: 'votes', type: 'uint256' },
+          {
+            internalType: 'bool',
+            name: 'hasVoted',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'support',
+            type: 'bool',
+          },
+          {
+            internalType: 'uint256',
+            name: 'votes',
+            type: 'uint256',
+          },
         ],
-        internalType: 'struct GovernorAlpha.Receipt',
+        internalType: 'struct GovernorAlphaMock.Receipt',
         name: '',
         type: 'tuple',
       },
@@ -243,17 +417,41 @@ export const DAOAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: '_voter', type: 'address' }],
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_voter',
+        type: 'address',
+      },
+    ],
     name: 'getVotingStatus',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'address', name: 'timelock_', type: 'address' },
-      { internalType: 'address', name: 'ASTR_', type: 'address' },
-      { internalType: 'address', name: '_chef', type: 'address' },
+      {
+        internalType: 'address',
+        name: 'timelock_',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'ASTR_',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_chef',
+        type: 'address',
+      },
     ],
     name: 'initialize',
     outputs: [],
@@ -261,125 +459,311 @@ export const DAOAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     name: 'isProposalQueued',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'lastProposal',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'lastProposalTimeIntervalSec',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'latestProposalIds',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minProposalTimeIntervalSec',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minVotersCount',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'name',
-    outputs: [{ internalType: 'string', name: '', type: 'string' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'propoasalVoted',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'proposalCount',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    name: 'proposalCreatedTime',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'proposalMaxOperations',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'pure',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'proposalTokens',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    name: 'proposals',
     outputs: [
-      { internalType: 'uint256', name: 'id', type: 'uint256' },
-      { internalType: 'address', name: 'proposer', type: 'address' },
-      { internalType: 'uint256', name: 'eta', type: 'uint256' },
-      { internalType: 'string', name: 'chain', type: 'string' },
-      { internalType: 'uint256', name: 'startBlock', type: 'uint256' },
-      { internalType: 'uint256', name: 'endBlock', type: 'uint256' },
-      { internalType: 'uint256', name: 'forVotes', type: 'uint256' },
-      { internalType: 'uint256', name: 'againstVotes', type: 'uint256' },
-      { internalType: 'bool', name: 'canceled', type: 'bool' },
-      { internalType: 'bool', name: 'executed', type: 'bool' },
-      { internalType: 'bool', name: 'fundamentalchanges', type: 'bool' },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
-      { internalType: 'string', name: 'chain', type: 'string' },
-      { internalType: 'address[]', name: 'targets', type: 'address[]' },
-      { internalType: 'uint256[]', name: 'values', type: 'uint256[]' },
-      { internalType: 'string[]', name: 'signatures', type: 'string[]' },
-      { internalType: 'bytes[]', name: 'calldatas', type: 'bytes[]' },
-      { internalType: 'string', name: 'description', type: 'string' },
-      { internalType: 'bool', name: '_fundametalChanges', type: 'bool' },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'latestProposalIds',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'minProposalTimeIntervalSec',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'minVotersCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'name',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'propoasalVoted',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'proposalCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'proposalCreatedTime',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'proposalMaxOperations',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'pure',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'proposalTokens',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'proposals',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'proposer',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'eta',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'chain',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'startBlock',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'endBlock',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'forVotes',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'againstVotes',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: 'canceled',
+        type: 'bool',
+      },
+      {
+        internalType: 'bool',
+        name: 'executed',
+        type: 'bool',
+      },
+      {
+        internalType: 'bool',
+        name: 'fundamentalchanges',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'chain',
+        type: 'string',
+      },
+      {
+        internalType: 'address[]',
+        name: 'targets',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'values',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'signatures',
+        type: 'string[]',
+      },
+      {
+        internalType: 'bytes[]',
+        name: 'calldatas',
+        type: 'bytes[]',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
+        internalType: 'bool',
+        name: '_fundametalChanges',
+        type: 'bool',
+      },
     ],
     name: 'propose',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'proposalId', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
     name: 'queue',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -388,23 +772,41 @@ export const DAOAbi = [
   {
     inputs: [],
     name: 'quorumVotes',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'stakeVault',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'proposalId', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'proposalId',
+        type: 'uint256',
+      },
+    ],
     name: 'state',
     outputs: [
       {
-        internalType: 'enum GovernorAlpha.ProposalState',
+        internalType: 'enum GovernorAlphaMock.ProposalState',
         name: '',
         type: 'uint8',
       },
@@ -416,7 +818,11 @@ export const DAOAbi = [
     inputs: [],
     name: 'timelock',
     outputs: [
-      { internalType: 'contract TimelockInterface', name: '', type: 'address' },
+      {
+        internalType: 'contract TimelockInterface',
+        name: '',
+        type: 'address',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -424,7 +830,13 @@ export const DAOAbi = [
   {
     inputs: [],
     name: 'totalTarget',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
@@ -443,7 +855,11 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_minVotersValue', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: '_minVotersValue',
+        type: 'uint256',
+      },
     ],
     name: 'updateMinVotersValue',
     outputs: [],
@@ -452,7 +868,11 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_proposalTokens', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: '_proposalTokens',
+        type: 'uint256',
+      },
     ],
     name: 'updateProposalTokens',
     outputs: [],
@@ -461,7 +881,11 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_quorumValue', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: '_quorumValue',
+        type: 'uint256',
+      },
     ],
     name: 'updateQuorumValue',
     outputs: [],
@@ -469,7 +893,13 @@ export const DAOAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: '_stakeVault', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_stakeVault',
+        type: 'uint256',
+      },
+    ],
     name: 'updateStakeVault',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -477,7 +907,11 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_totalTarget', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: '_totalTarget',
+        type: 'uint256',
+      },
     ],
     name: 'updateTotalTarget',
     outputs: [],
@@ -486,7 +920,11 @@ export const DAOAbi = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_votingPeriod', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: '_votingPeriod',
+        type: 'uint256',
+      },
     ],
     name: 'updateVotingPeriod',
     outputs: [],
@@ -494,11 +932,25 @@ export const DAOAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     name: 'votersInfo',
     outputs: [
-      { internalType: 'uint256', name: 'voterCount', type: 'uint256' },
-      { internalType: 'uint256', name: 'governors', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: 'voterCount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'governors',
+        type: 'uint256',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -506,14 +958,26 @@ export const DAOAbi = [
   {
     inputs: [],
     name: 'votingDelay',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'pure',
     type: 'function',
   },
   {
     inputs: [],
     name: 'votingPeriod',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
   },
