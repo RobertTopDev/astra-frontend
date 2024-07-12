@@ -156,7 +156,7 @@ const assetsColumns: ColumnDef<TIndexComposition>[] = [
 
 async function getTokenDetail(tokenAddr: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/tokens/tokenDetail?tokenAddress=${tokenAddr}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/tokens/detail/${tokenAddr}`,
     {
       next: { revalidate: 0 },
     }
