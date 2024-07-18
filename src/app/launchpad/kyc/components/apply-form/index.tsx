@@ -197,11 +197,7 @@ const ApplyForm = () => {
             </div>
           </div> */}
 
-          <iframe
-            src="https://stage.dashboard.purefi.io/"
-            height="800px"
-            loading="lazy"
-          />
+          <iframe src={purefiUrl.dashboard} height="800px" loading="lazy" />
 
           <div className="purefi-data flex">
             <span className="label w-1/5">PureFI Data</span>
