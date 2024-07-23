@@ -155,15 +155,15 @@ const PortfolioIndices = ({
 
           return (
             <div className="text-center">
-              {index?.ROI_NEW
-                ? parseFloat(index?.ROI_NEW).toFixed(2) + '%'
+              {index?.ROI
+                ? parseFloat(index?.ROI).toFixed(2) + '%'
                 : 'N/A'}
             </div>
           )
         },
       },
       {
-        accessorKey: 'RISK_SCORE',
+        accessorKey: 'RISK_SCORE_NEW',
         // header: 'Risk Score',
         header: ({ column }) => {
           return (

@@ -30,6 +30,8 @@ const ApplyForm = () => {
   const ruleId = purefiUrl.ruleId
   const signType = kycConfig.DEFAULT_SIGN_TYPE
 
+  console.log(purefiUrl);
+
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [dataPack, setDataPack] = useState<any>({})
   const [signature, setSignature] = useState<string>('')
@@ -197,17 +199,13 @@ const ApplyForm = () => {
             </div>
           </div> */}
 
-          <iframe
-            src="https://stage.dashboard.purefi.io/"
-            height="800px"
-            loading="lazy"
-          />
+          <iframe src={purefiUrl.dashboard} height="800px" loading="lazy" />
 
           <div className="purefi-data flex">
             <span className="label w-1/5">PureFI Data</span>
             <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
               {purefiData}
-              <BlurComponent />
+              {/* <BlurComponent /> */}
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">

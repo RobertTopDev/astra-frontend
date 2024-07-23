@@ -10,8 +10,8 @@ import {
   TableCell,
   Button,
 } from '@/components/shadcn'
-import { useTokenDetail } from '@/hooks'
-import { TIndexComposition, TIndexCompositionWithAsset } from '@/types'
+import { useAssetsTokenDetail } from '@/hooks'
+import { TIndexComposition, TIndexCompositionWithAsset, TToken } from '@/types'
 import { numberFormatter } from '@/util'
 import {
   Cell,
@@ -23,7 +23,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type TIndexCompositionAssetsProps = {
   tokensIndices: TIndexComposition[]
@@ -132,17 +132,6 @@ const assetsColumns: ColumnDef<TIndexComposition>[] = [
         </AstraTableToggleSortButton>
       )
     },
-    // cell: ({ row }) => {
-    //   const index = row.original
-
-    //   return (
-    //     <div className="w-96">
-    //       <div className="text-center [&>*]:overflow-hidden [&>*]:overflow-ellipsis [&>*]:whitespace-nowrap ">
-    //         {parse(index.description ? index.description : index.DESCRIPTION)}
-    //       </div>
-    //     </div>
-    //   )
-    // },
   },
   {
     id: 'tokenPrice',
@@ -164,45 +153,43 @@ const assetsColumns: ColumnDef<TIndexComposition>[] = [
       )
     },
   },
-  // {
-  //   id: 'holdings',
-  // },
 ]
+
+async function getTokenDetail(tokenAddr: string) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/tokens/detail/${tokenAddr}`,
+    {
+      next: { revalidate: 0 },
+    }
+  )
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    console.error('error', res)
+    throw new Error('Failed to fetch data')
+  }
+
+  return res.json()
+}
 
 const CompositionRow = ({
   cell,
 }: {
   cell: Cell<TIndexComposition, unknown>
 }) => {
-  const { data: tokenDetail, isLoading: tokenDetailLoading } = useTokenDetail({
-    contractAddress: cell.row.original.TOKEN_CONTRACT_ADDR,
-  })
+  const { data: tokenDetail, isLoading } = useAssetsTokenDetail(
+    cell.row.original.TOKEN_CONTRACT_ADDR
+  )
 
-  if (cell.column.id === 'tokenPrice') {
-    return (
-      <TableCell key={cell.id}>
-        <AstraLoading isLoading={tokenDetailLoading}>
-          {tokenDetail?.lastPriceUSD
-            ? `$${numberFormatter(tokenDetail?.lastPriceUSD)}`
-            : '-'}
-        </AstraLoading>
-      </TableCell>
-    )
-  }
-  if (cell.column.id === 'TVL') {
-    return (
-      <TableCell key={cell.id}>
-        <AstraLoading isLoading={tokenDetailLoading}>
-          {tokenDetail?._totalValueLockedUSD
-            ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD)}`
-            : '-'}
-        </AstraLoading>
-      </TableCell>
-    )
-  }
   return (
     <TableCell key={cell.id}>
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      <AstraLoading isLoading={isLoading}>
+        {cell.column.id === 'tokenPrice'
+          ? `$${numberFormatter(tokenDetail?.lastPriceUSD || 0)}`
+          : cell.column.id === 'TVL'
+            ? `$${numberFormatter(tokenDetail?._totalValueLockedUSD ?? 0)}`
+            : flexRender(cell.column.columnDef.cell, cell.getContext())}
+      </AstraLoading>
     </TableCell>
   )
 }
