@@ -63,7 +63,7 @@ export const chainConfig: TChainConfig = {
       'wss://ws-nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://dashboard.purefi.io',
-      issuer: 'https://issuer.app.purefi.io/v4/rule',
+      issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
     rpcURL: `https://nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302`,
@@ -166,7 +166,7 @@ export const chainConfig: TChainConfig = {
       'wss://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5',
     PURFI_CONFIGURE_URL: {
       dashboard: 'https://dashboard.purefi.io',
-      issuer: 'https://issuer.app.purefi.io/v4/rule',
+      issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
     rpcURL: `https://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5`,
