@@ -203,7 +203,7 @@ const ApplyForm = () => {
             <span className="label w-1/5">PureFI Data</span>
             <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
               {purefiData}
-              <BlurComponent />
+              {/* <BlurComponent /> */}
             </div>
           </div>
           <div className="flex items-center justify-center gap-4">
