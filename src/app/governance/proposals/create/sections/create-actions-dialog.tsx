@@ -263,15 +263,6 @@ const CreateActionsDialog = ({
     setActionsDialog(!actionsDialog)
   }
 
-  // useEffect(() => {
-  //   if (
-  //     selectedAction?.contractAbi !== undefined &&
-  //     selectedAction?.contractAbi[0].name !== 'addItoken'
-  //   ) {
-  //     console.log({ selectedAction })
-  //   }
-  // }, [selectedAction])
-
   useEffect(() => {
     form.reset()
   }, [selectedActionIndex, selectedAction, selectedSubActionIndex])
