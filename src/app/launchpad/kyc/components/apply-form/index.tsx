@@ -30,8 +30,6 @@ const ApplyForm = () => {
   const ruleId = purefiUrl.ruleId
   const signType = kycConfig.DEFAULT_SIGN_TYPE
 
-  console.log(purefiUrl);
-
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [dataPack, setDataPack] = useState<any>({})
   const [signature, setSignature] = useState<string>('')
