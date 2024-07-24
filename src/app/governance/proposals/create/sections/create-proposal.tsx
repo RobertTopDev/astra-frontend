@@ -400,10 +400,10 @@ const CreateProposal = ({ indices }: TCreateProposalProps) => {
                                 <div
                                   className={clsx(
                                     'cursor-pointer text-sm px-6 py-1 border border-astra-blue rounded-full',
-                                    field.value === chain.name &&
+                                    field.value === chain.network &&
                                       'bg-astra-blue text-black'
                                   )}
-                                  onClick={() => field.onChange(chain.name)}
+                                  onClick={() => field.onChange(chain.network)}
                                   key={chain.name}
                                 >
                                   {chain.name}

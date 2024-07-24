@@ -66,7 +66,7 @@ const CreateActionsDialog = ({
   const [selectedActionIndex, setSelectedActionIndex] = useState<string>('')
   const [selectedSubActionIndex, setSelectedSubActionIndex] = useState<string>()
   const { chains } = useNetwork()
-  const chain = chains.find((chain) => chain.name === chainName)
+  const chain = chains.find((chain) => chain.network === chainName)
 
   const form = useForm<CreateProposalActionsFormValues>({
     resolver: zodResolver(createProposalActionsFormSchema),

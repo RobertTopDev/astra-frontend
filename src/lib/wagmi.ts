@@ -7,12 +7,18 @@ import {
   arbitrumSepolia,
   bscTestnet,
   base,
+  Chain,
 } from 'wagmi/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
 
+const chainList: Chain[] =
+  process.env.NEXT_PUBLIC_NETWORK === 'testnet'
+    ? [arbitrumSepolia, bscTestnet, polygonMumbai]
+    : [arbitrum, base]
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [arbitrumSepolia, bscTestnet, polygonMumbai, arbitrum, base],
+  chainList,
   [
     jsonRpcProvider({
       rpc: (chain) => ({
