@@ -151,9 +151,10 @@ const ApplyForm = () => {
     }
     setDataPack(pack)
     if ((!buyRuleStatus || !buyRuleStatus[0]?.result) && !signature) {
+      console.log('dfdfdfdfdfdfd')
       signMessage({ message: JSON.stringify(pack) })
     }
-  }, [sender, receiver, chain.id, ruleId])
+  }, [sender, chain.id, ruleId])
 
   useEffect(() => {
     async function init() {
