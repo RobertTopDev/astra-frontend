@@ -73,7 +73,7 @@ export const chainConfig: TChainConfig = {
     LaunchpadFactoryContractAddress:
       '0xf0A04AD6C96d07B862fFb9aB0809c1F0b08FFCCA',
     LaunchpadConfigurationAddress: '0x5749b642b9787872E0DF6E8B186868706B1E8496',
-    AstraDAOWhitelistAddress: '0x5dAD9473109907a7eCd2620A19626540344727e3',
+    AstraDAOWhitelistAddress: '0x0AdAAeB00e745D1Ecc47957a65bb4c171FF9fa9c',
     CrosschainSaleManagerAddress: '0x0Af159a8E0B1282509663D8AceA2Bd59fcb1CCc8',
     VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
     USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',

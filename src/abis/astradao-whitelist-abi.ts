@@ -15,12 +15,7 @@ export const astraDaoWhitelistAbi = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: 'uint8',
-        name: 'version',
-        type: 'uint8',
-      },
+      { indexed: false, internalType: 'uint8', name: 'version', type: 'uint8' },
     ],
     name: 'Initialized',
     type: 'event',
@@ -97,73 +92,37 @@ export const astraDaoWhitelistAbi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_account',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: '_account', type: 'address' }],
     name: 'blacklist',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_verifier',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: '_verifier', type: 'address' }],
     name: 'initialize',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_account',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: '_account', type: 'address' }],
     name: 'isWhitelisted',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'owner',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'pendingOwner',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -175,26 +134,14 @@ export const astraDaoWhitelistAbi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_verifier',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: '_verifier', type: 'address' }],
     name: 'setVerifier',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -203,24 +150,12 @@ export const astraDaoWhitelistAbi = [
   {
     inputs: [],
     name: 'version',
-    outputs: [
-      {
-        internalType: 'uint32',
-        name: '',
-        type: 'uint32',
-      },
-    ],
+    outputs: [{ internalType: 'uint32', name: '', type: 'uint32' }],
     stateMutability: 'pure',
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_account',
-        type: 'address',
-      },
-    ],
+    inputs: [{ internalType: 'address', name: '_account', type: 'address' }],
     name: 'whitelistByOwner',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -228,11 +163,8 @@ export const astraDaoWhitelistAbi = [
   },
   {
     inputs: [
-      {
-        internalType: 'bytes',
-        name: '_purefidata',
-        type: 'bytes',
-      },
+      { internalType: 'bytes', name: '_purefidata', type: 'bytes' },
+      { internalType: 'uint256', name: 'ruleID', type: 'uint256' },
     ],
     name: 'whitelistWithKYCPurefi',
     outputs: [],
