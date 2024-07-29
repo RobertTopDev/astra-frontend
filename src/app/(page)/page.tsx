@@ -1,3 +1,4 @@
+import { CompletedLaunchpad } from './sections/completed-launchpad'
 import { Hero } from './sections/hero'
 import { Indices } from './sections/indices'
 import { InvestStep } from './sections/invest-step'
@@ -10,6 +11,7 @@ export default async function Home() {
       </div>
       <InvestStep />
       <Indices />
+      <CompletedLaunchpad />
     </main>
   )
 }

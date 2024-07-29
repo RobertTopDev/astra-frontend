@@ -39,10 +39,10 @@ const Indices = async () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-16">
+      {/* <div className="flex flex-col gap-16">
         <AstraHeader>INDICES</AstraHeader>
         {indices && <IndicesTable data={indices} />}
-      </div>
+      </div> */}
     </div>
   )
 }
