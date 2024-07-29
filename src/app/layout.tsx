@@ -1,5 +1,4 @@
 import { AstraRouterBack, Footer, Navbar } from '@/components'
-import '@rainbow-me/rainbowkit/styles.css'
 import clsx from 'clsx'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'

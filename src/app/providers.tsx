@@ -1,5 +1,6 @@
 'use client'
 
+import '@rainbow-me/rainbowkit/styles.css'
 import { WagmiConfig } from 'wagmi'
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
 import { useState, useEffect } from 'react'
