@@ -19,7 +19,11 @@ interface SortType {
   type: string
 }
 
-export default function Completed() {
+interface Props {
+  type?: string
+}
+
+export default function Completed({ type }: Props) {
   const status = 'all'
   const [getOption, SetGetOption] = useState<SortType>({
     sort: 'SALE_END_TIME',
@@ -28,9 +32,11 @@ export default function Completed() {
     search: '',
     type: 'all',
   })
+  const page = type === 'dashboard' ? 0 : -1
   const { data: completedData, isLoading } = useGetAllLaunchpad(
     status,
-    getOption
+    getOption,
+    page
   )
 
   const handleSearch = useDebouncedCallback((term: string) => {
