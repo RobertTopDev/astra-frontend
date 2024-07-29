@@ -16,8 +16,8 @@ import {
 import { useMemo, useState } from 'react'
 import {
   useChainConfig,
-  useDecimals,
   useFinishLaunchpad,
+  useGetTotalRaisedAmount,
   useLaunchpadInfo,
 } from '@/hooks'
 import { useAccount } from 'wagmi'
@@ -28,6 +28,13 @@ import Metrics from '@/app/launchpad/detail/[project]/components/Metrics'
 import { LogoLink } from '@/app/launchpad/detail/[project]/components/Overview'
 import LiveUpcoming from '@/app/launchpad/(page)/components/LiveUpcoming'
 import { MiniIdenticon } from '@/components/mini-identicon'
+import {
+  chainToId,
+  mainChainToId,
+  tokenDecimal,
+  chainConfig as defaultChainConfig,
+} from '@/config'
+import { AstraLoading } from '@/components'
 
 type TProgress = {
   data: TLaunchpadDetailInfo
@@ -61,47 +68,79 @@ export default function Finished({
   const baseTokenSymbol = tokenArray
     .filter((token) => token.address === data?.BASE_TOKEN)
     .map((token) => token.symbol)[0]
+  const baseTokenDecimals = useMemo(() => {
+    return tokenDecimal[data?.BASE_TOKEN as string]
+  }, [data])
+  const convertChainName = useMemo(() => {
+    return process.env.NEXT_PUBLIC_NETWORK === 'testnet' &&
+      data?.CHAIN === 'Arbitrum'
+      ? 'arbitrum-sepolia'
+      : data?.CHAIN?.toLowerCase() ?? 'binance'
+  }, [data])
+  const selectedChainId = useMemo(() => {
+    return process.env.NEXT_PUBLIC_NETWORK === 'testnet'
+      ? chainToId[convertChainName]
+      : mainChainToId[convertChainName]
+  }, [convertChainName])
+  const rpcUrl = defaultChainConfig[selectedChainId].rpcURL
 
-    const socialLinks: TLogoLink[] = [
-      {
-        alt: 'Twitter Logo',
-        logoUrl: '/svgs/twitter.svg',
-        redirectUrl: data?.TWITTER || '#',
-        background: 'bg-[#56a8ea]',
-      },
-    ]
-    if (data?.GITHUB) {
-      socialLinks.push({
-        alt: 'Git Logo',
-        logoUrl: '/svgs/github.svg',
-        redirectUrl: data?.GITHUB || '#',
-        background: 'bg-[#d9d9d9]',
-      })
-    }
-    if (data?.DISCORD) {
-      socialLinks.push({
-        alt: 'Discord Logo',
-        logoUrl: '/svgs/discord.svg',
-        redirectUrl: data?.DISCORD || '#',
-        background: 'bg-astra-orange',
-      })
-    }
-    if (data?.MEDIUM) {
-      socialLinks.push({
-        alt: 'Medium Logo',
-        logoUrl: '/images/medium-logo.png',
-        redirectUrl: data?.MEDIUM || '#',
-        background: 'bg-[#f6832e]',
-      })
-    }
-    socialLinks.push({
-      alt: 'Telegram Logo',
-      logoUrl: '/svgs/telegram.svg',
-      redirectUrl: data?.TELEGRAM.startsWith('@')
-        ? data?.TELEGRAM.replace('@', 'https://t.me/')
-        : data?.TELEGRAM || '#',
-      background: 'bg-[#56a8ea]',
+  const { data: raisedAmount, isLoading: raisedAmountLoading } =
+    useGetTotalRaisedAmount({
+      rpcUrl,
+      launchpadAddress:
+        data.LAUNCHPAD_ADDRESS &&
+        data.LAUNCHPAD_ADDRESS !== '0x0000000000000000000000000000000000000000'
+          ? data.LAUNCHPAD_ADDRESS
+          : '',
     })
+  const curRaisedAmount = useMemo(() => {
+    const tokenAmount = formatUnits(
+      BigInt(raisedAmount || '0'),
+      baseTokenDecimals ?? 18
+    )
+    return Number(tokenAmount).toFixed(2)
+  }, [raisedAmount])
+
+  const socialLinks: TLogoLink[] = [
+    {
+      alt: 'Twitter Logo',
+      logoUrl: '/svgs/twitter.svg',
+      redirectUrl: data?.TWITTER || '#',
+      background: 'bg-[#56a8ea]',
+    },
+  ]
+  if (data?.GITHUB) {
+    socialLinks.push({
+      alt: 'Git Logo',
+      logoUrl: '/svgs/github.svg',
+      redirectUrl: data?.GITHUB || '#',
+      background: 'bg-[#d9d9d9]',
+    })
+  }
+  if (data?.DISCORD) {
+    socialLinks.push({
+      alt: 'Discord Logo',
+      logoUrl: '/svgs/discord.svg',
+      redirectUrl: data?.DISCORD || '#',
+      background: 'bg-astra-orange',
+    })
+  }
+  if (data?.MEDIUM) {
+    socialLinks.push({
+      alt: 'Medium Logo',
+      logoUrl: '/images/medium-logo.png',
+      redirectUrl: data?.MEDIUM || '#',
+      background: 'bg-[#f6832e]',
+    })
+  }
+  socialLinks.push({
+    alt: 'Telegram Logo',
+    logoUrl: '/svgs/telegram.svg',
+    redirectUrl: data?.TELEGRAM.startsWith('@')
+      ? data?.TELEGRAM.replace('@', 'https://t.me/')
+      : data?.TELEGRAM || '#',
+    background: 'bg-[#56a8ea]',
+  })
 
   const isLaunchpadFinished = useMemo(() => {
     const endTime = data.SALE_END_TIME
@@ -122,12 +161,6 @@ export default function Finished({
 
   const { data: launchpadContractData } = useLaunchpadInfo({
     launchpad: data?.LAUNCHPAD_ADDRESS as `0x${string}`,
-  })
-
-  // base token decimals
-  const { data: baseTokenDecimals } = useDecimals({
-    address: data.BASE_TOKEN as `0x${string}`,
-    enabled: !!data,
   })
 
   const withdrawAmount = useMemo(() => {
@@ -331,30 +364,6 @@ export default function Finished({
                   Token Contract Address
                 </span>
               </Link>
-              {/* <span className="bg-[#1ADDA320] text-[#1ADDA3] text-xs font-medium inline-flex items-center p-2.5 rounded-md">
-                <svg
-                  className="w-2.5 h-2.5 me-1.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                </svg>
-                View detailed rules
-              </span>
-              <span className="bg-[#00E7FF20] text-[#00E7FF] text-xs font-medium inline-flex items-center p-2.5 rounded-md">
-                <svg
-                  className="w-2.5 h-2.5 me-1.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                </svg>
-                FAQ
-              </span> */}
             </div>
           </div>
         </div>
@@ -380,10 +389,12 @@ export default function Finished({
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">
               <p>Total Raised Amount</p>
-              <p>
-                {Number(withdrawAmount).toLocaleString('en-US')}{' '}
-                {baseTokenSymbol}
-              </p>
+              <AstraLoading isLoading={raisedAmountLoading}>
+                <p>
+                  {Number(curRaisedAmount).toLocaleString('en-US')}{' '}
+                  {baseTokenSymbol}
+                </p>
+              </AstraLoading>
             </div>
             <div className="bg-[#FFFFFF33] mx-1 md:h-16 h-8 w-px"></div>
             <div className="md:text-left text-center">

@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { TLaunchpadDetailInfo } from '@/types'
 import BuyContent from './BuyContent'
 import FollowSection from './FollowSection'
-// import Stake from './Stake'
 import Contributor from './Contributor'
 import { useGetBuyRuleLaunchpad, useLaunchpadFactoryInfo } from '@/hooks'
 import LiveUpcoming from '@/app/launchpad/(page)/components/LiveUpcoming'
@@ -75,7 +74,6 @@ export default function Progress({
         <></>
       )}
       <div className="mt-12">
-        {/* <Stake launchpadData={launchpadInfoData} /> */}
         <CrosschainStatus />
       </div>
       <div className="participated mt-12">
