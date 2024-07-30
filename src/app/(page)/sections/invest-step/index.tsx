@@ -1,6 +1,6 @@
 import { invest_steps } from '@/constants'
 import { AstraCard, AstraHeader } from '@/components'
-import { Card, CardContent } from '@/components/shadcn'
+import { Card, CardContent, Button } from '@/components/shadcn'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -11,10 +11,12 @@ export const InvestStep = () => {
         <AstraHeader>INVESTING IN CRYPTO MADE EASY</AstraHeader>
         <div className="w-full grid lg:grid-cols-2 grid-cols-1 lg:gap-32">
           {invest_steps.map((invest_step, index) => (
-            <Link href={index === 0 ? '/#indices' : '/#launchpad'}>
+            <div>
               <div
                 key={index}
-                className={`lg:col-span-1 col-span-full flex items-center flex-col gap-4 text-center ${index === 0 ? '' : 'pt-16 lg:pt-0'}`}
+                className={`lg:col-span-1 col-span-full flex items-center flex-col gap-4 text-center ${
+                  index === 0 ? '' : 'pt-16 lg:pt-0'
+                }`}
               >
                 <div className="flex justify-center h-[6rem] w-[6rem]">
                   <div className="relative h-[5rem] w-[5rem]">
@@ -39,7 +41,19 @@ export const InvestStep = () => {
                   <p dangerouslySetInnerHTML={{ __html: invest_step.desc }} />
                 </CardContent>
               </Card>
-            </Link>
+
+              <Link
+                href={invest_step.link}
+                className="w-full flex items-center justify-center mt-10"
+              >
+                <Button
+                  className="rounded-full text-xs py-6 px-16 border border-astra-blue max-w-[15rem]"
+                  variant="astra-blue"
+                >
+                  {invest_step.btn}
+                </Button>
+              </Link>
+            </div>
           ))}
         </div>
       </div>
