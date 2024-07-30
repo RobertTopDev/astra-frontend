@@ -48,12 +48,6 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
 
-pvc:
-  accessModes:
-    - ReadWriteOnce
-  size: 10Gi
-  storageClassName: standard-rwo
-
 backendConfig:
   namespace: astra-mainnet
   securityPolicy:
