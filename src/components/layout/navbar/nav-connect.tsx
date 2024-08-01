@@ -86,9 +86,9 @@ export const NavConnect = () => {
                         )}
                       </div>
                     )}
-                    {chain.name}
+                    <span className="hidden sm:block">{chain.name}</span>
                     <StarFilledIcon
-                      className="relative text-astra-blue ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180"
+                      className="relative text-astra-blue ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180 hidden sm:block"
                       aria-hidden="true"
                     />
                   </Button>
@@ -97,10 +97,11 @@ export const NavConnect = () => {
                     type="button"
                     variant="outline"
                   >
-                    {account.displayName}
-                    {/* {account.displayBalance */}
-                    {/*   ? ` (${account.displayBalance})` */}
-                    {/*   : ''} */}
+                    <span className="hidden sm:block">{account.displayName}</span>
+                    <StarFilledIcon
+                      className="relative text-astra-blue h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180 block sm:hidden"
+                      aria-hidden="true"
+                    />
                   </Button>
                 </div>
               )

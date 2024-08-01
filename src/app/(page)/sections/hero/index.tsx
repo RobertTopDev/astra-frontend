@@ -20,7 +20,7 @@ export const Hero = () => {
                 Crypto
               </div>
               <div className="grid md:grid-cols-2 md:cols-1 w-full gap-4">
-                <Link href="/#indices">
+                <Link href="/#step">
                   <Button
                     className="sm:col-span-1 col-span-full w-full rounded-full text-xs tracking-widest border border-astra-blue dark:text-neutral-900 dark:bg-neutral-50 dark:hover:bg-astra-blue/80 dark:hover:text-white"
                     size="default"

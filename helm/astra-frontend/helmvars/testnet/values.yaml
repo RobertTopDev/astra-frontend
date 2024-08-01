@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend
   pullPolicy: IfNotPresent
-  tag: "1234567"
+  tag: testnet-e21f4bd
 
 serviceAccount:
   create: true
@@ -48,12 +48,6 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
-
-pvc:
-  accessModes:
-    - ReadWriteOnce
-  size: 10Gi
-  storageClassName: standard-rwo
 
 backendConfig:
   namespace: astra-testnet
