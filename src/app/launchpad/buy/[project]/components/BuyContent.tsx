@@ -349,8 +349,8 @@ export default function BuyContent({
                     <SelectLabel>Select Token</SelectLabel>
                     {tokenArray
                       .filter((token) => token.address === detail.BASE_TOKEN)
-                      .map((token) => (
-                        <SelectItem value={token.address}>
+                      .map((token, idx) => (
+                        <SelectItem value={token.address} key={idx}>
                           {token.symbol}
                         </SelectItem>
                       ))}
