@@ -30,7 +30,7 @@ export default function FollowSection({
 }: Props) {
   const { address } = useAccount()
   const [twitterFollowInprogress, setTwitterFollowInprogress] = useState(false)
-  const [twitterCheckStarted, setTwitterCheckStarted] = useState(false);
+  const [twitterCheckStarted, setTwitterCheckStarted] = useState(false)
 
   const followingTemp = useFollowCheck(address)
   const followingData = followingTemp.data
@@ -62,14 +62,14 @@ export default function FollowSection({
               method: 'POST',
             })
           ).json()
-          console.log('TwitterAPI----->', twitterApi)
           document.cookie = serialize('comebackAt', window.location.href, {
             sameSite: 'none',
             path: '/apicallback_',
             secure: true,
           })
-          //localStorage.setItem("comebackAt",window.location.href)
-          location.href = twitterApi.url
+
+          window.open(twitterApi.url, '_blank')
+          // location.href = twitterApi.url
         } else {
           const res = await followTwitter(address)
           if (res.ok) {
@@ -214,7 +214,7 @@ export default function FollowSection({
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white cursor-pointer'
                 } justify-between`}
-                onClick={()=>handleFollowTwitter(false)}
+                onClick={() => handleFollowTwitter(false)}
               >
                 <div className="flex items-center">
                   <div className="h-8 w-8 mr-4">

@@ -15,7 +15,7 @@ import {
 import { navLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { TLink } from '@/types'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import clsx from 'clsx'
 import styles from './navbar.module.scss'
 import { useGetLaunchpadAdmin, useVestingRewards } from '@/hooks'
@@ -48,6 +48,7 @@ ListItem.displayName = 'ListItem'
 
 function NavLink({ navLink }: { navLink: TLink }) {
   const { isConnected, address } = useAccount()
+  const { chain } = useNetwork()
   const currentRoute = usePathname()
   const { data: vestingRewards } = useVestingRewards({})
   const { data: adminData, isLoading } = useGetLaunchpadAdmin()
@@ -78,8 +79,8 @@ function NavLink({ navLink }: { navLink: TLink }) {
             {navLink.menu.map((menuLink) => {
               if (
                 menuLink.name === 'Launchpad Admin' &&
-                adminData &&
-                adminData[0]?.result !== address
+                ((adminData && adminData[0]?.result !== address) ||
+                  chain?.unsupported)
               )
                 return null
               return (
