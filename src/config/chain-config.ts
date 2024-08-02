@@ -62,7 +62,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://ws-nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://dashboard.purefi.io',
+      dashboard: 'https://dashboard.purefi.io/kyc',
       issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
@@ -114,7 +114,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://ws-nd-069-375-190.p2pify.com/c0963d7b6845a9b601d2569f65f4e178',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://dashboard.purefi.io',
+      dashboard: 'https://dashboard.purefi.io/kyc',
       issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
@@ -165,7 +165,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://dashboard.purefi.io',
+      dashboard: 'https://dashboard.purefi.io/kyc',
       issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
@@ -217,7 +217,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://ws-nd-228-957-154.p2pify.com/a67c91c9db4e0cb9c5c0a3c41e08790c',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://stage.dashboard.purefi.io',
+      dashboard: 'https://stage.dashboard.purefi.io/kyc',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
@@ -272,7 +272,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://arbitrum-sepolia.core.chainstack.com/ws/25d78e54fa768b868fee699a675ad8f3',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://stage.dashboard.purefi.io',
+      dashboard: 'https://stage.dashboard.purefi.io/kyc',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
@@ -325,7 +325,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://stage.dashboard.purefi.io',
+      dashboard: 'https://stage.dashboard.purefi.io/kyc',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
