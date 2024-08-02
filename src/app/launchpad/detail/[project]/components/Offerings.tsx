@@ -1,4 +1,3 @@
-import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { TLaunchpadDetailInfo } from '@/types'
@@ -22,7 +21,6 @@ export default function Offering({ launchpadData }: TComponent) {
   const { address } = useAccount()
 
   const launchpadId = pathname.split('detail/')[1]
-  // const isAdmin = pathname.includes('owner') || pathname.includes('admin')
 
   const [remainingTime, setRemainingTime] = useState('00:00:00')
   const [saleStartsIn, setSaleStartsIn] = useState('00:00:00')
@@ -65,7 +63,7 @@ export default function Offering({ launchpadData }: TComponent) {
             path: '/apicallback_',
             secure: true,
           })
-          window.open(twitterApi.url, '_blank');
+          window.open(twitterApi.url, '_blank')
           // location.href = twitterApi.url
         } else {
           const res = await followTwitter(address)
@@ -89,6 +87,7 @@ export default function Offering({ launchpadData }: TComponent) {
       }
     }
   }
+
   useEffect(() => {
     if (location.href.includes('?twitter_confirm') && !twitterCheckStarted) {
       setTwitterCheckStarted(true)
