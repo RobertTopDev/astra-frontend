@@ -23,3 +23,4 @@ export * from './useVerifyMultiplierCrosschain'
 export * from './useGetCrossChainStakingDetails'
 export * from './useGetNativeAmountAndMultiplier'
 export * from './useGetTotalRaisedAmount'
+export * from "./useGetLaunchpadAdmin"
