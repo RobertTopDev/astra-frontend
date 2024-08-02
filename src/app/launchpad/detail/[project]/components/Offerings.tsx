@@ -60,14 +60,13 @@ export default function Offering({ launchpadData }: TComponent) {
               method: 'POST',
             })
           ).json()
-          console.log('TwitterAPI----->',twitterApi)
           document.cookie = serialize('comebackAt', window.location.href, {
             sameSite: 'none',
             path: '/apicallback_',
             secure: true,
           })
-          //localStorage.setItem("comebackAt",window.location.href)
-          location.href = twitterApi.url
+          window.open(twitterApi.url, '_blank');
+          // location.href = twitterApi.url
         } else {
           const res = await followTwitter(address)
           if (res.ok) {
@@ -174,12 +173,6 @@ export default function Offering({ launchpadData }: TComponent) {
               {remainingTime === '00:00:00' ? 'Finished' : 'Participate'}
             </div>
           )}
-          {/* <div
-            className="text-black text-center rounded-xl cursor-pointer px-8 py-2 bg-gradient-to-r from-[#00E7FF] to-[#28E7FD] border-astra-blue bg-opacity-15"
-            onClick={() => router.push(`/launchpad/buy/${launchpadId}`)}
-          >
-            {remainingTime === '00:00:00:00' ? 'Finished' : 'Participate'}
-          </div> */}
         </div>
       </div>
       <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
@@ -230,7 +223,7 @@ export default function Offering({ launchpadData }: TComponent) {
                 className={`text-white flex gap-4 rounded-xl h-full items-center p-4 bg-[#454561] ${
                   twitterfollowing ? '' : 'border border-white cursor-pointer'
                 } justify-between`}
-                onClick={()=>handleFollowTwitter(false)}
+                onClick={() => handleFollowTwitter(false)}
               >
                 <div className="flex items-center">
                   <div className="h-8 w-8 mr-4">

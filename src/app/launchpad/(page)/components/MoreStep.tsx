@@ -49,7 +49,7 @@ export default function MoreStep() {
               <div className="text-2xl">Governance </div>
             </div>
             <div className="font-normal text-lg whitespace-normal">
-              Join the Astra DAO and participate in ecosystem governance.
+              Join Astra DAO and participate in ecosystem governance.
             </div>
           </div>
         </AstraCard>

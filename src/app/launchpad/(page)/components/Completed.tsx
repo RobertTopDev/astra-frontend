@@ -45,7 +45,9 @@ export default function Completed({ type }: Props) {
   return (
     <div className="flex flex-col items-stretch py-8">
       <div className="flex items-center flex-col">
-        <AstraHeader>Completed Token Sales</AstraHeader>
+        <AstraHeader className={`${page === 0 ? 'uppercase' : ''}`}>
+          Completed Token Sales
+        </AstraHeader>
         <h1>All token Sales that were hosted on Astra DAO crypto launchpad.</h1>
       </div>
       {type === 'dashboard' ? (

@@ -18,8 +18,8 @@ export const invest_steps: {
   },
   {
     icon: '/images/invest_logo_2.png',
-    text: 'Participate the launchpads',
-    desc: "The Astra DAO Launchpad is finally here.<br /><br /> Our new launchpad is designed with YOU in mind.<br /><br /> Simple, seamless, and secure, it's your gateway to the most promising projects in the crypto space.<br /><br /> Find the best upcoming projects, or easily list your own on our innovative platform.<br /><br /> What are you waiting for? Get early access to the IDOs of tomorrow.",
+    text: 'Participate in Token Sales',
+    desc: "The Astra DAO Launchpad is finally here.<br /><br /> Our new launchpad is designed with YOU in mind.<br /><br /> Simple, seamless, and secure, it's your gateway to promising projects in the crypto space.<br /><br /> Find the upcoming projects, or easily list your own on our innovative platform.<br /><br /> What are you waiting for? Get early access.",
     btn: 'Explore Astra DAO Launchpad',
     link: '/#launchpad',
   },

@@ -47,7 +47,7 @@ export const InvestStep = () => {
                 className="w-full flex items-center justify-center mt-10"
               >
                 <Button
-                  className="rounded-full text-xs py-6 px-16 border border-astra-blue max-w-[15rem]"
+                  className="rounded-full text-xs py-6 px-12 border border-astra-blue max-w-[16rem] uppercase"
                   variant="astra-blue"
                 >
                   {invest_step.btn}
