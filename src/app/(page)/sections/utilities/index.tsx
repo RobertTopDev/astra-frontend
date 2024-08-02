@@ -32,7 +32,7 @@ export const Utilities = () => {
             href={
               typeof window !== 'undefined' && window.location.origin
                 ? window.location.origin
-                : '' + '/launchpad'
+                : '' + '/how-to-buy'
             }
           >
             <Button
