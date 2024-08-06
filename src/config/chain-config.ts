@@ -71,10 +71,21 @@ export const chainConfig: TChainConfig = {
     factoryContractAddress: '0x52ED59772BB1005e196E6baE3C25F6c25167feD4',
     routerContractAddress: '0x2C11E8b0251486aEc6E7Cd72A39efaF8c38BD613',
     LaunchpadFactoryContractAddress:
-      '0xf0A04AD6C96d07B862fFb9aB0809c1F0b08FFCCA',
-    LaunchpadConfigurationAddress: '0x5749b642b9787872E0DF6E8B186868706B1E8496',
-    AstraDAOWhitelistAddress: '0x0AdAAeB00e745D1Ecc47957a65bb4c171FF9fa9c',
-    CrosschainSaleManagerAddress: '0x0Af159a8E0B1282509663D8AceA2Bd59fcb1CCc8',
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0xf0A04AD6C96d07B862fFb9aB0809c1F0b08FFCCA'
+        : '0x75C3Cc6f879f061532512B70fcF7c068017f1Ebe',
+    LaunchpadConfigurationAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x5749b642b9787872E0DF6E8B186868706B1E8496'
+        : '0xA272E7C5284e8741F085C9fD2A3901c165A736b7',
+    AstraDAOWhitelistAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x0AdAAeB00e745D1Ecc47957a65bb4c171FF9fa9c'
+        : '0x1B0AB6742757267a4B92Ed12DF1611e46F674A2E',
+    CrosschainSaleManagerAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x0Af159a8E0B1282509663D8AceA2Bd59fcb1CCc8'
+        : '0x461715A66E44446a902e5574Ed71600c11133ddc',
     VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
     USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     DAIContractAddress: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
@@ -173,11 +184,21 @@ export const chainConfig: TChainConfig = {
     ethAddressForpaywithCrypto: '0x0',
     factoryContractAddress: '0x0',
     routerContractAddress: '0x0',
-    LaunchpadFactoryContractAddress:
-      '0x28464748D0dE3Af0483141f3A5931b1452069e39',
-    LaunchpadConfigurationAddress: '0x2edA70131267d8D54506653DcaE09CD1e2Bd8e31',
-    AstraDAOWhitelistAddress: '0xB9f0EbeD24c4Dedd7c75626cF02Dd2Ad30aA77c4',
-    CrosschainSaleManagerAddress: '0xE087721FC91390105A8310520889D08e632dADad',
+    LaunchpadFactoryContractAddress: process.env.NEXT_PUBLIC_NETWORK
+      ? '0xCb85E2dFE64Cc98430e4ddc0F44F566Adc4AaeEF'
+      : '0x28464748D0dE3Af0483141f3A5931b1452069e39',
+    LaunchpadConfigurationAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0xe3C29bBe74740a6Cd8d3E55eD9D7C919b2323142'
+        : '0x2edA70131267d8D54506653DcaE09CD1e2Bd8e31',
+    AstraDAOWhitelistAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0xC63901E522F8606034893BFC911E962783629baf'
+        : '0xB9f0EbeD24c4Dedd7c75626cF02Dd2Ad30aA77c4',
+    CrosschainSaleManagerAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x5b15FbE7aB98ad8000Cd50DA5A8906994f57e8F1'
+        : '0xE087721FC91390105A8310520889D08e632dADad',
     VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
     USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     DAIContractAddress: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
