@@ -40,12 +40,13 @@ export default function Unlocks({ launchpadDetail }: TComponent) {
           </div>
         ))
       ) : (
-        <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
-          <div className="flex flex-col justify-center text-white">
-            <div className="text-md"></div>
-            <div className="md:text-xl text-md font-medium">N/A</div>
-          </div>
-        </div>
+        // <div className="p-8 rounded-xl bg-gradient-to-r from-[#636389] to-[#2C2C51] shadow-xl">
+        //   <div className="flex flex-col justify-center text-white">
+        //     <div className="text-md"></div>
+        //     <div className="md:text-xl text-md font-medium">N/A</div>
+        //   </div>
+        // </div>
+        <></>
       )}
     </div>
   )
