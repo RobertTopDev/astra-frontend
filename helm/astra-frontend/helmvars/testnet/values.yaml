@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend
   pullPolicy: IfNotPresent
-  tag: testnet-2670547
+  tag: testnet-f4eedb5
 
 serviceAccount:
   create: true
@@ -22,7 +22,7 @@ service:
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-production
     ingress.gcp.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: gce
     # networking.gke.io/v1beta1.FrontendConfig: "astra-frontend"
