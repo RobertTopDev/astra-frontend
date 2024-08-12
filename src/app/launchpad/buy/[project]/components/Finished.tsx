@@ -104,7 +104,7 @@ export default function Finished({
   const socialLinks: TLogoLink[] = [
     {
       alt: 'Twitter Logo',
-      logoUrl: '/svgs/twitter.svg',
+      logoUrl: '/svgs/twitter_logo.svg',
       redirectUrl: data?.TWITTER || '#',
       background: 'bg-[#56a8ea]',
     },
