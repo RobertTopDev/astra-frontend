@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend
   pullPolicy: IfNotPresent
-  tag: testnet-dde0e40
+  tag: testnet-4d51452
 
 serviceAccount:
   create: true
