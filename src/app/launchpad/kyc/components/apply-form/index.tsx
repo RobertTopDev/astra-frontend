@@ -47,20 +47,20 @@ const ApplyForm = () => {
     isLoading: joinWhitelistLoading,
   } = useWhitelistWithKYCPurefi({
     enabled: purefiData,
-    args: [purefiData],
+    args: [purefiData, BigInt(ruleId)],
     onSuccessTx: () => {
       buyRuleStatusRefetch()
     },
   })
 
-  const verifyHandler = async () => {
+  const verifyHandler = async (signData: string) => {
     try {
-      if (isLoading || !signature) return
+      if (isLoading || !signData) return
       setKycRequired('')
       setIsLoading(true)
       const payload = {
         message: JSON.stringify(dataPack),
-        signature,
+        signature: signData,
       }
       PureFI.setIssuerUrl(purefiUrl.issuer)
       const data = await PureFI.verifyRule(payload, signType)
@@ -116,7 +116,7 @@ const ApplyForm = () => {
           disabled={joinWhitelistLoading}
           onClick={joinWhitelist}
         >
-          {joinWhitelistLoading ? 'Joining' : 'Join Whitelist'}
+          {joinWhitelistLoading ? 'Joining...' : 'Join Whitelist'}
         </Button>
       )
     } else if (signature) {
@@ -124,9 +124,9 @@ const ApplyForm = () => {
         <Button
           variant="astra-blue"
           disabled={isLoading || !!kycRequired}
-          onClick={verifyHandler}
+          onClick={() => verifyHandler(signature)}
         >
-          {isLoading ? 'Verifying' : 'Verify'}
+          {isLoading ? 'Verifying...' : 'Verify'}
         </Button>
       )
     } else {
@@ -136,7 +136,7 @@ const ApplyForm = () => {
           disabled={signLoading}
           onClick={() => signMessage({ message: JSON.stringify(dataPack) })}
         >
-          {signLoading ? 'Signing' : 'Sign'}
+          {signLoading ? 'Signing...' : 'Sign'}
         </Button>
       )
     }
@@ -150,11 +150,20 @@ const ApplyForm = () => {
       ruleId,
     }
     setDataPack(pack)
-  }, [sender, receiver, chain.id, ruleId])
+    if ((!buyRuleStatus || !buyRuleStatus[0]?.result) && !signature) {
+      console.log('dfdfdfdfdfdfd')
+      signMessage({ message: JSON.stringify(pack) })
+    }
+  }, [sender, chain.id, ruleId])
 
   useEffect(() => {
-    if (!signMessageData) return
-    setSignature(signMessageData)
+    async function init() {
+      if (!signMessageData) return
+      setSignature(signMessageData)
+      await verifyHandler(signMessageData)
+    }
+
+    init()
   }, [variables, signMessageData, sender, chain.id])
 
   useEffect(() => {
@@ -164,49 +173,70 @@ const ApplyForm = () => {
         title: 'Sign Message Error',
         description: signMessageError.message,
       })
-    else if (joinWhitelistError)
+    else if (joinWhitelistError) {
       toast({
         variant: 'destructive',
         title: 'Join Whitelist Error',
         description: joinWhitelistError.message,
       })
+    }
   }, [signMessageError, joinWhitelistError])
 
   return (
     <>
       <AstraHeader className="text-center w-full">KYC Apply Form</AstraHeader>
       <AstraCard className="w-full my-8">
-        <div className="form w-full flex flex-col gap-4">
-          {/* <div className="message flex">
-            <span className="label w-1/5">Message</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words relative">
-              <pre>
-                {JSON.stringify(dataPack, undefined, 2).replace(
-                  /,\s*(?=\w+:)/g,
-                  ',\n'
-                )}
-              </pre>
-              <BlurComponent />
-            </div>
-          </div>
-          <div className="signature flex">
-            <span className="label w-1/5">Signature</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
-              {signature}
-              <BlurComponent />
-            </div>
-          </div> */}
+        <div className="form w-full">
+          <ol className="flex items-center w-full text-sm font-medium text-center text-gray-500 sm:text-base">
+            <li
+              className={`flex md:w-full items-center ${
+                signature || (buyRuleStatus && buyRuleStatus[0]?.result)
+                  ? 'text-astra-blue after:border-astra-blue'
+                  : 'after:border-gray-200'
+              } sm:after:content-[''] after:w-full after:h-1 after:border-b  after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10`}
+            >
+              <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
+                <CheckMarkComponent />
+                <span className="hidden sm:inline-flex sm:ms-2 min-w-20">
+                  Sign In
+                </span>
+              </span>
+            </li>
+            <li
+              className={`flex md:w-full items-center ${
+                purefiData || (buyRuleStatus && buyRuleStatus[0]?.result)
+                  ? 'text-astra-blue'
+                  : 'after:border-gray-200'
+              } ${
+                buyRuleStatus &&
+                buyRuleStatus[0]?.result &&
+                'after:border-astra-blue'
+              } after:content-[''] after:w-full after:h-1 after:border-b  after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10`}
+            >
+              <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
+                <CheckMarkComponent />
+                <span className="hidden me-2 sm:inline-flex min-w-20">
+                  Verify
+                </span>
+              </span>
+            </li>
+            <li
+              className={`flex items-center ${
+                buyRuleStatus && buyRuleStatus[0]?.result
+                  ? 'text-astra-blue'
+                  : ''
+              }`}
+            >
+              <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
+                <CheckMarkComponent />
+                <span className="hidden me-2 sm:inline-flex min-w-20">
+                  Confirmation
+                </span>
+              </span>
+            </li>
+          </ol>
 
-          <iframe src={purefiUrl.dashboard} height="800px" loading="lazy" />
-
-          <div className="purefi-data flex">
-            <span className="label w-1/5">PureFI Data</span>
-            <div className="input-form w-4/5 border border-white p-2 rounded break-words min-h-20 relative">
-              {purefiData}
-              <BlurComponent />
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 mt-20">
             <div className="action-btn text-center">{actionButton()}</div>
             {kycRequired ? (
               <AstraLink link={kycRequired}>
@@ -224,8 +254,16 @@ const ApplyForm = () => {
 
 export default ApplyForm
 
-export const BlurComponent = () => {
+export const CheckMarkComponent = () => {
   return (
-    <div className="absolute left-0 top-0 w-full h-full bg-gray backdrop-blur-md"></div>
+    <svg
+      className="w-3.5 h-3.5 sm:w-4 sm:h-4 me-2.5"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      viewBox="0 0 20 20"
+    >
+      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+    </svg>
   )
 }

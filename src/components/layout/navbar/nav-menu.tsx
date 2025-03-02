@@ -1,6 +1,6 @@
 'use client'
-import Link from 'next/link'
 
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import React from 'react'
 import {
@@ -15,10 +15,10 @@ import {
 import { navLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { TLink } from '@/types'
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import clsx from 'clsx'
 import styles from './navbar.module.scss'
-import { useVestingRewards } from '@/hooks'
+import { useGetLaunchpadAdmin, useVestingRewards } from '@/hooks'
 
 const ListItem = React.forwardRef<
   React.ElementRef<'a'>,
@@ -47,11 +47,14 @@ const ListItem = React.forwardRef<
 ListItem.displayName = 'ListItem'
 
 function NavLink({ navLink }: { navLink: TLink }) {
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
+  const { chain } = useNetwork()
   const currentRoute = usePathname()
   const { data: vestingRewards } = useVestingRewards({})
+  const { data: adminData, isLoading } = useGetLaunchpadAdmin()
 
-  if (!!navLink.menu) {
+  if (isLoading) return null
+  else if (!!navLink.menu) {
     if (navLink.name === 'LAUNCHPAD' && !isConnected) return null
     return (
       <NavigationMenuItem
@@ -73,17 +76,25 @@ function NavLink({ navLink }: { navLink: TLink }) {
                 : 'md:w-[300px] lg:w-[425px]'
             } lg:grid-cols-[.75fr_1fr]`}
           >
-            {navLink.menu.map((menuLink) => (
-              <ListItem
-                href={menuLink.link}
-                title={menuLink.name}
-                key={menuLink.link + menuLink.name}
-              >
-                {!!menuLink.description
-                  ? menuLink.description
-                  : 'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.'}
-              </ListItem>
-            ))}
+            {navLink.menu.map((menuLink) => {
+              if (
+                menuLink.name === 'Launchpad Admin' &&
+                ((adminData && adminData[0]?.result !== address) ||
+                  chain?.unsupported)
+              )
+                return null
+              return (
+                <ListItem
+                  href={menuLink.link}
+                  title={menuLink.name}
+                  key={menuLink.link + menuLink.name}
+                >
+                  {!!menuLink.description
+                    ? menuLink.description
+                    : 'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.'}
+                </ListItem>
+              )
+            })}
           </ul>
         </NavigationMenuContent>
       </NavigationMenuItem>
@@ -92,7 +103,7 @@ function NavLink({ navLink }: { navLink: TLink }) {
     return null
   } else {
     if (navLink.name === 'CLAIM' && vestingRewards?.length === 0) return null
-    if(navLink.name === "LAUNCHPAD" && isConnected) return null;
+    if (navLink.name === 'LAUNCHPAD' && isConnected) return null
     return (
       <NavigationMenuItem
         className={clsx(

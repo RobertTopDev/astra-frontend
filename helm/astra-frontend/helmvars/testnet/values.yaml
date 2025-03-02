@@ -3,7 +3,7 @@ replicaCount: 2
 image:
   repository: us-central1-docker.pkg.dev/tmgalaxy/astra-testnet/astra-frontend
   pullPolicy: IfNotPresent
-  tag: "1234567"
+  tag: testnet-9d3d64e
 
 serviceAccount:
   create: true
@@ -22,10 +22,9 @@ service:
 ingress:
   enabled: true
   annotations: 
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-production
     ingress.gcp.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: gce
-    # networking.gke.io/v1beta1.FrontendConfig: "astra-frontend"
     kubernetes.io/ingress.allow-http: "true"
   hosts:
     - host: next.test.astradao.org
@@ -48,21 +47,6 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
-
-volumeMounts:
-  - name: data-volume
-    mountPath: /data
-
-volumes:
-  - name: data-volume
-    persistentVolumeClaim:
-      claimName: astradao-pvc
-
-pvc:
-  accessModes:
-    - ReadWriteOnce
-  size: 10Gi
-  storageClassName: standard-rwo
 
 backendConfig:
   namespace: astra-testnet

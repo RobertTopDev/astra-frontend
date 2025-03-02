@@ -3,7 +3,7 @@
 import { UserAvatar } from '@/components'
 import { TLaunchpadDetailInfo } from '@/types'
 import { ColumnDef } from '@tanstack/react-table'
-import { numberFormatter } from '@/util'
+import { TotalRaised } from './TotalRaised'
 
 export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
   {
@@ -24,7 +24,6 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
           />
         </div>
       )
-      // shorten(accountAddress)
     },
   },
   {
@@ -33,18 +32,7 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
     cell: ({ row }) => {
       const index = row.original
 
-      return (
-        <div className="w-fit">
-          {index.LEAD_VC}
-          {/* <UserAvatar
-            nameLink={`/launchpad/detail/${index.LAUNCHPAD_INDEX}`}
-            isForTable
-            isToken
-            // name={index.PROJECT_NAME}
-            address=""
-          /> */}
-        </div>
-      )
+      return <div className="w-fit">{index.LEAD_VC}</div>
     },
   },
   {
@@ -53,7 +41,7 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
     cell: ({ row }) => {
       const index = row.original
 
-      return <div className="w-fit">${numberFormatter(index?.HARD_CAP)}</div>
+      return <TotalRaised index={index} />
     },
   },
   {
@@ -62,7 +50,6 @@ export const CompletedTableColumns: ColumnDef<TLaunchpadDetailInfo>[] = [
     cell: ({ row }) => {
       const index = row.original
 
-      // return <div>{index?.allTimeHigh ? index?.allTimeHigh + 'x' : 'N/A'}</div>
       return <div>N/A</div>
     },
   },

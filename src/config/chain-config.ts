@@ -62,8 +62,8 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://ws-nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://dashboard.purefi.io',
-      issuer: 'https://issuer.app.purefi.io/v4/rule',
+      dashboard: 'https://dashboard.purefi.io/kyc',
+      issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
     rpcURL: `https://nd-009-939-622.p2pify.com/0390ea2c5ea8c1d20e350e3a1c95f302`,
@@ -71,10 +71,21 @@ export const chainConfig: TChainConfig = {
     factoryContractAddress: '0x52ED59772BB1005e196E6baE3C25F6c25167feD4',
     routerContractAddress: '0x2C11E8b0251486aEc6E7Cd72A39efaF8c38BD613',
     LaunchpadFactoryContractAddress:
-      '0xf0A04AD6C96d07B862fFb9aB0809c1F0b08FFCCA',
-    LaunchpadConfigurationAddress: '0x5749b642b9787872E0DF6E8B186868706B1E8496',
-    AstraDAOWhitelistAddress: '0x5dAD9473109907a7eCd2620A19626540344727e3',
-    CrosschainSaleManagerAddress: '0x0Af159a8E0B1282509663D8AceA2Bd59fcb1CCc8',
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0xf0A04AD6C96d07B862fFb9aB0809c1F0b08FFCCA'
+        : '0x75C3Cc6f879f061532512B70fcF7c068017f1Ebe',
+    LaunchpadConfigurationAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x5749b642b9787872E0DF6E8B186868706B1E8496'
+        : '0xA272E7C5284e8741F085C9fD2A3901c165A736b7',
+    AstraDAOWhitelistAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x0AdAAeB00e745D1Ecc47957a65bb4c171FF9fa9c'
+        : '0x1B0AB6742757267a4B92Ed12DF1611e46F674A2E',
+    CrosschainSaleManagerAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x0Af159a8E0B1282509663D8AceA2Bd59fcb1CCc8'
+        : '0x461715A66E44446a902e5574Ed71600c11133ddc',
     VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
     USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     DAIContractAddress: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
@@ -114,7 +125,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://ws-nd-069-375-190.p2pify.com/c0963d7b6845a9b601d2569f65f4e178',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://dashboard.purefi.io',
+      dashboard: 'https://dashboard.purefi.io/kyc',
       issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
@@ -165,19 +176,29 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://dashboard.purefi.io',
-      issuer: 'https://issuer.app.purefi.io/v4/rule',
+      dashboard: 'https://dashboard.purefi.io/kyc',
+      issuer: 'https://issuer.app.purefi.io',
       ruleId: '82',
     },
     rpcURL: `https://base-mainnet.core.chainstack.com/6a67bcf5e88adaab2f8e9f93339bd0a5`,
     ethAddressForpaywithCrypto: '0x0',
     factoryContractAddress: '0x0',
     routerContractAddress: '0x0',
-    LaunchpadFactoryContractAddress:
-      '0xCb85E2dFE64Cc98430e4ddc0F44F566Adc4AaeEF',
-    LaunchpadConfigurationAddress: '0xe3C29bBe74740a6Cd8d3E55eD9D7C919b2323142',
-    AstraDAOWhitelistAddress: '0xd3188e0df68559c0B63361f6160c57Ad88B239D8',
-    CrosschainSaleManagerAddress: '0x5b15FbE7aB98ad8000Cd50DA5A8906994f57e8F1',
+    LaunchpadFactoryContractAddress: process.env.NEXT_PUBLIC_NETWORK
+      ? '0xCb85E2dFE64Cc98430e4ddc0F44F566Adc4AaeEF'
+      : '0x28464748D0dE3Af0483141f3A5931b1452069e39',
+    LaunchpadConfigurationAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0xe3C29bBe74740a6Cd8d3E55eD9D7C919b2323142'
+        : '0x2edA70131267d8D54506653DcaE09CD1e2Bd8e31',
+    AstraDAOWhitelistAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0xC63901E522F8606034893BFC911E962783629baf'
+        : '0xB9f0EbeD24c4Dedd7c75626cF02Dd2Ad30aA77c4',
+    CrosschainSaleManagerAddress:
+      process.env.NEXT_PUBLIC_NETWORK === 'staging'
+        ? '0x5b15FbE7aB98ad8000Cd50DA5A8906994f57e8F1'
+        : '0xE087721FC91390105A8310520889D08e632dADad',
     VestingContractAddress: '0xC63901E522F8606034893BFC911E962783629baf',
     USDTContractAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
     DAIContractAddress: '0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb',
@@ -217,7 +238,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://ws-nd-228-957-154.p2pify.com/a67c91c9db4e0cb9c5c0a3c41e08790c',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://stage.dashboard.purefi.io',
+      dashboard: 'https://stage.dashboard.purefi.io/kyc',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
@@ -272,7 +293,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://arbitrum-sepolia.core.chainstack.com/ws/25d78e54fa768b868fee699a675ad8f3',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://stage.dashboard.purefi.io',
+      dashboard: 'https://stage.dashboard.purefi.io/kyc',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },
@@ -285,7 +306,7 @@ export const chainConfig: TChainConfig = {
     CrosschainSaleManagerAddress: '0x51D436DE37bB4f66016046518D22A93b0503dE97',
     ChefContractAddress: '0xa527476575972e28F2055F28901B7767b6672928',
     DAAContractAddress: '0x93Ee0bAcDbe4743a4fEEF68c91563ddCf913eD14',
-    DAOContractAddress: '0xeFdc06A60D568B875b75b6F46d715423264AfEd7',
+    DAOContractAddress: '0x578560d33E4DcFACB4003564A4F0332546B67f09',
     DAIContractAddress: '0xe281f2EbC803eecCF5550EF4D71b1E5b0016cFb1',
     USDTContractAddress: '0x0660E38Ac08F1997136A317D1291E3b8C1B316D5',
     USDCContractAddress: '0xDEBC254Eb31c8a54DA05e586cbC7CF2e30ebb616',
@@ -325,7 +346,7 @@ export const chainConfig: TChainConfig = {
     chainStackWS:
       'wss://bsc-testnet.core.chainstack.com/be7c0598abf930ce4bf8377f17a2456b',
     PURFI_CONFIGURE_URL: {
-      dashboard: 'https://stage.dashboard.purefi.io',
+      dashboard: 'https://stage.dashboard.purefi.io/kyc',
       issuer: 'https://stage.issuer.app.purefi.io',
       ruleId: '777',
     },

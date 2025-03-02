@@ -111,7 +111,7 @@ export const quickLinks: TLink[] = [
 export const socialLinks: TLogoLink[] = [
   {
     alt: 'Twitter Logo',
-    logoUrl: '/svgs/twitter.svg',
+    logoUrl: '/svgs/twitter_logo.svg',
     redirectUrl: 'https://twitter.com/astradao_org',
   },
   /* {

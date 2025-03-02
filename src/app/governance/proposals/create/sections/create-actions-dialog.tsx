@@ -66,7 +66,7 @@ const CreateActionsDialog = ({
   const [selectedActionIndex, setSelectedActionIndex] = useState<string>('')
   const [selectedSubActionIndex, setSelectedSubActionIndex] = useState<string>()
   const { chains } = useNetwork()
-  const chain = chains.find((chain) => chain.name === chainName)
+  const chain = chains.find((chain) => chain.network === chainName)
 
   const form = useForm<CreateProposalActionsFormValues>({
     resolver: zodResolver(createProposalActionsFormSchema),
@@ -262,15 +262,6 @@ const CreateActionsDialog = ({
     setSelectedSubActionIndex('')
     setActionsDialog(!actionsDialog)
   }
-
-  // useEffect(() => {
-  //   if (
-  //     selectedAction?.contractAbi !== undefined &&
-  //     selectedAction?.contractAbi[0].name !== 'addItoken'
-  //   ) {
-  //     console.log({ selectedAction })
-  //   }
-  // }, [selectedAction])
 
   useEffect(() => {
     form.reset()

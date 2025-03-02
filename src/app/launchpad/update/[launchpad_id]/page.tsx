@@ -654,9 +654,6 @@ export default function Page({ params }: TPage) {
       .nonnegative({
         message: 'Vesting initial unlock is required and must be positive.',
       })
-      .refine((value) => value !== 0, {
-        message: 'Vesting initial unlock cannot be zero.',
-      })
       .refine((value) => value >= 1 && value <= 100, {
         message: 'Vesting initial unlock must be between 1 and 100.',
       })

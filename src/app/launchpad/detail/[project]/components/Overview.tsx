@@ -28,9 +28,9 @@ export default function Overview({ launchpadDetail }: TComponent) {
   const socialLinks: TLogoLink[] = [
     {
       alt: 'Twitter Logo',
-      logoUrl: '/svgs/twitter.svg',
+      logoUrl: '/svgs/twitter_logo.svg',
       redirectUrl: launchpadDetail?.TWITTER || '#',
-      background: 'bg-[#56a8ea]',
+      background: 'bg-white',
     },
   ]
   if (launchpadDetail?.GITHUB) {
@@ -180,7 +180,7 @@ export const LogoLink = ({ link }: LINKProps) => {
     )
   } else {
     linkNode = (
-      <Link href={link.redirectUrl} scroll={false} id={`layout-${link}`}>
+      <Link href={link.redirectUrl} scroll={false} id={`layout-${link}`} target='_blank'>
         <Image src={link.logoUrl} alt={link.alt} width={24} height={24} />
       </Link>
     )

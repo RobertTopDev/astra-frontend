@@ -480,9 +480,13 @@ export default function LiveUpcomingCard({
               overflow: 'hidden',
             }}
           >
-            <AstraLoading isLoading={raisedAmountLoading}>
+            <AstraLoading
+              isLoading={raisedAmountLoading && raisedAmount != undefined}
+            >
               <div className="text-white text-sm font-black">
-                {Number(curRaisedAmount).toLocaleString('en-US')}{' '}
+                {raisedAmount == undefined
+                  ? 0
+                  : Number(curRaisedAmount).toLocaleString('en-US')}{' '}
                 {baseTokenSymbol || 'USD'}
               </div>
             </AstraLoading>
